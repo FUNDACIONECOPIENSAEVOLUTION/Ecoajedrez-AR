@@ -14,7 +14,7 @@ test('Public release version is single-source and displayed outside chess HUD',(
   assert.ok(html.includes('id="'+id+'"'),'missing screen '+id);
  assert.ok((html.match(/data-app-version/g)||[]).length>=5,'version visible across menus');
  assert.ok(privacy.includes('data-app-version'),'privacy needs release badge');
- assert.match(opening,/fetch\('\.\/version\.json\?v=0\.8\.0'/);
+ assert.match(opening,/fetch\('\.\/version\.json\?v=0\.9\.0'/);
  assert.match(opening,/cache:'no-store'/);
  const hud=html.split('<div id="gameHud">')[1].split('<div id="arHud"')[0];
  assert.doesNotMatch(hud,/data-app-version/,'version must be hidden during live chess');
