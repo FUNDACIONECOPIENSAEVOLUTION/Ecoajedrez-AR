@@ -12,7 +12,7 @@ export function parseMoveCommand(value, locale='es') {
  const joined=low.replace(/^(juega|mueve|mover|play|move)\s+/,'').replace(/\s+(?:a|hacia|hasta|to)\s+/g,'').replace(/\s+/g,'');
  if(/^[a-h][1-8][a-h][1-8][qrbn]?$/.test(joined))return {from:joined.slice(0,2),to:joined.slice(2,4),promotion:joined[4]||'q'};
  const pieces={peon:'',pawn:'',caballo:'N',alfil:'B',torre:'R',dama:'Q',reina:'Q',rey:'K',knight:'N',bishop:'B',rook:'R',queen:'Q',king:'K'};
- const named=low.match(/^(caballo|alfil|torre|dama|reina|rey|knight|bishop|rook|queen|king)\s+(?:a|hacia|to|en)\s+([a-h][1-8])$/);
+ const named=low.match(/^(peon|pawn|caballo|alfil|torre|dama|reina|rey|knight|bishop|rook|queen|king)\s+(?:a|hacia|to|en)\s+([a-h][1-8])$/);
  if(named)return pieces[named[1]]+named[2];
  if(locale==='es' && /^[CATDR]/.test(s))return ({C:'N',A:'B',T:'R',D:'Q',R:'K'})[s[0]]+s.slice(1);
  return s;
