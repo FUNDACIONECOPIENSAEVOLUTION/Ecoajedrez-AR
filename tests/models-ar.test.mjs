@@ -46,3 +46,17 @@ test('XR session provides touch, aim, placement, and fallback',()=>{
  for(const feature of ['requestSession(\'immersive-ar\'','requestHitTestSource','setHologram','closestARSquare','onARPointerDown','onARPointerUp','selectAimedSquare','renderer.xr.setSession','beforexrselect'])
    assert.ok(js.includes(feature),feature+' missing');
 });
+
+test('Royal fantasy chess uses original glTF templates and highlights moves',()=>{
+ assert.match(html,/value="royal"/);
+ assert.match(js,/modelSet==='royal'/);
+ assert.match(js,/OctahedronGeometry/);
+ assert.match(js,/ownedMaterial/);
+ assert.match(js,/arcaneUI\?\.tick/);
+});
+test('AR interrupted by phone lock restores 3D instead of blank screen',()=>{
+ for(const snippet of ["visibilitychange","offerARRecovery","arRecoveryPanel","arRecover2d","arRecoverAR","finishAR","onARPointerMove","world.quaternion.identity()"])
+  assert.ok(html.includes(snippet)||js.includes(snippet),'Missing '+snippet);
+ assert.match(js,/Promise\.resolve\(arSession\.end\(\)\)/);
+ assert.match(js,/voluntaryArExit/);
+});
