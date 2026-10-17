@@ -29,3 +29,12 @@ Comandos con SAN/UCI y español se verifican con chess.js; voz es experimental y
 Firebase d-line-g se reutiliza SOLO para Authentication, nunca para progreso de 3 LINE-AR. Si Google no abre, verificar dominio fundacionecopiensaevolution.github.io y proveedor Google autorizado. PvP PeerJS es beta, sin ranking, matchmaking, TURN ni anti-trampas fuertes, el anfitrión valida movimientos con chess.js.
 
 QA: node --check main.js; node --check auth.js; node --check commands.js; node --check pvp.js; node --test tests/*.test.mjs. Actualizar versión, CHANGELOG y ESTADO_ACTUAL cuando cambie funcionamiento.
+
+
+## Continuidad desde 0.4.1-beta.1
+1. **Leer `docs/ENTREGA_0.4.1.md`** antes de trabajar con redes, partidas o ajustes.
+2. Nuevo módulo `match-state.js`: `makeSnapshot()` incluye FEN+historial SAN completo; `verifyAndRestore()` prueba todas las jugadas en un tablero separado antes de mutar el juego. No regresar a `game.load(fen)` a secas para sincronización, porque borra historial.
+3. Guardado local por UID o invitado en LocalStorage; no almacenar partidas online como persistentes. Al cerrar sesión limpiar juego en RAM sin sobreescribir otra cuenta.
+4. Botón GUARDAR PARTIDA PGN y panel DIAGNÓSTICO de dispositivo deben conservarse al modificar el menú. Nunca incluir tokens ni claves privadas en los diagnósticos; solo información básica del equipo compartida voluntariamente.
+5. Google popup se invoca inmediatamente desde el clic de usuario después de que Firebase Auth ya inicializó persistencia. No insertar un `await` antes de `signInWithPopup` en el handler.
+6. Pruebas `tests/match-persistence.test.mjs` más todas las previas deben pasar, y el usuario debe volver a verificar AR 0.4.1 y PvP entre dos celulares.
