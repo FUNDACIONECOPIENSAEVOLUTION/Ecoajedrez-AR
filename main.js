@@ -6,6 +6,7 @@ import { parseMoveCommand } from './commands.js?v=0.4.0';
 import { PeerMatch } from './pvp.js?v=0.4.0';
 import { initializeAccountAuth, loginGoogle, logoutFirebase, authAvailable } from './auth.js?v=0.4.0';
 import { makeSnapshot, verifyAndRestore, saveLocalMatch, readLocalMatch } from './match-state.js?v=0.4.1';
+import { createArcaneUI } from './arcane-ui.js?v=0.6.0';
 
 const $ = (id) => document.getElementById(id);
 const canvas = $('render'), stage = $('scene');
@@ -31,6 +32,7 @@ const game = new Chess();
 const world = new THREE.Group(), tiles = new THREE.Group(), pieces = new THREE.Group();
 const decorations = new THREE.Group(), markers = new THREE.Group();
 world.add(tiles, decorations, pieces, markers); scene.add(world);
+let arcaneUI=null;
 const rootBase = new THREE.Mesh(new THREE.BoxGeometry(8.45, .35, 8.45), new THREE.MeshStandardMaterial({color:0x213544, metalness:.5, roughness:.28}));
 rootBase.position.y = -.23; rootBase.receiveShadow = true; tiles.add(rootBase);
 const raycaster = new THREE.Raycaster(), point = new THREE.Vector2();
@@ -65,7 +67,7 @@ function translate(){
   document.querySelectorAll('[data-ui]').forEach(el=>el.textContent=interfaceText[lang]?.[el.dataset.ui]||interfaceText.es[el.dataset.ui]||el.textContent);
   updateStatus();
 }
-function toast(msg){const el=$('gameToast');el.textContent=msg;el.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>el.style.display='none',4000);}
+function toast(msg){if(isAR){arHint('✦ '+msg);return;}const el=$('gameToast');el.textContent=msg;el.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>el.style.display='none',4000);}
 const geoCache = {
   cyl:(a,b,h,n=20)=>new THREE.CylinderGeometry(a,b,h,n),
   box:(x,y,z)=>new THREE.BoxGeometry(x,y,z),
@@ -133,7 +135,7 @@ function renderPieces(){
   clearGroup(pieces);clearGroup(markers);
   for(const row of game.board())for(const p of row)if(p){
     let g = null;
-    if(modelSet==='staunton' && assets.has(p.type)){
+    if((modelSet==='staunton'||modelSet==='royal') && assets.has(p.type)){
       const template = assets.get(p.type);
       if(template){
         g=template.clone(true);
@@ -149,6 +151,22 @@ function renderPieces(){
       }
     }
     if(!g)g=pieceModel(p);
+    if(modelSet==='royal'){
+      // Original fantasy ornaments over our own six local glTF meshes.
+      const aura=new THREE.MeshStandardMaterial({
+        color:p.color==='w'?0x9bfff0:0xb7a8ff,metalness:.45,roughness:.23,
+        emissive:p.color==='w'?0x1b7666:0x3c315d,emissiveIntensity:.9
+      });
+      const halo=addPart(g,new THREE.TorusGeometry(.33,.032,7,32),aura,0,.095,0);
+      halo.rotation.x=-Math.PI/2;
+      const gemHeight=p.type==='k'?1.55:p.type==='q'?1.35:p.type==='r'?1.14:p.type==='n'?1.23:p.type==='b'?1.33:.94;
+      addPart(g,new THREE.OctahedronGeometry(p.type==='p'?.095:.13),aura,0,gemHeight,0);
+      if(p.type==='r'||p.type==='k'){
+        const crown=addPart(g,new THREE.TorusGeometry(.22,.044,6,6),aura,0,gemHeight-.15,0);
+        crown.rotation.x=-Math.PI/2;
+      }
+      if(p.type==='n')addPart(g,new THREE.ConeGeometry(.095,.26,5),aura,.10,1.00,0).rotation.z=-.4;
+    }
     g.userData.square=p.square;
     const loc=positionOf(p.square);
     g.position.set(loc.x,.07,loc.z);
@@ -211,6 +229,7 @@ function updateStatus(){
   $('status').textContent=text;
   const history=game.history();
   $('history').textContent=history.length?history.map((v,i)=>(i%2===0?String(Math.floor(i/2)+1)+'. ':'')+v).join('  '):'—';
+  arcaneUI?.state({turn:game.turn(),check:game.isCheck(),mate:game.isCheckmate(),mode,connected:mode!=='online'||match.connected()});
 }
 function canPlay(source='local'){
   if(game.isGameOver())return false;
@@ -265,11 +284,14 @@ function playMove(from,to,promotion='q',source='local'){
   if(mode==='online' && !match.host && source==='local'){
     return match.send({type:'MOVE',from,to,promotion,version:roomVersion});
   }
+  let captured=false;
   try{
     const moved=game.move({from,to,promotion});
     if(!moved)return false;
+    captured=Boolean(moved.captured);
   }catch(error){return false;}
-  selected=null;moving=null;renderPieces();animateMove(from,to);updateStatus();
+  selected=null;arcaneUI?.selected(null);moving=null;renderPieces();animateMove(from,to);
+  arcaneUI?.move(to,captured);updateStatus();
   if(mode==='online'){roomVersion++;broadcastState();}
   persistCurrentGame();
   if(mode==='bot' && !game.isGameOver()){clearTimeout(timer);timer=setTimeout(playBot,500);}
@@ -310,6 +332,7 @@ function pickSquare(square){
   if(selected && playMove(selected,square))return;
   if(current && current.color===game.turn()){selected=square;renderPieces();}
   else {selected=null;renderPieces();}
+  arcaneUI?.selected(selected);
 }
 function valueOf(type){return {p:1,n:3.2,b:3.3,r:5,q:9,k:0}[type]||0;}
 function evaluate(){
@@ -350,7 +373,7 @@ function playBot(){
   if(mode!=='bot'||game.turn()!=='b'||game.isGameOver())return;
   const m=chooseBot();
   if(m)game.move({from:m.from,to:m.to,promotion:'q'});
-  selected=null;renderPieces();if(m)animateMove(m.from,m.to);updateStatus();persistCurrentGame();
+  selected=null;arcaneUI?.selected(null);renderPieces();if(m){animateMove(m.from,m.to);arcaneUI?.move(m.to,Boolean(m.captured));}updateStatus();persistCurrentGame();
 }
 function animateMove(from,to){
   const target=[...pieces.children].find(x=>x.userData.square===to);
@@ -359,7 +382,7 @@ function animateMove(from,to){
   moving={piece:target,a,b,start:performance.now(),duration:370};
 }
 function reset(){
-  clearTimeout(timer);game.reset();selected=null;moving=null;renderPieces();updateStatus();
+  clearTimeout(timer);game.reset();selected=null;arcaneUI?.selected(null);moving=null;renderPieces();updateStatus();
   if(mode==='online' && match.host){roomVersion++;broadcastState();}
   else if(mode!=='online')persistCurrentGame();
 }
@@ -409,7 +432,7 @@ async function loadChessModels(){
     try{
       const result=await loader.loadAsync('./assets/models/staunton/'+names[index]+'.gltf');
       assets.set(type,result.scene);
-      if(modelSet==='staunton')renderPieces();
+      if(modelSet==='staunton'||modelSet==='royal')renderPieces();
     }catch(error){
       console.warn('No se pudo cargar el modelo '+names[index],error);
       assets.set(type,null);
@@ -536,13 +559,13 @@ $('menuSettings').onclick=()=>transitionTo('settings');
 $('resumeGame').onclick=()=>transitionTo('game');
 let diagnosticReport='';
 async function runDiagnostics(){
-  const lines=['ECOAJEDREZ AR · diagnóstico local · 0.4.1-beta.1','Fecha: '+new Date().toISOString()];
+  const lines=['ECOAJEDREZ AR · diagnóstico local · 0.6.0-beta.1','Fecha: '+new Date().toISOString()];
   const check=(name,good,note='')=>lines.push((good?'✓ ':'! ')+name+(note?' — '+note:''));
   check('HTTPS o localhost',window.isSecureContext,'AR requiere contexto seguro');
   let webgl=false;
   try{const canvas=document.createElement('canvas');webgl=Boolean(canvas.getContext('webgl2'));}catch(error){}
   check('WebGL2 para tablero 3D',webgl);
-  check('SDK Firebase inicializado',authAvailable(),'No verifica el dominio ni la cuenta Google');
+  check('Intermediario Google protegido disponible',authAvailable(),'Requiere servidor Cloudflare; invitado funciona sin ello');
   check('PeerJS cargado',typeof window.Peer==='function','No garantiza conexión entre redes');
   check('Generador QR',typeof window.QRCode==='function');
   check('Micrófono Web Speech',Boolean(window.SpeechRecognition||window.webkitSpeechRecognition),'Puede pedir permiso');
