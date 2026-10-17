@@ -309,50 +309,212 @@ $('lang').onchange=()=>{lang=$('lang').value;translate();document.documentElemen
 $('center').onclick=()=>{if(isAR){toast(t('ar'));return;}camera.position.set(8.4,10.6,11.5);orbit.target.set(0,0,0);orbit.update();};
 $('rotate').onclick=()=>{if(isAR)return;camera.position.set(-camera.position.z,camera.position.y,camera.position.x);orbit.update();};
 
-let session=null;
-const arOptions={requiredFeatures:['hit-test'],optionalFeatures:['local-floor','dom-overlay'],domOverlay:{root:document.body}};
-const arButton=ARButton.createButton(renderer,arOptions);
-arButton.setAttribute('aria-label','Iniciar realidad aumentada si el dispositivo lo admite');
-$('arButtonHolder').appendChild(arButton);
-renderer.xr.addEventListener('sessionstart',()=>{
-  isAR=true;boardPlaced=false;orbit.enabled=false;scene.background=null;
-  world.visible=false;reticle.visible=false;hitSource=null;hitRequested=false;
-  session=renderer.xr.getSession();
-  session.addEventListener('select',handleXRSelect);
-  $('arMessage').style.display='block';$('arMessage').textContent=t('ar');
-});
-renderer.xr.addEventListener('sessionend',()=>{
-  if(session)session.removeEventListener('select',handleXRSelect);
-  if(hitSource){hitSource.cancel();hitSource=null;}
-  session=null;isAR=false;boardPlaced=true;hitRequested=false;
-  world.position.set(0,0,0);world.quaternion.identity();world.scale.setScalar(1);
-  world.visible=true;reticle.visible=false;orbit.enabled=true;scene.background=new THREE.Color('#0a1724');
-  $('arMessage').style.display='none';setTheme(theme);
-});
-function handleXRSelect(event){
-  if(!boardPlaced){
-    if(!reticle.visible || !reticlePose)return;
-    world.position.set(reticlePose.position.x,reticlePose.position.y + .023,reticlePose.position.z);
-    world.quaternion.set(reticlePose.orientation.x,reticlePose.orientation.y,reticlePose.orientation.z,reticlePose.orientation.w);
-    world.scale.setScalar(.0625);world.visible=true;boardPlaced=true;
-    reticle.visible=false;$('arMessage').style.display='none';
-    return;
-  }
-  const frame=event.frame, input=event.inputSource, ref=renderer.xr.getReferenceSpace();
-  if(!frame||!input||!ref)return;
-  let pos=frame.getPose(input.targetRaySpace,ref);
-  let origin,dir;
-  if(pos){
-    origin=new THREE.Vector3(pos.transform.position.x,pos.transform.position.y,pos.transform.position.z);
-    const q=pos.transform.orientation;
-    dir=new THREE.Vector3(0,0,-1).applyQuaternion(new THREE.Quaternion(q.x,q.y,q.z,q.w));
-  }else{
-    const c=renderer.xr.getCamera();
-    origin=c.getWorldPosition(new THREE.Vector3());dir=c.getWorldDirection(new THREE.Vector3());
-  }
-  const sq=squareFromHit([pieces,markers,tiles],origin,dir);
-  if(sq)pickSquare(sq);
+// WebXR AR: sesión explícita y selector por DOM overlay, adaptado del 3 LINE-AR.
+// Un tablero lógico/Chess.js para los dos modos; ninguna sesión online todavía.
+let arSession=null, arSpace=null, lastHit=null, arPointerStart=null;
+let arPicking='touch', lastARPick=0, aimedSquare=null;
+const pointers=new Set();
+function arHint(message){$('arHint').textContent=message;}
+function showAR(){
+  document.body.classList.add('xr-active');
+  $('placeArBtn').style.display='inline-block';
+  $('arTouchBtn').style.display='inline-block';
+  $('arAimBtn').style.display='inline-block';
+  $('exitArBtn').style.display='inline-block';
+  $('arScale').value='1';
+  setARPicking('touch');
+  arHint('Busca una mesa o suelo, después pulsa FIJAR TABLERO.');
 }
+function hideAR(){
+  document.body.classList.remove('xr-active');
+  $('arCrosshair').classList.add('hidden');
+  $('arSelectBtn').style.display='none';
+}
+function setARPicking(mode){
+  arPicking=mode==='aim'?'aim':'touch';
+  $('arCrosshair').classList.toggle('hidden',arPicking!=='aim');
+  $('arSelectBtn').style.display=arPicking==='aim'?'inline-block':'none';
+  $('arTouchBtn').style.borderColor=arPicking==='touch'?'#aaffd1':'#3d7580';
+  $('arAimBtn').style.borderColor=arPicking==='aim'?'#aaffd1':'#3d7580';
+  aimedSquare=null;
+  if(boardPlaced) arHint(arPicking==='aim'?'Apunta la cruz central a una casilla y pulsa SELECCIONAR.':'Toca la pieza y luego la casilla de destino.');
+}
+function placeARBoard(){
+  if(!isAR || boardPlaced)return false;
+  if(!lastHit){arHint('No hay superficie detectada. Mueve el celular lentamente.');return false;}
+  const p=new THREE.Vector3(),q=new THREE.Quaternion(),scale=new THREE.Vector3();
+  lastHit.decompose(p,q,scale);
+  world.position.copy(p);world.position.y+=.018;world.quaternion.copy(q);
+  world.scale.setScalar(.075*Number($('arScale').value));
+  world.visible=true;boardPlaced=true;reticle.visible=false;hitRequested=true;
+  $('placeArBtn').style.display='none';setARPicking('touch');
+  arHint('Tablero fijado. Toca una pieza y su destino para jugar.');
+  return true;
+}
+function setHologram(){
+  if(!isAR)return;
+  // Sin hit-test, no se promete anclaje a superficie: posición de referencia local.
+  world.position.set(0,-.35,-1.4);world.quaternion.identity();
+  world.scale.setScalar(.075*Number($('arScale').value));
+  world.visible=true;boardPlaced=true;lastHit=null;reticle.visible=false;
+  $('placeArBtn').style.display='none';
+  arHint('Holograma AR sin detección de mesa. Se puede jugar, pero no está anclado a una superficie.');
+}
+async function startAR(){
+  if(isAR || !renderer)return;
+  if(!window.isSecureContext){toast('AR requiere HTTPS.');return;}
+  if(!navigator.xr){toast('WebXR AR no disponible en este navegador. Sigue jugando en 3D.');return;}
+  let session=null;
+  try{
+    // Mismo enfoque probado en 3 LINE-AR: hit-test opcional + DOM overlay.
+    session=await navigator.xr.requestSession('immersive-ar',{
+      optionalFeatures:['hit-test','dom-overlay','local-floor','bounded-floor'],
+      domOverlay:{root:document.body}
+    });
+    arSession=session;isAR=true;boardPlaced=false;lastHit=null;hitSource=null;hitRequested=false;
+    world.visible=false;scene.background=null;orbit.enabled=false;
+    showAR();
+    session.addEventListener('select',onARXRSelect);
+    session.addEventListener('end',finishAR);
+    let spaceType=null;
+    for(const type of ['local','local-floor','viewer']){
+      try{arSpace=await session.requestReferenceSpace(type);spaceType=type;break;}catch(error){}
+    }
+    if(!spaceType)throw Error('Ningún espacio AR disponible');
+    renderer.xr.setReferenceSpaceType(spaceType);
+    await renderer.xr.setSession(session);
+    try{
+      const viewer=await session.requestReferenceSpace('viewer');
+      hitSource=await session.requestHitTestSource({space:viewer});
+      arHint('Cámara activa. Encuentra una mesa, espera la retícula verde y pulsa FIJAR TABLERO.');
+    }catch(error){console.warn('Hit-test no disponible; AR holográfica:',error);setHologram();}
+  }catch(error){
+    console.warn('Error al iniciar WebXR',error);
+    toast('AR no disponible: '+(error.message||String(error)));
+    if(session)try{await session.end();}catch(error2){finishAR();}
+  }
+}
+function finishAR(){
+  if(arSession)arSession.removeEventListener('select',onARXRSelect);
+  if(hitSource){try{hitSource.cancel();}catch(error){}hitSource=null;}
+  arSession=null;arSpace=null;lastHit=null;hitRequested=false;isAR=false;boardPlaced=true;
+  pointers.clear();arPointerStart=null;
+  world.position.set(0,0,0);world.quaternion.identity();world.scale.setScalar(1);
+  world.visible=true;reticle.visible=false;orbit.enabled=true;
+  hideAR();setTheme(theme);
+  resize();
+}
+function xrPerspectiveCameras(){
+  const c=renderer.xr.getCamera();
+  return c?.cameras?.filter(x=>x.isPerspectiveCamera) || (c?.isPerspectiveCamera?[c]:[]);
+}
+function closestARSquare(clientX,clientY){
+  if(!isAR||!boardPlaced||!world.visible)return null;
+  const views=xrPerspectiveCameras();if(!views.length)return null;
+  world.updateWorldMatrix(true,true);
+  const w=window.innerWidth,h=window.innerHeight;
+  let chosen=null,best=Infinity;
+  const p=new THREE.Vector3(),screen=new THREE.Vector3();
+  for(const square of FILES)for(let rank=1;rank<=8;rank++){
+    const sq=square+rank,loc=positionOf(sq);
+    for(const y of [.09,.54]){
+      p.set(loc.x,y,loc.z);
+      world.localToWorld(p);
+      for(const view of views){
+        screen.copy(p).project(view);
+        if(screen.z< -1||screen.z>1)continue;
+        const x=(screen.x+1)*w*.5,yy=(1-screen.y)*h*.5;
+        const distance=Math.hypot(clientX-x,clientY-yy);
+        if(distance<best){best=distance;chosen=sq;}
+      }
+    }
+  }
+  return best<=Math.max(28,Math.min(55,w*.11))?chosen:null;
+}
+function pickARAt(x,y){
+  if(!isAR||!boardPlaced||Date.now()-lastARPick<340)return false;
+  const square=closestARSquare(x,y);
+  if(!square)return false;
+  pickSquare(square);lastARPick=Date.now();
+  return true;
+}
+function selectAimedSquare(){
+  if(!isAR||!boardPlaced)return;
+  if(!pickARAt(window.innerWidth/2,window.innerHeight/2))arHint('Centra la cruz sobre una casilla y pulsa SELECCIONAR.');
+}
+function isARControl(target){
+  return Boolean(target?.closest?.('button,input,select,textarea,label,a,.arBar,.arBottom,#arHint'));
+}
+function onARPointerDown(event){
+  if(!isAR||isARControl(event.target))return;
+  pointers.add(event.pointerId);
+  if(pointers.size===1)arPointerStart={id:event.pointerId,x:event.clientX,y:event.clientY};
+  else arPointerStart=null;
+}
+function onARPointerUp(event){
+  if(!isAR)return;
+  pointers.delete(event.pointerId);
+  const p=arPointerStart;arPointerStart=null;
+  if(!p||p.id!==event.pointerId||pointers.size||isARControl(event.target))return;
+  if(Math.hypot(event.clientX-p.x,event.clientY-p.y)>22)return;
+  if(!boardPlaced){placeARBoard();return;}
+  if(arPicking==='touch')pickARAt(event.clientX,event.clientY);
+}
+function onARXRSelect(event){
+  if(!isAR)return;
+  if(!boardPlaced){placeARBoard();return;}
+  if(arPicking==='aim'){selectAimedSquare();return;}
+  if(Date.now()-lastARPick<340)return;
+  try{
+    const ref=renderer.xr.getReferenceSpace();
+    const space=event.inputSource?.targetRaySpace;
+    if(!ref||!space||!event.frame)return;
+    const pose=event.frame.getPose(space,ref);
+    if(!pose)return;
+    const x=pose.transform;
+    const origin=new THREE.Vector3(x.position.x,x.position.y,x.position.z);
+    const dir=new THREE.Vector3(0,0,-1).applyQuaternion(new THREE.Quaternion(x.orientation.x,x.orientation.y,x.orientation.z,x.orientation.w));
+    world.updateWorldMatrix(true,true);
+    const sq=squareFromHit([pieces,markers,tiles],origin,dir);
+    if(sq){pickSquare(sq);lastARPick=Date.now();}
+  }catch(error){console.debug('XR select sin pose utilizable',error);}
+}
+function updateAR(frame){
+  if(!frame||!arSession)return;
+  if(hitSource&&!boardPlaced){
+    const result=frame.getHitTestResults(hitSource);
+    if(!result.length){reticle.visible=false;lastHit=null;return;}
+    const pose=result[0].getPose(arSpace);
+    if(!pose){reticle.visible=false;lastHit=null;return;}
+    const mat=new THREE.Matrix4().fromArray(pose.transform.matrix);
+    reticle.position.setFromMatrixPosition(mat);
+    reticle.quaternion.setFromRotationMatrix(mat);
+    reticle.quaternion.multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),-Math.PI/2));
+    reticle.visible=true;lastHit=mat;
+  }
+  if(boardPlaced&&arPicking==='aim'){
+    aimedSquare=closestARSquare(window.innerWidth/2,window.innerHeight/2);
+    $('arSelectBtn').disabled=!aimedSquare;
+    $('arHint').textContent=aimedSquare?'OBJETIVO: '+aimedSquare.toUpperCase()+' · pulsa SELECCIONAR':'Apunta la cruz a una casilla del tablero.';
+  }
+}
+$('startArBtn').onclick=()=>{startAR();};
+$('placeArBtn').onclick=placeARBoard;
+$('exitArBtn').onclick=()=>{arSession?.end();};
+$('arTouchBtn').onclick=()=>setARPicking('touch');
+$('arAimBtn').onclick=()=>setARPicking('aim');
+$('arSelectBtn').onclick=selectAimedSquare;
+$('arScale').oninput=()=>{if(isAR&&boardPlaced)world.scale.setScalar(.075*Number($('arScale').value));};
+document.addEventListener('pointerdown',onARPointerDown,true);
+document.addEventListener('pointerup',onARPointerUp,true);
+document.addEventListener('beforexrselect',event=>{
+  if(isAR && isARControl(event.target))event.preventDefault();
+});
+if(!navigator.xr){$('startArBtn').title='Tu navegador no detecta WebXR; puedes jugar en 3D';}
+else navigator.xr.isSessionSupported?.('immersive-ar').then(supported=>{
+  if(!supported)$('startArBtn').title='Este navegador no dispone de modo immersive-ar';
+}).catch(()=>{});
+
 function resize(){
   const w=stage.clientWidth,h=stage.clientHeight;
   if(!w||!h)return;
@@ -360,30 +522,8 @@ function resize(){
 }
 const resizeObserver=new ResizeObserver(resize);resizeObserver.observe(stage);resize();
 function render(timestamp,frame){
-  if(isAR && frame){
-    if(!hitRequested){
-      hitRequested=true;
-      const currentSession=renderer.xr.getSession();
-      currentSession.requestReferenceSpace('viewer')
-        .then(ref=>currentSession.requestHitTestSource({space:ref}))
-        .then(src=>{hitSource=src;})
-        .catch(()=>{$('arMessage').textContent='Este dispositivo no pudo activar la detección de superficies.';});
-    }
-    if(!boardPlaced && hitSource){
-      const results=frame.getHitTestResults(hitSource);
-      if(results.length){
-        const pose=results[0].getPose(renderer.xr.getReferenceSpace());
-        if(pose){
-          reticlePose=pose.transform;
-          reticle.visible=true;
-          reticle.position.set(pose.transform.position.x,pose.transform.position.y,pose.transform.position.z);
-          const q=pose.transform.orientation;
-          reticle.quaternion.set(q.x,q.y,q.z,q.w);
-          reticle.rotateX(-Math.PI/2);
-        }
-      }else reticle.visible=false;
-    }
-  }else orbit.update();
+  if(isAR){updateAR(frame);}
+  else orbit.update();
   if(moving){
     const progress=Math.min(1,(timestamp-moving.start)/moving.duration);
     const smooth=progress*progress*(3-2*progress);
