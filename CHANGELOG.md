@@ -1,5 +1,15 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.7.0-beta.1 — 2026-10-17 · Apertura cinematográfica
+- Revisión de la bienvenida: dos columnas desktop, arte protagonista, versión móvil con ilustración superior y botones accesibles.
+- Dos arenas SVG originales de fantasía (Bosque encantado y Portal de duelo), con carrusel de transición automática y selección manual.
+- Menú principal gamer con cabecera y cuatro tarjetas ilustradas, estilos originales y animación ligera de invocación de tablero.
+- Etiqueta versión visible y derivada de version.json en bienvenida, menú, personalización, salas/QR, diagnóstico, carga y privacidad; nunca sobre el tablero ni durante AR.
+- No se añadió vídeo pesado, servicio externo, fuente de Google ni Firebase. Cambios orientados a coste $0 y compatibilidad móvil.
+- Prueba automatizada en tests/opening.test.mjs, lista blanca de arte/ui/version en Pages dist. Visita física desde móvil/AR pendiente.
+
+
+
 ## 0.6.0-beta.1 — 2026-10-17 · Arcane Glass y recuperación AR
 - Nuevo tema Arcane Glass local y accesible, sin relajar CSP ni descargar Google Fonts.
 - Orbes de estado, menú radial móvil con acciones reales, portal de cambio de pantalla, anillos y partículas dentro de Three.js.
