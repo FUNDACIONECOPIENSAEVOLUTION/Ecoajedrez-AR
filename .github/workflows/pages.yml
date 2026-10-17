@@ -21,7 +21,11 @@ jobs:
         with:
           node-version: '22'
       - name: Check JS syntax
-        run: node --check main.js
+        run: |
+          node --check main.js
+          node --check commands.js
+          node --check pvp.js
+          node --check auth.js
       - name: Check project consistency
         run: node --test tests/*.test.mjs
 
