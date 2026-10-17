@@ -80,3 +80,11 @@ Build solo dist para Pages, CSP/cabeceras, gitignore de secretos, escáner CI y 
 PeerJS salas privadas con 12 caracteres aleatorios, validación de mensaje y tasa; PvP sin backend anti-trampa confiable ni verificación real de dos teléfonos.
 Se añadió `privacy.html`, `SECURITY.md`, `docs/DEPLOY_SEGURIDAD.md`.
 Para otra IA: `docs/ENTREGA_SEGURIDAD_0.5.md`. No exponer claves en archivos nuevos. Las claves de configuración web del antiguo Firebase podrían permanecer en el historial Git; revisar restricciones y rotación, no afectar otro juego.
+
+
+## Entrega 0.6.0-beta.1 — Diseño, PvP y WebXR (2026-10-17)
+Interfaz Arcane Glass propia en `arcane.css`/`arcane-ui.js`: tarjetas esmeralda, detalles dorados, HUD, mensajes gamer, menú radial responsivo, orbe de turno derivado de chess.js, runas de selección y partículas de jugada. Conservar comandos, movilidad y CSP.
+Duelo PeerJS sin backend: 6 caracteres aleatorios + QR sin mostrar link. Mensajes de señalización tematizados, reconexión tentativa; seis caracteres NO constituyen secreto fuerte, uso recreativo únicamente.
+Modelos locales originales: 6 glTF Staunton, variante «Realeza arcana» con corona/cristales 3D nuevos, «Fantasía encantada» generada y «Clásico ligero». No se incorporaron modelos Harry Potter sin licencia ni assets externos de terceros.
+Interrupción Android AR: al bloquear pantalla se intenta terminar la sesión XR, reiniciar modo 3D y ofrecer botones para volver a 3D o reabrir AR. Tablero fijado horizontal. Arrastre de dedo sobre la pantalla da resaltado inmediato; no hay seguimiento real de manos ni oclusión. Se requiere prueba física; evitar declarar que el bug quedó resuelto en todos los teléfonos sin evidencia.
+Versión `0.6.0-beta.1`. Traspaso: `docs/ENTREGA_0.6.md`. Google BFF no desplegado, Firebase Spark independiente, $0.
