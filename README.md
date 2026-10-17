@@ -1,5 +1,5 @@
 # ECOAJEDREZ 3D / AR
-**Versión:** 0.4.1-beta.1 — 17/10/2026  
+**Versión:** 0.6.0-beta.1 — 17/10/2026  
 **Propietario:** Fundación Ecopiensa Evolution  
 **Estado:** tablero 3D con modelos glTF, selector de colores y AR WebXR basado en 3 LINE-AR; validación física Android pendiente. No es APK y el PvP remoto todavía es experimental, sin validación entre teléfonos.
 
@@ -67,3 +67,11 @@ Guía detallada: docs/ENTREGA_0.4.0.md
 El juego no maneja contraseñas propias. Se eliminó la configuración Firebase de auth.js y se preparó un servidor intermediario (BFF) seguro con Cloudflare Pages Functions para futuro login Google. Este BFF solo funcionará tras conectar Cloudflare Pages con credenciales cifradas en su panel; Google queda desactivado en GitHub Pages, donde se puede jugar como invitado.
 Protecciones: CSP, cabeceras HTTP Cloudflare, sesiones HttpOnly AES-GCM, OAuth state/nonce + PKCE y firma Google, listas de archivos públicos, escáner de secretos CI, salas con códigos de 12 caracteres y límites de mensajes. No sustituye auditoría de seguridad.
 `privacy.html`: aviso al jugador. Detalle: `SECURITY.md`, `docs/DEPLOY_SEGURIDAD.md` y `docs/ENTREGA_SEGURIDAD_0.5.md`.
+
+
+## Interfaz gamer v0.6.0-beta.1
+Actualización basada en sugerencias «Arcane Glass» del usuario: interfaz verde esmeralda y oro, medallón, orbe de turno, menú radial en móvil, transición de portal, runas y partículas 3D ligeras; los comandos táctiles y por texto siguen disponibles.
+Modalidades: CPU básica (no Stockfish), dos jugadores en un teléfono, duelo casual PeerJS con **código de seis caracteres + QR**. El link largo no aparece en el panel. No se garantiza disponibilidad de PeerJS tras NAT ni rankings seguros.
+Piezas: seis glTF Staunton originales incorporados al repositorio, «Realeza arcana» con decoración original, Fantasía y Clásico ligero.
+AR: intenta recuperarse tras bloquear el celular y ofrece reentrada mediante gesto del usuario sin perder una partida local. Permite apuntar y tocar/arrastrar **sobre la pantalla**, no rastreo de dedos en el aire ni ocultación de la mano real.
+La versión 0.6 todavía necesita pruebas en Android físico y dos teléfonos; ver `docs/ENTREGA_0.6.md`. Sigue siendo gratis, con Google desactivado en Github.io hasta activar el BFF autorizado.
