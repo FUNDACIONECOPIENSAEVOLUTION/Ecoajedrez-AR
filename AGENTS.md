@@ -75,3 +75,11 @@ Antes de activar Cloudflare, App Check, bases de datos, facturación o lanzar nu
 - El código BFF Google de ECOAJEDREZ está preparado, pero sin servidor Cloudflare/credenciales desplegados. Mantener invitado y no prometer autenticación Google operativa.
 - No escribir correos de titulares, contraseñas, credenciales, claves privadas o tokens en archivos públicos, commits, logs ni documentación. Si se requiere comprobar propiedad o permisos, hacerlo en cada consola con el titular.
 - Presupuesto máximo actual 0 COP / 0 USD: no crear servicios, activar facturación ni pasar a Blaze sin aprobación expresa. Realizar la configuración de seguridad paso por paso.
+
+
+## Firebase institucional de ECOAJEDREZ (confirmación visual 2026-10-17)
+- El usuario mostró **proyecto Firebase propio ya creado**, con **nombre `EcoAjedrez-3D` e ID `ecoajedrez-3d`**, en plan Spark gratuito. La captura muestra `+ Agregar app`; no se verificaron todavía aplicaciones web registradas, Authentication, Firestore ni permisos administrativos.
+- Este proyecto corresponde a la **cuenta Google institucional de la Fundación**, distinta de la cuenta personal que administra `d-line-g` para 3 LINE-AR. Nunca escribir datos de ECOAJEDREZ en `d-line-g`.
+- El complemento oficial Firebase aparece **instalado y habilitado**, pero **sus acciones no están expuestas en esta sesión de chat**; no afirmar acceso administrativo efectivo a `ecoajedrez-3d`. Para verificarlo es necesario abrir Codex / entorno que cargue el complemento Firebase, autenticar la cuenta institucional y consultar el proyecto primero en modo solo lectura.
+- No crear proyecto adicional ni activar Firestore, Blaze, App Check obligatorio, proveedores o escritura hasta que el usuario lo solicite y se confirme el plan de seguridad gratuito. Mantener el invitado.
+- No publicar direcciones de correo, credenciales ni tokens en Git o documentación; credenciales se autorizan mediante OAuth directamente en el proveedor.
