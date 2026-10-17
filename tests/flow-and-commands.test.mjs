@@ -42,4 +42,12 @@ test('Loading and visual mode actions exist as real functions',()=>{
 test('Room codes remove unsafe characters',()=>{
  assert.equal(normalizeRoomCode(' abc-def '),'ABCDEF');
  assert.equal(normalizeRoomCode('<foo>xyz'),'FOOXYZ');
+ assert.equal(normalizeRoomCode('ABCDEFGHIJKLMN'),'ABCDEFGHIJKL');
+});
+
+test('strong room codes and CSP protections are documented in the game',()=>{
+ assert.match(fs.readFileSync('pvp.js','utf8'),/ROOM_SIZE=12/);
+ assert.match(fs.readFileSync('pvp.js','utf8'),/MAX_MESSAGE_BYTES=64000/);
+ assert.match(html,/Content-Security-Policy/);
+ assert.match(html,/maxlength="12"/);
 });
