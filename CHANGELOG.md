@@ -1,3 +1,12 @@
+# Historial de ECOAJEDREZ AR
+
+## 0.3.0-beta.1 — 2026-10-17
+- Creación de seis modelos originales de ajedrez glTF 2.0 (rey, dama, alfil, caballo, torre, peón), que el juego utiliza en 32 instancias.
+- Selector Staunton/Fantasía geométrica/Clásico geométrico; materiales blancos y negros personalizables; movimiento animado.
+- AR explícita adaptada de 3 LINE-AR: sesión WebXR con DOM overlay, detección de superficie, FIJAR TABLERO, TOCAR/APUNTAR, escala, SALIR y fallback holograma.
+- `tests/models-ar.test.mjs` verifica integridad de glTF y controles; workflow ejecuta todas las pruebas antes del despliegue.
+- Prueba física AR y navegador móvil pendiente; PvP online, Stockfish, animación de combate y APK siguen sin implementar.
+
 # Cambios — Ecoajedrez AR
 
 ## 0.2.0-alpha — 2026-10-17
