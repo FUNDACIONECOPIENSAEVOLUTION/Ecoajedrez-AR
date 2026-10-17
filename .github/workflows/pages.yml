@@ -23,7 +23,7 @@ jobs:
       - name: Check JS syntax
         run: node --check main.js
       - name: Check project consistency
-        run: node --test tests/static.test.mjs
+        run: node --test tests/*.test.mjs
 
   deploy:
     needs: check
