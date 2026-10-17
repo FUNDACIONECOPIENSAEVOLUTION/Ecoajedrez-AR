@@ -425,6 +425,7 @@ function setGameMode(next){
 function gotoView(view){
   if(isAR && view!=='game'){arSession?.end();}
   document.body.dataset.view=view;
+  if(view==='menu')$('resumeGame').style.display=gameStarted?'block':'none';
   if(view==='game'){
     gameStarted=true;resize();
     $('networkStatus').textContent=mode==='online'?('SALA '+match.room+(match.connected()?' · CONECTADA':' · ESPERANDO')):(mode==='bot'?'VERSUS COMPUTADORA':'DUELO LOCAL');
@@ -436,11 +437,16 @@ function transitionTo(view){
   setTimeout(()=>{gotoView(view);$('loadingPortal').classList.remove('show');},420);
 }
 function setAccount(next){
+  if(!next){
+    // Un invitado local puede entrar aunque Firebase tarde en responder.
+    if(guestLocal)return;
+    account=null;
+    if(document.body.dataset.view==='menu')gotoView('welcome');
+    return;
+  }
   account=next;guestLocal=false;
-  if(next){
-    $('accountState').textContent=(next.name||'JUGADOR')+' · '+(next.provider==='google'?'Google':'Invitado Firebase');
-    if(document.body.dataset.view==='welcome')transitionTo('menu');
-  }else if(!guestLocal && document.body.dataset.view==='menu')gotoView('welcome');
+  $('accountState').textContent=(next.name||'JUGADOR')+' · '+(next.provider==='google'?'Google':'Invitado Firebase');
+  if(document.body.dataset.view==='welcome')transitionTo('menu');
 }
 async function startAccountAuth(){
   const good=await initializeAccountAuth(setAccount,error=>{
@@ -467,6 +473,7 @@ $('logoutBtn').onclick=async()=>{
 $('menuBot').onclick=()=>{setGameMode('bot');transitionTo('settings');};
 $('menuLocal').onclick=()=>{setGameMode('local');transitionTo('settings');};
 $('menuSettings').onclick=()=>transitionTo('settings');
+$('resumeGame').onclick=()=>transitionTo('game');
 $('menuJoin').onclick=()=>{
   $('joinPanel').classList.toggle('visible');
   if($('joinPanel').classList.contains('visible'))$('joinCode').focus();
