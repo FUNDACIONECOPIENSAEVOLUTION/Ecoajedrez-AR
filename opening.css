@@ -1,0 +1,88 @@
+/* ECOAJEDREZ OPENING 0.7 · Original SVG scenes · No external scripts/fonts/cookies */
+:root{--hero-emerald:#76ffe3;--hero-gold:#ffe3a4}
+#loginPanel{display:grid;grid-template-columns:1.06fr .94fr;align-items:stretch;width:min(1120px,calc(100vw - 36px));min-height:min(600px,calc(100dvh - 60px));max-width:1120px;padding:0;overflow:hidden;isolation:isolate;background:linear-gradient(145deg,#0d2c39ed,#071520f7)}
+#loginPanel::before{display:none}
+#loginPanel::after{display:none}
+#loginPanel .loginContent{min-width:0;position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:clamp(25px,3.1vw,48px);background:linear-gradient(93deg,#061725f5,#0a2b35dd 68%,#071f2d79);box-shadow:24px 0 65px #04101bc0}
+#loginPanel .loginContent .brand{font-size:clamp(32px,4vw,55px);white-space:nowrap;letter-spacing:.025em;max-width:100%}
+#loginPanel .loginContent .logo{width:94px;height:94px;animation:openingSigil 4.7s ease-in-out infinite alternate}
+#loginPanel .loginContent p{margin:3px 0 7px;max-width:370px}
+#loginPanel .loginContent .stack{width:100%;max-width:375px;margin:10px 0 4px}
+#loginPanel .loginContent .stack button{min-height:54px}
+#loginPanel #loginStatus{min-height:22px;margin:10px 0 4px!important}
+#loginPanel .loginContent .appVersion{margin:3px auto}
+.heroShowcase{grid-column:2;grid-row:1;position:relative;overflow:hidden;isolation:isolate;min-width:0;min-height:420px;background:#04131c;border-left:1px solid #83f1c044}
+.heroSlide{position:absolute;inset:0;opacity:0;transform:scale(1.12);transition:opacity 1.4s ease,transform 7s linear;pointer-events:none}
+.heroSlide.active{opacity:1;transform:scale(1)}
+.heroSlide img{height:100%;width:100%;object-fit:cover;object-position:center;display:block;filter:saturate(1.32) contrast(1.13)}
+.heroSceneCaption{position:absolute;bottom:78px;left:50%;transform:translateX(-50%);width:max-content;max-width:92%;font-family:Georgia,serif;font-weight:800;letter-spacing:.17em;font-size:12px;color:#fff0c7;text-shadow:0 2px 13px black,0 0 24px #37ffcc}
+.heroShowcase:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,#04111eed,transparent 34%,#07233557),radial-gradient(circle at 55% 48%,transparent 25%,#03162358 88%);z-index:1}
+.heroHalo{position:absolute;inset:-25%;pointer-events:none;z-index:2;background:conic-gradient(from 0deg at 50% 50%,transparent 0deg,#90fbe319 37deg,transparent 85deg,#f3dba113 150deg,transparent 195deg,#69ffd518 245deg,transparent 320deg);animation:heroOrbit 18s linear infinite;mix-blend-mode:screen}
+.heroControls{position:absolute;left:20px;right:20px;bottom:25px;display:flex;align-items:center;justify-content:space-between;gap:14px;z-index:3}
+.heroEyebrow{font-size:10px;font-weight:900;letter-spacing:.22em;color:#a6e9d9;text-shadow:0 0 9px black}
+.heroDots{display:flex;gap:9px}
+.heroDot{width:32px;height:8px;border-radius:10px;padding:0;background:#59757b9c;border:1px solid #b3c6c78d}
+.heroDot.active{background:#ffe19c;box-shadow:0 0 15px #ffe19ca8;border-color:#fff4ce}
+.appVersion{display:inline-flex;align-items:center;justify-content:center;max-width:100%;border:1px solid #71d6be77;border-radius:30px;color:#f8e9bb!important;background:#123a45a8;padding:5px 12px;font:700 11px/1.3 ui-monospace,Consolas,monospace!important;letter-spacing:.11em!important;white-space:nowrap}
+body[data-view="game"] .appVersion,body.xr-active .appVersion{display:none!important}
+#menuPanel{width:min(980px,calc(100vw - 34px))}
+.menuArtBanner{position:relative;min-height:151px;margin:5px 0 19px;border-radius:17px;overflow:hidden;background:linear-gradient(90deg,#092e38dd,#0c30443d),url('./assets/ui/portal-arena.svg') center 60%/cover;box-shadow:inset 0 0 0 1px #7ce5c569,0 9px 26px #010710b4}
+.menuArtBanner:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#04121cf5 4%,#082331d0 52%,#06152017);pointer-events:none}
+.menuArtBannerText{position:relative;z-index:1;display:flex;flex-direction:column;gap:8px;align-items:flex-start;justify-content:center;min-height:150px;padding:20px 26px}
+.menuArtBannerText strong{font:900 clamp(16px,2.6vw,27px)/1.2 Georgia,serif;letter-spacing:.11em;color:#fff1cd;text-shadow:0 0 20px #f8d68368}
+.menuArtBannerText small{color:#cfe4e1;max-width:480px}
+.menuTile{min-height:135px;position:relative;isolation:isolate;overflow:hidden;padding:20px;align-items:flex-start;justify-content:flex-end;background:#082332}
+.menuTile:enabled:before{content:"";position:absolute;inset:0;width:100%;height:100%;background-image:linear-gradient(90deg,#051520ef,#062637b3 61%,#0b1b2050),url('./assets/ui/forest-arena.svg');background-size:cover;background-position:center;transform:scale(1.03);opacity:.92;transition:transform .75s ease,opacity .4s ease;pointer-events:none;z-index:-1}
+.menuTile:enabled:hover:before{transform:scale(1.10);opacity:1}
+.menuTile-bot:enabled:before{background-image:linear-gradient(90deg,#081920eb,#06312b9d 76%,#0f3e4164),url('./assets/ui/forest-arena.svg')}
+.menuTile-local:enabled:before{background-image:linear-gradient(90deg,#081321ed,#162940a2 76%,#073b5a67),url('./assets/ui/portal-arena.svg');background-position:48% 58%}
+.menuTile-host:enabled:before{background-image:linear-gradient(90deg,#051728e0,#0b334fa1 76%,#08203366),url('./assets/ui/portal-arena.svg');background-position:68% 66%}
+.menuTile-join:enabled:before{background-image:linear-gradient(90deg,#0a1c2cde,#223528c3 76%,#083e4368),url('./assets/ui/forest-arena.svg');background-position:80% 45%}
+.menuTile b,.menuTile small{position:relative;z-index:2;text-shadow:0 2px 9px #010a13,0 0 19px #001217}
+.menuTile b{font-size:19px;color:#ffe3a5}
+.menuTile small{font-size:12px;color:#f2f9eb;line-height:1.45}
+.menuTile:after{z-index:0}
+.settingsHeader{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px}
+#diagnosticCard .appVersion{margin:-5px 0 15px}
+#roomPanel{position:relative}
+#roomPanel .appVersion{display:flex;width:max-content;margin:12px 0 0}
+#loadingPortal{background:radial-gradient(circle at 50% 35%,#125a63ad,#03111df0 58%),linear-gradient(120deg,#09242adf,#051a2c),url('./assets/ui/portal-arena.svg') center/cover;backdrop-filter:blur(15px)}
+.portalBoard{position:relative;width:142px;height:142px;display:grid;place-items:center;transform:perspective(350px) rotateX(38deg);border:2px solid #a6f3c7;border-radius:15px;background:conic-gradient(#19645b 25%,#e8dbb3 25% 50%,#19645b 50% 75%,#e8dbb3 75%) 0 0/35px 35px;box-shadow:0 0 80px #76fdd064,0 0 40px #ffe4a481}
+.portalBoard span{font:900 85px Georgia,serif;color:#ffe4a2;text-shadow:0 0 20px #ffd997,0 14px 13px #05291a;animation:boardRise 1.9s ease-in-out infinite alternate}
+.portalBoard i{position:absolute;width:16px;height:16px;border-radius:100%;background:#8dffe2;box-shadow:0 0 18px #85ffd7;animation:portalSpark 1.5s linear infinite}
+.portalBoard i:nth-child(2){left:-8px;top:-10px}.portalBoard i:nth-child(3){right:-12px;bottom:10px;animation-delay:.45s}.portalBoard i:nth-child(4){right:24px;top:-13px;animation-delay:.9s}
+.portalVersion{margin-top:22px}
+#loadingPortal strong{margin-top:27px;font:900 17px Georgia,serif;letter-spacing:.18em;text-shadow:0 0 16px #baffdc}
+@keyframes boardRise{to{transform:translateY(-12px) scale(1.09)}}
+@keyframes heroOrbit{to{transform:rotate(360deg)}}
+@keyframes portalSpark{50%{opacity:.22;transform:scale(.5)}}
+@keyframes openingSigil{to{filter:brightness(1.18) drop-shadow(0 0 14px #ffe5a399)}}
+@media(max-width:860px){
+ #loginPanel{min-height:unset;width:min(660px,calc(100vw - 20px));grid-template-columns:1fr}
+ .heroShowcase{grid-column:1;grid-row:1;min-height:205px;max-height:28dvh;border-left:0;border-bottom:1px solid #83f1c044}
+ .heroSceneCaption{bottom:44px;font-size:10px}
+ .heroControls{bottom:9px}
+ #loginPanel .loginContent{grid-column:1;grid-row:2;padding:18px 22px 22px;box-shadow:0 -16px 38px #04101ba3;gap:3px}
+ #loginPanel .loginContent .logo{width:62px;height:62px}
+ #loginPanel .loginContent .brand{font-size:clamp(30px,7vw,42px)}
+ #loginPanel .loginContent .stack{margin:4px 0}
+ #loginPanel .loginContent .stack button{min-height:44px}
+ #loginPanel #loginStatus{margin:3px 0!important}
+ #loginPanel .loginContent p{margin:2px 0 4px}
+ #welcomeScreen{align-items:flex-start;padding:10px}
+}
+@media(max-width:690px){
+ .menuArtBanner{min-height:120px;margin-bottom:12px}
+ .menuArtBannerText{min-height:120px;padding:13px}
+ .menuArtBannerText strong{font-size:17px}
+ .menuTile{min-height:120px;padding:12px}
+ .menuTile b{font-size:13px}
+ .menuTile small{font-size:11px}
+ #menuPanel{padding:20px 13px}
+ .settingsHeader{flex-wrap:wrap}
+ .heroEyebrow{font-size:9px}
+}
+@media(max-height:675px) and (min-width:861px){#loginPanel{min-height:500px}.screen{align-items:flex-start}}
+@media(prefers-reduced-motion:reduce){
+ .heroSlide,.heroSlide.active,.heroHalo,.portalBoard span,.portalBoard i,#loginPanel .loginContent .logo{animation:none!important;transition:none!important;transform:none}
+}
