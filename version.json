@@ -1,1 +1,12 @@
-{"name":"Ecoajedrez-AR","version":"0.2.0-alpha","updated":"2026-10-17","status":"experimental","browserValidated":false,"physicalARValidated":false,"onlinePvP":false,"apk":false}
+{
+  "name": "Ecoajedrez-AR",
+  "version": "0.3.0-beta.1",
+  "updated": "2026-10-17",
+  "status": "AR UI and models merged; device validation pending",
+  "browserValidated": false,
+  "physicalARValidated": false,
+  "onlinePvP": false,
+  "apk": false,
+  "modelType": "original light glTF Staunton set",
+  "arImplementation": "ported WebXR from 3 LINE-AR"
+}
