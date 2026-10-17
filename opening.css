@@ -144,3 +144,140 @@ body.xr-active .cinemaOverlay{display:none!important}
 @media(prefers-reduced-motion:reduce){
  .heroSlide .heroVideo{transition:none}
 }
+
+
+/* 0.9 · Cinematic composition: videos behind readable content, art gallery on the side. */
+#loginPanel .loginContent{
+ isolation:isolate;overflow:hidden;
+ background:#071c29;box-shadow:inset 0 0 0 1px #6de6c124;
+}
+#loginPanel .loginContent:before{
+ content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+ background:
+ linear-gradient(180deg,#061625b8 0%,#061724dd 45%,#041422f1 95%),
+ radial-gradient(circle at 48% 20%,#23575e83,transparent 70%);
+}
+#loginPanel .loginContent> :not(.welcomeVideoBackdrop){position:relative;z-index:2}
+.welcomeVideoBackdrop,.menuAtmosphere{
+ position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:-1;background:#06202c;
+}
+.welcomeVideoBackdrop .ambientPoster,.welcomeVideoBackdrop .ambientVideo,
+.menuAtmosphere .ambientPoster,.menuAtmosphere .ambientVideo{
+ position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+ border:0;pointer-events:none;
+}
+.welcomeVideoBackdrop .ambientPoster{
+ object-position:50% 50%;opacity:.95;filter:brightness(.72) saturate(1.12);
+}
+.welcomeVideoBackdrop .ambientVideo{
+ object-position:center;opacity:0;filter:brightness(.8) saturate(1.22);
+ transition:opacity .9s ease;
+}
+.welcomeVideoBackdrop.videoReady .ambientVideo{opacity:1}
+#loginPanel .loginContent:after{
+ content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+ background:
+ radial-gradient(ellipse at 50% 25%,#6cffe713,transparent 54%),
+ linear-gradient(90deg,#0214205a,transparent 35%,transparent 65%,#02152052);
+}
+#loginPanel .loginContent .brand{
+ text-shadow:0 2px 22px #000d;filter:drop-shadow(0 0 12px #78f1d03d);
+}
+#loginPanel .loginContent p,#loginPanel .loginContent .eyebrow{
+ text-shadow:0 2px 12px #020b16,0 0 6px #020b16;
+}
+#loginPanel .loginContent .stack button{
+ box-shadow:0 5px 25px #000b,0 0 14px #82f9cd30;
+}
+.ambientControls{
+ display:flex;gap:9px;align-items:center;justify-content:center;
+ flex-wrap:wrap;margin:7px 0 6px;color:#d6faed;
+ text-shadow:0 1px 8px #000;font-size:10px;font-weight:850;letter-spacing:.13em;
+}
+.ambientControls .videoToggle,.menuMediaActions .videoToggle{
+ min-height:33px;padding:6px 11px;border:1px solid #a4f6d39c;border-radius:20px;
+ background:#082d3dcb;color:#d6ffec;font:750 10px/1.3 system-ui,sans-serif;
+ letter-spacing:.04em;backdrop-filter:blur(8px);
+}
+.heroShowcase{
+ background:#071b29;
+ box-shadow:inset 0 0 20px #6ad6cb24;
+}
+.heroSlide,.heroSlide.active{transform:none}
+.heroSlide .heroPoster{
+ object-fit:contain;object-position:center;
+ animation:arcaneGalleryFloat 18s ease-in-out infinite alternate;
+ filter:brightness(.92) saturate(1.09);
+}
+.heroSlide:not(.active) .heroPoster{animation-play-state:paused}
+.heroSlide .heroVideo{display:none!important}
+.heroShowcase:after{
+ background:
+ linear-gradient(180deg,#0512204a,transparent 23%,transparent 71%,#071828ca),
+ radial-gradient(ellipse at 50% 50%,transparent 45%,#0618243d 100%);
+}
+.heroHalo{opacity:.26}
+@keyframes arcaneGalleryFloat{
+ from{transform:translateY(1%) scale(.985)}
+ to{transform:translateY(-1%) scale(1.005)}
+}
+#menuPanel{
+ position:relative;isolation:isolate;overflow:hidden;
+ background:#0b2733df;
+}
+#menuPanel:before{z-index:5}
+#menuPanel:after{z-index:5}
+#menuPanel> :not(.menuAtmosphere){position:relative;z-index:2}
+#menuPanel .menuAtmosphere{
+ z-index:-1;
+ background:#051522;
+}
+.menuAtmosphere .ambientPoster{
+ object-position:center 42%;opacity:.50;filter:saturate(1.2) brightness(.63);
+}
+.menuAtmosphere .ambientVideo{
+ opacity:0;object-position:center 44%;filter:brightness(.61) saturate(1.14);
+ transition:opacity 1.1s ease;
+}
+.menuAtmosphere.videoReady .ambientVideo{opacity:.62}
+.menuAtmosphere:after{
+ content:"";position:absolute;inset:0;pointer-events:none;
+ background:
+ linear-gradient(180deg,#0414209c 0%,#041623b5 29%,#051e2bc9 75%,#031019e2),
+ radial-gradient(ellipse at 35% 35%,#0a434b5c,transparent 70%);
+}
+#menuPanel .menuHead,#menuPanel .menuArtBanner,#menuPanel .menuGrid,
+#menuPanel #roomPanel,#menuPanel #joinPanel,
+#menuPanel .menuMediaActions{
+ backdrop-filter:blur(2px);
+}
+#menuPanel .menuArtBanner{border:1px solid #96ecc16b}
+#menuPanel .menuTile{
+ background:#092736bd;box-shadow:inset 0 1px #ffffff18,0 9px 25px #010e1e82;
+}
+#menuPanel .menuTile:enabled:before{opacity:.45}
+#menuPanel .menuTile:enabled:hover:before{opacity:.73}
+#menuPanel .menuTile b{color:#ffe1a0;text-shadow:0 2px 10px #000}
+#menuPanel .menuTile small{text-shadow:0 2px 8px #000}
+.menuMediaActions{
+ display:flex;justify-content:space-between;align-items:center;gap:10px;
+ flex-wrap:wrap;margin:0 0 12px;
+}
+#menuPanel .menuIntroButton{margin:0}
+body.xr-active .ambientVideo,body[data-view="game"] .ambientVideo{visibility:hidden!important}
+@media(max-width:860px){
+ #loginPanel .loginContent{min-height:unset}
+ .heroSlide .heroPoster{animation-duration:23s}
+ .ambientControls{font-size:9px;margin:3px auto}
+ .menuAtmosphere .ambientPoster,.menuAtmosphere .ambientVideo{
+  object-position:center 30%;
+ }
+}
+@media(max-width:690px){
+ .menuMediaActions{gap:6px}
+ .menuMediaActions button{flex:1;white-space:nowrap;font-size:10px}
+ #loginPanel .loginContent .brand{font-size:clamp(30px,7vw,42px)}
+}
+@media(prefers-reduced-motion:reduce){
+ .heroSlide .heroPoster,.ambientVideo{animation:none!important;transition:none!important}
+}
