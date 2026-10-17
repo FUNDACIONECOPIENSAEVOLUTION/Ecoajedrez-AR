@@ -1,8 +1,8 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.8.0-beta.1",
+  "version": "0.9.0-beta.1",
   "updated": "2026-10-17",
-  "status": "User-uploaded 3 MP4 and 3 PNG integrated into GitHub Pages as optional intro and two lazy ambient looping arena videos. Video playback/codec on physical Android still to be tested. Chess and AR unchanged.",
+  "status": "Professional gamer composition: one ambient video BEHIND welcome title/buttons and another behind menu options; side gallery is subtle animated stills; old intro remains optional; mobile autoplay with fallback and low-data safeguards. Real-device testing pending.",
   "browserValidated": false,
   "physicalARValidated": false,
   "onlinePvP": "Casual PeerJS beta, 6-character code and QR; unranked and not independently anti-cheat verified",
@@ -18,12 +18,12 @@
   "privacyPolicy": "privacy.html",
   "apiSecretsExposedInCurrentBuild": false,
   "liveSecureServerConfigured": false,
-  "ui": "Arcane Glass 0.8: optional intro video with skip, two video backgrounds rotating with uncropped poster fallback, user-supplied PNG artwork in menu, load one ambient video at a time; release displayed only outside chess/AR",
+  "ui": "Arcane Glass v0.9: full-bleed darkened welcoming video under legible text, subtle Ken Burns on lateral original imagery, second atmospheric video behind menu game cards; existing optional intro, single active video, reduced-motion/data-saver and WebXR pause; labels outside game/AR.",
   "media": {
     "source": "Owner-uploaded repo videos/ 2026-10-17",
     "intro": "Vídeo sin título-17_10_2026, 16_58.mp4",
     "forest": "Vídeo sin título-17_10_2026, 17_08.mp4",
     "portal": "Vídeo sin título-17_10_2026, 17_10.mp4",
-    "notes": "Video filename chronology used as provisional roles; owner can confirm visual correspondence. 13.6MB intro loads only on user request. 7.7 and 6.6MB backgrounds load only when selected. Images always fallback. MP4 codecs not read in this session."
+    "notes": "Foreground/chrome never masked by ambient video. Only one MP4 decoded at a time and autoplay never blocks guest mode. Mapping of MP4 by original filenames is provisional pending visual confirmation. Intro requires click."
   }
 }
