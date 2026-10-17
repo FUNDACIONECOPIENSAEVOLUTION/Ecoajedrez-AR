@@ -1,13 +1,13 @@
 # ECOAJEDREZ 3D / AR
-**Versión:** 0.3.0-beta.1 — 17/10/2026  
+**Versión:** 0.4.1-beta.1 — 17/10/2026  
 **Propietario:** Fundación Ecopiensa Evolution  
-**Estado:** tablero 3D con modelos glTF, selector de colores y AR WebXR basado en 3 LINE-AR; validación física Android pendiente. No es APK ni PvP remoto.
+**Estado:** tablero 3D con modelos glTF, selector de colores y AR WebXR basado en 3 LINE-AR; validación física Android pendiente. No es APK y el PvP remoto todavía es experimental, sin validación entre teléfonos.
 
 ## Prueba web
 Repositorio: https://github.com/FUNDACIONECOPIENSAEVOLUTION/Ecoajedrez-AR  
 Dirección de GitHub Pages (acción de publicación completada; pendiente verificación visual del navegador): https://fundacionecopiensaevolution.github.io/Ecoajedrez-AR/
 
-**Publicación:** comprobación sintáctica y despliegue Pages exitosos en GitHub Actions: https://github.com/FUNDACIONECOPIENSAEVOLUTION/Ecoajedrez-AR/actions/runs/39040927867 . Si el enlace aún no abre, revisar Settings → Pages → Source: GitHub Actions y esperar propagación. No se ha comprobado la ejecución gráfica o cámara en móvil.
+**Publicación:** comprobación sintáctica y despliegue Pages exitosos en GitHub Actions: https://github.com/FUNDACIONECOPIENSAEVOLUTION/Ecoajedrez-AR/actions/runs/39040927867 . Si el enlace aún no abre, revisar Settings → Pages → Source: GitHub Actions y esperar propagación. El usuario confirmó AR en una versión anterior; falta repetir la prueba física tras actualizar 0.4.1.
 
 **Prueba local:** ejecutar `python -m http.server 8000` desde la raíz y visitar `http://localhost:8000`. Necesita conexión para las dependencias JS del CDN. La AR debe probarse por HTTPS en Android con navegador/WebXR compatibles.
 
