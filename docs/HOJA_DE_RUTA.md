@@ -22,3 +22,9 @@
 
 ## Prioridad estricta
 No empezar por monstruos animados, facturación o rankings antes de tener ajedrez correcto, AR verificable y base multijugador segura.
+
+## Actualización 2026-10-17
+- Se completó el primer set de seis modelos glTF propios y las herramientas de selección/colores; aun falta verificar render visual.
+- El patrón WebXR probado en 3 LINE-AR se portó a Ecoajedrez, con selección de casillas por proyección XR o toque, escalar y fijar un tablero, pero queda prueba física.
+- Evaluar TWA vs Capacitor por compatibilidad AR; no garantizar actualizaciones OTA nativas ni latencia remota fija.
+- `docs/ENTREGA_0.3.0.md` detalla la próxima prueba Android y links de modelos adicionales.
