@@ -106,19 +106,19 @@ body.xr-active #gameToast{display:none!important}
 <div id="gameToast" role="status"></div>
 <div id="gameHud">
 <div class="hudTop"><div class="chip"><strong>♜ ECOAJEDREZ</strong> · <span id="status">Preparando tablero...</span><div id="networkStatus" class="version">MODO LOCAL</div></div>
-<button id="gameMenuBtn">☰ MENÚ</button></div>
+<button id="gameMenuBtn" data-ui="gameMenu">☰ MENÚ</button></div>
 <div id="commandHint">Mueve tocando una pieza y su destino, o escribe e2e4 / e4 / Cf3</div>
 <div class="hudBottom">
 <button id="reset">↻ Nueva</button><button id="undo">↶ Deshacer</button>
 <input id="moveInput" maxlength="80" placeholder="e4 · Cf3 · e2e4" aria-label="Comando de ajedrez" autocomplete="off" spellcheck="false">
-<button id="playMove" class="primary">♟ Mover</button><button id="voiceBtn" title="Dictar jugada usando el micrófono" type="button">🎙</button>
-<button id="startArBtn" class="primary">◎ AR</button><button id="center">⌖ Vista</button><button id="rotate">⟳</button><span id="history"></span>
+<button id="playMove" data-ui="move" class="primary">♟ Mover</button><button id="voiceBtn" title="Dictar jugada usando el micrófono" type="button">🎙</button>
+<button id="startArBtn" data-ui="enterAR" class="primary">◎ AR</button><button id="center">⌖ Vista</button><button id="rotate">⟳</button><span id="history"></span>
 </div></div>
 <div id="arHud" class="ar-hud">
-<div class="arBar"><button id="placeArBtn" type="button">📍 FIJAR TABLERO</button><button id="exitArBtn" type="button">✕ SALIR AR</button><button id="arTouchBtn" type="button">👆 TOCAR</button><button id="arAimBtn" type="button">⊕ APUNTAR</button></div>
+<div class="arBar"><button id="placeArBtn" data-ui="placeAR" type="button">📍 FIJAR TABLERO</button><button id="exitArBtn" data-ui="exitAR" type="button">✕ SALIR AR</button><button id="arTouchBtn" data-ui="arTouch" type="button">👆 TOCAR</button><button id="arAimBtn" data-ui="arAim" type="button">⊕ APUNTAR</button></div>
 <div id="arHint">Busca una mesa y pulsa FIJAR TABLERO</div>
 <div id="arCrosshair" class="aimCrosshair hidden">⊕</div>
-<div class="arBottom"><button id="arSelectBtn" type="button" style="display:none">✓ SELECCIONAR CASILLA</button>
+<div class="arBottom"><button id="arSelectBtn" data-ui="selectAR" type="button" style="display:none">✓ SELECCIONAR CASILLA</button>
 <label>Escala <input type="range" id="arScale" min="0.35" max="2.8" step="0.05" value="1"></label>
 <input id="arCommand" placeholder="e4 / Cf3" maxlength="80" aria-label="Comando de movimiento AR">
 <button id="arPlayMove" type="button">♟ MOVER</button>
@@ -129,7 +129,7 @@ body.xr-active #gameToast{display:none!important}
 <div id="loginPanel" class="panel"><img src="./ecoajedrez.PNG" class="logo" alt="Logo Ecoajedrez">
 <div class="eyebrow" style="margin-top:12px">LA ARENA COBRA VIDA</div><h1 class="brand">ECO<span>AJEDREZ</span></h1>
 <p>Ajedrez 3D y realidad aumentada. Domina el tablero, invoca tu ejército y desafía a otros jugadores.</p>
-<div class="stack"><button id="loginGoogleBtn" class="primary">G · INICIAR CON GOOGLE</button><button id="loginGuestBtn" class="gold">⚡ CONTINUAR COMO INVITADO</button></div>
+<div class="stack"><button id="loginGoogleBtn" data-ui="loginGoogle" class="primary">G · INICIAR CON GOOGLE</button><button id="loginGuestBtn" data-ui="loginGuest" class="gold">⚡ CONTINUAR COMO INVITADO</button></div>
 <p id="loginStatus" role="status" style="margin:15px 0 0">Comprobando inicio de sesión…</p>
 <p class="version">Modo invitado gratuito y partidas locales · v0.4.0-beta.1</p>
 </div></div>
@@ -137,18 +137,18 @@ body.xr-active #gameToast{display:none!important}
 <div id="menuPanel" class="panel"><div class="menuHead"><img src="./ecoajedrez.PNG" class="logo" alt="Logo ECOAJEDREZ"><div><div class="eyebrow">ELIGE TU BATALLA</div><h1 class="brand">ECO<span>AJEDREZ</span></h1><div class="version">GAMER · 3D · AR | v0.4.0-beta.1</div></div></div>
 <div id="accountState" role="status">Invitado</div>
 <div class="menuGrid">
-<button id="menuBot" class="menuTile featured"><b>♟ VS COMPUTADORA</b><small>Practica contra un rival automático</small></button>
-<button id="menuLocal" class="menuTile"><b>⚔ DOS JUGADORES</b><small>Turnos en un mismo dispositivo</small></button>
-<button id="menuHost" class="menuTile"><b>🌐 CREAR DUELO ONLINE</b><small>Sala privada con código y QR (beta)</small></button>
-<button id="menuJoin" class="menuTile"><b>♜ UNIRME A PARTIDA</b><small>Ingresa un código de seis caracteres</small></button>
+<button id="menuBot" class="menuTile featured"><b data-ui="menuBot">♟ VS COMPUTADORA</b><small>Practica contra un rival automático</small></button>
+<button id="menuLocal" class="menuTile"><b data-ui="menuLocal">⚔ DOS JUGADORES</b><small>Turnos en un mismo dispositivo</small></button>
+<button id="menuHost" class="menuTile"><b data-ui="menuHost">🌐 CREAR DUELO ONLINE</b><small>Sala privada con código y QR (beta)</small></button>
+<button id="menuJoin" class="menuTile"><b data-ui="menuJoin">♜ UNIRME A PARTIDA</b><small>Ingresa un código de seis caracteres</small></button>
 </div>
-<div id="joinPanel"><input id="joinCode" maxlength="6" placeholder="CÓDIGO DE SALA" autocomplete="off"><button id="joinBtn" class="primary">CONECTAR</button></div>
-<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><button id="menuSettings">⚙ PERSONALIZAR</button><button id="logoutBtn">⇥ CERRAR SESIÓN</button></div>
+<div id="joinPanel"><input id="joinCode" maxlength="6" placeholder="CÓDIGO DE SALA" autocomplete="off"><button id="joinBtn" data-ui="joinBtn" class="primary">CONECTAR</button></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><button id="menuSettings" data-ui="menuSettings">⚙ PERSONALIZAR</button><button id="logoutBtn" data-ui="logout">⇥ CERRAR SESIÓN</button></div>
 <p class="muted" style="font-size:12px;margin:14px 0 0">PvP beta mediante PeerJS: necesita conexión y puede fallar detrás de algunos NAT o redes móviles.</p>
 </div></div>
 <div id="settingsScreen" class="screen">
 <aside id="settingsPanel" class="settingsPanel panel">
-<h2>⚙ CONFIGURACIÓN DE BATALLA</h2>
+<h2 data-ui="settingsTitle">⚙ CONFIGURACIÓN DE BATALLA</h2>
 <p class="muted" style="font-size:13px">Personaliza tu ejército y bioma antes de entrar al tablero. Todos los cambios son reversibles.</p>
 <div class="settingGrid">
 <div><label for="lang">Idioma · Language · 语言</label><select id="lang"><option value="es">Español</option><option value="en">English</option><option value="zh">简体中文</option></select></div>
@@ -161,7 +161,7 @@ body.xr-active #gameToast{display:none!important}
 <div><label for="blackColor">Color ejército negro</label><select id="blackColor"><option value="#203d54">Obsidiana</option><option value="#f0788d">Carmesí</option><option value="#a3bfff">Zafiro</option><option value="#72e0bf">Jade</option></select></div>
 </div>
 <p id="modelsStatus" class="muted" style="font-size:12px">Cargando modelos 3D...</p>
-<div class="settingFoot"><button id="backToMenu">← VOLVER</button><button id="startConfigured" class="primary">⚔ INICIAR PARTIDA</button></div>
+<div class="settingFoot"><button id="backToMenu" data-ui="back">← VOLVER</button><button id="startConfigured" data-ui="startGame" class="primary">⚔ INICIAR PARTIDA</button></div>
 </aside></div>
 <div id="loadingPortal"><div class="portal">♜</div><strong id="portalText">INVOCANDO TABLERO...</strong></div>
 <script type="module" src="./main.js"></script>
