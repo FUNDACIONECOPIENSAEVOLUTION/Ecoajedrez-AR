@@ -15,6 +15,8 @@ test('Spanish spoken/UCI/SAN commands work',()=>{
  assert.equal(parseMoveCommand('e4'),'e4');
  assert.equal(parseMoveCommand('enroque corto'),'O-O');
  assert.equal(parseMoveCommand('enroque largo'),'O-O-O');
+ assert.deepEqual(parseMoveCommand('caballo de ge uno a efe tres'),{from:'g1',to:'f3',promotion:'q'});
+ assert.equal(parseMoveCommand('peón a e4'),'e4');
 });
 test('Welcome, settings, board-only game and private duels are present',()=>{
  for(const id of ['welcomeScreen','menuScreen','settingsScreen','scene','gameHud','loginGoogleBtn','loginGuestBtn','menuBot','menuLocal','menuHost','menuJoin','joinCode','moveInput','playMove','arCommand','arPlayMove','voiceBtn','arVoiceBtn','boardSize','theme','whiteColor','blackColor']){
@@ -30,6 +32,12 @@ test('One chess.js validates commands and host validates network moves',()=>{
  assert.ok(game.includes('match.connected()'),'remote availability');
  assert.ok(game.includes('requestSession('),'XR entry remains available');
  assert.ok(game.includes('closestARSquare('),'AR touch must remain');
+});
+test('Loading and visual mode actions exist as real functions',()=>{
+ for(const name of ['loadChessModels','startSpeech','transitionTo','applyNotation','gotoView','startAR','closestARSquare','onARPointerUp']){
+  assert.ok(game.includes('function '+name+'(') || game.includes('async function '+name+'('),'missing '+name);
+ }
+ assert.ok(html.includes('id="resumeGame"'));
 });
 test('Room codes remove unsafe characters',()=>{
  assert.equal(normalizeRoomCode(' abc-def '),'ABCDEF');
