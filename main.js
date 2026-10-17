@@ -534,6 +534,47 @@ $('menuBot').onclick=()=>{setGameMode('bot');transitionTo('settings');};
 $('menuLocal').onclick=()=>{setGameMode('local');transitionTo('settings');};
 $('menuSettings').onclick=()=>transitionTo('settings');
 $('resumeGame').onclick=()=>transitionTo('game');
+let diagnosticReport='';
+async function runDiagnostics(){
+  const lines=['ECOAJEDREZ AR · diagnóstico local · 0.4.1-beta.1','Fecha: '+new Date().toISOString()];
+  const check=(name,good,note='')=>lines.push((good?'✓ ':'! ')+name+(note?' — '+note:''));
+  check('HTTPS o localhost',window.isSecureContext,'AR requiere contexto seguro');
+  let webgl=false;
+  try{const canvas=document.createElement('canvas');webgl=Boolean(canvas.getContext('webgl2'));}catch(error){}
+  check('WebGL2 para tablero 3D',webgl);
+  check('SDK Firebase inicializado',authAvailable(),'No verifica el dominio ni la cuenta Google');
+  check('PeerJS cargado',typeof window.Peer==='function','No garantiza conexión entre redes');
+  check('Generador QR',typeof window.QRCode==='function');
+  check('Micrófono Web Speech',Boolean(window.SpeechRecognition||window.webkitSpeechRecognition),'Puede pedir permiso');
+  check('Conexión declarada por navegador',navigator.onLine!==false,'No garantiza conectividad externa');
+  check('Modelos glTF', [...assets.values()].filter(Boolean).length===6,
+    [...assets.values()].filter(Boolean).length+' / 6 cargados');
+  if(navigator.xr?.isSessionSupported){
+    try{
+      const supported=await navigator.xr.isSessionSupported('immersive-ar');
+      check('WebXR immersive-ar',supported,'Comprueba compatibilidad, no la cámara en funcionamiento');
+    }catch(error){check('WebXR immersive-ar',false,'No se pudo consultar: '+String(error.message||error));}
+  }else check('WebXR immersive-ar',false,'Navegador sin WebXR');
+  lines.push('Modo de partida: '+mode+(mode==='online'?' · enlace '+(match.connected()?'conectado':'sin conectar'):''), 
+    'Sistema/navegador: '+navigator.userAgent,
+    'Nota: este informe contiene información del equipo; compártelo solo voluntariamente.');
+  diagnosticReport=lines.join('\n');
+  $('diagnosticOutput').textContent=diagnosticReport;
+}
+$('diagnoseBtn').onclick=()=>{
+  $('diagnosticPanel').classList.add('visible');
+  $('diagnosticOutput').textContent='Comprobando compatibilidad…';
+  runDiagnostics();
+};
+$('closeDiagnostic').onclick=()=>$('diagnosticPanel').classList.remove('visible');
+$('copyDiagnostic').onclick=async()=>{
+  try{await navigator.clipboard.writeText(diagnosticReport);toast('Diagnóstico copiado.');}
+  catch(error){toast('No se pudo copiar automáticamente. Selecciona el texto del informe.');}
+};
+document.addEventListener('keydown',event=>{
+  if(event.key==='Escape')$('diagnosticPanel').classList.remove('visible');
+});
+
 $('downloadPgn').onclick=()=>{
   const pgn=game.pgn();
   if(!pgn){toast('Aún no hay jugadas para exportar.');return;}
