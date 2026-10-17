@@ -35,7 +35,7 @@ test('Welcome has original illustrated two-scene lightweight autoplay opening',(
   const art=fs.readFileSync(p,'utf8');
   assert.ok(art.startsWith('<svg'));
   assert.match(art,/<polygon/);
-  assert.doesNotMatch(art,/<script|onload=|<foreignObject|https?:\/\//i);
+  assert.doesNotMatch(art,/<script|onload=|<foreignObject|(?:href|src)\s*=\s*['\"]https?:\/\//i);
   assert.ok(art.length<100_000,'keep art lightweight');
   assert.ok(html.includes(name+'.svg'),'welcome includes art '+name);
  }
