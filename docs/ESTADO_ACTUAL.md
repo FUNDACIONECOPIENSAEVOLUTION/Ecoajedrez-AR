@@ -1,4 +1,4 @@
-# Estado actual y traspaso — 2026-10-17 · v0.3.0-beta.1
+# Estado actual y traspaso — 2026-10-17 · v0.4.1-beta.1
 
 ## Lectura ultrarrápida para otra IA
 **Objetivo:** videojuego Ecoajedrez 3D/AR comercializable, bajo presupuesto cero; evolución gamer/fantasía tipo tablero animado (diseños 100% originales), español/inglés/chino, rival con niveles, PvP online, APK con actualizaciones.
@@ -15,6 +15,9 @@
 - Interfaz i18n básica español/inglés/mandarín simplificado; textos auxiliares por revisar.
 - AR WebXR rediseñado a partir de experiencia de 3 LINE-AR: sesión explícita, hit-test opcional, botón FIJAR, TOCAR/APUNTAR, escala y fallback holograma. **Aún no probado con hardware físico**.
 - Workflow de publicación Pages y documentación, sujeto a activación Pages por propietario.
+
+## Archivo histórico de verificación (0.3.x)
+Las casillas de esta sección reflejan el estado inicial; la información vigente está en el bloque **Última modificación 0.4.1** al final.
 
 ## Verificación / pendientes
 - [x] Repositorio nuevo existe y con permisos de administración/escritura comprobados.
