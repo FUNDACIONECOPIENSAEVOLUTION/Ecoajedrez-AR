@@ -1,5 +1,14 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.8.0-beta.1 — 2026-10-17 · Videos originales del propietario
+- Se integran los tres MP4 que el propietario subió en `videos/` a una intro opcional con botón Omitir y dos escenas de fondo en bucle.
+- Se integran también los tres PNG originales como pósteres y fondos de las tarjetas ilustradas. Videos e imágenes se muestran completos con `object-fit:contain`, sin recortar el tablero; conservan fallback SVG.
+- Carga diferida: el MP4 principal (13.6MB) solo al solicitar intro; un fondo activo a la vez; pausa al entrar a partida o realidad aumentada; ahorro de datos y reducción de movimiento respetados.
+- GitHub Pages publica estrictamente seis archivos permitidos tras verificar firmas PNG/MP4 y límites de tamaño. CSP, motor AR, acceso invitado y privacidad no se alteran.
+- Tests para reproducción, ruta de media y protección de backend; ver `docs/ENTREGA_0.8.md`. Reproducción física de MP4 y correspondencia de los clips todavía requiere comprobación del usuario.
+
+
+
 ## 0.7.0-beta.1 — 2026-10-17 · Apertura cinematográfica
 - Revisión de la bienvenida: dos columnas desktop, arte protagonista, versión móvil con ilustración superior y botones accesibles.
 - Dos arenas SVG originales de fantasía (Bosque encantado y Portal de duelo), con carrusel de transición automática y selección manual.
