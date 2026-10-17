@@ -129,7 +129,7 @@ function pieceModel(p){
   return g;
 }
 function clearGroup(group){
-  while(group.children.length){const child=group.children[0];group.remove(child);child.traverse(node=>{if(node.isMesh && node.geometry && !node.userData.sharedGeo)node.geometry.dispose();if(node.isMesh && node.userData.sharedGeo && node.material)node.material.dispose();});}
+  while(group.children.length){const child=group.children[0];group.remove(child);child.traverse(node=>{if(node.isMesh && node.geometry && !node.userData.sharedGeo)node.geometry.dispose();if(node.isMesh && (node.userData.sharedGeo||node.userData.ownedMaterial) && node.material)node.material.dispose();});}
 }
 function renderPieces(){
   clearGroup(pieces);clearGroup(markers);
@@ -157,15 +157,21 @@ function renderPieces(){
         color:p.color==='w'?0x9bfff0:0xb7a8ff,metalness:.45,roughness:.23,
         emissive:p.color==='w'?0x1b7666:0x3c315d,emissiveIntensity:.9
       });
-      const halo=addPart(g,new THREE.TorusGeometry(.33,.032,7,32),aura,0,.095,0);
+      // All decorative meshes own their materials; dispose them when positions change.
+      const addGem=(geometry,x,y,z)=>{
+        const item=addPart(g,geometry,aura.clone(),x,y,z);
+        item.userData.ownedMaterial=true;return item;
+      };
+      const halo=addGem(new THREE.TorusGeometry(.33,.032,7,32),0,.095,0);
       halo.rotation.x=-Math.PI/2;
       const gemHeight=p.type==='k'?1.55:p.type==='q'?1.35:p.type==='r'?1.14:p.type==='n'?1.23:p.type==='b'?1.33:.94;
-      addPart(g,new THREE.OctahedronGeometry(p.type==='p'?.095:.13),aura,0,gemHeight,0);
+      addGem(new THREE.OctahedronGeometry(p.type==='p'?.095:.13),0,gemHeight,0);
       if(p.type==='r'||p.type==='k'){
-        const crown=addPart(g,new THREE.TorusGeometry(.22,.044,6,6),aura,0,gemHeight-.15,0);
+        const crown=addGem(new THREE.TorusGeometry(.22,.044,6,6),0,gemHeight-.15,0);
         crown.rotation.x=-Math.PI/2;
       }
-      if(p.type==='n')addPart(g,new THREE.ConeGeometry(.095,.26,5),aura,.10,1.00,0).rotation.z=-.4;
+      if(p.type==='n')addGem(new THREE.ConeGeometry(.095,.26,5),.10,1.00,0).rotation.z=-.4;
+      aura.dispose();
     }
     g.userData.square=p.square;
     const loc=positionOf(p.square);
