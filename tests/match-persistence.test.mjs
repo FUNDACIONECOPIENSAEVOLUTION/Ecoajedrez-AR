@@ -82,3 +82,14 @@ test('UI offers PGN export, local save and a documented Google login gesture',()
  assert.match(js,/a\.download='ecoajedrez-'/);
  assert.match(auth,/return sdk\.signInWithPopup\(auth,provider\)/);
 });
+
+test('on-device diagnostics is wired into the real game menu',()=>{
+ const html=fs.readFileSync('index.html','utf8');
+ const js=fs.readFileSync('main.js','utf8');
+ for(const id of ['diagnoseBtn','diagnosticPanel','diagnosticOutput','closeDiagnostic','copyDiagnostic']){
+   assert.ok(html.includes('id="'+id+'"'),'missing diagnostic control '+id);
+ }
+ for(const feature of ["isSessionSupported('immersive-ar')","authAvailable()","navigator.onLine","navigator.clipboard.writeText(diagnosticReport)"]){
+   assert.ok(js.includes(feature),'missing diagnostic capability '+feature);
+ }
+});
