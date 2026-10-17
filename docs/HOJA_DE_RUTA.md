@@ -13,7 +13,7 @@
 | 8. Monetización | Skins originales opcionales, publicidad de prueba y analítica respetuosa | IDs reales autorizados, privacidad, consentimiento y métricas verificadas |
 
 ## Arquitectura
-- **Reglas:** única instancia de \`chess.js\` para tablero 3D y AR; FEN/PGN en partidas.
+- **Reglas:** única instancia de `chess.js` para tablero 3D y AR; FEN/PGN en partidas.
 - **Render:** Three.js y WebXR hit-test; materiales/biomas intercambiables.
 - **IA:** motor local Stockfish (GPLv3; revisión de licenciamiento y distribución).
 - **Backend futuro:** Firebase Authentication + Firestore/Realtime Database con cuota gratuita; reglas de seguridad contra jugadas ilegales. Ninguno configurado todavía en Ecoajedrez.
