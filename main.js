@@ -343,6 +343,23 @@ canvas.addEventListener('pointerup',event=>{
   }else if(!moved)pickSquare(destination);
 });
 canvas.addEventListener('pointercancel',()=>{down=null;orbit.enabled=true;});
+async function loadChessModels(){
+  const label=$('modelsStatus');
+  if(label)label.textContent='Cargando seis modelos glTF originales…';
+  const types=['p','r','n','b','q','k'];
+  const names=['pawn','rook','knight','bishop','queen','king'];
+  await Promise.all(types.map(async(type,index)=>{
+    try{
+      const result=await loader.loadAsync('./assets/models/staunton/'+names[index]+'.gltf');
+      assets.set(type,result.scene);
+      if(modelSet==='staunton')renderPieces();
+    }catch(error){
+      console.warn('No se pudo cargar el modelo '+names[index],error);
+      assets.set(type,null);
+    }
+  }));
+  if(label)label.textContent=[...assets.values()].filter(Boolean).length+' / 6 modelos glTF cargados · respaldo 3D disponible';
+}
 $('reset').onclick=()=>{if(mode==='online'&&!match.host){toast('Solo el anfitrión reinicia el duelo.');return;}reset();};
 $('undo').onclick=()=>{
   if(mode==='online'){toast('Deshacer no está disponible durante un duelo online.');return;}
