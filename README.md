@@ -50,3 +50,14 @@ Comandos: e2e4, e4, Nf3, Cf3, O-O, enroque corto, caballo de g1 a f3. Dictado op
 
 El usuario confirmó que la AR funcionaba en la versión previa. Esta actualización necesita prueba física regresiva en Android, más prueba de Google y PvP entre dos móviles.
 Guía detallada: docs/ENTREGA_0.4.0.md
+
+
+## Actualización 0.4.1-beta.1: recuperación y diagnóstico
+- Historial íntegro de jugadas SAN con sincronización de FEN validada: el invitado online conserva anotaciones y se rechazan estados remotos inconsistentes.
+- Partidas CPU/local guardadas **en el navegador** por cuenta o invitado; se restauran al volver a entrar (hasta 90 días, salvo eliminación de datos locales). Las partidas online NO se almacenan localmente como si fueran recuperables.
+- Exportación de partida PGN desde el menú, con formato compatible con herramientas de ajedrez.
+- Resaltado de la última jugada y la pieza seleccionada en tablero 3D y AR.
+- DIAGNÓSTICO del dispositivo para verificar APIs WebXR/WebGL, disponibilidad de Firebase SDK, PeerJS, recursos 3D y copiar el informe voluntariamente.
+- Popup Google se inicia directamente al tocar el botón, sin espera intermedia; queda pendiente comprobar autorización del dominio.
+- Pruebas automatizadas ampliadas: `tests/match-persistence.test.mjs`.
+**Estado:** versión desplegada automáticamente cuando GitHub Actions aprueba las pruebas; aún sin prueba del PvP entre dos celulares ni Google en el dominio. Leer `docs/ENTREGA_0.4.1.md`.
