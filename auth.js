@@ -41,11 +41,12 @@ export async function initializeAccountAuth(onUser,onError){
   return true;
  }catch(error){onError?.(error);return false;}
 }
-export async function loginGoogle(){
+export function loginGoogle(){
  if(!authAvailable())throw new Error('La autenticación Firebase aún no está disponible.');
  const provider=new sdk.GoogleAuthProvider();
  provider.setCustomParameters({prompt:'select_account'});
- await sdk.setPersistence(auth,sdk.browserLocalPersistence);
+ // Persistence was set during initializeAccountAuth. Do not await here:
+ // opening a popup after another asynchronous call can lose the user gesture on mobile.
  return sdk.signInWithPopup(auth,provider);
 }
 export async function loginGuest(){
