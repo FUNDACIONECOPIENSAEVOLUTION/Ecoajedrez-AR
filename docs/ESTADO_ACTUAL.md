@@ -71,3 +71,12 @@ Corrección del popup Google eliminando espera entre gesto real y apertura, pero
 Diagnóstico desde menú para WebGL2, WebXR immersive-ar, Firebase SDK disponible (no garantiza inicio de sesión), PeerJS, QR y seis modelos 3D.
 QA de módulos Node y GitHub Actions, pendiente browser E2E y prueba física de AR tras revisión 0.4.1, de dos dispositivos PvP y login Google. El usuario confirmó AR en una versión anterior.
 Para continuación: `docs/ENTREGA_0.4.1.md`. No afirmar que el PvP o Google está confirmado en teléfonos sin evidencia.
+
+
+## Seguridad — 0.5.0-beta.1 · 2026-10-17
+Se retiraron datos de configuración Firebase de `auth.js` actual. El login Google dejó de funcionar voluntariamente en github.io mientras no exista intermediario propio para impedir el uso de credenciales desde JavaScript cliente. Modo invitado y ajedrez 3D/AR se mantienen.
+Código de BFF Cloudflare Pages Functions disponible en `functions/` y `worker-lib/`: PKCE, state/nonce, verificación JWKS/RS256 de Google, cookies HttpOnly Secure AES-GCM y datos seudónimos. **No se ha desplegado/configurado servidor con secretos.**
+Build solo dist para Pages, CSP/cabeceras, gitignore de secretos, escáner CI y pruebas de criptografía.
+PeerJS salas privadas con 12 caracteres aleatorios, validación de mensaje y tasa; PvP sin backend anti-trampa confiable ni verificación real de dos teléfonos.
+Se añadió `privacy.html`, `SECURITY.md`, `docs/DEPLOY_SEGURIDAD.md`.
+Para otra IA: `docs/ENTREGA_SEGURIDAD_0.5.md`. No exponer claves en archivos nuevos. Las claves de configuración web del antiguo Firebase podrían permanecer en el historial Git; revisar restricciones y rotación, no afectar otro juego.
