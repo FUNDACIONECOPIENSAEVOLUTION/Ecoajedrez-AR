@@ -37,3 +37,16 @@ No afirmar "funciona en AR" hasta verificar dispositivo; distinguir código impl
 
 ## Entrega más reciente
 Consultar [docs/ENTREGA_0.3.0.md](docs/ENTREGA_0.3.0.md) para modelos, enlaces CC0, diagnóstico AR y lista de pruebas que debe realizar una persona en un Android compatible.
+
+
+## Versión 0.4.0-beta.1 — flujo gamer y multijugador experimental
+Enlace: https://fundacionecopiensaevolution.github.io/Ecoajedrez-AR/
+
+Bienvenida con Google (Firebase Auth existente del proyecto d-line-g) o invitado local. Menú principal con VS computadora, dos jugadores locales, crear sala online y unirse mediante código/URL/QR. El Google login necesita verificar dominio autorizado y proveedor activado; PvP por PeerJS es beta sin garantía de conexión en todas las redes.
+
+La configuración del tablero ahora se realiza antes de jugar: siete variantes visuales (obsidiana, madera, mármol, neón, selva, volcán e hielo), estilos de piezas originales, colores, tamaño AR, idioma y dificultad. El tablero aparece a pantalla completa y se puede regresar al menú y continuar una partida.
+
+Comandos: e2e4, e4, Nf3, Cf3, O-O, enroque corto, caballo de g1 a f3. Dictado opcional con Web Speech; las reglas se verifican con chess.js. Tocar o arrastrar piezas 3D y AR, con control de escala de mesa.
+
+El usuario confirmó que la AR funcionaba en la versión previa. Esta actualización necesita prueba física regresiva en Android, más prueba de Google y PvP entre dos móviles.
+Guía detallada: docs/ENTREGA_0.4.0.md
