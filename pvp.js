@@ -1,8 +1,10 @@
 // PeerJS unranked duel for Ecoajedrez. Host validates ALL guest moves through chess.js.
 // This is a cost-free beta using the public PeerJS signal server; no SLA / NAT guarantee.
-const PREFIX='ecoajedrez-v04-';
+const PREFIX='ecoajedrez-v05-protected-';
+const ROOM_SIZE=12;
+const MAX_MESSAGE_BYTES=64000;
 const LETTERS='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-export const normalizeRoomCode=value=>String(value||'').trim().toUpperCase().replace(/[^A-Z2-9]/g,'').slice(0,6);
+export const normalizeRoomCode=value=>String(value||'').trim().toUpperCase().replace(/[^A-Z2-9]/g,'').slice(0,ROOM_SIZE);
 export class PeerMatch {
  constructor({onStatus,onMove,onState,onReady}={}){
   this.peer=null;this.conn=null;this.room='';this.host=false;
@@ -12,7 +14,7 @@ export class PeerMatch {
  available(){return typeof window.Peer==='function';}
  create(){
   this.close();if(!this.available())throw Error('PeerJS no está disponible en esta conexión.');
-  let code='';const nums=new Uint8Array(6);crypto.getRandomValues(nums);
+  let code='';const nums=new Uint8Array(ROOM_SIZE);crypto.getRandomValues(nums);
   for(const n of nums)code+=LETTERS[n%LETTERS.length];
   this.room=code;this.host=true;this.onStatus('Creando sala '+code+'…');
   const p=new window.Peer(PREFIX+code,{debug:0});
@@ -29,7 +31,7 @@ export class PeerMatch {
  }
  join(input){
   const code=normalizeRoomCode(input);
-  if(code.length!==6)throw Error('Código de sala no válido.');
+  if(code.length!==ROOM_SIZE)throw Error('El código de sala debe tener 12 caracteres.');
   this.close();if(!this.available())throw Error('PeerJS no está disponible.');
   this.room=code;this.host=false;this.onStatus('Buscando sala '+code+'…');
   const p=new window.Peer(undefined,{debug:0});
@@ -45,11 +47,19 @@ export class PeerMatch {
  connect(c){
   this.conn=c;
   c.on('open',()=>{this.onStatus('Rival conectado · '+this.room);this.onReady(this.host);});
-  c.on('data',data=>{
-   if(!data || typeof data!=='object')return;
+  let lastMessageAt=0,burst=0;
+ c.on('data',data=>{
+   if(!data || typeof data!=='object' || Array.isArray(data))return;
+   let encoded;
+   try{encoded=JSON.stringify(data);}catch(error){return;}
+   if(!encoded || encoded.length>MAX_MESSAGE_BYTES)return;
+   const now=Date.now();
+   burst=(now-lastMessageAt<1000)?burst+1:1;lastMessageAt=now;
+   if(burst>12)return;
+
    if(data.type==='MOVE' && this.host && /^[a-h][1-8]$/.test(data.from||'') && /^[a-h][1-8]$/.test(data.to||'')){
-    this.onMove({from:data.from,to:data.to,promotion:/^[qrbn]$/.test(data.promotion)?data.promotion:'q',version:Number(data.version)});
-   } else if(data.type==='STATE' && !this.host && typeof data.fen==='string' && data.fen.length<120 && Number.isSafeInteger(data.version)){
+    this.onMove({from:data.from,to:data.to,promotion:/^[qrbn]$/.test(data.promotion)?data.promotion:'q',version:Number.isSafeInteger(data.version)&&data.version>=0&&data.version<=5000?data.version:-1});
+   } else if(data.type==='STATE' && !this.host && typeof data.fen==='string' && data.fen.length<120 && Array.isArray(data.history) && data.history.length<=2048 && Number.isSafeInteger(data.version) && data.version>=0 && data.version<=5000){
     this.onState(data);
    }else if(data.type==='HELLO' && this.host){this.onReady(true);}
   });
