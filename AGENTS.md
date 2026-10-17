@@ -83,3 +83,12 @@ Antes de activar Cloudflare, App Check, bases de datos, facturación o lanzar nu
 - El complemento oficial Firebase aparece **instalado y habilitado**, pero **sus acciones no están expuestas en esta sesión de chat**; no afirmar acceso administrativo efectivo a `ecoajedrez-3d`. Para verificarlo es necesario abrir Codex / entorno que cargue el complemento Firebase, autenticar la cuenta institucional y consultar el proyecto primero en modo solo lectura.
 - No crear proyecto adicional ni activar Firestore, Blaze, App Check obligatorio, proveedores o escritura hasta que el usuario lo solicite y se confirme el plan de seguridad gratuito. Mantener el invitado.
 - No publicar direcciones de correo, credenciales ni tokens en Git o documentación; credenciales se autorizan mediante OAuth directamente en el proveedor.
+
+
+## ECOAJEDREZ v0.6.0-beta.1 — continuidad obligatoria (2026-10-17)
+Leer `docs/ENTREGA_0.6.md` antes de modificar UI, WebXR, modelos o salas. El usuario confirmó con capturas que el modo invitado/AR funcionaban en 0.5, pero la revisión 0.6 **requiere nuevas pruebas físicas**.
+Interfaz temática `arcane.css` y `arcane-ui.js` ahora dentro de la lista pública de `scripts/build-pages.mjs`. No reemplazar sin pruebas el CSS del HTML ni abrir fuentes externas en CSP.
+Salas código/QR de 6 caracteres (en lugar de 12) para invitaciones casuales, con validación/tasa de mensajes, no autenticación formal ni aptas para premios. La URL larga permanece solo codificada en el QR, no se muestra en pantalla. Conserva el modo invitado sin Firebase.
+Modelos: 6 glTF Staunton originales + `royal` como variante geométrica propia con cristales y corona; sin materiales de franquicias. No se descargaron otros modelos comerciales.
+AR: interrupción por bloqueo termina WebXR y muestra recuperación 3D/AR en gesto nuevo; anclaje plano XZ. Arrastre táctil en pantalla y apuntar. NO hay oclusión de mano real ni pinza en el aire. No afirmar que se lograron sin prueba real.
+No mezclar con Firebase personal de 3 LINE-AR. Costo $0, sin nuevas suscripciones.
