@@ -11,6 +11,31 @@ for(const name of files){
 }
 fs.cpSync('assets/models',path.join(dest,'assets/models'),{recursive:true});
 fs.cpSync('assets/ui',path.join(dest,'assets/ui'),{recursive:true});
+
+// Explicitly publish the user-approved game media. Never publish whole arbitrary directories.
+const mediaFiles=[
+  ['ECOAJEDREZ_ Tablero Místico del Planeta-1.png',6000000],
+  ['Ecoajedrez_ La Arena Cobra Vida-2.png',6000000],
+  ['Ecoajedrez_ Portales del Bosque Mágico-3.png',6000000],
+  ['Vídeo sin título-17_10_2026, 16_58.mp4',20000000],
+  ['Vídeo sin título-17_10_2026, 17_08.mp4',20000000],
+  ['Vídeo sin título-17_10_2026, 17_10.mp4',20000000]
+];
+fs.mkdirSync(path.join(dest,'videos'),{recursive:true});
+for(const [name,maxSize] of mediaFiles){
+  const src=path.join('videos',name);
+  if(!fs.existsSync(src)||!fs.statSync(src).isFile())throw Error('Missing media asset: '+name);
+  const size=fs.statSync(src).size;
+  if(size<128||size>maxSize)throw Error('Unexpected media size: '+name+' '+size);
+  const header=Buffer.alloc(12);
+  const handle=fs.openSync(src,'r');
+  try{fs.readSync(handle,header,0,12,0);}finally{fs.closeSync(handle);}
+  const isPng=name.endsWith('.png');
+  if(isPng&&!header.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])))throw Error('Not a PNG: '+name);
+  if(!isPng&&header.subarray(4,8).toString()!=='ftyp')throw Error('Not an MP4: '+name);
+  fs.copyFileSync(src,path.join(dest,'videos',name));
+}
+
 fs.writeFileSync(path.join(dest,'.nojekyll'),'');
 for(const sensitive of ['worker-lib','functions','tests','docs','AGENTS.md','package.json','.env','.dev.vars']){
  if(fs.existsSync(path.join(dest,sensitive)))throw Error('Sensitive internal source in deployment: '+sensitive);
