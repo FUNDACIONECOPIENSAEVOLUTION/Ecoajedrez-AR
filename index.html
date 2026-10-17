@@ -1,92 +1,168 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#08131c"><title>ECOAJEDREZ 3D · AR</title>
+<meta name="theme-color" content="#06111e"><title>ECOAJEDREZ AR · Arena 3D</title>
+<meta name="description" content="ECOAJEDREZ AR: ajedrez 3D con realidad aumentada, rival automático y duelos con amigos.">
 <style>
-:root{color-scheme:dark;--b:#08131c;--p:#102330;--s:#315064;--g:#91f2c7;--a:#fbd38a;--t:#f0f8fb;--d:#a8c1c9}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--b);color:var(--t);font-family:system-ui,'Segoe UI',sans-serif}
-button,select,input{font:inherit;color:inherit;background:#153143;border:1px solid #456273;border-radius:10px;padding:10px}
-button{cursor:pointer}button:hover{border-color:var(--g)}button:disabled{opacity:.45;cursor:not-allowed}
-main{display:grid;grid-template-columns:305px 1fr;width:100%;height:100dvh;min-height:380px}
-aside{background:linear-gradient(160deg,#12303e,#08131c);border-right:1px solid var(--s);padding:22px;overflow:auto;z-index:3}
-.head{display:flex;gap:12px;align-items:center}.chessIcon{font-size:27px;background:#205b50;width:48px;height:48px;border-radius:14px;display:grid;place-items:center}
-h1{font-size:22px;letter-spacing:.6px;margin:0}h2{font-size:12px;letter-spacing:1.2px;color:var(--a);text-transform:uppercase;margin:0 0 10px}
-.desc,.help{font-size:12px;color:var(--d);line-height:1.55}.ver{color:var(--g);letter-spacing:1.6px;font-size:11px;margin-top:3px}
-section{border-top:1px solid #25485b;padding-top:15px;margin-top:16px}
-label{display:block;font-size:12px;color:#c0d1d7;margin:10px 0 5px}
-select,input{width:100%}.twocol{display:flex;gap:7px}.twocol>*{flex:1;min-width:0}
-.accent{background:linear-gradient(100deg,#3cbb99,#acf6d2);color:#073328;font-weight:800;border-color:#b5fbe2}.status{background:#153946;border:1px solid #3f797b;padding:11px;border-radius:11px;font-size:13px;font-weight:700;line-height:1.4}
-#history{font-size:12px;color:#e3f0f4;line-height:1.5;max-height:85px;overflow:auto;min-height:24px}
-#scene{position:relative;overflow:hidden;background:radial-gradient(ellipse at 50% 40%,#203d50,#06111a 78%)}
+:root{color-scheme:dark;--b:#06101b;--panel:#0d2536;--border:#416078;--lime:#8bf6cd;--gold:#ffd78a;--white:#edf9ff;--muted:#bed0d9}
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:var(--b);color:var(--white);font-family:system-ui,'Segoe UI',sans-serif}
+button,select,input{font:inherit;color:inherit;border:1px solid var(--border);border-radius:11px;background:#153142;padding:10px 13px}
+button{cursor:pointer;transition:transform .18s,border-color .18s,filter .18s}button:hover{border-color:var(--lime);transform:translateY(-1px)}button:disabled{opacity:.44;cursor:not-allowed}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
+h1,h2,h3,p{margin-top:0}h2{font-size:20px}small,.muted{color:var(--muted)}label{display:block;font-size:12px;margin:9px 0 5px;color:var(--muted)}
+select,input{width:100%}
+.primary{background:linear-gradient(110deg,#49c4a0,#bdffe0);border-color:#c4ffdf;color:#08382f;font-weight:850}
+.gold{background:linear-gradient(115deg,#a97336,#e3be70);color:#231608;border-color:#ffe0aa;font-weight:800}
+.ghost{background:#153548bf}
+.panel{border:1px solid #5777898a;background:linear-gradient(145deg,#122d3fe9,#091822f0);box-shadow:0 15px 70px #0008;border-radius:24px}
+.logo{width:86px;height:86px;object-fit:cover;border-radius:22px;border:2px solid #c4ffdf;box-shadow:0 0 38px #41db9e55}
+.brand{font-size:clamp(31px,5vw,57px);letter-spacing:2px;font-weight:950;margin:9px 0 1px;text-shadow:0 0 25px #145d62}
+.brand span{color:#ffd58a}
+.eyebrow{letter-spacing:3px;font-size:11px;color:var(--lime)}
+.version{font-size:11px;color:#b7cfd4;letter-spacing:1px}
+#scene{position:absolute;inset:0;overflow:hidden;background:radial-gradient(ellipse at center,#204456,#05111b 72%)}
 #render{display:block;width:100%;height:100%;touch-action:none}
-.banner{position:absolute;left:20px;top:18px;pointer-events:none;text-shadow:0 2px 16px #000}.banner strong{letter-spacing:2px;font-size:clamp(17px,2.6vw,30px)}.banner strong span{color:#ffd58a}
-.banner div{font-size:12px;line-height:1.7;color:#bce0dd}
-.bottom{position:absolute;bottom:18px;left:18px;right:18px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.bottom button{font-size:13px;background:#193e4cd9;backdrop-filter:blur(10px)}
-#arButtonHolder button{background:#287d68!important;border-color:#a9ffda!important;color:#fff!important;font-size:13px!important;font-weight:800!important;border-radius:10px!important;padding:11px 16px!important;position:static!important;bottom:auto!important;left:auto!important;max-width:none!important}
-#arMessage{position:absolute;top:85px;left:50%;transform:translateX(-50%);width:min(95%,430px);padding:12px;text-align:center;border-radius:13px;background:#102c37e8;border:1px solid #6ad3b6;display:none;z-index:5;font-size:13px;font-weight:700;pointer-events:none}
-#toast{position:absolute;top:85px;right:18px;max-width:290px;background:#102c37;border:1px solid #72d2bb;padding:13px;border-radius:12px;display:none;z-index:4;font-size:13px}
-kbd{background:#294454;border:1px solid #52798b;padding:1px 5px;border-radius:5px}
-
-.pieceColors{display:grid;grid-template-columns:1fr 1fr;gap:8px}.pieceColors label{margin:5px 0}
-.ar-hud{display:none;position:fixed;z-index:99999;inset:0;pointer-events:none;font-size:13px}
-.ar-hud .arBar{position:absolute;top:12px;left:10px;right:10px;display:flex;flex-wrap:wrap;gap:7px;align-items:center;pointer-events:auto}
-.ar-hud button{font-weight:700;background:#143d4eee;border:1px solid #82e4b9;color:white;padding:10px 13px}
-.ar-hud .arBottom{position:absolute;bottom:17px;left:12px;right:12px;display:flex;gap:7px;flex-wrap:wrap;align-items:center;pointer-events:auto}
-.ar-hud input[type=range]{max-width:110px;accent-color:#6df2bd}
-.ar-hud .aimCrosshair{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:36px;text-shadow:0 1px 8px #000;pointer-events:none;color:#6ef0c8}
+#scene:after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,#05121b40,transparent,#05121b38)}
+.screen{display:none;position:absolute;inset:0;z-index:8;align-items:center;justify-content:center;overflow-y:auto;padding:24px;background:linear-gradient(135deg,#031019c9,#041825a8)}
+body[data-view=welcome] #welcomeScreen,body[data-view=menu] #menuScreen,body[data-view=settings] #settingsScreen{display:flex}
+#loginPanel{width:min(100%,480px);padding:32px;text-align:center}
+#loginPanel p{line-height:1.5;color:var(--muted);font-size:14px}
+.stack{display:grid;gap:12px}.stack>button{min-height:46px}
+#menuPanel{width:min(100%,820px);padding:clamp(20px,4vw,44px)}
+.menuHead{display:flex;gap:18px;align-items:center;margin-bottom:22px}
+.menuHead .logo{width:66px;height:66px}.menuHead .brand{font-size:32px;margin:0}
+.menuGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.menuTile{padding:21px;min-height:110px;text-align:left;border-color:#517181;background:linear-gradient(130deg,#1d4354df,#0c2235);display:flex;gap:10px;flex-direction:column;justify-content:center}
+.menuTile b{font-size:16px}.menuTile small{font-size:12px}
+.menuTile.featured{border-color:#8af5cb;background:linear-gradient(120deg,#1c5a4c,#153349)}
+#accountState{color:#adf5e0;font-size:12px;line-height:1.6;margin-bottom:15px}
+.settingsPanel{width:min(100%,620px);max-height:calc(100dvh - 30px);overflow:auto;padding:25px}
+.settingsPanel h2{color:var(--gold)}
+.settingGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.settingFoot{display:flex;gap:9px;margin-top:20px}
+.settingFoot button{flex:1}
+#gameHud{position:absolute;inset:0;pointer-events:none;z-index:3;display:none}
+body[data-view=game] #gameHud{display:block}
+#gameHud button,#gameHud input,#gameHud select{pointer-events:auto}
+.hudTop{position:absolute;top:16px;left:16px;right:16px;display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.hudTop .chip{background:#0b2232dd;backdrop-filter:blur(10px);border:1px solid #578d88;border-radius:14px;padding:10px 12px;max-width:360px}
+.hudTop .chip strong{color:#afffd2}
+.hudTop button{background:#173446d6}
+.hudBottom{position:absolute;bottom:16px;left:16px;right:16px;display:flex;gap:7px;flex-wrap:wrap;justify-content:center;align-items:center}
+.hudBottom button,.hudBottom input{background:#123144e9;backdrop-filter:blur(12px);font-size:13px}
+.hudBottom .primary{background:linear-gradient(110deg,#36bd99,#a8f5d3);color:#06362d}
+#moveInput{width:130px}
+#history{font-size:12px;color:#dffae9;max-width:220px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+#commandHint{position:absolute;bottom:75px;left:50%;transform:translateX(-50%);background:#0c2940d9;padding:8px 12px;border-radius:10px;font-size:12px;color:#bde5d5;text-align:center;max-width:92%;pointer-events:none}
+#gameToast{display:none;position:absolute;top:85px;right:14px;padding:12px;background:#102d43;z-index:20;border:1px solid #8bffdd;border-radius:12px;font-size:13px;max-width:290px}
+#loadingPortal{display:none;position:fixed;inset:0;z-index:90;background:radial-gradient(circle,#14556d,#06131f 64%);align-items:center;justify-content:center;flex-direction:column;pointer-events:none;animation:portalIn .5s ease}
+#loadingPortal.show{display:flex}
+.portal{font-size:85px;color:var(--gold);animation:portalSpin 1.4s ease-in-out infinite;filter:drop-shadow(0 0 30px #59ffbf)}
+#loadingPortal strong{letter-spacing:3px;color:#ddffe8}
+@keyframes portalSpin{0%{transform:scale(.8) rotate(-17deg)}50%{transform:scale(1.23) rotate(16deg)}100%{transform:scale(.8) rotate(-17deg)}}
+@keyframes portalIn{from{opacity:0}to{opacity:1}}
+#roomPanel{display:none;margin-top:10px;padding:12px;border:1px solid #538879;border-radius:13px;background:#143844b8}
+#roomPanel.visible{display:block}
+#roomCode{font-size:26px;letter-spacing:5px;font-weight:850;color:var(--gold)}
+#roomQR{padding:8px;width:max-content;background:white;margin:10px auto;border-radius:7px}
+#roomQR:empty{display:none}
+#joinCode{width:130px;text-transform:uppercase;letter-spacing:2px}
+#joinPanel{display:none;margin-top:12px}#joinPanel.visible{display:flex;flex-wrap:wrap;gap:8px}
+#joinPanel input{flex:1}
+.ar-hud{display:none;position:fixed;inset:0;z-index:99999;pointer-events:none}
+.ar-hud .arBar,.ar-hud .arBottom{display:flex;gap:5px;flex-wrap:wrap;align-items:center;pointer-events:auto;position:absolute;left:8px;right:8px}
+.ar-hud .arBar{top:max(10px,env(safe-area-inset-top))}.ar-hud .arBottom{bottom:max(9px,env(safe-area-inset-bottom))}
+.ar-hud button{font-size:12px;padding:9px 11px;border:1px solid #80edc5;font-weight:750;background:#0f3447ee;color:white}
+.ar-hud label{display:flex;align-items:center;gap:5px;background:#0f3447ee;padding:5px;border-radius:10px;margin:0;color:white}
+.ar-hud input[type=range]{width:85px;accent-color:#80ffba}
+.ar-hud #arHint{position:absolute;top:70px;left:10px;right:10px;text-align:center;background:#113949e8;padding:9px;border-radius:10px;font-size:12px;pointer-events:none}
+.ar-hud .aimCrosshair{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:#86ffd6;font-size:33px;pointer-events:none;text-shadow:0 2px 10px black}
 .ar-hud .aimCrosshair.hidden{display:none}
-.ar-hud #arHint{position:absolute;top:65px;left:10%;right:10%;background:#0d3348ec;border:1px solid #72dcc2;border-radius:10px;padding:10px;text-align:center;pointer-events:none}
-body.xr-active .ar-hud{display:block}
-body.xr-active #scene{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;background:transparent!important;z-index:30}
+.ar-hud #arCommand{width:115px;font-size:12px;padding:9px}
+body.xr-active .screen,body.xr-active #gameHud,body.xr-active #loadingPortal{display:none!important}
+body.xr-active #scene{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;background:transparent!important;z-index:10}
 body.xr-active #render{width:100%!important;height:100%!important}
-body.xr-active aside,body.xr-active .banner,body.xr-active .bottom,body.xr-active #arMessage{display:none!important}
-body.xr-active main{display:block!important;width:100vw!important;height:100dvh!important}
 body.xr-active .ar-hud{display:block!important}
-@media(max-width:720px){html,body{overflow:auto}main{display:flex;flex-direction:column;height:100dvh}aside{order:2;height:42%;border-right:0;border-top:1px solid var(--s);padding:13px 16px}#scene{order:1;height:58%;flex-shrink:0}.head{align-items:center}h1{font-size:19px}section{margin-top:12px;padding-top:12px}.banner{top:10px;left:12px}.banner div{font-size:10px}.bottom{left:9px;right:9px;bottom:9px}.bottom button{padding:8px}#arButtonHolder button{padding:8px 10px!important}}
+body.xr-active #gameToast{display:none!important}
+@media(max-width:690px){
+.screen{padding:10px}.settingsPanel{max-height:calc(100dvh - 18px);padding:15px}
+#loginPanel,#menuPanel{padding:23px}.menuGrid{grid-template-columns:1fr 1fr;gap:8px}.menuTile{padding:12px;min-height:96px}.menuTile b{font-size:13px}
+.menuTile small{font-size:11px}.menuHead .brand{font-size:24px}
+.hudTop{top:7px;left:7px;right:7px}.hudTop .chip{font-size:11px;padding:7px}
+.hudBottom{left:6px;right:6px;bottom:8px;gap:5px}.hudBottom button{padding:8px;font-size:11px}
+#moveInput{width:100px}#history{max-width:130px}
+#commandHint{bottom:100px;font-size:10px}.settingGrid{grid-template-columns:1fr 1fr;gap:6px}
+.ar-hud .arBar{top:max(4px,env(safe-area-inset-top))}.ar-hud .arBottom{bottom:max(4px,env(safe-area-inset-bottom))}
+.ar-hud button{padding:7px 8px;font-size:11px}.ar-hud #arHint{top:90px;font-size:11px}
+}
 </style>
+<script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js" defer></script>
+<script src="https://unpkg.com/qrcodejs@1.0.0/qrcode.min.js" defer></script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}</script>
 </head>
-<body>
-<main>
-<aside>
-<div class="head"><img src="./ecoajedrez.PNG" width="48" height="48" alt="Logo Ecoajedrez" style="object-fit:cover;border-radius:14px"><div><h1>ECOAJEDREZ</h1><div class="ver">3D • AR | v0.3.0-beta.1</div></div></div>
-<p class="desc">Una arena de ajedrez viva. Empieza en 3D; pasa a realidad aumentada cuando tu dispositivo sea compatible.</p>
-<section><h2>Configuración de partida</h2>
-<label for="lang">Idioma · Language · 语言</label><select id="lang"><option value="es">Español</option><option value="en">English</option><option value="zh">简体中文</option></select>
-<label for="mode" data-i18n="mode">Modo de juego</label><select id="mode"><option value="bot" data-i18n="bot">Contra computadora</option><option value="local" data-i18n="local">Dos jugadores locales</option></select>
-<label for="difficulty" data-i18n="difficulty">Dificultad de demostración</label><select id="difficulty"><option value="easy" data-i18n="easy">Principiante</option><option value="medium" data-i18n="medium">Intermedio</option><option value="advanced" data-i18n="advanced">Avanzado (básico)</option></select>
-<label for="theme" data-i18n="scenario">Escenario 3D</label><select id="theme"><option value="classic" data-i18n="classic">Clásico de obsidiana</option><option value="jungle" data-i18n="jungle">Selva encantada</option></select>
-<label for="pieceSet">Modelos de piezas 3D</label>
-<select id="pieceSet"><option value="staunton">Staunton 3D original (glTF)</option><option value="fantasy">Fantasía mágica (geometría 3D)</option><option value="classic">Clásico ligero (geometría 3D)</option></select>
-<div class="pieceColors">
-<div><label for="whiteColor">Blancas · Material</label><select id="whiteColor"><option value="#f9d890">Oro</option><option value="#efffff">Marfil</option><option value="#7cf6e2">Esmeralda</option><option value="#e2a7ff">Amatista</option></select></div>
-<div><label for="blackColor">Negras · Material</label><select id="blackColor"><option value="#203d54">Obsidiana</option><option value="#f0788d">Carmesí</option><option value="#a3bfff">Zafiro</option><option value="#72e0bf">Jade</option></select></div>
-</div>
-<p class="help" id="modelsStatus">Cargando modelos 3D...</p>
-</section>
-<section><h2 data-i18n="game">Partida</h2><div class="status" id="status">Preparando tablero…</div>
-<div class="twocol" style="margin-top:10px"><button id="reset" class="accent" data-i18n="new">Nueva partida</button><button id="undo" data-i18n="undo">Deshacer</button></div>
-<label for="moveInput" data-i18n="keyboard">Movimiento por teclado (e2e4)</label>
-<div class="twocol"><input id="moveInput" maxlength="5" placeholder="e2e4" autocomplete="off" spellcheck="false"><button id="playMove" data-i18n="move">Mover</button></div>
-<label data-i18n="historyTitle">Movimientos</label><div id="history">—</div>
-</section>
-<section><h2 data-i18n="about">Cómo jugar</h2><div class="help" id="help">Toca una figura y una casilla iluminada. Arrastra para girar el tablero. En Android compatible, pulsa AR, apunta a una mesa y toca para fijarlo.</div>
-<div class="help" style="margin-top:12px"><strong>AR WebXR experimental:</strong> necesita HTTPS y un navegador Android compatible; si no hay hit-test se usa un tablero holográfico frente a la cámara. La partida remota y los títulos Elo/FIDE todavía no están implementados.</div></section>
-</aside>
-<div id="scene"><canvas id="render" aria-label="Tablero 3D interactivo"></canvas>
-<div class="banner"><strong>ECO<span>AJEDREZ</span> · 3D AR</strong><div>REALIDAD AUMENTADA · FANTASÍA · ESTRATEGIA</div></div>
-<div id="arMessage" role="status">Busca una superficie y toca para colocar el tablero.</div><div id="toast" role="status"></div>
+<body data-view="welcome">
+<div id="scene"><canvas id="render" aria-label="Tablero de ajedrez 3D interactivo"></canvas>
+<div id="gameToast" role="status"></div>
+<div id="gameHud">
+<div class="hudTop"><div class="chip"><strong>♜ ECOAJEDREZ</strong> · <span id="status">Preparando tablero...</span><div id="networkStatus" class="version">MODO LOCAL</div></div>
+<button id="gameMenuBtn">☰ MENÚ</button></div>
+<div id="commandHint">Mueve tocando una pieza y su destino, o escribe e2e4 / e4 / Cf3</div>
+<div class="hudBottom">
+<button id="reset">↻ Nueva</button><button id="undo">↶ Deshacer</button>
+<input id="moveInput" maxlength="80" placeholder="e4 · Cf3 · e2e4" aria-label="Comando de ajedrez" autocomplete="off" spellcheck="false">
+<button id="playMove" class="primary">♟ Mover</button><button id="voiceBtn" title="Dictar jugada usando el micrófono" type="button">🎙</button>
+<button id="startArBtn" class="primary">◎ AR</button><button id="center">⌖ Vista</button><button id="rotate">⟳</button><span id="history"></span>
+</div></div>
 <div id="arHud" class="ar-hud">
-<div class="arBar"><button id="placeArBtn" type="button">📍 FIJAR TABLERO</button><button id="exitArBtn" type="button">✕ SALIR AR</button><button id="arTouchBtn" type="button">👆 TOCAR CASILLA</button><button id="arAimBtn" type="button">⊕ APUNTAR</button></div>
-<div id="arHint">Busca una mesa y toca FIJAR TABLERO</div>
+<div class="arBar"><button id="placeArBtn" type="button">📍 FIJAR TABLERO</button><button id="exitArBtn" type="button">✕ SALIR AR</button><button id="arTouchBtn" type="button">👆 TOCAR</button><button id="arAimBtn" type="button">⊕ APUNTAR</button></div>
+<div id="arHint">Busca una mesa y pulsa FIJAR TABLERO</div>
 <div id="arCrosshair" class="aimCrosshair hidden">⊕</div>
-<div class="arBottom"><button id="arSelectBtn" type="button" style="display:none">✓ SELECCIONAR CASILLA</button><label for="arScale" style="background:#143d4eee;padding:6px;border-radius:9px">Escala AR <input type="range" id="arScale" min="0.4" max="2.2" step="0.1" value="1"></label></div>
+<div class="arBottom"><button id="arSelectBtn" type="button" style="display:none">✓ SELECCIONAR CASILLA</button>
+<label>Escala <input type="range" id="arScale" min="0.35" max="2.8" step="0.05" value="1"></label>
+<input id="arCommand" placeholder="e4 / Cf3" maxlength="80" aria-label="Comando de movimiento AR">
+<button id="arPlayMove" type="button">♟ MOVER</button>
+<button id="arVoiceBtn" type="button">🎙 DICTAR</button>
+</div></div>
 </div>
-<div class="bottom"><button id="startArBtn" class="accent" type="button">📱 Activar realidad aumentada</button><button id="center" data-i18n="center">Centrar cámara</button><button id="rotate" data-i18n="rotate">Girar vista</button><span class="help">3D / WebXR</span></div>
+<div id="welcomeScreen" class="screen">
+<div id="loginPanel" class="panel"><img src="./ecoajedrez.PNG" class="logo" alt="Logo Ecoajedrez">
+<div class="eyebrow" style="margin-top:12px">LA ARENA COBRA VIDA</div><h1 class="brand">ECO<span>AJEDREZ</span></h1>
+<p>Ajedrez 3D y realidad aumentada. Domina el tablero, invoca tu ejército y desafía a otros jugadores.</p>
+<div class="stack"><button id="loginGoogleBtn" class="primary">G · INICIAR CON GOOGLE</button><button id="loginGuestBtn" class="gold">⚡ CONTINUAR COMO INVITADO</button></div>
+<p id="loginStatus" role="status" style="margin:15px 0 0">Comprobando inicio de sesión…</p>
+<p class="version">Modo invitado gratuito y partidas locales · v0.4.0-beta.1</p>
+</div></div>
+<div id="menuScreen" class="screen">
+<div id="menuPanel" class="panel"><div class="menuHead"><img src="./ecoajedrez.PNG" class="logo" alt="Logo ECOAJEDREZ"><div><div class="eyebrow">ELIGE TU BATALLA</div><h1 class="brand">ECO<span>AJEDREZ</span></h1><div class="version">GAMER · 3D · AR | v0.4.0-beta.1</div></div></div>
+<div id="accountState" role="status">Invitado</div>
+<div class="menuGrid">
+<button id="menuBot" class="menuTile featured"><b>♟ VS COMPUTADORA</b><small>Practica contra un rival automático</small></button>
+<button id="menuLocal" class="menuTile"><b>⚔ DOS JUGADORES</b><small>Turnos en un mismo dispositivo</small></button>
+<button id="menuHost" class="menuTile"><b>🌐 CREAR DUELO ONLINE</b><small>Sala privada con código y QR (beta)</small></button>
+<button id="menuJoin" class="menuTile"><b>♜ UNIRME A PARTIDA</b><small>Ingresa un código de seis caracteres</small></button>
 </div>
-</main>
+<div id="joinPanel"><input id="joinCode" maxlength="6" placeholder="CÓDIGO DE SALA" autocomplete="off"><button id="joinBtn" class="primary">CONECTAR</button></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><button id="menuSettings">⚙ PERSONALIZAR</button><button id="logoutBtn">⇥ CERRAR SESIÓN</button></div>
+<p class="muted" style="font-size:12px;margin:14px 0 0">PvP beta mediante PeerJS: necesita conexión y puede fallar detrás de algunos NAT o redes móviles.</p>
+</div></div>
+<div id="settingsScreen" class="screen">
+<aside id="settingsPanel" class="settingsPanel panel">
+<h2>⚙ CONFIGURACIÓN DE BATALLA</h2>
+<p class="muted" style="font-size:13px">Personaliza tu ejército y bioma antes de entrar al tablero. Todos los cambios son reversibles.</p>
+<div class="settingGrid">
+<div><label for="lang">Idioma · Language · 语言</label><select id="lang"><option value="es">Español</option><option value="en">English</option><option value="zh">简体中文</option></select></div>
+<div><label for="mode" data-i18n="mode">Modalidad</label><select id="mode"><option value="bot" data-i18n="bot">Contra computadora</option><option value="local" data-i18n="local">Dos jugadores locales</option><option value="online">Duelo online (beta)</option></select></div>
+<div><label for="difficulty" data-i18n="difficulty">Dificultad</label><select id="difficulty"><option value="easy" data-i18n="easy">Principiante</option><option value="medium" data-i18n="medium">Intermedio</option><option value="advanced" data-i18n="advanced">Avanzado (básico)</option></select></div>
+<div><label for="theme" data-i18n="scenario">Tablero / bioma</label><select id="theme"><option value="classic" data-i18n="classic">Obsidiana clásico</option><option value="wood">Bosque de madera</option><option value="marble">Mármol imperial</option><option value="neon">Neón galáctico</option><option value="jungle" data-i18n="jungle">Selva encantada</option><option value="volcano">Volcán carmesí</option><option value="ice">Templo de hielo</option></select></div>
+<div><label for="pieceSet">Piezas 3D</label><select id="pieceSet"><option value="staunton">Staunton glTF 3D</option><option value="fantasy">Fantasía encantada</option><option value="classic">Clásico ligero</option></select></div>
+<div><label for="boardSize">Tamaño de tablero AR</label><select id="boardSize"><option value="0.05">Pequeño (40 cm)</option><option value="0.065" selected>Mediano (55 cm)</option><option value="0.08">Grande (68 cm)</option></select></div>
+<div><label for="whiteColor">Color ejército blanco</label><select id="whiteColor"><option value="#f9d890">Oro</option><option value="#efffff">Marfil</option><option value="#7cf6e2">Esmeralda</option><option value="#e2a7ff">Amatista</option></select></div>
+<div><label for="blackColor">Color ejército negro</label><select id="blackColor"><option value="#203d54">Obsidiana</option><option value="#f0788d">Carmesí</option><option value="#a3bfff">Zafiro</option><option value="#72e0bf">Jade</option></select></div>
+</div>
+<p id="modelsStatus" class="muted" style="font-size:12px">Cargando modelos 3D...</p>
+<div class="settingFoot"><button id="backToMenu">← VOLVER</button><button id="startConfigured" class="primary">⚔ INICIAR PARTIDA</button></div>
+</aside></div>
+<div id="loadingPortal"><div class="portal">♜</div><strong id="portalText">INVOCANDO TABLERO...</strong></div>
 <script type="module" src="./main.js"></script>
-</body>
-</html>
+</body></html>
