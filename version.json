@@ -1,8 +1,8 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.7.0-beta.1",
+  "version": "0.8.0-beta.1",
   "updated": "2026-10-17",
-  "status": "Cinematic illustrated opening and gamer mode cards, animation, version from version.json on all non-game screens; preserve chess 3D/AR and guest mode; mobile/browser acceptance testing pending.",
+  "status": "User-uploaded 3 MP4 and 3 PNG integrated into GitHub Pages as optional intro and two lazy ambient looping arena videos. Video playback/codec on physical Android still to be tested. Chess and AR unchanged.",
   "browserValidated": false,
   "physicalARValidated": false,
   "onlinePvP": "Casual PeerJS beta, 6-character code and QR; unranked and not independently anti-cheat verified",
@@ -14,9 +14,16 @@
   "googleAuth": "Server-only BFF code exists but no Cloudflare Functions secrets deployed; Google unavailable on GitHub Pages; guest fully usable",
   "localPersistence": "LocalStorage por UID o invitado, sin servicio externo",
   "diagnostics": "WebXR, WebGL2, Firebase SDK, PeerJS, modelos, conexión, micrófono",
-  "securityReview": "Same-origin CSP and allowlisted Pages dist; no new third-party requests, backend accounts or paid services",
+  "securityReview": "Same-origin media-src 'self'; explicit media allowlist and signature checks, no new external requests, secrets, billing or Firebase activation.",
   "privacyPolicy": "privacy.html",
   "apiSecretsExposedInCurrentBuild": false,
   "liveSecureServerConfigured": false,
-  "ui": "Arcane Glass 0.7: two original scalable arena artworks (forest and neon temple), CSS-animated carousel, illuminated mode cards, lightweight summon portal, version in welcome/menu/settings/duel/diagnostics/loading/privacy, absent in game/AR"
+  "ui": "Arcane Glass 0.8: optional intro video with skip, two video backgrounds rotating with uncropped poster fallback, user-supplied PNG artwork in menu, load one ambient video at a time; release displayed only outside chess/AR",
+  "media": {
+    "source": "Owner-uploaded repo videos/ 2026-10-17",
+    "intro": "Vídeo sin título-17_10_2026, 16_58.mp4",
+    "forest": "Vídeo sin título-17_10_2026, 17_08.mp4",
+    "portal": "Vídeo sin título-17_10_2026, 17_10.mp4",
+    "notes": "Video filename chronology used as provisional roles; owner can confirm visual correspondence. 13.6MB intro loads only on user request. 7.7 and 6.6MB backgrounds load only when selected. Images always fallback. MP4 codecs not read in this session."
+  }
 }
