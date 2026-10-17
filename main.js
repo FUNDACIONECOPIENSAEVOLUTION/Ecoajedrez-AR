@@ -680,7 +680,8 @@ document.addEventListener('visibilitychange',()=>{
   if(document.hidden&&isAR&&arSession){
     arInterrupted=true;voluntaryArExit=false;
     // WebXR camera textures may become invalid when Android locks the screen.
-    Promise.resolve(arSession.end()).catch(()=>finishAR());
+    try{Promise.resolve(arSession.end()).catch(()=>finishAR());}
+    catch(error){finishAR();}
   }else if(!document.hidden){
     requestAnimationFrame(()=>{resize();offerARRecovery();});
   }
@@ -914,6 +915,13 @@ function updateAR(frame){
 $('startArBtn').onclick=()=>{startAR();};
 $('placeArBtn').onclick=placeARBoard;
 $('exitArBtn').onclick=()=>{voluntaryArExit=true;arInterrupted=false;arSession?.end().catch(()=>finishAR());};
+$('arFixBtn').onclick=()=>{
+  if(!isAR){offerARRecovery();return;}
+  arInterrupted=true;voluntaryArExit=false;
+  try{Promise.resolve(arSession?.end()).catch(()=>finishAR());}
+  catch(error){finishAR();}
+};
+
 $('arTouchBtn').onclick=()=>setARPicking('touch');
 $('arAimBtn').onclick=()=>setARPicking('aim');
 $('arSelectBtn').onclick=selectAimedSquare;
