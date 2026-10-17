@@ -232,7 +232,8 @@ function storageKey(){
 function persistCurrentGame(){
   if(!gameStarted||mode==='online')return;
   const preferences={theme,modelSet,lang,botDifficulty,boardScale,whiteColor:$('whiteColor').value,blackColor:$('blackColor').value};
-  saveLocalMatch(window.localStorage,storageKey(),game,mode,preferences);
+  const success=saveLocalMatch(window.localStorage,storageKey(),game,mode,preferences);
+  $('saveStatus').textContent=success?'💾 Partida local guardada en este dispositivo.':'El navegador impide el guardado local.';
 }
 function restoreLastGame(){
   if(gameStarted)return;
@@ -256,6 +257,7 @@ function restoreLastGame(){
   theme=$('theme').value;modelSet=$('pieceSet').value;lang=$('lang').value;botDifficulty=$('difficulty').value;
   setTheme(theme);translate();renderPieces();updateStatus();
   gameStarted=true; $('resumeGame').style.display='block';
+  $('saveStatus').textContent='💾 Partida local recuperada con '+game.history().length+' movimientos.';
   if(mode==='bot'&&game.turn()==='b'&&!game.isGameOver())timer=setTimeout(playBot,600);
 }
 function playMove(from,to,promotion='q',source='local'){
@@ -501,9 +503,11 @@ function setAccount(next){
   if(document.body.dataset.view==='welcome')transitionTo('menu');
 }
 async function startAccountAuth(){
+  $('loginGoogleBtn').disabled=true;
   const good=await initializeAccountAuth(setAccount,error=>{
     $('loginStatus').textContent='Google/Firebase: '+(error.code||error.message||'no disponible')+'. El invitado local funciona.';
   });
+  $('loginGoogleBtn').disabled=!authAvailable();
   if(!good)$('loginStatus').textContent='Google no disponible. Puedes entrar como invitado.';
   else if(!account)$('loginStatus').textContent='Selecciona Google o invitado para continuar.';
 }
@@ -518,14 +522,28 @@ $('loginGuestBtn').onclick=()=>{
   $('accountState').textContent='INVITADO · sesión local sin nube';restoreLastGame();transitionTo('menu');
 };
 $('logoutBtn').onclick=async()=>{
-  match.close();setGameMode('bot');
+  match.close();
+  clearTimeout(timer);
+  gameStarted=false;game.reset();selected=null;moving=null;renderPieces();updateStatus();
+  setGameMode('bot');
+  account=null;guestLocal=false;
   try{if(authAvailable())await logoutFirebase();}catch(error){}
-  account=null;guestLocal=false;gotoView('welcome');
+  gotoView('welcome');
 };
 $('menuBot').onclick=()=>{setGameMode('bot');transitionTo('settings');};
 $('menuLocal').onclick=()=>{setGameMode('local');transitionTo('settings');};
 $('menuSettings').onclick=()=>transitionTo('settings');
 $('resumeGame').onclick=()=>transitionTo('game');
+$('downloadPgn').onclick=()=>{
+  const pgn=game.pgn();
+  if(!pgn){toast('Aún no hay jugadas para exportar.');return;}
+  const blob=new Blob([pgn+'\n'],{type:'application/x-chess-pgn;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='ecoajedrez-'+new Date().toISOString().slice(0,10)+'.pgn';
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
 $('menuJoin').onclick=()=>{
   $('joinPanel').classList.toggle('visible');
   if($('joinPanel').classList.contains('visible'))$('joinCode').focus();
