@@ -42,12 +42,25 @@ test('Loading and visual mode actions exist as real functions',()=>{
 test('Room codes remove unsafe characters',()=>{
  assert.equal(normalizeRoomCode(' abc-def '),'ABCDEF');
  assert.equal(normalizeRoomCode('<foo>xyz'),'FOOXYZ');
- assert.equal(normalizeRoomCode('ABCDEFGHIJKLMN'),'ABCDEFGHIJKL');
+ assert.equal(normalizeRoomCode('ABCDEFGHIJKLMN'),'ABCDEF');
 });
 
 test('strong room codes and CSP protections are documented in the game',()=>{
- assert.match(fs.readFileSync('pvp.js','utf8'),/ROOM_SIZE=12/);
+ assert.match(fs.readFileSync('pvp.js','utf8'),/ROOM_SIZE=6/);
  assert.match(fs.readFileSync('pvp.js','utf8'),/MAX_MESSAGE_BYTES=64000/);
  assert.match(html,/Content-Security-Policy/);
- assert.match(html,/maxlength="12"/);
+ assert.match(html,/maxlength="6"/);
+});
+
+test('Arcane Glass gamer menu keeps playable mobile chess commands and room QR',()=>{
+ assert.match(html,/arcane\.css/);
+ assert.match(game,/createArcaneUI/);
+ assert.match(game,/arcaneUI\?\.selected/);
+ assert.match(game,/arcaneUI\?\.move/);
+ assert.match(game,/document\.createElement\('div'\);qr\.id='roomQR'/);
+ assert.doesNotMatch(game,/link\.id='roomLink'/);
+ assert.match(html,/id="joinCode" maxlength="6"/);
+ const css=fs.readFileSync('arcane.css','utf8');
+ assert.match(css,/\.hudBottom #moveInput/);
+ assert.match(css,/#radialTrigger/);
 });
