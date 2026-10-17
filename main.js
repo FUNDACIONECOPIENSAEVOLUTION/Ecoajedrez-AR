@@ -834,9 +834,24 @@ function onARPointerDown(event){
   if(!isAR||isARControl(event.target))return;
   pointers.add(event.pointerId);
   if(pointers.size===1){
-    arPointerStart={id:event.pointerId,x:event.clientX,y:event.clientY,
-      square:boardPlaced?closestARSquare(event.clientX,event.clientY):null};
+    const sq=boardPlaced?closestARSquare(event.clientX,event.clientY):null;
+    const piece=sq?game.get(sq):null;
+    arPointerStart={id:event.pointerId,x:event.clientX,y:event.clientY,square:sq};
+    if(arPicking==='touch'&&piece&&piece.color===game.turn()&&canPlay()){
+      // Start the visual "grab" immediately when finger presses the screen.
+      // This is touchscreen drag, NOT real 3D hand tracking or depth occlusion.
+      pickSquare(sq);
+      arHint('✦ Pieza levantada: arrastra sobre la pantalla hacia la casilla de destino.');
+    }
   }else arPointerStart=null;
+}
+function onARPointerMove(event){
+  if(!isAR||!boardPlaced||arPicking!=='touch')return;
+  const p=arPointerStart;
+  if(!p||p.id!==event.pointerId||!p.square||selected!==p.square)return;
+  if(Math.hypot(event.clientX-p.x,event.clientY-p.y)<16)return;
+  const target=closestARSquare(event.clientX,event.clientY);
+  if(target && target!==p.square)arHint('✦ SOLTAR EN '+target.toUpperCase()+' · confirma con el dedo');
 }
 function onARPointerUp(event){
   if(!isAR)return;
@@ -904,6 +919,7 @@ $('arAimBtn').onclick=()=>setARPicking('aim');
 $('arSelectBtn').onclick=selectAimedSquare;
 $('arScale').oninput=()=>{if(isAR&&boardPlaced)world.scale.setScalar(boardScale*Number($('arScale').value));};
 document.addEventListener('pointerdown',onARPointerDown,true);
+document.addEventListener('pointermove',onARPointerMove,true);
 document.addEventListener('pointerup',onARPointerUp,true);
 document.addEventListener('beforexrselect',event=>{
   if(isAR && isARControl(event.target))event.preventDefault();
