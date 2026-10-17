@@ -1,5 +1,17 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.4.1-beta.1 — 2026-10-17
+- Sincronización PeerJS reforzada con historial SAN completo y validación FEN/SAN antes de aplicar cambios.
+- Persistencia local por cuenta o invitado y recuperación al abrir sesión; modos CPU/local solamente.
+- Descarga PGN y resaltado de última jugada/selección en 3D y AR.
+- Popup Google directo desde el gesto de usuario y acceso deshabilitado mientras se inicializa Firebase SDK.
+- Limpieza de partida en memoria al cerrar sesión para impedir reutilizar la partida de otra cuenta.
+- Diagnóstico del dispositivo disponible desde el menú, con informe copiable; no prueba por sí solo acceso Google/PeerJS remoto.
+- Pruebas ampliadas de historial, snapshots corruptos, guardado y controles de diagnóstico.
+- Traspaso documentado en docs/ENTREGA_0.4.1.md. Aún sin pruebas entre dos celulares ni validación Google real.
+
+
+
 ## 0.4.0-beta.1 — 2026-10-17
 - Portada gamer con Google/invitado, menú de modalidades y configuración previa.
 - Transiciones, tablero 3D a pantalla completa y continuar partida.
