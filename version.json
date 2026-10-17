@@ -1,12 +1,15 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.3.0-beta.1",
+  "version": "0.4.0-beta.1",
   "updated": "2026-10-17",
-  "status": "AR UI and models merged; device validation pending",
+  "status": "Gamer flow, commands, Google auth and PeerJS private duel beta; device tests pending",
   "browserValidated": false,
-  "physicalARValidated": false,
-  "onlinePvP": false,
+  "physicalARValidated": true,
+  "onlinePvP": "PeerJS room code implemented; not verified between two phones; unranked beta",
   "apk": false,
   "modelType": "original light glTF Staunton set",
-  "arImplementation": "ported WebXR from 3 LINE-AR"
+  "arImplementation": "ported WebXR from 3 LINE-AR",
+  "userReportedARWorking": true,
+  "validationBasis": "Reported by user on 2026-10-17 before UI overhaul; rerun AR regression.",
+  "googleAuth": "Firebase d-line-g reused for authentication only; needs authorized domain/provider verification"
 }
