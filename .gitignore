@@ -1,0 +1,17 @@
+# Sensitive: NEVER upload any real credentials or tokens.
+.env
+.env.*
+.dev.vars
+.dev.vars.*
+*.pem
+*.key
+*.p12
+*.pfx
+secrets.json
+credentials.json
+serviceAccountKey.json
+firebase-adminsdk*.json
+node_modules/
+dist/
+.wrangler/
+.DS_Store
