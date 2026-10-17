@@ -1,15 +1,17 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.4.0-beta.1",
+  "version": "0.4.1-beta.1",
   "updated": "2026-10-17",
-  "status": "Gamer flow, commands, Google auth and PeerJS private duel beta; device tests pending",
+  "status": "Historial online verificado por SAN, guardado local, exportación PGN y diagnóstico de dispositivo; pruebas físicas pendientes",
   "browserValidated": false,
   "physicalARValidated": true,
-  "onlinePvP": "PeerJS room code implemented; not verified between two phones; unranked beta",
+  "onlinePvP": "PeerJS con verificación/reproducción de historial completo; sin prueba real de dos móviles",
   "apk": false,
   "modelType": "original light glTF Staunton set",
   "arImplementation": "ported WebXR from 3 LINE-AR",
   "userReportedARWorking": true,
-  "validationBasis": "Reported by user on 2026-10-17 before UI overhaul; rerun AR regression.",
-  "googleAuth": "Firebase d-line-g reused for authentication only; needs authorized domain/provider verification"
+  "validationBasis": "AR v0.3 confirmada por usuario; versión 0.4.1 requiere volver a probar las interacciones AR.",
+  "googleAuth": "Firebase d-line-g reused for authentication only; needs authorized domain/provider verification",
+  "localPersistence": "LocalStorage por UID o invitado, sin servicio externo",
+  "diagnostics": "WebXR, WebGL2, Firebase SDK, PeerJS, modelos, conexión, micrófono"
 }
