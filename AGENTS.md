@@ -19,3 +19,13 @@ Fecha: 2026-10-17. Repo canónico: https://github.com/FUNDACIONECOPIENSAEVOLUTIO
 - AR usa sesión explícita `navigator.xr.requestSession('immersive-ar')` y DOM overlay, con hit-test, botón fijar tablero, toques y apuntar con selección de casilla mediante cámaras XR, adaptado de 3 LINE-AR. Fallback holograma no significa anclaje.
 - Ejecutar `node --check main.js` y `node --test tests/*.test.mjs`; verificar también funcionamiento físico antes de declarar AR funcional.
 - Leer `docs/ENTREGA_0.3.0.md` para qué probar y qué sigue pendiente.
+
+
+## Estado 0.4.0-beta.1
+Leer docs/ENTREGA_0.4.0.md antes de retomar. Ahora el flujo es bienvenida, menú, configuración, partida y opción de continuar. Modulos auth.js, commands.js, pvp.js son importados por main.js.
+
+Comandos con SAN/UCI y español se verifican con chess.js; voz es experimental y con permisos. AR reportada funcional por el usuario en 0.3, conservar y verificar regresión en móvil.
+
+Firebase d-line-g se reutiliza SOLO para Authentication, nunca para progreso de 3 LINE-AR. Si Google no abre, verificar dominio fundacionecopiensaevolution.github.io y proveedor Google autorizado. PvP PeerJS es beta, sin ranking, matchmaking, TURN ni anti-trampas fuertes, el anfitrión valida movimientos con chess.js.
+
+QA: node --check main.js; node --check auth.js; node --check commands.js; node --check pvp.js; node --test tests/*.test.mjs. Actualizar versión, CHANGELOG y ESTADO_ACTUAL cuando cambie funcionamiento.
