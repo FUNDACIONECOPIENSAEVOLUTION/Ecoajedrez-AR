@@ -38,3 +38,13 @@ QA: node --check main.js; node --check auth.js; node --check commands.js; node -
 4. Botón GUARDAR PARTIDA PGN y panel DIAGNÓSTICO de dispositivo deben conservarse al modificar el menú. Nunca incluir tokens ni claves privadas en los diagnósticos; solo información básica del equipo compartida voluntariamente.
 5. Google popup se invoca inmediatamente desde el clic de usuario después de que Firebase Auth ya inicializó persistencia. No insertar un `await` antes de `signInWithPopup` en el handler.
 6. Pruebas `tests/match-persistence.test.mjs` más todas las previas deben pasar, y el usuario debe volver a verificar AR 0.4.1 y PvP entre dos celulares.
+
+
+## Seguridad 0.5.0-beta.1 (OBLIGATORIO)
+Antes de modificar autenticación, red o datos: leer `docs/ENTREGA_SEGURIDAD_0.5.md`, `SECURITY.md`, `docs/DEPLOY_SEGURIDAD.md`.
+No publicar contraseñas, cookies, access tokens, refresh tokens, claves privadas, archivos .env, credenciales Google ni Firebase Admin. No mostrarlos en el chat, consola, informe de diagnóstico, errores o GitHub.
+GitHub Pages NO ejecuta Cloudflare Pages Functions. Por seguridad, Google permanece desactivado en la URL github.io, mientras el modo invitado sigue en funcionamiento.
+El BFF (Backend for Frontend) Google se activa solamente desde Cloudflare Pages con secretos cargados por administrador. Usa OAuth con PKCE, state/nonce, ID token firmado verificado, AES-GCM y cookie HttpOnly. No retirar estas comprobaciones ni regresar a claves incrustadas en auth.js.
+Workflow publica solo dist/ por allowlist, nunca worker-lib/functions/docs/tests. Ejecutar node scripts/security-check.mjs, node --test tests/*.test.mjs.
+PvP PeerJS tiene código aleatorio 12 caracteres, límites de mensajes; todavía no es antitrampas ni apropiado para dinero o rankings. No prometer seguridad absoluta.
+No reescribir historial Git sin autorización: configuración web Firebase antigua puede permanecer en commits previos; revisar restricciones/rotación sin afectar 3 LINE-AR.
