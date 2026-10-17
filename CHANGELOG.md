@@ -1,5 +1,17 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.5.0-beta.1 — 2026-10-17 · Protección de datos
+- Eliminación de configuración de autenticación Firebase del frontend actual; login Google desactivado en GitHub Pages hasta activar servidor propio.
+- Intermediario BFF Cloudflare Pages Functions implementado como código: OAuth Authorization Code/PKCE, state, nonce y JWKS verificación de ID tokens; cookies HttpOnly Secure cifradas AES-GCM.
+- Restricción de origen, cookies de sesión temporales y pseudónimos sin email.
+- CSP, cabeceras HTTP para Cloudflare, política de privacidad y modelos de amenazas documentados.
+- Salas PeerJS de 12 caracteres aleatorios, límites de tamaño y frecuencia de mensajes.
+- GitHub Actions realiza secret scan y publica únicamente directorio dist con lista blanca de archivos.
+- Backend OAuth aún sin desplegar/credenciales, Google no probado; invitado y juego local disponibles. No hay garantías de seguridad absoluta.
+- Guía de despliegue en docs/DEPLOY_SEGURIDAD.md, traspaso docs/ENTREGA_SEGURIDAD_0.5.md.
+
+
+
 ## 0.4.1-beta.1 — 2026-10-17
 - Sincronización PeerJS reforzada con historial SAN completo y validación FEN/SAN antes de aplicar cambios.
 - Persistencia local por cuenta o invitado y recuperación al abrir sesión; modos CPU/local solamente.
