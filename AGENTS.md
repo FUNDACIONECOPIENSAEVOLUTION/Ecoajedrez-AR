@@ -92,3 +92,7 @@ Salas código/QR de 6 caracteres (en lugar de 12) para invitaciones casuales, co
 Modelos: 6 glTF Staunton originales + `royal` como variante geométrica propia con cristales y corona; sin materiales de franquicias. No se descargaron otros modelos comerciales.
 AR: interrupción por bloqueo termina WebXR y muestra recuperación 3D/AR en gesto nuevo; anclaje plano XZ. Arrastre táctil en pantalla y apuntar. NO hay oclusión de mano real ni pinza en el aire. No afirmar que se lograron sin prueba real.
 No mezclar con Firebase personal de 3 LINE-AR. Costo $0, sin nuevas suscripciones.
+
+
+## 0.7 — Apertura visual + versionado único (decisión 2026-10-17)
+Leer `docs/ENTREGA_0.7.md` antes de editar opening o versión. Código nuevo: `opening.js`, `opening.css`, `assets/ui/forest-arena.svg` y `assets/ui/portal-arena.svg`. Son ilustraciones vectoriales **originales inspiradas en las capturas**, no imágenes extraídas idénticas. Versionado `version.json` leído sin caché e insertado en todas las pantallas fuera de partida (incluyendo privacidad, diagnóstico y sala online). No mostrar versión durante tablero/AR. Actualizar fallback HTML, version.json, URL cache-busting de main.js/opening.js y CHANGELOG juntos. Mantener el modo invitado y Google BFF sin cambios, presupuesto 0 COP. Validar GitHub Actions + test Android.
