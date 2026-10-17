@@ -61,3 +61,9 @@ Guía detallada: docs/ENTREGA_0.4.0.md
 - Popup Google se inicia directamente al tocar el botón, sin espera intermedia; queda pendiente comprobar autorización del dominio.
 - Pruebas automatizadas ampliadas: `tests/match-persistence.test.mjs`.
 **Estado:** versión desplegada automáticamente cuando GitHub Actions aprueba las pruebas; aún sin prueba del PvP entre dos celulares ni Google en el dominio. Leer `docs/ENTREGA_0.4.1.md`.
+
+
+## Seguridad 0.5.0-beta.1
+El juego no maneja contraseñas propias. Se eliminó la configuración Firebase de auth.js y se preparó un servidor intermediario (BFF) seguro con Cloudflare Pages Functions para futuro login Google. Este BFF solo funcionará tras conectar Cloudflare Pages con credenciales cifradas en su panel; Google queda desactivado en GitHub Pages, donde se puede jugar como invitado.
+Protecciones: CSP, cabeceras HTTP Cloudflare, sesiones HttpOnly AES-GCM, OAuth state/nonce + PKCE y firma Google, listas de archivos públicos, escáner de secretos CI, salas con códigos de 12 caracteres y límites de mensajes. No sustituye auditoría de seguridad.
+`privacy.html`: aviso al jugador. Detalle: `SECURITY.md`, `docs/DEPLOY_SEGURIDAD.md` y `docs/ENTREGA_SEGURIDAD_0.5.md`.
