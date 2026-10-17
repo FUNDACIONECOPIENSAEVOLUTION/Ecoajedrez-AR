@@ -499,7 +499,7 @@ function setGameMode(next){
   $('networkStatus').textContent=next==='online'?'DUELO ONLINE · BETA':next==='bot'?'VERSUS COMPUTADORA':'DOS JUGADORES LOCALES';
 }
 function gotoView(view){
-  if(isAR && view!=='game'){arSession?.end();}
+  if(isAR && view!=='game'){voluntaryArExit=true;arInterrupted=false;arSession?.end().catch(()=>finishAR());}
   document.body.dataset.view=view;
   if(view==='menu')$('resumeGame').style.display=gameStarted?'block':'none';
   if(view==='game'){
@@ -655,6 +655,32 @@ if(invite){$('joinCode').value=invite.toUpperCase();$('joinPanel').classList.add
 startAccountAuth();
 
 let arSession=null, arSpace=null, lastHit=null, arPointerStart=null;
+let arInterrupted=false, voluntaryArExit=false;
+function offerARRecovery(){
+  if(document.hidden||isAR||!arInterrupted)return;
+  $('arRecoveryPanel').classList.add('visible');
+}
+$('arRecover2d').onclick=()=>{
+  $('arRecoveryPanel').classList.remove('visible');
+  arInterrupted=false;
+  gotoView('game');resize();
+};
+$('arRecoverAR').onclick=()=>{
+  $('arRecoveryPanel').classList.remove('visible');
+  arInterrupted=false;
+  startAR(); // Real user gesture is required again; automatic camera launch is forbidden.
+};
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden&&isAR&&arSession){
+    arInterrupted=true;voluntaryArExit=false;
+    // WebXR camera textures may become invalid when Android locks the screen.
+    Promise.resolve(arSession.end()).catch(()=>finishAR());
+  }else if(!document.hidden){
+    requestAnimationFrame(()=>{resize();offerARRecovery();});
+  }
+});
+window.addEventListener('pageshow',()=>{requestAnimationFrame(()=>{resize();offerARRecovery();});});
+window.addEventListener('orientationchange',()=>setTimeout(resize,150));
 let arPicking='touch', lastARPick=0, aimedSquare=null;
 const pointers=new Set();
 function arHint(message){$('arHint').textContent=message;}
@@ -687,7 +713,10 @@ function placeARBoard(){
   if(!lastHit){arHint('No hay superficie detectada. Mueve el celular lentamente.');return false;}
   const p=new THREE.Vector3(),q=new THREE.Quaternion(),scale=new THREE.Vector3();
   lastHit.decompose(p,q,scale);
-  world.position.copy(p);world.position.y+=.018;world.quaternion.copy(q);
+  world.position.copy(p);world.position.y+=.018;
+  // Tables are horizontal: WebXR hit poses can contain a rotation that
+  // otherwise flips the XZ chess board vertically on some Android devices.
+  world.quaternion.identity();
   world.scale.setScalar(boardScale*Number($('arScale').value));
   world.visible=true;boardPlaced=true;reticle.visible=false;hitRequested=true;
   $('placeArBtn').style.display='none';setARPicking('touch');
@@ -714,6 +743,8 @@ async function startAR(){
       optionalFeatures:['hit-test','dom-overlay','local-floor','bounded-floor'],
       domOverlay:{root:document.body}
     });
+    arInterrupted=false;voluntaryArExit=false;
+    $('arRecoveryPanel').classList.remove('visible');
     arSession=session;isAR=true;boardPlaced=false;lastHit=null;hitSource=null;hitRequested=false;
     world.visible=false;scene.background=null;orbit.enabled=false;
     showAR();
@@ -734,10 +765,13 @@ async function startAR(){
   }catch(error){
     console.warn('Error al iniciar WebXR',error);
     toast('AR no disponible: '+(error.message||String(error)));
-    if(session)try{await session.end();}catch(error2){finishAR();}
+    if(session){try{await session.end();}catch(error2){finishAR();}}
+    else if(isAR)finishAR();
   }
 }
 function finishAR(){
+  const wasActive=isAR;
+  if(wasActive&&!voluntaryArExit)arInterrupted=true;
   if(arSession)arSession.removeEventListener('select',onARXRSelect);
   if(hitSource){try{hitSource.cancel();}catch(error){}hitSource=null;}
   arSession=null;arSpace=null;lastHit=null;hitRequested=false;isAR=false;boardPlaced=true;
@@ -746,6 +780,8 @@ function finishAR(){
   world.visible=true;reticle.visible=false;orbit.enabled=true;
   hideAR();setTheme(theme);
   resize();
+  offerARRecovery();
+  voluntaryArExit=false;
 }
 function xrPerspectiveCameras(){
   const c=renderer.xr.getCamera();
@@ -856,7 +892,7 @@ function updateAR(frame){
 }
 $('startArBtn').onclick=()=>{startAR();};
 $('placeArBtn').onclick=placeARBoard;
-$('exitArBtn').onclick=()=>{arSession?.end();};
+$('exitArBtn').onclick=()=>{voluntaryArExit=true;arInterrupted=false;arSession?.end().catch(()=>finishAR());};
 $('arTouchBtn').onclick=()=>setARPicking('touch');
 $('arAimBtn').onclick=()=>setARPicking('aim');
 $('arSelectBtn').onclick=selectAimedSquare;
@@ -891,8 +927,10 @@ function render(timestamp,frame){
     if(progress>=1)moving=null;
   }
   if(theme==='jungle'&&!isAR)decorations.children.forEach((p,i)=>{p.rotation.z=Math.sin(timestamp*.0016+i*.8)*.12;});
+  arcaneUI?.tick(timestamp||performance.now());
   renderer.render(scene,camera);
 }
+arcaneUI=createArcaneUI({THREE,world});
 buildTiles();setTheme(theme);renderPieces();updateStatus();translate();
 renderer.setAnimationLoop(render);
 loadChessModels();
