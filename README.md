@@ -1,5 +1,5 @@
 # ECOAJEDREZ 3D / AR
-**Versión:** 0.6.0-beta.1 — 17/10/2026  
+**Versión:** 0.8.0-beta.1 — 17/10/2026  
 **Propietario:** Fundación Ecopiensa Evolution  
 **Estado:** tablero 3D con modelos glTF, selector de colores y AR WebXR basado en 3 LINE-AR; validación física Android pendiente. No es APK y el PvP remoto todavía es experimental, sin validación entre teléfonos.
 
@@ -80,3 +80,6 @@ La versión 0.6 todavía necesita pruebas en Android físico y dos teléfonos; v
 ## 0.7.0-beta.1 — Opening gamer animado
 La portada ya muestra dos arenas de fantasía ilustradas originales, carrusel que cambia automáticamente y botones de selección de escena, tarjetas de menú con ilustraciones, invocación CSS del tablero y versión única visible en todas las pantallas excepto partida/AR. Las imágenes fueron recreadas como SVG escalables inspirados en referencias del usuario para evitar depender de capturas pixeladas o recursos con licencias no comprobadas.
 Consulta `docs/ENTREGA_0.7.md`. Modo invitado, reglas de ajedrez, WebXR, PeerJS casual y privacidad se conservan. La versión física en celulares aún debe probarse.
+
+## 0.8.0-beta.1 · Videos originales del propietario
+Se incluyen 3 MP4 y 3 imágenes PNG de la carpeta `videos/` en GitHub Pages: un intro opcional con botón Omitir y dos arenas animadas que se alternan en la bienvenida. Los archivos permanecen bajo su nombre original en GitHub; los enlaces están correctamente codificados para espacios y acentos. Los videos de fondo se cargan bajo demanda, sin sonido, y cada escena presenta su imagen de respaldo íntegra (sin recorte). En móviles con ahorro de datos o movimiento reducido, no arrancan automáticamente. AR, reglas de juego, modo invitado y Firebase permanecen sin cambios. Ver `docs/ENTREGA_0.8.md` para comprobar reproducción, compatibilidad y límites de peso.
