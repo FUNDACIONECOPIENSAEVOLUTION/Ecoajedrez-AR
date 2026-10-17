@@ -80,7 +80,10 @@ test('UI offers PGN export, local save and a documented Google login gesture',()
  assert.match(js,/saveLocalMatch\(/);
  assert.match(js,/readLocalMatch\(/);
  assert.match(js,/a\.download='ecoajedrez-'/);
- assert.match(auth,/return sdk\.signInWithPopup\(auth,provider\)/);
+ assert.match(auth,/api\/auth\/session/);
+ assert.match(auth,/api\/auth\/google\/start/);
+ assert.doesNotMatch(auth,/firebaseConfig|AIza/);
+ assert.match(html,/Content-Security-Policy/);
 });
 
 test('on-device diagnostics is wired into the real game menu',()=>{
