@@ -13,3 +13,9 @@ Fecha: 2026-10-17. Repo canónico: https://github.com/FUNDACIONECOPIENSAEVOLUTIO
 10. **Desarrollo:** primero estabilizar tablero 3D, WebXR y modelo/rig originales; después animaciones, Stockfish, PvP Firebase, i18n completo, OTA con políticas de Play, PWA y APK.
 11. **Terminología FIDE:** ELO/rangos de práctica no equivalen a títulos oficiales otorgados por la FIDE.
 12. Al terminar **actualiza este traspaso**, la fecha, el commit, los bloqueos y tareas prioritarias. Prioriza demostraciones reales, no promesas.
+
+## Desde 0.3.0-beta.1
+- `assets/models/staunton/`: seis modelos glTF originales autocontenidos (no material de Harry Potter), cargados por GLTFLoader. No borrar su respaldo geométrico.
+- AR usa sesión explícita `navigator.xr.requestSession('immersive-ar')` y DOM overlay, con hit-test, botón fijar tablero, toques y apuntar con selección de casilla mediante cámaras XR, adaptado de 3 LINE-AR. Fallback holograma no significa anclaje.
+- Ejecutar `node --check main.js` y `node --test tests/*.test.mjs`; verificar también funcionamiento físico antes de declarar AR funcional.
+- Leer `docs/ENTREGA_0.3.0.md` para qué probar y qué sigue pendiente.
