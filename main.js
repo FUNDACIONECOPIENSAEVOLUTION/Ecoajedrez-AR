@@ -52,8 +52,14 @@ en:{mode:'Game mode',bot:'Against computer',local:'Two local players',difficulty
 zh:{mode:'游戏模式',bot:'与电脑对弈',local:'本地双人',difficulty:'演示难度',easy:'初学者',medium:'中级',advanced:'高级（基础版）',scenario:'3D 场景',classic:'经典黑曜石',jungle:'魔法丛林',game:'对局',new:'新游戏',undo:'悔棋',keyboard:'键盘走棋 (e2e4)',move:'走棋',historyTitle:'着法记录',about:'玩法',center:'重置视角',rotate:'旋转视角',turn:'轮到：',white:'白方',black:'黑方',check:'将军！',mate:'将死',draw:'和棋',ar:'寻找平面并轻触放置棋盘。',wait:'电脑思考中…',invalid:'无效着法',help:'轻触棋子，再轻触高亮格子。拖动可旋转棋盘。支持AR的安卓设备可点击AR并寻找平面。'}
 };
 function t(k){return letters[lang][k] || letters.es[k] || k;}
+const interfaceText={
+  es:{loginGoogle:'G · INICIAR CON GOOGLE',loginGuest:'⚡ CONTINUAR COMO INVITADO',menuBot:'♟ VS COMPUTADORA',menuLocal:'⚔ DOS JUGADORES',menuHost:'🌐 CREAR DUELO ONLINE',menuJoin:'♜ UNIRME A PARTIDA',joinBtn:'CONECTAR',menuSettings:'⚙ PERSONALIZAR',logout:'⇥ CERRAR SESIÓN',settingsTitle:'⚙ CONFIGURACIÓN DE BATALLA',back:'← VOLVER',startGame:'⚔ INICIAR PARTIDA',gameMenu:'☰ MENÚ',move:'♟ MOVER',enterAR:'◎ AR',placeAR:'📍 FIJAR TABLERO',exitAR:'✕ SALIR AR',arTouch:'👆 TOCAR',arAim:'⊕ APUNTAR',selectAR:'✓ SELECCIONAR CASILLA'},
+  en:{loginGoogle:'G · CONTINUE WITH GOOGLE',loginGuest:'⚡ PLAY AS GUEST',menuBot:'♟ VS COMPUTER',menuLocal:'⚔ TWO LOCAL PLAYERS',menuHost:'🌐 CREATE ONLINE DUEL',menuJoin:'♜ JOIN A MATCH',joinBtn:'CONNECT',menuSettings:'⚙ CUSTOMIZE',logout:'⇥ SIGN OUT',settingsTitle:'⚙ BATTLE SETTINGS',back:'← BACK',startGame:'⚔ START MATCH',gameMenu:'☰ MENU',move:'♟ MOVE',enterAR:'◎ AR',placeAR:'📍 PLACE BOARD',exitAR:'✕ EXIT AR',arTouch:'👆 TOUCH',arAim:'⊕ AIM',selectAR:'✓ SELECT SQUARE'},
+  zh:{loginGoogle:'G · 使用谷歌账号登录',loginGuest:'⚡ 游客进入',menuBot:'♟ 对战电脑',menuLocal:'⚔ 本地双人',menuHost:'🌐 创建在线对局',menuJoin:'♜ 加入对局',joinBtn:'连接',menuSettings:'⚙ 自定义',logout:'⇥ 退出登录',settingsTitle:'⚙ 对局设置',back:'← 返回',startGame:'⚔ 开始对局',gameMenu:'☰ 菜单',move:'♟ 走棋',enterAR:'◎ 增强现实',placeAR:'📍 放置棋盘',exitAR:'✕ 退出AR',arTouch:'👆 点击',arAim:'⊕ 瞄准',selectAR:'✓ 选择格子'}
+};
 function translate(){
   document.querySelectorAll('[data-i18n]').forEach(el=>el.textContent=t(el.dataset.i18n));
+  document.querySelectorAll('[data-ui]').forEach(el=>el.textContent=interfaceText[lang]?.[el.dataset.ui]||interfaceText.es[el.dataset.ui]||el.textContent);
   updateStatus();
 }
 function toast(msg){const el=$('gameToast');el.textContent=msg;el.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>el.style.display='none',4000);}
