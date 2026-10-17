@@ -5,6 +5,7 @@ import { Chess } from 'https://cdn.jsdelivr.net/npm/chess.js@1.4.0/dist/esm/ches
 import { parseMoveCommand } from './commands.js?v=0.4.0';
 import { PeerMatch } from './pvp.js?v=0.4.0';
 import { initializeAccountAuth, loginGoogle, logoutFirebase, authAvailable } from './auth.js?v=0.4.0';
+import { makeSnapshot, verifyAndRestore, saveLocalMatch, readLocalMatch } from './match-state.js?v=0.4.1';
 
 const $ = (id) => document.getElementById(id);
 const canvas = $('render'), stage = $('scene');
@@ -36,6 +37,8 @@ const raycaster = new THREE.Raycaster(), point = new THREE.Vector2();
 const goldMat = new THREE.MeshStandardMaterial({color:0xf9d890,metalness:.5,roughness:.28});
 const darkMat = new THREE.MeshStandardMaterial({color:0x203d54,metalness:.45,roughness:.27});
 const highlightMat = new THREE.MeshBasicMaterial({color:0x5affad,transparent:true,opacity:.56,depthWrite:false});
+const lastMoveMat = new THREE.MeshBasicMaterial({color:0xffd07a,transparent:true,opacity:.23,depthWrite:false});
+const selectedMat = new THREE.MeshBasicMaterial({color:0x3bfafa,transparent:true,opacity:.40,depthWrite:false});
 const FILES = 'abcdefgh';
 let selected = null, squares = [], isAR = false, boardPlaced = true;
 let hitSource = null, hitRequested = false, reticlePose = null, timer = null;
@@ -152,10 +155,20 @@ function renderPieces(){
     if(p.color==='b')g.rotation.y=Math.PI;
     pieces.add(g);
   }
+  const verbose=game.history({verbose:true});
+  const latest=verbose[verbose.length-1];
+  if(latest)for(const sq of [latest.from,latest.to]){
+    const loc=positionOf(sq);
+    const outline=mesh(new THREE.CylinderGeometry(.46,.46,.01,24),lastMoveMat,loc.x,.103,loc.z);
+    outline.userData.square=sq; markers.add(outline);
+  }
   if(selected){
+    const source=positionOf(selected);
+    const outline=mesh(new THREE.CylinderGeometry(.46,.46,.015,24),selectedMat,source.x,.105,source.z);
+    outline.userData.square=selected;markers.add(outline);
     for(const m of game.moves({square:selected,verbose:true})){
       const loc=positionOf(m.to);
-      const circle=mesh(new THREE.CylinderGeometry(.37,.37,.015,24),highlightMat,loc.x,.10,loc.z);
+      const circle=mesh(new THREE.CylinderGeometry(.32,.32,.018,24),highlightMat,loc.x,.113,loc.z);
       circle.userData.square=m.to;markers.add(circle);
     }
   }
@@ -210,7 +223,40 @@ function canPlay(source='local'){
   return true;
 }
 function broadcastState(){
-  if(mode==='online'&&match.host)match.send({type:'STATE',fen:game.fen(),version:roomVersion,history:game.history().slice(-40)});
+  if(mode==='online'&&match.host)match.send(makeSnapshot(game,roomVersion));
+}
+function storageKey(){
+  const uid=String(account?.uid||'local-guest').replace(/[^a-zA-Z0-9_-]/g,'').slice(0,96);
+  return 'ecoajedrez:local:0.4.1:'+uid;
+}
+function persistCurrentGame(){
+  if(!gameStarted||mode==='online')return;
+  const preferences={theme,modelSet,lang,botDifficulty,boardScale,whiteColor:$('whiteColor').value,blackColor:$('blackColor').value};
+  saveLocalMatch(window.localStorage,storageKey(),game,mode,preferences);
+}
+function restoreLastGame(){
+  if(gameStarted)return;
+  const saved=readLocalMatch(window.localStorage,storageKey(),game);
+  if(!saved)return;
+  mode=saved.mode;
+  $('mode').value=mode;
+  const pref=saved.preferences||{};
+  for(const key of ['theme','modelSet','lang','botDifficulty']){
+    const control={theme:'theme',modelSet:'pieceSet',lang:'lang',botDifficulty:'difficulty'}[key];
+    if(pref[key] && [...$(control).options].some(o=>o.value===pref[key]))$(control).value=pref[key];
+  }
+  if(Number.isFinite(pref.boardScale)&&pref.boardScale>=.04&&pref.boardScale<=.10){
+    boardScale=pref.boardScale; $('boardSize').value=String(boardScale);
+  }
+  for(const [input,key,mat] of [['whiteColor','whiteColor',goldMat],['blackColor','blackColor',darkMat]]){
+    if(pref[key]&&[...$(input).options].some(o=>o.value===pref[key])){
+      $(input).value=pref[key];mat.color.set(pref[key]);
+    }
+  }
+  theme=$('theme').value;modelSet=$('pieceSet').value;lang=$('lang').value;botDifficulty=$('difficulty').value;
+  setTheme(theme);translate();renderPieces();updateStatus();
+  gameStarted=true; $('resumeGame').style.display='block';
+  if(mode==='bot'&&game.turn()==='b'&&!game.isGameOver())timer=setTimeout(playBot,600);
 }
 function playMove(from,to,promotion='q',source='local'){
   if(!canPlay(source))return false;
@@ -223,6 +269,7 @@ function playMove(from,to,promotion='q',source='local'){
   }catch(error){return false;}
   selected=null;moving=null;renderPieces();animateMove(from,to);updateStatus();
   if(mode==='online'){roomVersion++;broadcastState();}
+  persistCurrentGame();
   if(mode==='bot' && !game.isGameOver()){clearTimeout(timer);timer=setTimeout(playBot,500);}
   return true;
 }
@@ -301,7 +348,7 @@ function playBot(){
   if(mode!=='bot'||game.turn()!=='b'||game.isGameOver())return;
   const m=chooseBot();
   if(m)game.move({from:m.from,to:m.to,promotion:'q'});
-  selected=null;renderPieces();if(m)animateMove(m.from,m.to);updateStatus();
+  selected=null;renderPieces();if(m)animateMove(m.from,m.to);updateStatus();persistCurrentGame();
 }
 function animateMove(from,to){
   const target=[...pieces.children].find(x=>x.userData.square===to);
@@ -310,7 +357,9 @@ function animateMove(from,to){
   moving={piece:target,a,b,start:performance.now(),duration:370};
 }
 function reset(){
-  clearTimeout(timer);game.reset();selected=null;moving=null;renderPieces();updateStatus();if(mode==='online' && match.host){roomVersion++;broadcastState();}
+  clearTimeout(timer);game.reset();selected=null;moving=null;renderPieces();updateStatus();
+  if(mode==='online' && match.host){roomVersion++;broadcastState();}
+  else if(mode!=='online')persistCurrentGame();
 }
 function squareFromHit(objects, origin, direction){
   raycaster.set(origin,direction);
@@ -373,7 +422,7 @@ $('undo').onclick=()=>{
   if(game.history().length){
     game.undo();
     if(mode==='bot' && game.turn()==='b' && game.history().length)game.undo();
-    selected=null;moving=null;renderPieces();updateStatus();
+    selected=null;moving=null;renderPieces();updateStatus();persistCurrentGame();
   }
 };
 $('playMove').onclick=()=>submitCommand($('moveInput'));
@@ -403,13 +452,15 @@ const match=new PeerMatch({
   },
   onState(message){
     if(mode!=='online'||match.host||message.version<roomVersion)return;
-    try{
-      const changed=game.fen()!==message.fen;
-      game.load(message.fen);
-      roomVersion=message.version;
-      if(changed){selected=null;moving=null;renderPieces();}
-      updateStatus();
-    }catch(error){console.warn('Estado inválido del anfitrión',error);}
+    const changed=game.fen()!==message.fen;
+    if(!verifyAndRestore(game,message)){
+      console.warn('El anfitrión envió un estado de ajedrez inconsistente. Se descartó.');
+      toast('No se pudo validar la posición recibida del rival.');
+      return;
+    }
+    roomVersion=message.version;
+    if(changed){selected=null;moving=null;renderPieces();}
+    updateStatus();
   },
   onReady(isHost){
     if(isHost){broadcastState();}else{match.send({type:'HELLO'});}
@@ -446,6 +497,7 @@ function setAccount(next){
   }
   account=next;guestLocal=false;
   $('accountState').textContent=(next.name||'JUGADOR')+' · '+(next.provider==='google'?'Google':'Invitado Firebase');
+  restoreLastGame();
   if(document.body.dataset.view==='welcome')transitionTo('menu');
 }
 async function startAccountAuth(){
@@ -463,7 +515,7 @@ $('loginGoogleBtn').onclick=async()=>{
 };
 $('loginGuestBtn').onclick=()=>{
   guestLocal=true;account={uid:'local-guest',name:'INVITADO',provider:'local'};
-  $('accountState').textContent='INVITADO · sesión local sin nube';transitionTo('menu');
+  $('accountState').textContent='INVITADO · sesión local sin nube';restoreLastGame();transitionTo('menu');
 };
 $('logoutBtn').onclick=async()=>{
   match.close();setGameMode('bot');
