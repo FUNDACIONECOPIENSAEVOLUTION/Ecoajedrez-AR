@@ -1,5 +1,16 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.6.0-beta.1 — 2026-10-17 · Arcane Glass y recuperación AR
+- Nuevo tema Arcane Glass local y accesible, sin relajar CSP ni descargar Google Fonts.
+- Orbes de estado, menú radial móvil con acciones reales, portal de cambio de pantalla, anillos y partículas dentro de Three.js.
+- Duelo PeerJS de seis caracteres + QR con URL oculta en interfaz; avisos tematizados y reintento de señalización.
+- Piezas «Realeza arcana» 3D originales sobre seis glTF Staunton locales; sin obras de franquicias; limpieza de geometría/materiales.
+- WebXR: recuperación después de bloqueo del celular/fin inesperado de sesión; reentrada con gesto, tablero horizontal, mejoras de arrastre sobre la pantalla. Sin oclusión de mano ni seguimiento en aire.
+- Pruebas CI actualizadas, despliegue público de CSS/JS por lista allowlisted, nota de QA en docs/ENTREGA_0.6.md.
+- Pendiente confirmar en Android real y dos móviles; Google Auth BFF aún requiere servidor seguro, sin costo activado.
+
+
+
 ## 0.5.0-beta.1 — 2026-10-17 · Protección de datos
 - Eliminación de configuración de autenticación Firebase del frontend actual; login Google desactivado en GitHub Pages hasta activar servidor propio.
 - Intermediario BFF Cloudflare Pages Functions implementado como código: OAuth Authorization Code/PKCE, state, nonce y JWKS verificación de ID tokens; cookies HttpOnly Secure cifradas AES-GCM.
