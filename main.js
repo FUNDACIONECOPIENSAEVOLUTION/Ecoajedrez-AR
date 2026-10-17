@@ -565,7 +565,7 @@ $('menuSettings').onclick=()=>transitionTo('settings');
 $('resumeGame').onclick=()=>transitionTo('game');
 let diagnosticReport='';
 async function runDiagnostics(){
-  const lines=['ECOAJEDREZ AR · diagnóstico local · 0.6.0-beta.1','Fecha: '+new Date().toISOString()];
+  const lines=['ECOAJEDREZ AR · diagnóstico local · '+(document.querySelector('[data-app-version]')?.textContent||'v0.7.0-beta.1'),'Fecha: '+new Date().toISOString()];
   const check=(name,good,note='')=>lines.push((good?'✓ ':'! ')+name+(note?' — '+note:''));
   check('HTTPS o localhost',window.isSecureContext,'AR requiere contexto seguro');
   let webgl=false;
