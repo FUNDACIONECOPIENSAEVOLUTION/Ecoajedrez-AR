@@ -23,7 +23,7 @@ Listados inspeccionados el 17/10/2026; los tamaños son los registrados por GitH
 **Total:** 13 archivos GLB; 6 cumplen el umbral de 15 MB + 1 OBJ, pero el objetivo es optimizar la **colección completa** para rendimiento real en móvil.
 
 ## Decisión
-1. Mantener modelo de demostración 3D original creado con geometrías Three.js en \`main.js\`; permite comercialización sin arrastrar piezas de franquicia ajena.
+1. Mantener modelo de demostración 3D original creado con geometrías Three.js en `main.js`; permite comercialización sin arrastrar piezas de franquicia ajena.
 2. Revisar procedencia y permiso de cada GLB de la fuente original antes de importarlo.
 3. Si se autorizan para uso interno, optimizar en Blender: unir mallas, LOD, reducción polígonos, texturas 1024/2048, compresión glTF/Draco o Meshopt cuando el visor lo soporte; validar materiales y animaciones.
 4. Alternativas CC0 a evaluar/comprobar en fichas originales: https://opengameart.org/content/stylized-chess-pieces ; https://opengameart.org/content/3d-chess-pieces ; https://opengameart.org/content/chess-board-pieces .
