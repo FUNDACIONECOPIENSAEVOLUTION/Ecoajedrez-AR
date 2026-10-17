@@ -103,6 +103,7 @@ body.xr-active #gameToast{display:none!important}
 #diagnosticCard{width:min(620px,100%);max-height:92dvh;overflow:auto;padding:22px;border:1px solid #67cdb0}
 #diagnosticOutput{font:12px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap;word-break:break-word;background:#061a29;border:1px solid #426774;border-radius:10px;padding:12px}
 </style>
+<link rel="stylesheet" href="./arcane.css?v=0.6.0">
 <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js" defer></script>
 <script src="https://unpkg.com/qrcodejs@1.0.0/qrcode.min.js" defer></script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}</script>
@@ -137,19 +138,19 @@ body.xr-active #gameToast{display:none!important}
 <p>Ajedrez 3D y realidad aumentada. Domina el tablero, invoca tu ejército y desafía a otros jugadores.</p>
 <div class="stack"><button id="loginGoogleBtn" data-ui="loginGoogle" class="primary" disabled>G · INICIAR CON GOOGLE</button><button id="loginGuestBtn" data-ui="loginGuest" class="gold">⚡ CONTINUAR COMO INVITADO</button></div>
 <p id="loginStatus" role="status" style="margin:15px 0 0">Comprobando inicio de sesión…</p>
-<p class="version">Modo invitado gratuito y partidas locales · v0.5.0-beta.1</p>
+<p class="version">Modo invitado gratuito y partidas locales · v0.6.0-beta.1</p>
 <p class="version"><a href="./privacy.html" style="color:#8bf6cd">Privacidad y protección de datos</a> · Google solo cuando el servidor seguro esté activo</p>
 </div></div>
 <div id="menuScreen" class="screen">
-<div id="menuPanel" class="panel"><div class="menuHead"><img src="./ecoajedrez.PNG" class="logo" alt="Logo ECOAJEDREZ"><div><div class="eyebrow">ELIGE TU BATALLA</div><h1 class="brand">ECO<span>AJEDREZ</span></h1><div class="version">GAMER · 3D · AR | v0.5.0-beta.1</div></div></div>
+<div id="menuPanel" class="panel"><div class="menuHead"><img src="./ecoajedrez.PNG" class="logo" alt="Logo ECOAJEDREZ"><div><div class="eyebrow">ELIGE TU BATALLA</div><h1 class="brand">ECO<span>AJEDREZ</span></h1><div class="version">GAMER · 3D · AR | v0.6.0-beta.1</div></div></div>
 <div id="accountState" role="status">Invitado</div><p class="version" id="saveStatus">Partidas locales guardadas en este navegador.</p><button id="resumeGame" class="gold" style="display:none;width:100%;margin-bottom:13px">▶ CONTINUAR PARTIDA</button>
 <div class="menuGrid">
 <button id="menuBot" class="menuTile featured"><b data-ui="menuBot">♟ VS COMPUTADORA</b><small>Practica contra un rival automático</small></button>
 <button id="menuLocal" class="menuTile"><b data-ui="menuLocal">⚔ DOS JUGADORES</b><small>Turnos en un mismo dispositivo</small></button>
 <button id="menuHost" class="menuTile"><b data-ui="menuHost">🌐 CREAR DUELO ONLINE</b><small>Sala privada con código y QR (beta)</small></button>
-<button id="menuJoin" class="menuTile"><b data-ui="menuJoin">♜ UNIRME A PARTIDA</b><small>Ingresa el código privado de 12 caracteres</small></button>
+<button id="menuJoin" class="menuTile"><b data-ui="menuJoin">♜ UNIRME A PARTIDA</b><small>Introduce el código privado de 6 caracteres</small></button>
 </div>
-<div id="joinPanel"><input id="joinCode" maxlength="12" placeholder="CÓDIGO DE 12 CARACTERES" autocomplete="off"><button id="joinBtn" data-ui="joinBtn" class="primary">CONECTAR</button></div>
+<div id="joinPanel"><input id="joinCode" maxlength="6" placeholder="CÓDIGO DE 6 CARACTERES" autocomplete="off"><button id="joinBtn" data-ui="joinBtn" class="primary">CONECTAR</button></div>
 <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><button id="menuSettings" data-ui="menuSettings">⚙ PERSONALIZAR</button><button id="downloadPgn" data-ui="downloadPgn">⬇ GUARDAR PARTIDA PGN</button><button id="diagnoseBtn" data-ui="diagnostics">◈ DIAGNÓSTICO</button><button id="logoutBtn" data-ui="logout">⇥ CERRAR SESIÓN</button></div>
 <p class="muted" style="font-size:12px;margin:14px 0 0">PvP beta mediante PeerJS: necesita conexión y puede fallar detrás de algunos NAT o redes móviles.</p>
 </div></div>
@@ -162,7 +163,7 @@ body.xr-active #gameToast{display:none!important}
 <div><label for="mode" data-i18n="mode">Modalidad</label><select id="mode"><option value="bot" data-i18n="bot">Contra computadora</option><option value="local" data-i18n="local">Dos jugadores locales</option><option value="online">Duelo online (beta)</option></select></div>
 <div><label for="difficulty" data-i18n="difficulty">Dificultad</label><select id="difficulty"><option value="easy" data-i18n="easy">Principiante</option><option value="medium" data-i18n="medium">Intermedio</option><option value="advanced" data-i18n="advanced">Avanzado (básico)</option></select></div>
 <div><label for="theme" data-i18n="scenario">Tablero / bioma</label><select id="theme"><option value="classic" data-i18n="classic">Obsidiana clásico</option><option value="wood">Bosque de madera</option><option value="marble">Mármol imperial</option><option value="neon">Neón galáctico</option><option value="jungle" data-i18n="jungle">Selva encantada</option><option value="volcano">Volcán carmesí</option><option value="ice">Templo de hielo</option></select></div>
-<div><label for="pieceSet">Piezas 3D</label><select id="pieceSet"><option value="staunton">Staunton glTF 3D</option><option value="fantasy">Fantasía encantada</option><option value="classic">Clásico ligero</option></select></div>
+<div><label for="pieceSet">Piezas 3D</label><select id="pieceSet"><option value="staunton">Staunton 3D original</option><option value="royal">Realeza arcana 3D ✦</option><option value="fantasy">Fantasía encantada</option><option value="classic">Clásico ligero</option></select></div>
 <div><label for="boardSize">Tamaño de tablero AR</label><select id="boardSize"><option value="0.05">Pequeño (40 cm)</option><option value="0.065" selected>Mediano (55 cm)</option><option value="0.08">Grande (68 cm)</option></select></div>
 <div><label for="whiteColor">Color ejército blanco</label><select id="whiteColor"><option value="#f9d890">Oro</option><option value="#efffff">Marfil</option><option value="#7cf6e2">Esmeralda</option><option value="#e2a7ff">Amatista</option></select></div>
 <div><label for="blackColor">Color ejército negro</label><select id="blackColor"><option value="#203d54">Obsidiana</option><option value="#f0788d">Carmesí</option><option value="#a3bfff">Zafiro</option><option value="#72e0bf">Jade</option></select></div>
@@ -177,6 +178,13 @@ body.xr-active #gameToast{display:none!important}
 <pre id="diagnosticOutput">Preparando comprobaciones…</pre>
 <div style="display:flex;gap:8px;flex-wrap:wrap"><button id="copyDiagnostic">COPIAR INFORME</button><button id="closeDiagnostic" class="primary">CERRAR</button></div>
 </div></div>
+<div id="arRecoveryPanel" role="dialog" aria-modal="true" aria-labelledby="arRecoveryTitle"><div class="panel">
+<h2 id="arRecoveryTitle">✦ Portal AR interrumpido</h2>
+<p id="arRecoveryNote">El celular pausó la cámara. Tu partida sigue conservada en el tablero 3D.</p>
+<div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">
+<button type="button" id="arRecover2d" class="gold">♟ VOLVER AL TABLERO</button>
+<button type="button" id="arRecoverAR" class="primary">◎ REABRIR AR</button>
+</div></div></div>
 <div id="loadingPortal"><div class="portal">♜</div><strong id="portalText">INVOCANDO TABLERO...</strong></div>
 <script type="module" src="./main.js"></script>
 </body></html>
