@@ -316,17 +316,33 @@ function squareFromHit(objects, origin, direction){
   }
   return null;
 }
-let down=null;
-canvas.addEventListener('pointerdown',e=>{down={x:e.clientX,y:e.clientY};});
-canvas.addEventListener('pointerup',e=>{
-  if(isAR || !down)return;
-  if(Math.hypot(e.clientX-down.x,e.clientY-down.y)>9)return;
+function pick3DSquare(x,y){
   const rect=canvas.getBoundingClientRect();
-  point.set(((e.clientX-rect.left)/rect.width)*2-1,-((e.clientY-rect.top)/rect.height)*2+1);
+  if(!rect.width||!rect.height)return null;
+  point.set(((x-rect.left)/rect.width)*2-1,-((y-rect.top)/rect.height)*2+1);
   raycaster.setFromCamera(point,camera);
-  const square=squareFromHit([pieces,markers,tiles],raycaster.ray.origin,raycaster.ray.direction);
-  if(square)pickSquare(square);
+  return squareFromHit([pieces,markers,tiles],raycaster.ray.origin,raycaster.ray.direction);
+}
+let down=null;
+canvas.addEventListener('pointerdown',event=>{
+  if(isAR)return;
+  const square=pick3DSquare(event.clientX,event.clientY),piece=square?game.get(square):null;
+  const draggingPiece=canPlay() && piece && piece.color===game.turn();
+  down={x:event.clientX,y:event.clientY,square:draggingPiece?square:null};
+  if(draggingPiece)orbit.enabled=false;
 });
+canvas.addEventListener('pointerup',event=>{
+  if(isAR||!down)return;
+  const downEvent=down;down=null;orbit.enabled=true;
+  const destination=pick3DSquare(event.clientX,event.clientY);
+  if(!destination)return;
+  const moved=Math.hypot(event.clientX-downEvent.x,event.clientY-downEvent.y)>12;
+  if(moved&&downEvent.square&&downEvent.square!==destination){
+    if(selected!==downEvent.square)pickSquare(downEvent.square);
+    pickSquare(destination);
+  }else if(!moved)pickSquare(destination);
+});
+canvas.addEventListener('pointercancel',()=>{down=null;orbit.enabled=true;});
 $('reset').onclick=()=>{if(mode==='online'&&!match.host){toast('Solo el anfitrión reinicia el duelo.');return;}reset();};
 $('undo').onclick=()=>{
   if(mode==='online'){toast('Deshacer no está disponible durante un duelo online.');return;}
@@ -502,7 +518,7 @@ function placeARBoard(){
   const p=new THREE.Vector3(),q=new THREE.Quaternion(),scale=new THREE.Vector3();
   lastHit.decompose(p,q,scale);
   world.position.copy(p);world.position.y+=.018;world.quaternion.copy(q);
-  world.scale.setScalar(.075*Number($('arScale').value));
+  world.scale.setScalar(boardScale*Number($('arScale').value));
   world.visible=true;boardPlaced=true;reticle.visible=false;hitRequested=true;
   $('placeArBtn').style.display='none';setARPicking('touch');
   arHint('Tablero fijado. Toca una pieza y su destino para jugar.');
@@ -512,7 +528,7 @@ function setHologram(){
   if(!isAR)return;
   // Sin hit-test, no se promete anclaje a superficie: posición de referencia local.
   world.position.set(0,-.35,-1.4);world.quaternion.identity();
-  world.scale.setScalar(.075*Number($('arScale').value));
+  world.scale.setScalar(boardScale*Number($('arScale').value));
   world.visible=true;boardPlaced=true;lastHit=null;reticle.visible=false;
   $('placeArBtn').style.display='none';
   arHint('Holograma AR sin detección de mesa. Se puede jugar, pero no está anclado a una superficie.');
@@ -605,17 +621,30 @@ function isARControl(target){
 function onARPointerDown(event){
   if(!isAR||isARControl(event.target))return;
   pointers.add(event.pointerId);
-  if(pointers.size===1)arPointerStart={id:event.pointerId,x:event.clientX,y:event.clientY};
-  else arPointerStart=null;
+  if(pointers.size===1){
+    arPointerStart={id:event.pointerId,x:event.clientX,y:event.clientY,
+      square:boardPlaced?closestARSquare(event.clientX,event.clientY):null};
+  }else arPointerStart=null;
 }
 function onARPointerUp(event){
   if(!isAR)return;
   pointers.delete(event.pointerId);
   const p=arPointerStart;arPointerStart=null;
   if(!p||p.id!==event.pointerId||pointers.size||isARControl(event.target))return;
-  if(Math.hypot(event.clientX-p.x,event.clientY-p.y)>22)return;
   if(!boardPlaced){placeARBoard();return;}
-  if(arPicking==='touch')pickARAt(event.clientX,event.clientY);
+  if(arPicking!=='touch'||Date.now()-lastARPick<340)return;
+  const distance=Math.hypot(event.clientX-p.x,event.clientY-p.y);
+  const target=closestARSquare(event.clientX,event.clientY);
+  if(distance>22 && p.square && target && p.square!==target){
+    const from=game.get(p.square);
+    if(from && from.color===game.turn() && canPlay()){
+      if(selected!==p.square)pickSquare(p.square);
+      pickSquare(target);
+      lastARPick=Date.now();
+      return;
+    }
+  }
+  if(distance<=22)pickARAt(event.clientX,event.clientY);
 }
 function onARXRSelect(event){
   if(!isAR)return;
@@ -661,7 +690,7 @@ $('exitArBtn').onclick=()=>{arSession?.end();};
 $('arTouchBtn').onclick=()=>setARPicking('touch');
 $('arAimBtn').onclick=()=>setARPicking('aim');
 $('arSelectBtn').onclick=selectAimedSquare;
-$('arScale').oninput=()=>{if(isAR&&boardPlaced)world.scale.setScalar(.075*Number($('arScale').value));};
+$('arScale').oninput=()=>{if(isAR&&boardPlaced)world.scale.setScalar(boardScale*Number($('arScale').value));};
 document.addEventListener('pointerdown',onARPointerDown,true);
 document.addEventListener('pointerup',onARPointerUp,true);
 document.addEventListener('beforexrselect',event=>{
