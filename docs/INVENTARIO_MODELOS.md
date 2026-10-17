@@ -31,3 +31,20 @@ Listados inspeccionados el 17/10/2026; los tamaños son los registrados por GitH
 
 ## Procedimiento para nuevos modelos
 Registrar nombre; autor; URL de origen; licencia escrita y fecha de verificación; GLB comprimido; bytes; polígonos; texturas; celular de prueba; captura. Nunca asumir CC0 por ser descargable.
+
+## Activos originales integrados el 2026-10-17
+Ruta: `assets/models/staunton/` — `pawn.gltf`, `rook.gltf`, `knight.gltf`, `bishop.gltf`, `queen.gltf`, `king.gltf`.
+Son seis mallas 3D originales de geometría Staunton, generadas para ECOAJEDREZ y guardadas en glTF 2.0 autocontenido.
+Se utilizan como una malla por tipo, y mediante instanciación/clonación de Three.js aparecen 32 piezas sobre el tablero.
+Cada archivo es menor de 50 KB (<15 MB). Son recolorables, pero NO están riggeadas; el movimiento de casillas es una animación por interpolación.
+Hay verificación automática de tamaños, buffers, normales e índices; falta verificación visual y de WebXR en celular.
+
+## Bibliotecas externas adicionales revisadas (solo enlaces, sin importar archivos)
+- Poly Haven Chess Set (Riley Queen), CC0, requiere reducir texturas: https://polyhaven.com/a/chess_set
+- Polyy.AI low-poly Staunton 12 GLB, CC0 declarado y descarga por itch.io: https://polyyai.itch.io/3d-chess-pieces-pack
+- KayKit Adventurers pack básico gratuito CC0, personajes de fantasía: https://kaylousberg.itch.io/kaykit-adventurers
+- KayKit Skeletons pack básico gratuito CC0: https://kaylousberg.itch.io/kaykit-skeletons
+- Quaternius packs gratuitos: https://quaternius.com (verificar paquete/licencia específico).
+- Adobe Mixamo es un servicio con condiciones de uso, NO material CC0; uso comercial en juegos permitido con limitaciones de distribución en bruto.
+
+Ver [ENTREGA_0.3.0.md](ENTREGA_0.3.0.md) para detalles y próximos tests.
