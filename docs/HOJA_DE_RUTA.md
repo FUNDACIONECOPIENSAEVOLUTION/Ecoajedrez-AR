@@ -28,3 +28,16 @@ No empezar por monstruos animados, facturación o rankings antes de tener ajedre
 - El patrón WebXR probado en 3 LINE-AR se portó a Ecoajedrez, con selección de casillas por proyección XR o toque, escalar y fijar un tablero, pero queda prueba física.
 - Evaluar TWA vs Capacitor por compatibilidad AR; no garantizar actualizaciones OTA nativas ni latencia remota fija.
 - `docs/ENTREGA_0.3.0.md` detalla la próxima prueba Android y links de modelos adicionales.
+
+
+## Hito de 17/10/2026: v0.4
+- [x] Menú gamer, configuración previa, tablero completo, reanudar.
+- [x] Siete estilos de tablero, modelos 3D, colores por bando.
+- [x] Comandos SAN/UCI/español, dictado experimental y arrastre AR/3D.
+- [x] Código login Google Firebase y PvP privado por PeerJS.
+- [ ] Probar autorización del dominio y Google Sign-in en Ecoajedrez.
+- [ ] Probar PvP entre dos teléfonos en redes distintas, reconexión y errores.
+- [ ] Probar AR 0.4 en teléfono: arrastrar, tocar, escala, comando y salida.
+- [ ] Sistema global de jugadores con progreso en Firebase separado de 3 LINE-AR y reglas seguras.
+- [ ] IA Stockfish WASM y calibración de fuerza; clasificación FIDE no oficial.
+- [ ] Figuras fantásticas originales riggeadas y biomas animados optimizados.
