@@ -1,17 +1,21 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.4.1-beta.1",
+  "version": "0.5.0-beta.1",
   "updated": "2026-10-17",
-  "status": "Historial online verificado por SAN, guardado local, exportación PGN y diagnóstico de dispositivo; pruebas físicas pendientes",
+  "status": "Security hardening: secret-free browser, Cloudflare Pages BFF scaffold, CSP, encrypted server sessions, hardened PeerJS; server-side OAuth not deployed",
   "browserValidated": false,
   "physicalARValidated": false,
-  "onlinePvP": "PeerJS con verificación/reproducción de historial completo; sin prueba real de dos móviles",
+  "onlinePvP": "Casual beta, no independent anti-cheat server; 12-character random rooms, message caps, host validation",
   "apk": false,
   "modelType": "original light glTF Staunton set",
   "arImplementation": "ported WebXR from 3 LINE-AR",
   "userReportedARWorking": true,
   "validationBasis": "El usuario confirmó que la AR funcionaba en la versión 0.3; no se ha realizado una nueva prueba física 0.4.1.",
-  "googleAuth": "Firebase d-line-g reused for authentication only; needs authorized domain/provider verification",
+  "googleAuth": "Google disabled on GitHub Pages; OAuth2 BFF available only after Cloudflare Pages Functions configured with encrypted environment secrets.",
   "localPersistence": "LocalStorage por UID o invitado, sin servicio externo",
-  "diagnostics": "WebXR, WebGL2, Firebase SDK, PeerJS, modelos, conexión, micrófono"
+  "diagnostics": "WebXR, WebGL2, Firebase SDK, PeerJS, modelos, conexión, micrófono",
+  "securityReview": "Static scans, CSP, safe dist, 12-character private P2P codes; professional security review pending",
+  "privacyPolicy": "privacy.html",
+  "apiSecretsExposedInCurrentBuild": false,
+  "liveSecureServerConfigured": false
 }
