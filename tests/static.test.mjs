@@ -13,7 +13,7 @@ test('version and assets match',()=>{
   assert.ok(fs.statSync('ecoajedrez.PNG').size > 0,'logo exists');
 });
 test('engine and controls present',()=>{
-  for(const token of ['new Chess()','new THREE.WebGLRenderer','ARButton.createButton','requestHitTestSource','requestReferenceSpace','chooseBot','squareFromHit','playMove']){
+  for(const token of ['new Chess()','new THREE.WebGLRenderer','navigator.xr.requestSession','requestHitTestSource','requestReferenceSpace','chooseBot','squareFromHit','playMove']){
     assert.ok(code.includes(token),'missing: '+token);
   }
 });
