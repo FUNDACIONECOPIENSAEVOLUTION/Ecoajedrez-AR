@@ -7,7 +7,9 @@
 - Controles táctiles/clic y entrada por teclado, temas clásico/selva, i18n preliminar ES/EN/ZH.
 - Acceso AR experimental WebXR hit-test; por verificar en Android real.
 - Inicio de documentación para IA: AGENTS, estado, modelos, decisiones y ruta.
-- Configuración CI/Pages preparada (activar en Settings antes de afirmar despliegue).
+- Workflow GitHub Actions con `node --check`, pruebas de consistencia y despliegue Pages ejecutados con éxito (run `39040927867`). Sin prueba de navegador/WebXR física.
 
 ### Límites
 Sin partidas online, títulos/rating FIDE calibrados, APK, anuncios, personajes GLB fantásticos ni garantía de soporte iOS.
+
+- Se eliminó el borrador temporal de `3d-line/ecoajedrez-ar/`, conservando `3d-line` principal intacto.
