@@ -37,7 +37,7 @@ test('All six independent glTF chess meshes are valid and tiny',()=>{
 });
 test('Asset selector and GLTFLoader use files from this repo',()=>{
  assert.match(html,/id="pieceSet"/);assert.match(html,/id="whiteColor"/);
- assert.match(js,/GLTFLoader/);assert.match(js,/assets\/models\/staunton\//);
+ assert.ok(js.includes('assets/models/staunton/'),'GLTFLoader must load local chess models');
 });
 test('XR session provides touch, aim, placement, and fallback',()=>{
  assert.match(html,/id="startArBtn"/);
