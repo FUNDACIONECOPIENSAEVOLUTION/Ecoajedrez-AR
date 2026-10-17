@@ -55,7 +55,7 @@ test('Royal fantasy chess uses original glTF templates and highlights moves',()=
  assert.match(js,/arcaneUI\?\.tick/);
 });
 test('AR interrupted by phone lock restores 3D instead of blank screen',()=>{
- for(const snippet of ["visibilitychange","offerARRecovery","arRecoveryPanel","arRecover2d","arRecoverAR","finishAR","onARPointerMove","world.quaternion.identity()"])
+ for(const snippet of ["visibilitychange","offerARRecovery","arRecoveryPanel","arRecover2d","arRecoverAR","arFixBtn","finishAR","onARPointerMove","world.quaternion.identity()"])
   assert.ok(html.includes(snippet)||js.includes(snippet),'Missing '+snippet);
  assert.match(js,/Promise\.resolve\(arSession\.end\(\)\)/);
  assert.match(js,/voluntaryArExit/);
