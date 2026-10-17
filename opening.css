@@ -86,3 +86,61 @@ body[data-view="game"] .appVersion,body.xr-active .appVersion{display:none!impor
 @media(prefers-reduced-motion:reduce){
  .heroSlide,.heroSlide.active,.heroHalo,.portalBoard span,.portalBoard i,#loginPanel .loginContent .logo{animation:none!important;transition:none!important;transform:none}
 }
+
+
+/* 0.8 · Real uploaded MP4/PNG art. Full image always visible: no video zoom/crop. */
+.heroSlide{background-size:cover;background-position:center;overflow:hidden}
+.heroSlide .heroPoster,.heroSlide .heroVideo{
+ position:absolute;inset:0;width:100%;height:100%;display:block;
+ object-fit:contain;object-position:center;
+ filter:none;transform:none;border:0;
+}
+.heroSlide .heroPoster{z-index:0;opacity:1}
+.heroSlide .heroVideo{z-index:1;opacity:0;transition:opacity .5s ease;background:transparent}
+.heroSlide.videoReady .heroVideo{opacity:1}
+.heroSlide .heroSceneCaption{z-index:3}
+.heroShowcase:after{z-index:2;pointer-events:none;background:linear-gradient(0deg,#030e19d0,transparent 30%,#03132339)}
+.heroHalo{z-index:3;opacity:.42}
+.heroControls{z-index:5;display:flex;flex-wrap:wrap}
+.heroControls .videoToggle{
+ font:800 10px/1.4 system-ui,sans-serif;letter-spacing:.08em;
+ color:#f0ffe5;background:#0b2b35d9;border:1px solid #72e2b1a8;
+ border-radius:16px;padding:6px 10px;min-height:32px;
+ backdrop-filter:blur(8px);
+}
+#loginPanel .stack .introButton,
+.menuIntroButton{background:linear-gradient(125deg,#0c4b58,#10263f 75%);
+ border:1px solid #89e9ce;box-shadow:0 0 17px #55e6c53c;
+ color:#f6e2b9;font-size:13px;font-weight:850;letter-spacing:.05em}
+#menuPanel .menuIntroButton{margin:0 0 12px 0}
+.menuArtBanner{background:linear-gradient(90deg,#031e29b9,#123d4150),url("./videos/ECOAJEDREZ_%20Tablero%20M%C3%ADstico%20del%20Planeta-1.png") center 54%/cover}
+.menuTile-bot:enabled:before{background-image:linear-gradient(90deg,#081920e8,#06312bb0 76%,#0f3e4164),url("./videos/Ecoajedrez_%20La%20Arena%20Cobra%20Vida-2.png")}
+.menuTile-local:enabled:before,.menuTile-host:enabled:before{background-image:linear-gradient(90deg,#051728e7,#0b334fa1 76%,#08203366),url("./videos/Ecoajedrez_%20Portales%20del%20Bosque%20M%C3%A1gico-3.png")}
+.menuTile-join:enabled:before{background-image:linear-gradient(90deg,#0a1c2cde,#223528bc 76%,#083e4368),url("./videos/Ecoajedrez_%20La%20Arena%20Cobra%20Vida-2.png")}
+.cinemaOverlay{
+ position:fixed;inset:0;z-index:200000;display:flex;align-items:center;justify-content:center;
+ background:#020a12f5;padding:clamp(8px,2.5vw,30px);backdrop-filter:blur(20px)
+}
+.cinemaOverlay[hidden]{display:none!important}
+.cinemaFrame{width:min(1100px,100%);max-height:95dvh;overflow:auto;border:1px solid #8cffd2;
+ background:linear-gradient(145deg,#0d3142,#061321);border-radius:19px;
+ padding:clamp(10px,2vw,21px);box-shadow:0 0 60px #70ffc521,0 30px 85px #000e;
+}
+.cinemaHeader{display:flex;align-items:center;justify-content:space-between;gap:9px;margin-bottom:13px;flex-wrap:wrap;color:#ffe1a5;letter-spacing:.06em}
+.cinemaHeader strong{font:800 clamp(13px,2.3vw,21px) Georgia,serif}
+.cinemaHeader button{flex-shrink:0}
+.cinemaVideo{width:100%;height:auto;max-height:75dvh;aspect-ratio:16 / 9;
+ display:block;background:#020910;object-fit:contain;border:1px solid #6dfaca66;
+ border-radius:11px}
+#cinemaNote{font-size:13px;color:#bce6db;text-align:center;margin:13px 0 3px}
+body.xr-active .cinemaOverlay{display:none!important}
+@media(max-width:860px){
+ .heroControls .videoToggle{order:3;margin-inline:auto;max-width:100%;font-size:9px}
+ .heroSceneCaption{bottom:51px}
+ #loginPanel .stack .introButton{min-height:40px;font-size:12px}
+ .cinemaHeader{justify-content:center}
+ .cinemaHeader button{font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){
+ .heroSlide .heroVideo{transition:none}
+}
