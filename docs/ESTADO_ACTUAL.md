@@ -49,3 +49,13 @@ Sin anuncios, ingresos ni compras integradas. No existen jugadores remotos, mét
 
 ## Entrega detallada y pruebas por realizar
 Leer `docs/ENTREGA_0.3.0.md`: modelos descargables, nota comercial, controles AR, pruebas pendientes e investigación de terceros CC0. GitHub Actions valida sintaxis y glTF, NO cámara de un teléfono.
+
+
+## Última entrega: v0.4.0-beta.1 (2026-10-17)
+Nuevo menú gamer, welcome Google/invitado, opciones VS CPU/local/online, configuración previa con siete tableros y partida 3D a pantalla completa; transiciones y opción continuar partida. Comandos SAN/UCI/español, voz Web Speech experimental y gestos de arrastre de piezas 3D/AR. Tamaño AR ajustable; conservación del visor WebXR y modelos glTF originales.
+
+Auth Google: integración código d-line-g de Fundación para identidad exclusivamente; sin prueba en cuenta Google desde este dominio ni datos de otros juegos. Online PvP: salas PeerJS código de seis caracteres / QR, host valida jugada de cliente y sincroniza FEN versionada, sin pruebas entre dos móviles; sin persistencia remota. Invitado puede jugar local sin Firebase.
+
+El usuario CONFIRMÓ AR funcional en versión anterior; probar 0.4 en Android antes de declarar validación. Tests GitHub Actions automatizados no prueban hardware, popup, micrófono ni red externa.
+
+Continuidad: leer docs/ENTREGA_0.4.0.md.
