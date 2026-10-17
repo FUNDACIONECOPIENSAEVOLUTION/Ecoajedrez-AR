@@ -484,7 +484,7 @@ const match=new PeerMatch({
       return;
     }
     roomVersion=message.version;
-    if(changed){selected=null;moving=null;renderPieces();}
+    if(changed){selected=null;arcaneUI?.selected(null);moving=null;renderPieces();}
     updateStatus();
   },
   onReady(isHost){
@@ -625,10 +625,16 @@ $('menuHost').onclick=()=>{
     const codeLine=document.createElement('strong');codeLine.id='roomCode';codeLine.textContent=code;panel.appendChild(codeLine);
     const info=document.createElement('p');info.id='roomNote';info.textContent='Esperando al otro jugador…';panel.appendChild(info);
     const url=new URL(window.location.href);url.search='';url.searchParams.set('room',code);
-    const link=document.createElement('input');link.readOnly=true;link.value=url.href;link.id='roomLink';panel.appendChild(link);
-    const copy=document.createElement('button');copy.textContent='COPIAR INVITACIÓN';copy.onclick=()=>navigator.clipboard?.writeText(url.href).then(()=>toast('Invitación copiada')).catch(()=>toast(url.href));panel.appendChild(copy);
-    if(window.QRCode){const qr=document.createElement('div');qr.id='roomQR';panel.appendChild(qr);new window.QRCode(qr,{text:url.href,width:140,height:140});}
-    const enter=document.createElement('button');enter.textContent='VER TABLERO MIENTRAS ESPERO';enter.onclick=()=>transitionTo('game');panel.appendChild(enter);
+    // The QR embeds the room URL, but the lengthy URL is intentionally not shown on screen.
+    const actions=document.createElement('div');actions.className='room-actions';panel.appendChild(actions);
+    const copy=document.createElement('button');copy.textContent='⧉ COPIAR CÓDIGO';
+    copy.onclick=async()=>{try{await navigator.clipboard.writeText(code);toast('✦ Código de duelo copiado.');}
+      catch(error){toast('Selecciona el código de seis caracteres que aparece arriba.');}};
+    actions.appendChild(copy);
+    const infoQR=document.createElement('div');infoQR.className='version';infoQR.textContent='ESCANEA EL SELLO DEL PORTAL PARA UNIRTE';panel.appendChild(infoQR);
+    if(window.QRCode){const qr=document.createElement('div');qr.id='roomQR';panel.appendChild(qr);new window.QRCode(qr,{text:url.href,width:156,height:156});}
+    else{const note=document.createElement('p');note.textContent='✧ El QR no está disponible. Comparte los seis caracteres.';panel.appendChild(note);}
+    const enter=document.createElement('button');enter.textContent='♟ VER ARENA MIENTRAS ESPERO';enter.onclick=()=>transitionTo('game');panel.appendChild(enter);
   }catch(error){toast(error.message||'No se pudo crear sala');setGameMode('bot');}
 };
 $('joinBtn').onclick=()=>{
