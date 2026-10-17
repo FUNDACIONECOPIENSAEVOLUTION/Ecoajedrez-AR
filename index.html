@@ -28,6 +28,22 @@ select,input{width:100%}.twocol{display:flex;gap:7px}.twocol>*{flex:1;min-width:
 #arMessage{position:absolute;top:85px;left:50%;transform:translateX(-50%);width:min(95%,430px);padding:12px;text-align:center;border-radius:13px;background:#102c37e8;border:1px solid #6ad3b6;display:none;z-index:5;font-size:13px;font-weight:700;pointer-events:none}
 #toast{position:absolute;top:85px;right:18px;max-width:290px;background:#102c37;border:1px solid #72d2bb;padding:13px;border-radius:12px;display:none;z-index:4;font-size:13px}
 kbd{background:#294454;border:1px solid #52798b;padding:1px 5px;border-radius:5px}
+
+.pieceColors{display:grid;grid-template-columns:1fr 1fr;gap:8px}.pieceColors label{margin:5px 0}
+.ar-hud{display:none;position:fixed;z-index:99999;inset:0;pointer-events:none;font-size:13px}
+.ar-hud .arBar{position:absolute;top:12px;left:10px;right:10px;display:flex;flex-wrap:wrap;gap:7px;align-items:center;pointer-events:auto}
+.ar-hud button{font-weight:700;background:#143d4eee;border:1px solid #82e4b9;color:white;padding:10px 13px}
+.ar-hud .arBottom{position:absolute;bottom:17px;left:12px;right:12px;display:flex;gap:7px;flex-wrap:wrap;align-items:center;pointer-events:auto}
+.ar-hud input[type=range]{max-width:110px;accent-color:#6df2bd}
+.ar-hud .aimCrosshair{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:36px;text-shadow:0 1px 8px #000;pointer-events:none;color:#6ef0c8}
+.ar-hud .aimCrosshair.hidden{display:none}
+.ar-hud #arHint{position:absolute;top:65px;left:10%;right:10%;background:#0d3348ec;border:1px solid #72dcc2;border-radius:10px;padding:10px;text-align:center;pointer-events:none}
+body.xr-active .ar-hud{display:block}
+body.xr-active #scene{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;background:transparent!important;z-index:30}
+body.xr-active #render{width:100%!important;height:100%!important}
+body.xr-active aside,body.xr-active .banner,body.xr-active .bottom,body.xr-active #arMessage{display:none!important}
+body.xr-active main{display:block!important;width:100vw!important;height:100dvh!important}
+body.xr-active .ar-hud{display:block!important}
 @media(max-width:720px){html,body{overflow:auto}main{display:flex;flex-direction:column;height:100dvh}aside{order:2;height:42%;border-right:0;border-top:1px solid var(--s);padding:13px 16px}#scene{order:1;height:58%;flex-shrink:0}.head{align-items:center}h1{font-size:19px}section{margin-top:12px;padding-top:12px}.banner{top:10px;left:12px}.banner div{font-size:10px}.bottom{left:9px;right:9px;bottom:9px}.bottom button{padding:8px}#arButtonHolder button{padding:8px 10px!important}}
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}</script>
@@ -35,13 +51,20 @@ kbd{background:#294454;border:1px solid #52798b;padding:1px 5px;border-radius:5p
 <body>
 <main>
 <aside>
-<div class="head"><img src="./ecoajedrez.PNG" width="48" height="48" alt="Logo Ecoajedrez" style="object-fit:cover;border-radius:14px"><div><h1>ECOAJEDREZ</h1><div class="ver">3D • AR | v0.2.0-alpha</div></div></div>
+<div class="head"><img src="./ecoajedrez.PNG" width="48" height="48" alt="Logo Ecoajedrez" style="object-fit:cover;border-radius:14px"><div><h1>ECOAJEDREZ</h1><div class="ver">3D • AR | v0.3.0-beta.1</div></div></div>
 <p class="desc">Una arena de ajedrez viva. Empieza en 3D; pasa a realidad aumentada cuando tu dispositivo sea compatible.</p>
 <section><h2>Configuración de partida</h2>
 <label for="lang">Idioma · Language · 语言</label><select id="lang"><option value="es">Español</option><option value="en">English</option><option value="zh">简体中文</option></select>
 <label for="mode" data-i18n="mode">Modo de juego</label><select id="mode"><option value="bot" data-i18n="bot">Contra computadora</option><option value="local" data-i18n="local">Dos jugadores locales</option></select>
 <label for="difficulty" data-i18n="difficulty">Dificultad de demostración</label><select id="difficulty"><option value="easy" data-i18n="easy">Principiante</option><option value="medium" data-i18n="medium">Intermedio</option><option value="advanced" data-i18n="advanced">Avanzado (básico)</option></select>
 <label for="theme" data-i18n="scenario">Escenario 3D</label><select id="theme"><option value="classic" data-i18n="classic">Clásico de obsidiana</option><option value="jungle" data-i18n="jungle">Selva encantada</option></select>
+<label for="pieceSet">Modelos de piezas 3D</label>
+<select id="pieceSet"><option value="staunton">Staunton 3D original (glTF)</option><option value="fantasy">Fantasía mágica (geometría 3D)</option><option value="classic">Clásico ligero (geometría 3D)</option></select>
+<div class="pieceColors">
+<div><label for="whiteColor">Blancas · Material</label><select id="whiteColor"><option value="#f9d890">Oro</option><option value="#efffff">Marfil</option><option value="#7cf6e2">Esmeralda</option><option value="#e2a7ff">Amatista</option></select></div>
+<div><label for="blackColor">Negras · Material</label><select id="blackColor"><option value="#203d54">Obsidiana</option><option value="#f0788d">Carmesí</option><option value="#a3bfff">Zafiro</option><option value="#72e0bf">Jade</option></select></div>
+</div>
+<p class="help" id="modelsStatus">Cargando modelos 3D...</p>
 </section>
 <section><h2 data-i18n="game">Partida</h2><div class="status" id="status">Preparando tablero…</div>
 <div class="twocol" style="margin-top:10px"><button id="reset" class="accent" data-i18n="new">Nueva partida</button><button id="undo" data-i18n="undo">Deshacer</button></div>
@@ -50,12 +73,18 @@ kbd{background:#294454;border:1px solid #52798b;padding:1px 5px;border-radius:5p
 <label data-i18n="historyTitle">Movimientos</label><div id="history">—</div>
 </section>
 <section><h2 data-i18n="about">Cómo jugar</h2><div class="help" id="help">Toca una figura y una casilla iluminada. Arrastra para girar el tablero. En Android compatible, pulsa AR, apunta a una mesa y toca para fijarlo.</div>
-<div class="help" style="margin-top:12px"><strong>AR experimental:</strong> necesita HTTPS, WebXR immersive-ar y detección de superficies. La partida remota y los títulos Elo/FIDE todavía no están implementados.</div></section>
+<div class="help" style="margin-top:12px"><strong>AR WebXR experimental:</strong> necesita HTTPS y un navegador Android compatible; si no hay hit-test se usa un tablero holográfico frente a la cámara. La partida remota y los títulos Elo/FIDE todavía no están implementados.</div></section>
 </aside>
 <div id="scene"><canvas id="render" aria-label="Tablero 3D interactivo"></canvas>
 <div class="banner"><strong>ECO<span>AJEDREZ</span> · 3D AR</strong><div>REALIDAD AUMENTADA · FANTASÍA · ESTRATEGIA</div></div>
 <div id="arMessage" role="status">Busca una superficie y toca para colocar el tablero.</div><div id="toast" role="status"></div>
-<div class="bottom"><span id="arButtonHolder"></span><button id="center" data-i18n="center">Centrar cámara</button><button id="rotate" data-i18n="rotate">Girar vista</button><span class="help">3D / WebXR</span></div>
+<div id="arHud" class="ar-hud">
+<div class="arBar"><button id="placeArBtn" type="button">📍 FIJAR TABLERO</button><button id="exitArBtn" type="button">✕ SALIR AR</button><button id="arTouchBtn" type="button">👆 TOCAR CASILLA</button><button id="arAimBtn" type="button">⊕ APUNTAR</button></div>
+<div id="arHint">Busca una mesa y toca FIJAR TABLERO</div>
+<div id="arCrosshair" class="aimCrosshair hidden">⊕</div>
+<div class="arBottom"><button id="arSelectBtn" type="button" style="display:none">✓ SELECCIONAR CASILLA</button><label for="arScale" style="background:#143d4eee;padding:6px;border-radius:9px">Escala AR <input type="range" id="arScale" min="0.4" max="2.2" step="0.1" value="1"></label></div>
+</div>
+<div class="bottom"><button id="startArBtn" class="accent" type="button">📱 Activar realidad aumentada</button><button id="center" data-i18n="center">Centrar cámara</button><button id="rotate" data-i18n="rotate">Girar vista</button><span class="help">3D / WebXR</span></div>
 </div>
 </main>
 <script type="module" src="./main.js"></script>
