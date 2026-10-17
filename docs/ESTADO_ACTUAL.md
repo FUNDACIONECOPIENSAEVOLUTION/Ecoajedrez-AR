@@ -92,3 +92,7 @@ Versión `0.6.0-beta.1`. Traspaso: `docs/ENTREGA_0.6.md`. Google BFF no desplega
 
 ## 0.7.0-beta.1 (2026-10-17) — Experiencia gamer y versiones
 Opening ilustrado por dos escenarios SVG originales, carrusel automático, brillo/animación CSS, tarjetas de menú con fondo de arena. La versión oficial está en version.json y se distribuye con el sitio; opening.js la carga con cache no-store para mostrarla fuera de la partida, también al crear salas con QR y en privacidad. No se añadió BFF/Firebase nuevo ni recursos pagos. Pruebas estáticas y Actions deben confirmarse; pruebas físicas AR y dos celulares siguen pendientes. Detalles: docs/ENTREGA_0.7.md.
+
+
+## Entrega 0.8.0-beta.1 · Medios del propietario (2026-10-17)
+Se verificaron 6 archivos originales en `videos/` (3 MP4 de 13.6 MB, 7.7 MB y 6.6 MB; 3 PNG de 3.1–3.4 MB), antes ignorados por build. Se incorporaron a la portada como video de intro opcional, dos videos de fondo que se reproducen uno a la vez, imágenes originales sin recorte y menú ilustrado. Build publica exactamente los 6 medios tras verificar firma/tamaño y mantiene fuera fuentes de secretos. Se actualizó versión 0.8, tests y documentación `docs/ENTREGA_0.8.md`. La cuenta Github tiene permiso push. El contenido exacto de los MP4 no pudo inspeccionarse por límites del conector; comprobar roles en Android/Windows y codec. Partida/AR/auth no cambiaron.
