@@ -1,5 +1,13 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.9.0-beta.1 — 2026-10-17 · Cine gamer debajo del contenido
+- Tras revisar capturas del usuario, se reposicionan los MP4: bienvenida con fondo animado **detrás de las letras y botones**, lateral con imágenes y movimiento mínimo, menú principal con otro video bajo las tarjetas.
+- Degradados de contraste y controles para pausar/activar fondos; CSS responsive evita el collage recortado que producía mezclar video e imagen en el panel lateral.
+- Solo un fondo MP4 a la vez, carga bajo demanda, pausas automáticas en partida/AR y al bloquear/ocultar; respeto a preferencias de datos/movimiento y fallback PNG.
+- No hay cambios de motor 3D/WebXR, autenticación o Firebase; costo $0. Ver `docs/ENTREGA_0.9.md` para pruebas pendientes.
+
+
+
 ## 0.8.0-beta.1 — 2026-10-17 · Videos originales del propietario
 - Se integran los tres MP4 que el propietario subió en `videos/` a una intro opcional con botón Omitir y dos escenas de fondo en bucle.
 - Se integran también los tres PNG originales como pósteres y fondos de las tarjetas ilustradas. Videos e imágenes se muestran completos con `object-fit:contain`, sin recortar el tablero; conservan fallback SVG.
