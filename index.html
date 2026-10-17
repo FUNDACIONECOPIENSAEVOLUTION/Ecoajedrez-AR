@@ -135,7 +135,7 @@ body.xr-active #gameToast{display:none!important}
 <div id="loginPanel" class="panel"><img src="./ecoajedrez.PNG" class="logo" alt="Logo Ecoajedrez">
 <div class="eyebrow" style="margin-top:12px">LA ARENA COBRA VIDA</div><h1 class="brand">ECO<span>AJEDREZ</span></h1>
 <p>Ajedrez 3D y realidad aumentada. Domina el tablero, invoca tu ejército y desafía a otros jugadores.</p>
-<div class="stack"><button id="loginGoogleBtn" data-ui="loginGoogle" class="primary">G · INICIAR CON GOOGLE</button><button id="loginGuestBtn" data-ui="loginGuest" class="gold">⚡ CONTINUAR COMO INVITADO</button></div>
+<div class="stack"><button id="loginGoogleBtn" data-ui="loginGoogle" class="primary" disabled>G · INICIAR CON GOOGLE</button><button id="loginGuestBtn" data-ui="loginGuest" class="gold">⚡ CONTINUAR COMO INVITADO</button></div>
 <p id="loginStatus" role="status" style="margin:15px 0 0">Comprobando inicio de sesión…</p>
 <p class="version">Modo invitado gratuito y partidas locales · v0.4.1-beta.1</p>
 </div></div>
@@ -146,9 +146,9 @@ body.xr-active #gameToast{display:none!important}
 <button id="menuBot" class="menuTile featured"><b data-ui="menuBot">♟ VS COMPUTADORA</b><small>Practica contra un rival automático</small></button>
 <button id="menuLocal" class="menuTile"><b data-ui="menuLocal">⚔ DOS JUGADORES</b><small>Turnos en un mismo dispositivo</small></button>
 <button id="menuHost" class="menuTile"><b data-ui="menuHost">🌐 CREAR DUELO ONLINE</b><small>Sala privada con código y QR (beta)</small></button>
-<button id="menuJoin" class="menuTile"><b data-ui="menuJoin">♜ UNIRME A PARTIDA</b><small>Ingresa un código de seis caracteres</small></button>
+<button id="menuJoin" class="menuTile"><b data-ui="menuJoin">♜ UNIRME A PARTIDA</b><small>Ingresa el código privado de 12 caracteres</small></button>
 </div>
-<div id="joinPanel"><input id="joinCode" maxlength="6" placeholder="CÓDIGO DE SALA" autocomplete="off"><button id="joinBtn" data-ui="joinBtn" class="primary">CONECTAR</button></div>
+<div id="joinPanel"><input id="joinCode" maxlength="12" placeholder="CÓDIGO DE 12 CARACTERES" autocomplete="off"><button id="joinBtn" data-ui="joinBtn" class="primary">CONECTAR</button></div>
 <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><button id="menuSettings" data-ui="menuSettings">⚙ PERSONALIZAR</button><button id="downloadPgn" data-ui="downloadPgn">⬇ GUARDAR PARTIDA PGN</button><button id="diagnoseBtn" data-ui="diagnostics">◈ DIAGNÓSTICO</button><button id="logoutBtn" data-ui="logout">⇥ CERRAR SESIÓN</button></div>
 <p class="muted" style="font-size:12px;margin:14px 0 0">PvP beta mediante PeerJS: necesita conexión y puede fallar detrás de algunos NAT o redes móviles.</p>
 </div></div>
