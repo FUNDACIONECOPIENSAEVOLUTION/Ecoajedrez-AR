@@ -63,3 +63,6 @@ No reescribir historial Git sin autorización: configuración web Firebase antig
 ## Hosting comercial: condición oficial que no debemos olvidar
 GitHub Pages es apropiado como **demostración y prueba**. Según los límites oficiales de GitHub, no debe usarse como hosting gratuito principal de un negocio online o software comercial SaaS. Para lanzamiento monetizado, evaluar Cloudflare Pages Free u otro servicio oficial cuyas condiciones permitan la actividad, sin inventar costes ni desplegar servicios cobrables.
 Cloudflare Pages puede vincular el repositorio con GitHub y actualizar automáticamente; su URL gratuita es *.pages.dev. Verificar límites en https://developers.cloudflare.com/pages/platform/limits/ .
+
+## DECISIÓN OPERATIVA ACTIVA: coste cero y cuotas de seguridad
+Antes de activar Cloudflare, App Check, bases de datos, facturación o lanzar nuevas versiones de producción, leer `docs/PLAN_SEGURIDAD_0_COP.md`. La decisión vigente es: proteger ahora cuentas/código y reglas de acceso necesarias; reservar recursos y despliegues de nube para MVP y releases significativos; no habilitar Blaze ni servicios con tarjeta sin autorización explícita. El siguiente paso del usuario es GitHub passkey/2FA, luego comprobar Spark Firebase sin cambiar servicios.
