@@ -50,7 +50,17 @@ test('Real cinematic intro is optional, skippable and not required to enter the 
 });
 
 test('Background clips play one at a time without cropping, with static fallback and mobile power safeguards',()=>{
- assert.match(html,/class="heroVideo"/);
+ assert.match(html,/id="welcomeAmbientVideo"/);
+ assert.match(html,/id="menuAmbientVideo"/);
+ assert.match(html,/class="welcomeVideoBackdrop"/);
+ assert.match(html,/class="menuAtmosphere"/);
+ assert.match(html,/id="menuToggleAmbientVideo"/);
+ assert.match(js,/pauseScenes/);
+ assert.match(js,/const video=view==='welcome'\?welcomeVideo:view==='menu'\?menuVideo:null/);
+ assert.doesNotMatch(html,/class="heroVideo"/,'Side illustration should be gently animated still image, not video');
+ assert.match(css,/@keyframes arcaneGalleryFloat/);
+ assert.match(css,/#loginPanel \.loginContent:before/);
+ assert.match(css,/\.menuAtmosphere\.videoReady/);
  assert.match(html,/data-fallback="\.\/assets\/ui\/forest-arena\.svg"/);
  assert.match(html,/data-fallback="\.\/assets\/ui\/portal-arena\.svg"/);
  assert.match(js,/prefers-reduced-motion/);
@@ -63,8 +73,8 @@ test('Background clips play one at a time without cropping, with static fallback
  assert.match(css,/object-fit:contain/);
  assert.match(html,/muted loop playsinline preload="none"/);
  assert.match(html,/id="toggleAmbientVideo"/);
- assert.match(html,/data-app-version>v0\.8\.0-beta\.1/);
- assert.equal(manifest.version,'0.8.0-beta.1');
+ assert.match(html,/data-app-version>v0\.9\.0-beta\.1/);
+ assert.equal(manifest.version,'0.9.0-beta.1');
 });
 
 test('User uploaded media does not weaken the CSP or bundle server secrets',()=>{
