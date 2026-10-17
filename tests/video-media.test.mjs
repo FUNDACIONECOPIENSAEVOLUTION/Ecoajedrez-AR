@@ -44,7 +44,7 @@ test('Real cinematic intro is optional, skippable and not required to enter the 
  assert.match(js,/addEventListener\('click',closeIntro\)/);
  assert.match(js,/cinemaVideo\.dataset\.videoSrc/);
  assert.match(js,/cinemaVideo\.play\(\)/);
- assert.match(js,/cinemaVideo\.pause\(\)/);
+ assert.match(js,/cinemaVideo\?\.pause\(\)/);
  assert.match(css,/\.cinemaOverlay\[hidden\]/);
  assert.match(css,/\.cinemaVideo/);
 });
