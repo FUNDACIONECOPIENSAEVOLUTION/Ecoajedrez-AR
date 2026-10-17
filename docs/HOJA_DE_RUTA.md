@@ -41,3 +41,16 @@ No empezar por monstruos animados, facturación o rankings antes de tener ajedre
 - [ ] Sistema global de jugadores con progreso en Firebase separado de 3 LINE-AR y reglas seguras.
 - [ ] IA Stockfish WASM y calibración de fuerza; clasificación FIDE no oficial.
 - [ ] Figuras fantásticas originales riggeadas y biomas animados optimizados.
+
+
+## Incremento 0.4.1-beta.1
+- [x] Historial SAN completo sincronizado y verificado contra FEN, rechazo de posición inconsistente.
+- [x] Partidas locales guardadas por cuenta/invitado y recuperables desde navegador.
+- [x] Exportación PGN y marcadores visuales de última jugada/selección.
+- [x] Diagnóstico local WebXR/WebGL/Firebase SDK/PeerJS, copia de informe.
+- [x] Corrección de activación del popup Google al pulsar (sin `await` previo).
+- [ ] Validar partida PvP REAL en dos celulares y manejo de desconexión.
+- [ ] Verificar acceso Google en dominio Pages y estado autorizado del proveedor.
+- [ ] Prueba física AR 0.4.1: toque, arrastre, micrófono, selección y persistencia.
+- [ ] Guardado remoto con reglas seguras en backend propio (no reutilizar datos de 3 LINE-AR).
+- [ ] Motor Stockfish bajo licencia apropiada y clasificación por fuerza calibrada.
