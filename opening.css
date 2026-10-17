@@ -281,3 +281,11 @@ body.xr-active .ambientVideo,body[data-view="game"] .ambientVideo{visibility:hid
 @media(prefers-reduced-motion:reduce){
  .heroSlide .heroPoster,.ambientVideo{animation:none!important;transition:none!important}
 }
+
+
+/* Media must paint ABOVE panel's base background and BELOW both text and glass overlays. */
+#loginPanel .loginContent .welcomeVideoBackdrop{z-index:0}
+#loginPanel .loginContent:before{z-index:1}
+#loginPanel .loginContent:after{z-index:1}
+#menuPanel .menuAtmosphere{z-index:0}
+#menuPanel> :not(.menuAtmosphere){z-index:2}
