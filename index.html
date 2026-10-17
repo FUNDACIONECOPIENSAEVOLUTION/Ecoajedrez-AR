@@ -96,6 +96,10 @@ body.xr-active #gameToast{display:none!important}
 .ar-hud .arBar{top:max(4px,env(safe-area-inset-top))}.ar-hud .arBottom{bottom:max(4px,env(safe-area-inset-bottom))}
 .ar-hud button{padding:7px 8px;font-size:11px}.ar-hud #arHint{top:90px;font-size:11px}
 }
+#diagnosticPanel{display:none;position:fixed;inset:0;z-index:100;align-items:center;justify-content:center;padding:13px;background:#02101dec}
+#diagnosticPanel.visible{display:flex}
+#diagnosticCard{width:min(620px,100%);max-height:92dvh;overflow:auto;padding:22px;border:1px solid #67cdb0}
+#diagnosticOutput{font:12px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap;word-break:break-word;background:#061a29;border:1px solid #426774;border-radius:10px;padding:12px}
 </style>
 <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js" defer></script>
 <script src="https://unpkg.com/qrcodejs@1.0.0/qrcode.min.js" defer></script>
@@ -143,7 +147,7 @@ body.xr-active #gameToast{display:none!important}
 <button id="menuJoin" class="menuTile"><b data-ui="menuJoin">♜ UNIRME A PARTIDA</b><small>Ingresa un código de seis caracteres</small></button>
 </div>
 <div id="joinPanel"><input id="joinCode" maxlength="6" placeholder="CÓDIGO DE SALA" autocomplete="off"><button id="joinBtn" data-ui="joinBtn" class="primary">CONECTAR</button></div>
-<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><button id="menuSettings" data-ui="menuSettings">⚙ PERSONALIZAR</button><button id="downloadPgn">⬇ GUARDAR PARTIDA PGN</button><button id="logoutBtn" data-ui="logout">⇥ CERRAR SESIÓN</button></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><button id="menuSettings" data-ui="menuSettings">⚙ PERSONALIZAR</button><button id="downloadPgn">⬇ GUARDAR PARTIDA PGN</button><button id="diagnoseBtn">◈ DIAGNÓSTICO</button><button id="logoutBtn" data-ui="logout">⇥ CERRAR SESIÓN</button></div>
 <p class="muted" style="font-size:12px;margin:14px 0 0">PvP beta mediante PeerJS: necesita conexión y puede fallar detrás de algunos NAT o redes móviles.</p>
 </div></div>
 <div id="settingsScreen" class="screen">
@@ -163,6 +167,13 @@ body.xr-active #gameToast{display:none!important}
 <p id="modelsStatus" class="muted" style="font-size:12px">Cargando modelos 3D...</p>
 <div class="settingFoot"><button id="backToMenu" data-ui="back">← VOLVER</button><button id="startConfigured" data-ui="startGame" class="primary">⚔ INICIAR PARTIDA</button></div>
 </aside></div>
+<div id="diagnosticPanel" role="dialog" aria-modal="true" aria-labelledby="diagnosticTitle">
+<div id="diagnosticCard" class="panel">
+<h2 id="diagnosticTitle">◈ Diagnóstico ECOAJEDREZ</h2>
+<p class="muted">Comprueba las capacidades de este equipo. No confirma que todos los servicios externos funcionen.</p>
+<pre id="diagnosticOutput">Preparando comprobaciones…</pre>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><button id="copyDiagnostic">COPIAR INFORME</button><button id="closeDiagnostic" class="primary">CERRAR</button></div>
+</div></div>
 <div id="loadingPortal"><div class="portal">♜</div><strong id="portalText">INVOCANDO TABLERO...</strong></div>
 <script type="module" src="./main.js"></script>
 </body></html>
