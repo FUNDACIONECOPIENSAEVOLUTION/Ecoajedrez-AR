@@ -59,3 +59,12 @@ Auth Google: integración código d-line-g de Fundación para identidad exclusiv
 El usuario CONFIRMÓ AR funcional en versión anterior; probar 0.4 en Android antes de declarar validación. Tests GitHub Actions automatizados no prueban hardware, popup, micrófono ni red externa.
 
 Continuidad: leer docs/ENTREGA_0.4.0.md.
+
+
+## Última modificación: 0.4.1-beta.1 (2026-10-17)
+Nuevo `match-state.js`: el anfitrión PvP envía FEN más **historial completo**; la otra parte valida jugadas SAN y FEN antes de reconstruir la partida, conservando historial. Se evita aplicar un estado corrupto. Persistencia **local en navegador** por cuenta/invitado para modos CPU y dos jugadores locales, reanudable al volver a entrar; no existe guardado cloud de partidas.
+Botón EXPORTAR PGN; último movimiento y selección se destacan en 3D/AR.
+Corrección del popup Google eliminando espera entre gesto real y apertura, pero inicio de sesión de Google **todavía no probado**.
+Diagnóstico desde menú para WebGL2, WebXR immersive-ar, Firebase SDK disponible (no garantiza inicio de sesión), PeerJS, QR y seis modelos 3D.
+QA de módulos Node y GitHub Actions, pendiente browser E2E y prueba física de AR tras revisión 0.4.1, de dos dispositivos PvP y login Google. El usuario confirmó AR en una versión anterior.
+Para continuación: `docs/ENTREGA_0.4.1.md`. No afirmar que el PvP o Google está confirmado en teléfonos sin evidencia.
