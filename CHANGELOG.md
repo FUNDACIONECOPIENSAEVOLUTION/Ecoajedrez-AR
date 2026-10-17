@@ -1,5 +1,18 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.4.0-beta.1 — 2026-10-17
+- Portada gamer con Google/invitado, menú de modalidades y configuración previa.
+- Transiciones, tablero 3D a pantalla completa y continuar partida.
+- Siete estilos de tableros con colores y tres variantes de piezas.
+- Comandos algebraicos internacionales/españoles, coordenadas y dictado experimental.
+- Arrastre de fichas en 3D y AR, tamaño AR configurable.
+- Login Google con Firebase Auth del proyecto propio d-line-g (sin acceder datos de otro juego).
+- Salas PvP privadas PeerJS por código y QR; host valida jugadas y sincroniza FEN.
+- Pruebas automáticas; falta probar red entre dos celulares, dictado y Google.
+- Entrega documentada en docs/ENTREGA_0.4.0.md.
+
+
+
 ## 0.3.0-beta.1 — 2026-10-17
 - Creación de seis modelos originales de ajedrez glTF 2.0 (rey, dama, alfil, caballo, torre, peón), que el juego utiliza en 32 instancias.
 - Selector Staunton/Fantasía geométrica/Clásico geométrico; materiales blancos y negros personalizables; movimiento animado.
