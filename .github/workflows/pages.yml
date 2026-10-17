@@ -24,6 +24,7 @@ jobs:
         run: |
           node --check main.js
           node --check arcane-ui.js
+          node --check opening.js
           node --check commands.js
           node --check pvp.js
           node --check auth.js
