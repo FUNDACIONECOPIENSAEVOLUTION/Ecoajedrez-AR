@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { ARButton } from 'three/addons/webxr/ARButton.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { Chess } from 'https://cdn.jsdelivr.net/npm/chess.js@1.4.0/dist/esm/chess.js';
 
 const $ = (id) => document.getElementById(id);
@@ -37,6 +37,8 @@ const FILES = 'abcdefgh';
 let selected = null, squares = [], isAR = false, boardPlaced = true;
 let hitSource = null, hitRequested = false, reticlePose = null, timer = null;
 let theme = 'classic', lang = 'es', botDifficulty = 'easy', mode = 'bot';
+let modelSet = 'staunton', moving = null;
+const assets = new Map(), loader = new GLTFLoader();
 const reticle = new THREE.Mesh(new THREE.RingGeometry(.125,.145,40), new THREE.MeshBasicMaterial({color:0x72ffba,side:THREE.DoubleSide}));
 reticle.rotation.x = -Math.PI/2; reticle.visible = false; scene.add(reticle);
 const letters = {
@@ -72,7 +74,7 @@ function addPart(group,geometry,mat,x,y,z){const p=mesh(geometry,mat,x,y,z);grou
 function pieceModel(p){
   const mat=p.color==='w'?goldMat:darkMat;
   const g=new THREE.Group(); g.userData.square=p.square;
-  const base = addPart(g,geoCache.cyl(.32,.36,.13),mat,0,.13,0);
+  addPart(g,geoCache.cyl(.32,.36,.13),mat,0,.13,0);
   addPart(g,geoCache.cyl(.24,.31,.12),mat,0,.245,0);
   if(p.type==='p'){
     addPart(g,geoCache.cyl(.12,.19,.3),mat,0,.42,0);
@@ -101,15 +103,40 @@ function pieceModel(p){
     addPart(g,geoCache.box(.11,.39,.10),mat,0,1.27,0);
     addPart(g,geoCache.box(.31,.10,.10),mat,0,1.30,0);
   }
+  if(modelSet==='fantasy'){
+    const glow = new THREE.MeshStandardMaterial({color:p.color==='w'?0xa3fff0:0xc487ff,metalness:.36,roughness:.22,emissive:p.color==='w'?0x2a6556:0x41236f,emissiveIntensity:.68});
+    const ring=addPart(g,new THREE.TorusGeometry(.27,.035,8,24),glow,0,.09,0);ring.rotation.x=Math.PI/2;
+    if(p.type==='b'){addPart(g,new THREE.ConeGeometry(.25,.34,7),glow,0,1.20,0);}
+    if(p.type==='k'||p.type==='q'){addPart(g,new THREE.OctahedronGeometry(.11),glow,0,p.type==='k'?1.57:1.35,0);}
+    if(p.type==='n'){addPart(g,new THREE.BoxGeometry(.31,.045,.1),glow,.12,1.15,0).rotation.z=-.5;}
+  }
   return g;
 }
 function clearGroup(group){
-  while(group.children.length){const child=group.children[0];group.remove(child);child.traverse(node=>{if(node.isMesh && node.geometry)node.geometry.dispose();});}
+  while(group.children.length){const child=group.children[0];group.remove(child);child.traverse(node=>{if(node.isMesh && node.geometry && !node.userData.sharedGeo)node.geometry.dispose();if(node.isMesh && node.userData.sharedGeo && node.material)node.material.dispose();});}
 }
 function renderPieces(){
   clearGroup(pieces);clearGroup(markers);
   for(const row of game.board())for(const p of row)if(p){
-    const g=pieceModel(p),loc=positionOf(p.square);
+    let g = null;
+    if(modelSet==='staunton' && assets.has(p.type)){
+      const template = assets.get(p.type);
+      if(template){
+        g=template.clone(true);
+        const material=p.color==='w'?goldMat:darkMat;
+        g.traverse(o=>{
+          if(o.isMesh){
+            o.userData.sharedGeo=true;
+            o.material=material.clone();
+            o.material.side=THREE.DoubleSide;
+            o.castShadow=true;
+          }
+        });
+      }
+    }
+    if(!g)g=pieceModel(p);
+    g.userData.square=p.square;
+    const loc=positionOf(p.square);
     g.position.set(loc.x,.07,loc.z);
     if(p.color==='b')g.rotation.y=Math.PI;
     pieces.add(g);
@@ -160,7 +187,7 @@ function playMove(from,to){
     const moved=game.move({from,to,promotion:'q'});
     if(!moved)return false;
   }catch(e){return false;}
-  selected=null;renderPieces();updateStatus();
+  selected=null;renderPieces();animateMove(from,to);updateStatus();
   if(mode==='bot' && !game.isGameOver()){clearTimeout(timer);timer=setTimeout(playBot,500);}
   return true;
 }
@@ -211,10 +238,16 @@ function playBot(){
   if(mode!=='bot'||game.turn()!=='b'||game.isGameOver())return;
   const m=chooseBot();
   if(m)game.move({from:m.from,to:m.to,promotion:'q'});
-  selected=null;renderPieces();updateStatus();
+  selected=null;renderPieces();if(m)animateMove(m.from,m.to);updateStatus();
+}
+function animateMove(from,to){
+  const target=[...pieces.children].find(x=>x.userData.square===to);
+  if(!target)return;
+  const a=positionOf(from),b=positionOf(to);
+  moving={piece:target,a,b,start:performance.now(),duration:370};
 }
 function reset(){
-  clearTimeout(timer);game.reset();selected=null;renderPieces();updateStatus();
+  clearTimeout(timer);game.reset();selected=null;moving=null;renderPieces();updateStatus();
 }
 function squareFromHit(objects, origin, direction){
   raycaster.set(origin,direction);
@@ -255,6 +288,23 @@ $('moveInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('playMove').c
 $('mode').onchange=()=>{mode=$('mode').value;$('difficulty').disabled=mode!=='bot';reset();};
 $('difficulty').onchange=()=>{botDifficulty=$('difficulty').value;};
 $('theme').onchange=()=>setTheme($('theme').value);
+$('pieceSet').onchange=()=>{modelSet=$('pieceSet').value;moving=null;renderPieces();};
+$('whiteColor').onchange=()=>{goldMat.color.set($('whiteColor').value);renderPieces();};
+$('blackColor').onchange=()=>{darkMat.color.set($('blackColor').value);renderPieces();};
+async function loadChessModels(){
+  $('modelsStatus').textContent='Cargando seis modelos glTF originales...';
+  const types=['p','r','n','b','q','k'];
+  const names=['pawn','rook','knight','bishop','queen','king'];
+  await Promise.all(types.map(async (type,i)=>{
+    try{
+      const gltf=await loader.loadAsync('./assets/models/staunton/'+names[i]+'.gltf');
+      assets.set(type,gltf.scene);
+      if(modelSet==='staunton')renderPieces();
+    }catch(error){console.warn('Modelo glTF',names[i],error);assets.set(type,null);}
+  }));
+  const n=[...assets.values()].filter(Boolean).length;
+  $('modelsStatus').textContent=n===6?'6 modelos 3D cargados y personalizables':n+' de 6 modelos cargados · respaldo geométrico activo';
+}
 $('lang').onchange=()=>{lang=$('lang').value;translate();document.documentElement.lang=lang;};
 $('center').onclick=()=>{if(isAR){toast(t('ar'));return;}camera.position.set(8.4,10.6,11.5);orbit.target.set(0,0,0);orbit.update();};
 $('rotate').onclick=()=>{if(isAR)return;camera.position.set(-camera.position.z,camera.position.y,camera.position.x);orbit.update();};
@@ -334,8 +384,19 @@ function render(timestamp,frame){
       }else reticle.visible=false;
     }
   }else orbit.update();
+  if(moving){
+    const progress=Math.min(1,(timestamp-moving.start)/moving.duration);
+    const smooth=progress*progress*(3-2*progress);
+    moving.piece.position.set(
+      moving.a.x+(moving.b.x-moving.a.x)*smooth,
+      .07 + Math.sin(progress*Math.PI)*.34,
+      moving.a.z+(moving.b.z-moving.a.z)*smooth
+    );
+    if(progress>=1)moving=null;
+  }
   if(theme==='jungle'&&!isAR)decorations.children.forEach((p,i)=>{p.rotation.z=Math.sin(timestamp*.0016+i*.8)*.12;});
   renderer.render(scene,camera);
 }
 buildTiles();setTheme(theme);renderPieces();updateStatus();translate();
 renderer.setAnimationLoop(render);
+loadChessModels();
