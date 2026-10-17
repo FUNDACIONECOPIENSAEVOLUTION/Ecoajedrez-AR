@@ -75,3 +75,8 @@ Modalidades: CPU básica (no Stockfish), dos jugadores en un teléfono, duelo ca
 Piezas: seis glTF Staunton originales incorporados al repositorio, «Realeza arcana» con decoración original, Fantasía y Clásico ligero.
 AR: intenta recuperarse tras bloquear el celular y ofrece reentrada mediante gesto del usuario sin perder una partida local. Permite apuntar y tocar/arrastrar **sobre la pantalla**, no rastreo de dedos en el aire ni ocultación de la mano real.
 La versión 0.6 todavía necesita pruebas en Android físico y dos teléfonos; ver `docs/ENTREGA_0.6.md`. Sigue siendo gratis, con Google desactivado en Github.io hasta activar el BFF autorizado.
+
+
+## 0.7.0-beta.1 — Opening gamer animado
+La portada ya muestra dos arenas de fantasía ilustradas originales, carrusel que cambia automáticamente y botones de selección de escena, tarjetas de menú con ilustraciones, invocación CSS del tablero y versión única visible en todas las pantallas excepto partida/AR. Las imágenes fueron recreadas como SVG escalables inspirados en referencias del usuario para evitar depender de capturas pixeladas o recursos con licencias no comprobadas.
+Consulta `docs/ENTREGA_0.7.md`. Modo invitado, reglas de ajedrez, WebXR, PeerJS casual y privacidad se conservan. La versión física en celulares aún debe probarse.
