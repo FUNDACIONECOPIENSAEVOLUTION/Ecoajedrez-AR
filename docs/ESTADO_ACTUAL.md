@@ -96,3 +96,7 @@ Opening ilustrado por dos escenarios SVG originales, carrusel automático, brill
 
 ## Entrega 0.8.0-beta.1 · Medios del propietario (2026-10-17)
 Se verificaron 6 archivos originales en `videos/` (3 MP4 de 13.6 MB, 7.7 MB y 6.6 MB; 3 PNG de 3.1–3.4 MB), antes ignorados por build. Se incorporaron a la portada como video de intro opcional, dos videos de fondo que se reproducen uno a la vez, imágenes originales sin recorte y menú ilustrado. Build publica exactamente los 6 medios tras verificar firma/tamaño y mantiene fuera fuentes de secretos. Se actualizó versión 0.8, tests y documentación `docs/ENTREGA_0.8.md`. La cuenta Github tiene permiso push. El contenido exacto de los MP4 no pudo inspeccionarse por límites del conector; comprobar roles en Android/Windows y codec. Partida/AR/auth no cambiaron.
+
+
+## 0.9.0-beta.1 — Experiencia audiovisual moderna (2026-10-17)
+Se adaptó por capturas del usuario la disposición del video: ahora está **detrás del logo, título y botones del inicio**; el lateral tiene dos imágenes animadas ligeramente. El menú de opciones presenta un segundo MP4 de fondo bajo las tarjetas, con gradientes para legibilidad. Los videos se cargan bajo demanda y nunca se reproducen simultáneamente ni durante una partida, AR, intro modal, pestaña oculta o ahorro de datos. Intro voluntario y modo invitado siguen disponibles, sin cambios en Firebase ni AR. Versión visible 0.9.0-beta.1. Detalles/tests pendientes `docs/ENTREGA_0.9.md`.
