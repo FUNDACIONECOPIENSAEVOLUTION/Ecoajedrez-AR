@@ -1,0 +1,26 @@
+ECOAJEDREZ — Paquete 08 — REINO ATLANTE / SUBMARINO
+
+IMPORTACION A SKYBOX CUBICO
+Usa SOLO las 6 imágenes de la carpeta exactos/ para el visor del juego.
+px.webp = DERECHA +X
+nx.webp = IZQUIERDA -X
+py.webp = CIELO / SUPERIOR +Y
+ny.webp = SUELO / INFERIOR -Y (camara hacia abajo)
+pz.webp = FRENTE +Z
+nz.webp = ATRAS -Z
+
+Las imágenes descriptivos/ son copias con nombres completos, para identificación.
+Cada cara: WebP, 1254 × 1254 píxeles, FOV 90 grados.
+
+PROCESO Y LIMITACIONES
+Se construyó un panorama 360° continuo a partir del fondo existente de Atlantis y
+composiciones visuales creadas para este reino. Se proyectó matemáticamente en
+seis vistas ortogonales desde un mismo centro, con transiciones entre referencias.
+Eso permite una correspondencia geométrica entre bordes y reduce las uniones.
+Sin embargo, la fuente NO es una fotografía ni render 360° nativo y algunos
+motivos arquitectónicos pueden deformarse o repetirse, especialmente al girar.
+Este paquete es una versión artística del cielo virtual, sin profundidad ni paralaje.
+En realidad aumentada de cámara, mostrar el cubo opaco ocultaría el entorno real;
+puede utilizarse en un modo VR/portal AR que abre un mundo virtual.
+
+Incluye manifest.json y extras/vista_previa_seis_caras.jpg.

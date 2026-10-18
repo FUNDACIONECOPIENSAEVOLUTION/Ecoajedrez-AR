@@ -1,0 +1,65 @@
+{
+  "paquete": "ECOAJEDREZ_08_Reino_Atlante_Submarino_Skybox_6_Caras_WEBP",
+  "reino": "Reino Atlante / Submarino",
+  "resolucion": [
+    1254,
+    1254
+  ],
+  "nota": "Proyección cúbica desde panorama sintetizado, no captura 360° nativa",
+  "caras": {
+    "px": {
+      "archivo_exacto": "exactos/px.webp",
+      "archivo_descriptivo": "descriptivos/ECOAJEDREZ_08_Reino_Atlante_Submarino_px_derecha_positivo_X.webp",
+      "vista": "derecha",
+      "eje": "+X",
+      "ancho": 1254,
+      "alto": 1254,
+      "formato": "WebP"
+    },
+    "nx": {
+      "archivo_exacto": "exactos/nx.webp",
+      "archivo_descriptivo": "descriptivos/ECOAJEDREZ_08_Reino_Atlante_Submarino_nx_izquierda_negativo_X.webp",
+      "vista": "izquierda",
+      "eje": "-X",
+      "ancho": 1254,
+      "alto": 1254,
+      "formato": "WebP"
+    },
+    "py": {
+      "archivo_exacto": "exactos/py.webp",
+      "archivo_descriptivo": "descriptivos/ECOAJEDREZ_08_Reino_Atlante_Submarino_py_techo_positivo_Y.webp",
+      "vista": "techo",
+      "eje": "+Y",
+      "ancho": 1254,
+      "alto": 1254,
+      "formato": "WebP"
+    },
+    "ny": {
+      "archivo_exacto": "exactos/ny.webp",
+      "archivo_descriptivo": "descriptivos/ECOAJEDREZ_08_Reino_Atlante_Submarino_ny_suelo_negativo_Y.webp",
+      "vista": "suelo",
+      "eje": "-Y",
+      "ancho": 1254,
+      "alto": 1254,
+      "formato": "WebP"
+    },
+    "pz": {
+      "archivo_exacto": "exactos/pz.webp",
+      "archivo_descriptivo": "descriptivos/ECOAJEDREZ_08_Reino_Atlante_Submarino_pz_frente_positivo_Z.webp",
+      "vista": "frente",
+      "eje": "+Z",
+      "ancho": 1254,
+      "alto": 1254,
+      "formato": "WebP"
+    },
+    "nz": {
+      "archivo_exacto": "exactos/nz.webp",
+      "archivo_descriptivo": "descriptivos/ECOAJEDREZ_08_Reino_Atlante_Submarino_nz_atras_negativo_Z.webp",
+      "vista": "atras",
+      "eje": "-Z",
+      "ancho": 1254,
+      "alto": 1254,
+      "formato": "WebP"
+    }
+  }
+}
