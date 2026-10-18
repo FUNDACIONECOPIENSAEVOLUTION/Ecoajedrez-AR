@@ -656,6 +656,7 @@ $('joinBtn').onclick=()=>{
   const code=$('joinCode').value.trim().toUpperCase();
   if(!/^[A-HJ-NP-Z2-9]{6}$/.test(code)){
    $('qrScannerStatus').textContent='El código debe tener seis símbolos válidos. Comprueba la invitación.';
+   $('joinFeedback').textContent='Introduce seis caracteres válidos o escanea el QR de la otra persona.';
    $('joinCode').focus();
    return;
   }
@@ -673,6 +674,7 @@ qrReader=setupQrJoin({
  },
  onStatus(message){
   $('qrScannerStatus').textContent=message;
+  $('joinFeedback').textContent=message;
  },
  hideJoinPanel:() => !$('joinPanel').classList.contains('visible')
 });
