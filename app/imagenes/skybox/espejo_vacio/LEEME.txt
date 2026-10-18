@@ -1,0 +1,19 @@
+ECOAJEDREZ | PAQUETE 11 | REINO ESPEJO / DIMENSION DEL VACIO
+
+IMPORTAR: carpeta exactos/
+px.webp = Derecha +X
+nx.webp = Izquierda -X
+py.webp = Cielo/Techo +Y
+ny.webp = Piso cenital -Y
+pz.webp = Frente +Z
+nz.webp = Detras -Z
+
+Carpeta descriptivos/: los seis mismos ficheros con nombres largos.
+extras/: vista previa de las seis caras y panorama 360 reconstruido.
+
+Cada textura es WebP de 1254x1254 pixeles, calidad 95.
+Tecnica: Se extrajeron los paneles limpios de la lámina generada, se reconstruyo un ambiente panoramico equirectangular único, y se calculo cada cara con rayos de 90 grados. Esto mantiene coincidencia geometrica de las aristas, pero NO equivale a un render 360 3D autentico.
+Los paneles laterales minimizan el piso extendido; ny.webp es vista cenital del suelo y py.webp mira hacia arriba.
+
+Importacion Three.js (orden: px,nx,py,ny,pz,nz):
+new THREE.CubeTextureLoader().setPath("exactos/").load(["px.webp","nx.webp","py.webp","ny.webp","pz.webp","nz.webp"])

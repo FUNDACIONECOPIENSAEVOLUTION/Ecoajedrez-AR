@@ -1,0 +1,69 @@
+{
+  "realm_id": "11_reino_espejo_dimension_del_vacio",
+  "realm": "Reino Espejo / Dimensión del Vacío",
+  "engine_order": [
+    "px",
+    "nx",
+    "py",
+    "ny",
+    "pz",
+    "nz"
+  ],
+  "size": [
+    1254,
+    1254
+  ],
+  "format": "image/webp",
+  "projection": "cubemap_90deg_from_one_synthetic_equirectangular_projection",
+  "source_note": "Panorama 360 reconstruido artísticamente a partir de lámina 2D; no es un render 3D capturado desde un punto real. No garantiza correspondencia arquitectónica perfecta.",
+  "seams": "Las seis caras proyectadas de un mismo panorama garantizan correspondencia geométrica de coordenadas en las aristas; la compresión WebP puede generar pequeñas diferencias de valores de pixel.",
+  "face_names": {
+    "px": {
+      "orientation": "derecha_+X",
+      "short": "exactos/px.webp",
+      "descriptive": "descriptivos/ECOAJEDREZ_11_Reino_Espejo_Dimension_del_Vacio__px__derecha_+X.webp",
+      "width": 1254,
+      "height": 1254
+    },
+    "nx": {
+      "orientation": "izquierda_-X",
+      "short": "exactos/nx.webp",
+      "descriptive": "descriptivos/ECOAJEDREZ_11_Reino_Espejo_Dimension_del_Vacio__nx__izquierda_-X.webp",
+      "width": 1254,
+      "height": 1254
+    },
+    "py": {
+      "orientation": "techo_+Y",
+      "short": "exactos/py.webp",
+      "descriptive": "descriptivos/ECOAJEDREZ_11_Reino_Espejo_Dimension_del_Vacio__py__techo_+Y.webp",
+      "width": 1254,
+      "height": 1254
+    },
+    "ny": {
+      "orientation": "suelo_cenital_-Y",
+      "short": "exactos/ny.webp",
+      "descriptive": "descriptivos/ECOAJEDREZ_11_Reino_Espejo_Dimension_del_Vacio__ny__suelo_cenital_-Y.webp",
+      "width": 1254,
+      "height": 1254
+    },
+    "pz": {
+      "orientation": "frente_+Z",
+      "short": "exactos/pz.webp",
+      "descriptive": "descriptivos/ECOAJEDREZ_11_Reino_Espejo_Dimension_del_Vacio__pz__frente_+Z.webp",
+      "width": 1254,
+      "height": 1254
+    },
+    "nz": {
+      "orientation": "atras_-Z",
+      "short": "exactos/nz.webp",
+      "descriptive": "descriptivos/ECOAJEDREZ_11_Reino_Espejo_Dimension_del_Vacio__nz__atras_-Z.webp",
+      "width": 1254,
+      "height": 1254
+    }
+  },
+  "validation": {
+    "px_izquierda_vs_pz_derecha_max_diferencia": 29,
+    "diferencia_media": 3.9790005316321104
+  },
+  "recommended_threejs": "new THREE.CubeTextureLoader().setPath(\"exactos/\").load([\"px.webp\",\"nx.webp\",\"py.webp\",\"ny.webp\",\"pz.webp\",\"nz.webp\"])"
+}
