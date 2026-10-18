@@ -1,5 +1,5 @@
 # ECOAJEDREZ 3D/AR · RESUMEN MAESTRO PARA LA PRÓXIMA IA
-**Revisión vigente:** 0.14.3-beta.1 · 2026-10-18. **Leer primero la sección más reciente al final.** Leer **este archivo primero**; consultar AGENTS.md y código solo si la tarea lo requiere. Evitar reanalizar conversaciones largas.
+**Revisión vigente:** 0.14.4-beta.1 · 2026-10-18. **Leer primero la sección más reciente al final.** Leer **este archivo primero**; consultar AGENTS.md y código solo si la tarea lo requiere. Evitar reanalizar conversaciones largas.
 
 ## Identidad y fuentes de verdad
 - Repositorio canónico con permisos de escritura: https://github.com/FUNDACIONECOPIENSAEVOLUTION/Ecoajedrez-AR (rama main).
@@ -101,3 +101,9 @@ Hay **seis** archivos glTF originales autocontenidos bajo `assets/models/staunto
 - Resultado de victoria, derrota y tablas ahora tiene una de las ilustraciones decorativas `vista_de_ajedrez_celestial_encantado.webp` detrás del modal, con sombreado legible y partículas CSS intactas.
 - Tests `tests/realm-pairing.test.mjs` y los tests de versión sincronizados. CI valida scripts, tests y publicación segura; prueba física móvil/AR real sigue pendiente.
 - **Próxima acción del propietario:** cargar imágenes 16:9 en la carpeta, con nombres exactos `entorno_alquimia.webp` etc.; comprobar selección y el fondo relacionado en 3D tras el commit y despliegue automático.
+
+## 0.14.4-beta.1 — 10 fondos reales de los 13 reinos (2026-10-18)
+- Se confirmó en GitHub que el usuario cargó 10 WebP en `app/imagenes/entornos/` con nombres enumerados `01_...` a `10_...`; el código anterior esperaba `entorno_ID.webp` y los omitía en Pages.
+- `realm-pairing.js` contiene ahora el **mapeo real por nombre original** de 10 imágenes a 13 tableros, sin renombrar/copiar recursos repetidos. `scripts/build-pages.mjs` usa el mismo objeto como whitelist y genera `manifest.json` con solo archivos presentes y válidos.
+- Diez tableros poseen fondo propio disponible; `alquimia` comparte `02_entorno_magico_fantasia_ancestral.webp`, `amatista` comparte `01_entorno_galactico_cosmico.webp`, `gotico` comparte `03_entorno_medieval_leyenda_fantasia.webp`. Esas tres imágenes exclusivas son las únicas faltantes. La prioridad futura es `entorno_alquimia.webp`, `entorno_amatista.webp`, `entorno_gotico.webp`, opcionales.
+- Referencia completa y cargas futuras en `app/imagenes/entornos/README.md`. 3D usa fondo del reino, AR conserva cámara y decoraciones 3D se ocultan. Verificar GitHub Actions y muestras en móviles para la validación física.

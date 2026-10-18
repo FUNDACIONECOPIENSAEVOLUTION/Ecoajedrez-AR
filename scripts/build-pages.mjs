@@ -68,13 +68,18 @@ for(const name of [...boardFiles,...decorativeVistaFiles]){
 }
 console.log('Approved board images: '+boardFiles.length+' playable, '+decorativeVistaFiles.length+' decorative.');
 
-// Optional and exact owner-uploaded 3D kingdoms (no arbitrary user files).
-const realmIds=["alquimia","celta","cyber","cosmos","amatista","dorado","atlantis","hielo","lava","egipto","gotico","cristales","steampunk"];
+// Only whitelist owner-approved uploaded backgrounds (no wildcards / user files).
+// Import the same data as the UI so every 3D board & realm keep identical names.
+const {BOARD_REALM_IMAGES}=await import('../realm-pairing.js');
+const realmFiles=[...new Set([
+ ...Object.values(BOARD_REALM_IMAGES),
+ ...Object.keys(BOARD_REALM_IMAGES).map(id=>'entorno_'+id+'.webp')
+])];
 const realmBase='app/imagenes/entornos',realmDest=path.join(dest,realmBase);
 fs.mkdirSync(realmDest,{recursive:true});
 const availableRealms=[];
-for(const id of realmIds){
- const name='entorno_'+id+'.webp',src=path.join(realmBase,name);
+for(const name of realmFiles){
+ const src=path.join(realmBase,name);
  if(!fs.existsSync(src))continue;
  const data=fs.readFileSync(src);
  if(data.length<1024||data.length>3000000||data.toString('ascii',0,4)!=='RIFF'
@@ -84,7 +89,7 @@ for(const id of realmIds){
 }
 fs.writeFileSync(path.join(realmDest,'manifest.json'),
  JSON.stringify({available:availableRealms},null,2)+'\n');
-console.log('Kingdoms paired: '+availableRealms.length+' / 13.');
+console.log('Uploaded kingdom environments: '+availableRealms.length+' published.');
 // Exact single owner-uploaded post-intro background (not arbitrary directory publishing).
 const loginImage='app/imagenes/interfaces/login_post_intro_fondo.png';
 const loginBytes=fs.readFileSync(loginImage);

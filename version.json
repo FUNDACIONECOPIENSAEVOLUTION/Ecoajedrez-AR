@@ -1,8 +1,8 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.14.3-beta.1",
+  "version": "0.14.4-beta.1",
   "updated": "2026-10-18",
-  "status": "13 parejas tablero/reino definidas; fondos WebP opcionales mediante subidas a app/imagenes/entornos, manifest generado por Pages. Galería dual, fondo celeste de celebración, reino solo modo 3D. Pruebas físicas AR pendientes.",
+  "status": "Los 10 WebP originales de reinos subidos por el usuario están emparejados con los 13 tableros 3D; Alquimia/Amatista/Gótico usan paisajes compartidos hasta recibir imagen exclusiva. Sin alterar fichas, reglas ni AR.",
   "browserValidated": false,
   "physicalARValidated": false,
   "onlinePvP": "Casual PeerJS beta, six-character code and QR with camera scanner (native BarcodeDetector / lazy in-browser jsQR), validation restricts invite origin/path. Real two-device session requires device test; unranked and unaudited anti-cheat.",
@@ -53,7 +53,7 @@
     "licensing": "Original procedurally created models; legacy fictional-character models not included"
   },
   "environments": {
-    "assets": "Owner-uploaded 05–08 WebP existing, no new downloads",
+    "assets": "10 owner-uploaded WebP in app/imagenes/entornos (2026-10-18)",
     "graphicsProfiles": [
       "auto",
       "low",
@@ -66,7 +66,14 @@
     "pairedDirectory": "app/imagenes/entornos",
     "manifest": "app/imagenes/entornos/manifest.json, created only in static Pages build",
     "pairCount": 13,
-    "availableUploadedAtRelease": 0
+    "availableUploadedAtRelease": 10,
+    "uniqueBackgroundCount": 10,
+    "needsDedicatedArtwork": [
+      "alquimia",
+      "amatista",
+      "gotico"
+    ],
+    "pairingModule": "realm-pairing.js"
   },
   "lastMoveHint": {
     "visibleOnlyOnRequest": true,

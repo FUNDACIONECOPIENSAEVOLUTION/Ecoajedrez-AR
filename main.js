@@ -9,7 +9,7 @@ import { initializeAccountAuth, loginGoogle, logoutFirebase, authAvailable } fro
 import { makeSnapshot, verifyAndRestore, saveLocalMatch, readLocalMatch } from './match-state.js?v=0.4.1';
 import { createArcaneUI } from './arcane-ui.js?v=0.6.0';
 import { createMagicWorld } from './magic-world.js?v=0.14.3';
-import { realmTheme,publishedRealmURL } from './realm-pairing.js?v=0.14.3';
+import { realmTheme,publishedRealmURL } from './realm-pairing.js?v=0.14.4';
 import { createBoardSurface } from './board-skins.js?v=0.14.3';
 import { makeLastMoveOverlay } from './last-move-ghost.js?v=0.13.0';
 import { createVictoryFX } from './victory-fx.js?v=0.14.2';

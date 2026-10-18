@@ -1,5 +1,12 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.14.4-beta.1 — 2026-10-18 · Incorporados los 10 WebP de reino subidos
+- Se reconocen los 10 nombres originales numerados `01_` a `10_` en la carpeta entornos; 13 tableros usan 10 paisajes (3 compartidos provisionalmente).
+- Alquimia, Plata y amatista y Gótico son los únicos sin paisaje exclusivo; existen fondos compartidos y se pueden sobreescribir con `entorno_ID.webp` cuando se suban.
+- Mapeo y allowlist de GitHub Pages sincronizados desde `realm-pairing.js`. No cambian movimientos, texturas de casillas ni la experiencia AR.
+- Documentación actualizada en un único resumen maestro y carpeta de fondos; se exige verificar pruebas CI y visualización 3D en navegador.
+
+
 ## 0.14.3-beta.1 — 2026-10-18 · Tablero y reino son una pareja única en 3D
 - Nueva carpeta de subida `app/imagenes/entornos/` con README de los 13 WebP `entorno_ID.webp` y manifest generado por GitHub Pages solo con archivos existentes y seguros.
 - Cada tablero jugable selecciona su bioma y fondo 3D automáticamente. El clásico conserva escenarios libres; los 13 modelos ilustrados no tienen selector separado de reino. No hay cambios al fondo AR (cámara real).
