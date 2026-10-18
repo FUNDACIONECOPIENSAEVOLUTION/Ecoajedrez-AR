@@ -1,5 +1,14 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.14.0-beta.1 — 2026-10-18 · Tableros reales sobre 3D, colección de vistas separada
+- 13 imágenes `tablero_*.webp` importadas como texturas jugables 8x8 sin cambiar posiciones de casillas, clics, fichas ni turnos. Selector configurable antes y durante la partida.
+- Encadre del marco ajustable al 65–100% (predeterminado 86%); proporción conservada al cambiar zoom y tamaño AR. Se requiere prueba visual de cuadrícula real por imagen.
+- 7 imágenes `vista-*.webp` implementadas exclusivamente como arte decorativo en carrusel de menú, no como miniaturas de tableros.
+- CacheStorage y service worker guardan solo los diseños que el usuario selecciona, sin descargar todos cada vez ni perder los modelos ya guardados.
+- Nuevos `board-skins.js`, `board-catalog-ui.js`, `board-catalog.css` y `tests/board-skins.test.mjs`. Publicación segura solo de recursos permitidos. Ver `docs/ENTREGA_0.14.md`.
+- Infraestructura gratuita; motores y PvP inalterados.
+
+
 ## 0.13.0-beta.1 — 2026-10-18
 - Fondo mágico 3D con ambientes de bosque, templo, ciudad y volcán mediante imágenes del usuario y geometría ligera, con perfiles de rendimiento.
 - Última jugada: silueta temporal, origen y destino visibles solo en el dispositivo solicitante. Online no permite deshacer.
