@@ -1,11 +1,11 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.11.1-beta.1",
+  "version": "0.12.0-beta.1",
   "updated": "2026-10-18",
-  "status": "Clean owner-provided post-intro galaxy/chess background in login; 10-second once-per-first-visit cinematic opening then permanent still image, responsive desktop/tablet/mobile; other screens, chess, AR and caching unchanged.",
+  "status": "First-entry per-tab cinematic intro begins immediately with skip while assets prefetch; improved welcome contrast; QR scanning for six-symbol PeerJS invitations with native camera and jsQR fallback; guest deep-link join. Browser/mobile real tests pending.",
   "browserValidated": false,
   "physicalARValidated": false,
-  "onlinePvP": "Casual PeerJS beta, 6-character code and QR; unranked and not independently anti-cheat verified",
+  "onlinePvP": "Casual PeerJS beta, six-character code and QR with camera scanner (native BarcodeDetector / lazy in-browser jsQR), validation restricts invite origin/path. Real two-device session requires device test; unranked and unaudited anti-cheat.",
   "apk": false,
   "modelType": "Six bundled original glTF Staunton models + procedurally enhanced royal/fantasy/classic variants; no third-party franchise assets",
   "arImplementation": "WebXR hit-test with touch/aim + recovery dialog after interrupted Android session; screen-drag feedback, NOT camera hand recognition or hand occlusion",
@@ -18,13 +18,13 @@
   "privacyPolicy": "privacy.html",
   "apiSecretsExposedInCurrentBuild": false,
   "liveSecureServerConfigured": false,
-  "ui": "Adventure 0.11.1: full-bleed official clean app/imagenes/interfaces/login_post_intro_fondo.png; cinematic stops after 10 actual playback seconds or video end; accessible centered-left login controls; no loop on welcome",
+  "ui": "0.12: high-contrast typography on post-intro galaxy image, automatic first session launch intro (10s playback max), assets load under cinematic, real QR camera joining; responsive QR panel on phones/tablets",
   "media": {
     "source": "Owner-uploaded repo videos/ 2026-10-17",
     "intro": "Vídeo sin título-17_10_2026, 16_58.mp4",
     "forest": "Vídeo sin título-17_10_2026, 17_08.mp4",
     "portal": "Vídeo sin título-17_10_2026, 17_10.mp4",
-    "notes": "First visit muted cinematic auto-plays when permitted, stops at 10 seconds or end, reveals static owner PNG; return visits show still. Manual replay button remains. Menu video still separate. Mobile browser may block autoplay. No private data added."
+    "notes": "Muted intro auto-start per browser tab/session (after page ready, if reduced-motion/data-saver/browser restrictions permit); stop at 10s video playback or 20s network stall cap; keep post-intro static backdrop. Asset downloads continue asynchronously. No auth/API secrets exposed."
   },
   "visualFidelity": "Functional reinterpretation of user's approved fantasy look, not photo-identical; uses existing user-owned video and poster; no unlicensed materials",
   "assetCache": {
