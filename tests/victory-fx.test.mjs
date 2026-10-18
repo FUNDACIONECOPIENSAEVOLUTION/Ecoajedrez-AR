@@ -28,7 +28,7 @@ test('Celebration is dismissible, motion-conscious and separate from game logic'
  for(const id of ['victoryOverlay','victoryCard','victoryTitle','victoryText','victoryNewGame','victoryMenu','victoryClose','victorySparkles'])
   assert.ok(html.includes('id="'+id+'"'),id);
  assert.match(html,/victoryOverlay"[^>]*hidden>/);
- assert.match(html,/victory-fx\.css\?v=0\.14\.2/);
+ assert.ok(html.includes('victory-fx.css?v=0.14.3'));
  assert.match(main,/createVictoryFX\(/);
  assert.match(main,/syncVictory\(\)/);
  assert.match(main,/victoryFX\?\.reset\(\)/);
