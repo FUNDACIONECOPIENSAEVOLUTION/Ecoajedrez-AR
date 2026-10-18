@@ -1,8 +1,8 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.14.6-beta.1",
+  "version": "0.14.7-beta.1",
   "updated": "2026-10-18",
-  "status": "Skybox Galáctico publicado (6 caras válidas). Visor 360 corregido para verificar URLs de caras incluso sin manifest actualizado y botón explícito Entrar/Salir/Reintentar en Android. Revisión física pendiente.",
+  "status": "Experimental playable 3D realm skybox using existing Chess board/engine and original pieces. User can look around, hide menu and refocus board, with optional phone gyroscope. AR remains real-world anchored without synthetic skybox and no room safety bounds implemented.",
   "browserValidated": false,
   "physicalARValidated": false,
   "onlinePvP": "Casual PeerJS beta, six-character code and QR with camera scanner (native BarcodeDetector / lazy in-browser jsQR), validation restricts invite origin/path. Real two-device session requires device test; unranked and unaudited anti-cheat.",
@@ -145,6 +145,13 @@
     "gameplayIntegration": false,
     "arPreserved": true,
     "physicalValidationPending": true,
-    "availabilityFallback": "If Pages generated manifest is missing or stale, probe six exact cubemap WebP URLs via HEAD; do not incorrectly claim files missing."
+    "availabilityFallback": "If Pages generated manifest is missing or stale, probe six exact cubemap WebP URLs via HEAD; do not incorrectly claim files missing.",
+    "playable3DPrototype": true,
+    "chessEngineReused": true,
+    "cameraView": "Fixed virtual viewer position; free 360 rotational 3DoF view; real board stays at world origin",
+    "ui": "Hide or show HUD; persistent mini controls to refocus board or exit",
+    "mobileGyro": "Optional permission-gated sensor orientation",
+    "AR": "Existing real-surface WebXR hit-test only. Full virtual kingdom not available in AR, no physical area mapping.",
+    "roomBoundaryCalibrated": false
   }
 }

@@ -25,6 +25,7 @@ jobs:
           node --check main.js
           node --check victory-fx.js
           node --check skybox-test.js
+          node --check immersive-chess.js
           node --check skybox-config.js
           node --check magic-world.js
           node --check board-skins.js

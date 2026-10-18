@@ -1,5 +1,5 @@
 # ECOAJEDREZ 3D/AR · RESUMEN MAESTRO PARA LA PRÓXIMA IA
-**Revisión vigente:** 0.14.6-beta.1 · 2026-10-18. **Leer primero la sección más reciente al final.** Leer **este archivo primero**; consultar AGENTS.md y código solo si la tarea lo requiere. Evitar reanalizar conversaciones largas.
+**Revisión vigente:** 0.14.7-beta.1 · 2026-10-18. **Leer primero la sección más reciente al final.** Leer **este archivo primero**; consultar AGENTS.md y código solo si la tarea lo requiere. Evitar reanalizar conversaciones largas.
 
 ## Identidad y fuentes de verdad
 - Repositorio canónico con permisos de escritura: https://github.com/FUNDACIONECOPIENSAEVOLUTION/Ecoajedrez-AR (rama main).
@@ -122,3 +122,10 @@ Hay **seis** archivos glTF originales autocontenidos bajo `assets/models/staunto
 - Corregido skybox-test.js: si manifest no confirma conjunto listo, hace seis consultas HEAD a URLs reales publicadas y solo reporta faltantes cuando da HTTP negativo; errores de red se indican como verificación pendiente.
 - UI ahora tiene ENTRAR AL REINO 360°, Comprobar imágenes y Salir del reino. La cámara Three.js está en origen del cubemap y no solicita cámara trasera del teléfono: giro por dedo o sensores opcionales. Sigue sin batallas, desplazamiento 6DoF ni alteraciones de AR.
 - Pendiente confirmar en móvil que aparece ENTRAR y el cubo carga/permite mirar todas las direcciones, además de inspeccionar costuras/orientación con fotografías.
+
+## 0.14.7-beta.1 — Primer ajedrez 3D jugable dentro del Skybox 360° (2026-10-18)
+- `immersive-chess.js` aplica `THREE.CubeTextureLoader` como background de la MISMA escena principal de main.js: reutiliza chess.js, 13 tableros, 32 fichas, bot, movimientos y PeerJS sin duplicar reglas. Disponible en una partida 3D al pulsar ✦360° o Acciones → Entrar en reino 3D 360°. Requiere que las seis caras del reino correspondiente estén cargadas (solo Galáctico probado en carga automatizada).
+- El tablero conserva coordenadas y suelo visual propio, el jugador virtual observa desde (0, 4.2, 11.8) y puede mirar a los lados con arrastre/sensor sin girar el tablero. Para recuperar enfoque: botón ⊕ Tablero. Controles inmersivos pequeños, botón Mostrar menú/Ocultar menú, botón Salir 360°. Se respeta raycast de casillas, se diferencia arrastre de mirada versus selección/arrastre de piezas; se restaura cámara y OrbitControls al salir.
+- `skybox-test.js` oculta su menú superior automáticamente al entrar y lo reemplaza por pequeño botón de abrir/cerrar menú; permanece visor independiente.
+- No se solicita cámara trasera para reino 3D. Al activar AR (immersive-ar existente), se abandona primero el Skybox, pues mezclar fondo opaco virtual con passthrough sin diseño y sin mapping espacial del perímetro sería engañoso e inseguro. El AR actual ya detecta superficie y ancla tablero; todavía NO detecta ni valida un área segura donde caminar o entrar, ni reemplaza entorno físico por reino. Para fase futura: portal AR opcional con límite visible, calibración de espacio físico, plane hit-test/anchors si soportados y pruebas de dispositivos; inmersión VR real 6DoF exige geometría/paralaje y hardware.
+- Tests: `tests/immersive-chess.test.mjs`; build incluye módulo/CSS; el nuevo camino debe validarse en Chrome Android con partidas, sensor, botones, zoom y memoria. No afirmar validación AR/VR física.

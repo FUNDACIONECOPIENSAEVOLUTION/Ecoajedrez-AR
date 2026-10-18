@@ -1,5 +1,13 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.14.7-beta.1 — 2026-10-18 · Tablero jugable en reino 3D inmersivo
+- Ajedrez existente jugable dentro del Cubemap del reino: la escena y motor main.js se conservan; sin segundo ajedrez ni cambios de reglas.
+- Botones de entrada, ocultar/mostrar menú, reenfocar tablero, sensor de giro opcional y salir del mundo virtual.
+- El visor Skybox aislado también minimiza menú al entrar; sus controles quedan en botón pequeño y se pueden reabrir.
+- Modo AR existente protegido y separado: colocar tablero sobre superficie física sigue disponible, pero NO se ha desarrollado aún mapeo seguro de área ni portal circundante AR. Eso requiere fase posterior y pruebas de usuario.
+- Tests de estructura y publicación ampliados; validación de uso real en Android pendiente.
+
+
 ## 0.14.6-beta.1 — 2026-10-18 · Corrección de acceso a skybox en Android
 - El Galáctico tiene seis WebP verificados y una compilación confirmó cubo completo; en celular aparecía pendiente por depender de manifest.json no disponible o desactualizado.
 - El visor ahora comprueba directamente las seis rutas con HEAD cuando el manifest no acredita el skybox; mensajes claros para archivos realmente faltantes y errores de red.
