@@ -1,5 +1,14 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.10.1-beta.1 — 2026-10-17 · Corrección de bienvenida cinematográfica
+- Quitados rey, caballo, torre y alfil Unicode exagerados de la portada tras captura del usuario; eran caracteres 2D, no fichas 3D.
+- Media original PNG/MP4 del propietario vuelve al fondo de toda la arena con tarjeta legible encima, sin caja aislada a la derecha.
+- Nuevas reglas de pantalla completa y scroll móvil; conserva el inicio como invitado y el botón de intro.
+- CSS local adicional `cinematic-fix.css`, build actualizado, pruebas de regresión y traspaso `docs/ENTREGA_0.10.1.md`.
+- No hay gastos ni cambios de Firebase, modelado GLB o WebXR. Pendiente verificación visual real del propietario.
+
+
+
 ## 0.10.0-beta.1 — 2026-10-17 · Universo celestial interactivo
 - Inspirado por las interfaces aprobadas: arte SVG vectorial original de islas flotantes, galaxia y figuras de ajedrez; piezas flotantes con CSS y destellos ornamentados en la portada.
 - El video ambiental permanece detrás del texto real; se oculta la galería lateral con collages y se reemplaza por arena galáctica animada.
