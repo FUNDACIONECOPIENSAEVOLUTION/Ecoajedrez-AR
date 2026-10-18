@@ -52,7 +52,7 @@ test('Model glTF downloads are deduplicated and reused from persistent CacheStor
   window:{addEventListener() {},dispatchEvent(){}},
   CustomEvent:class {constructor(name,opts){this.type=name;this.detail=opts.detail;}}
  };
- const boot=()=>{const ctx={...platform,window:{...platform.window}};vm.runInNewContext(cached,ctx);return ctx.window.ecoPublicAssets;};
+ const boot=()=>{const ctx={...platform,window:{...platform.window,caches:platform.caches}};vm.runInNewContext(cached,ctx);return ctx.window.ecoPublicAssets;};
  const first=boot();
  const urls=gltfNames.map(name=>'./assets/models/staunton/'+name+'.gltf');
  // Concurrent background prefetch and model loading ask for same bytes.
