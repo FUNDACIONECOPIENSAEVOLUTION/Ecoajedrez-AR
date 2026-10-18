@@ -71,7 +71,7 @@ test('Terms/privacy first-use gate stores minimal local acknowledgement; permiss
 test('Safe static bundling and version match added game module references',()=>{
  for(const p of ['magic-world.js','last-move-ghost.js','legal-consent.js','magic-game.css','terms.html']){
   assert.ok(build.includes("'"+p+"'"),p);
-  assert.ok(html.includes('./'+p),p);
+  assert.ok((p==='magic-world.js'||p==='last-move-ghost.js'?main:html).includes('./'+p),p);
  }
  assert.equal(manifest.version,'0.13.0-beta.1');
  assert.ok(html.includes('v'+manifest.version));
