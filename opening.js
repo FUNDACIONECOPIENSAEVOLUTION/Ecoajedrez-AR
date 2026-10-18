@@ -1,6 +1,6 @@
 // ECOAJEDREZ 0.9 · cinematic media choreography. The game and WebXR remain independent.
 // One ambient MP4 maximum, only on welcome/menu; photos animate gently on the side.
-const FALLBACK_RELEASE='0.11.1-beta.1';
+const FALLBACK_RELEASE='0.12.0-beta.1';
 const versionTags=()=>Array.from(document.querySelectorAll('[data-app-version]'));
 let resolvedVersion=FALLBACK_RELEASE;
 function showVersion(){
@@ -11,7 +11,7 @@ function showVersion(){
 }
 async function readVersion(){
  try{
-  const response=await fetch('./version.json?v=0.11.1',{cache:'no-store',headers:{Accept:'application/json'}});
+  const response=await fetch('./version.json?v=0.12.0',{cache:'no-store',headers:{Accept:'application/json'}});
   if(!response.ok)throw Error('Release manifest unavailable');
   const body=await response.json();
   if(typeof body.version==='string'&&/^0\.[0-9]+\.[0-9]+-beta\.[0-9]+$/.test(body.version))resolvedVersion=body.version;
@@ -40,11 +40,13 @@ function setupHero(){
  const skip=document.getElementById('skipIntroBtn');
  const INTRO_MAX_SECONDS=10;
  let lastFocus=null;
- // Only the first visit to this browser/origin auto-opens the video.
- // Previous visits can use the normal optional "VER INTRO" button.
- const INTRO_KEY='ecoajedrez-intro-played-v1';
- function hasWatchedIntro(){try{return localStorage.getItem(INTRO_KEY)==='1';}catch(error){return false;}}
- function recordIntroSeen(){try{localStorage.setItem(INTRO_KEY,'1');}catch(error){}}
+ let bufferingFallback=null;
+ // Autoplay once on each new tab/session, even if the game was opened on earlier days.
+ // A refresh in this tab does not replay. Opening a new session starts with the film.
+ const INTRO_KEY='ecoajedrez-intro-session-v2';
+ let volatileIntroSeen=false;
+ function hasWatchedIntro(){try{return volatileIntroSeen||sessionStorage.getItem(INTRO_KEY)==='1';}catch(error){return volatileIntroSeen;}}
+ function recordIntroSeen(){volatileIntroSeen=true;try{sessionStorage.setItem(INTRO_KEY,'1');}catch(error){}}
 
 
  function pauseScenes(){
@@ -129,6 +131,7 @@ function setupHero(){
  function closeIntro(){
   if(!cinema||cinema.hidden)return;
   cinemaVideo?.pause();
+  clearTimeout(bufferingFallback);bufferingFallback=null;
   cinema.hidden=true;
   cinema.setAttribute('aria-hidden','true');
   introVisible=false;
@@ -144,6 +147,11 @@ function setupHero(){
   pauseScenes();
   cinema.hidden=false;
   cinema.removeAttribute('aria-hidden');
+  // If a network stalls and video time does not advance, never trap user in overlay.
+  clearTimeout(bufferingFallback);
+  bufferingFallback=setTimeout(()=>{
+   if(introVisible)closeIntro();
+  },20000);
   note.textContent=automatic
    ?'✦ ¡Bienvenido a ECOAJEDREZ! Mientras ves la intro preparamos tus escenarios y piezas 3D.'
    :'ECOAJEDREZ · Puedes omitir la introducción y empezar a jugar en cualquier momento.';
@@ -154,13 +162,16 @@ function setupHero(){
   }
   try{cinemaVideo.currentTime=0;}catch(error){}
   const p=cinemaVideo.play();
-  if(p?.catch)p.catch(()=>{note.textContent='No fue posible iniciar este video. Puedes continuar jugando como invitado.';});
+  if(p?.catch)p.catch(()=>{
+   note.textContent='La reproducción automática no está permitida; puedes ver la intro después.';
+   if(automatic)closeIntro();
+  });
  }
  document.getElementById('playIntroBtn')?.addEventListener('click',()=>startIntro(false));
  document.getElementById('menuIntroBtn')?.addEventListener('click',()=>startIntro(false));
  // Muted inline video is permitted to autoplay in most modern browsers.
  // When blocked, the video controls + OMITIR INTRO remain fully accessible.
- setTimeout(()=>startIntro(true),380);
+ setTimeout(()=>startIntro(true),0);
  skip?.addEventListener('click',closeIntro);
  cinemaVideo?.addEventListener('ended',closeIntro);
  // Actual video playback time (not a fake loading timer): stop after 10 seconds
