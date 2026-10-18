@@ -49,7 +49,7 @@ test('The intro is first-visit-only, muted, replayable, always skippable and rep
  assert.match(html,/id="downloadProgress"/);
  assert.match(opening,/eco:asset-progress/);
  assert.match(loader,/new CustomEvent\('eco:asset-progress'/);
- assert.match(loader,/done\*100\/total/);
+ assert.match(opening,/done\*100\/total/);
  assert.match(loader,/asset-progress/);
  assert.equal(version.version,'0.11.0-beta.1');
 });
