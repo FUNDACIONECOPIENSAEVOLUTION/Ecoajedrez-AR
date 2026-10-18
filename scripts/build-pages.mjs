@@ -4,7 +4,7 @@ import path from 'node:path';
 const dest='dist';
 fs.rmSync(dest,{recursive:true,force:true});
 fs.mkdirSync(dest,{recursive:true});
-const files=['index.html','arcane.css','opening.css','opening.js','celestial.css','cinematic-fix.css','adventure.css','login-scene.css','readability-qr.css','models-cache.css','magic-game.css','magic-world.js','last-move-ghost.js','legal-consent.js','terms.html','qr-scanner.js','asset-cache.js','adventure-ui.js','sw.js','celestial-ui.js','arcane-ui.js','privacy.html','version.json','main.js','auth.js','commands.js','pvp.js','match-state.js','ecoajedrez.PNG','_headers'];
+const files=['index.html','arcane.css','opening.css','opening.js','celestial.css','cinematic-fix.css','adventure.css','login-scene.css','readability-qr.css','models-cache.css','magic-game.css','board-catalog.css','board-skins.js','board-catalog-ui.js','magic-world.js','last-move-ghost.js','legal-consent.js','terms.html','qr-scanner.js','asset-cache.js','adventure-ui.js','sw.js','celestial-ui.js','arcane-ui.js','privacy.html','version.json','main.js','auth.js','commands.js','pvp.js','match-state.js','ecoajedrez.PNG','_headers'];
 for(const name of files){
  if(!fs.existsSync(name))throw Error('Missing asset: '+name);
  fs.copyFileSync(name,path.join(dest,name));
@@ -28,6 +28,45 @@ for(const name of cardNames){
  fs.writeFileSync(path.join(cardDest,name),file);
 }
 
+
+// User-approved, real gameplay boards (13) and decorative vista artwork (7).
+// Never publish unspecified files from app/imagenes/tableros.
+const boardFiles=[
+ "tablero_alquímico_de_líquidos_mágicos.webp",
+ "tablero_celta_mágico_de_ajedrez.webp",
+ "tablero_cibernético_de_neón_magenta_y_cian.webp",
+ "tablero_cósmico_de_nebulosas_y_obsidiana.webp",
+ "tablero_cósmico_de_plata_y_amatista.webp",
+ "tablero_de_ajedrez_mágico_con_vetas_doradas.webp",
+ "tablero_de_atlantis_en_nácar_y_oro.webp",
+ "tablero_de_hielo_mágico_con_runas_luminosas.webp",
+ "tablero_de_lava_y_basalto.webp",
+ "tablero_egipcio_de_oro_y_lapislázuli.webp",
+ "tablero_gótico_de_almas_espectrales.webp",
+ "tablero_místico_de_cristales_y_runas.webp",
+ "tablero_steampunk_de_engranajes_y_cobre.webp"
+];
+const decorativeVistaFiles=[
+ "vista-ajedrez_cósmico_entre_galaxias.webp",
+ "vista-coleccion_cinco_tableros_fantasticos.webp",
+ "vista-tablero_de_ajedrez_de_hielo_auroral.webp",
+ "vista-tablero_de_ajedrez_de_lava_draconico.webp",
+ "vista-tablero_de_ajedrez_mágico_de_amatista.webp",
+ "vista-tablero_místico_del_bosque_encantado.webp",
+ "vista_de_ajedrez_celestial_encantado.webp"
+];
+const boardDest=path.join(dest,'app/imagenes/tableros');
+fs.mkdirSync(boardDest,{recursive:true});
+for(const name of [...boardFiles,...decorativeVistaFiles]){
+ const src=path.join('app/imagenes/tableros',name);
+ if(!fs.existsSync(src))throw Error('Missing approved fantasy board artwork: '+name);
+ const data=fs.readFileSync(src);
+ if(data.length<1024||data.length>2500000
+    ||data.toString('ascii',0,4)!=='RIFF'||data.toString('ascii',8,12)!=='WEBP')
+  throw Error('Invalid board WebP '+name);
+ fs.writeFileSync(path.join(boardDest,name),data);
+}
+console.log('Approved board images: '+boardFiles.length+' playable, '+decorativeVistaFiles.length+' decorative.');
 
 // Exact single owner-uploaded post-intro background (not arbitrary directory publishing).
 const loginImage='app/imagenes/interfaces/login_post_intro_fondo.png';
