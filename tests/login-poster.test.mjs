@@ -27,7 +27,7 @@ test('First visit cinematic ends after up to 10 playback seconds and leaves fixe
  assert.match(js,/cinemaVideo\?\.addEventListener\('ended',closeIntro\)/);
  assert.match(js,/function recordIntroSeen/);
  assert.match(js,/function hasWatchedIntro/);
- assert.match(js,/setTimeout\(\(\)=>startIntro\(true\),380\)/);
+ assert.match(js,/setTimeout\(\(\)=>startIntro\(true\),0\)/);
  assert.match(js,/if\(currentView\(\)==='welcome'\)return/);
  assert.match(html,/id="cinemaVideo"[^>]* muted playsinline/);
  assert.match(html,/id="skipIntroBtn"/);
@@ -37,7 +37,7 @@ test('First visit cinematic ends after up to 10 playback seconds and leaves fixe
  assert.match(css,/display:none!important/);
 });
 test('Desktop, tablet and phone controls remain visible and version increments',()=>{
- assert.equal(version.version,'0.11.1-beta.1');
+ assert.equal(version.version,'0.12.0-beta.1');
  assert.ok(html.includes('v'+version.version));
  assert.match(css,/@media\(max-width:1080px\)/);
  assert.match(css,/@media\(max-width:760px\)/);
