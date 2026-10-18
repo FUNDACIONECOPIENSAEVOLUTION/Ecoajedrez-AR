@@ -114,6 +114,7 @@ body.xr-active #gameToast{display:none!important}
 <link rel="stylesheet" href="./magic-game.css?v=0.13.0">
 <link rel="stylesheet" href="./board-catalog.css?v=0.14.3">
 <link rel="stylesheet" href="./victory-fx.css?v=0.14.3">
+<link rel="stylesheet" href="./immersive-chess.css?v=0.14.7">
 <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js" defer></script>
 <script src="https://unpkg.com/qrcodejs@1.0.0/qrcode.min.js" defer></script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}</script>
@@ -121,8 +122,14 @@ body.xr-active #gameToast{display:none!important}
 <body data-view="welcome">
 <div id="scene"><canvas id="render" aria-label="Tablero de ajedrez 3D interactivo"></canvas>
 <div id="gameToast" role="status"></div>
+<div id="realmMiniControls" hidden role="group" aria-label="Controles del reino inmersivo">
+<button id="realmHudButton" type="button" aria-expanded="false">☰ Mostrar menú</button>
+<button id="realmFocusButton" type="button" title="Volver a mirar el tablero sin moverlo">⊕ Tablero</button>
+<button id="realmGyroButton" type="button" aria-pressed="false">◉ Sensores</button>
+<button id="realmExitButton" type="button">✕ Salir 360°</button>
+</div>
 <div id="gameHud">
-<div class="magicQuickBar" aria-label="Acciones rápidas durante la partida"><button id="lastMoveBtn" type="button" title="Mostrar solo para ti una silueta de la última jugada">♞</button><button id="quickArBtn" type="button" title="Entrar en realidad aumentada">◎ AR</button></div>
+<div class="magicQuickBar" aria-label="Acciones rápidas durante la partida"><button id="lastMoveBtn" type="button" title="Mostrar solo para ti una silueta de la última jugada">♞</button><button id="realmQuickBtn" type="button" title="Entrar en el reino 360° sin cambiar tu partida">✦ 360°</button><button id="quickArBtn" type="button" title="Entrar en realidad aumentada">◎ AR</button></div>
 <div id="lastMoveMessage" role="status" aria-live="polite"></div>
 <div class="hudTop"><div class="chip"><strong>♜ ECOAJEDREZ</strong> · <span id="status">Preparando tablero...</span><div id="networkStatus" class="version">MODO LOCAL</div></div>
 <button id="gameMenuBtn" data-ui="gameMenu" aria-haspopup="dialog" aria-expanded="false">☰ MENÚ</button></div>
@@ -151,6 +158,7 @@ body.xr-active #gameToast{display:none!important}
 <button id="toolsContinue" type="button">▶ CONTINUAR</button>
 <button id="toolsLastMove" type="button">♞ ÚLTIMA JUGADA</button>
 <button id="toolsAR" type="button">◎ ACTIVAR AR</button>
+<button id="realmEnterBtn" type="button">✦ ENTRAR EN REINO 3D 360°</button>
 <label class="toolsSelect">✧ CAMBIAR MUNDO
 <select id="toolsTheme" aria-label="Cambiar entorno de la partida">
 <option value="classic">Clásico de obsidiana</option><option value="jungle">Bosque encantado</option><option value="neon">Templo arcano</option><option value="marble">Ciudad flotante</option><option value="volcano">Volcán celestial</option><option value="wood">Madera</option><option value="ice">Hielo</option>
@@ -335,5 +343,5 @@ body.xr-active #gameToast{display:none!important}
 <script type="module" src="./celestial-ui.js?v=0.10.0"></script>
 <script type="module" src="./legal-consent.js?v=0.13.0"></script>
 <script type="module" src="./board-catalog-ui.js?v=0.14.4"></script>
-<script type="module" src="./main.js?v=0.14.4"></script>
+<script type="module" src="./main.js?v=0.14.7"></script>
 </body></html>

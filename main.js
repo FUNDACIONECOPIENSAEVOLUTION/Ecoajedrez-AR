@@ -13,6 +13,7 @@ import { realmTheme,publishedRealmURL } from './realm-pairing.js?v=0.14.4';
 import { createBoardSurface } from './board-skins.js?v=0.14.3';
 import { makeLastMoveOverlay } from './last-move-ghost.js?v=0.13.0';
 import { createVictoryFX } from './victory-fx.js?v=0.14.2';
+import { createImmersiveChess } from './immersive-chess.js?v=0.14.7';
 
 const $ = (id) => document.getElementById(id);
 const canvas = $('render'), stage = $('scene');
@@ -38,7 +39,7 @@ const game = new Chess();
 const world = new THREE.Group(), tiles = new THREE.Group(), pieces = new THREE.Group();
 const decorations = new THREE.Group(), markers = new THREE.Group();
 world.add(tiles, decorations, pieces, markers); scene.add(world);
-let arcaneUI=null,magicEnv=null,ghostHint=null,boardSurface=null,victoryFX=null;
+let arcaneUI=null,magicEnv=null,ghostHint=null,boardSurface=null,victoryFX=null,realmImmersion=null;
 const rootBase = new THREE.Mesh(new THREE.BoxGeometry(8.45, .35, 8.45), new THREE.MeshStandardMaterial({color:0x213544, metalness:.5, roughness:.28}));
 rootBase.position.y = -.23; rootBase.receiveShadow = true; tiles.add(rootBase);
 const raycaster = new THREE.Raycaster(), point = new THREE.Vector2();
@@ -458,7 +459,8 @@ canvas.addEventListener('pointerdown',event=>{
 });
 canvas.addEventListener('pointerup',event=>{
   if(isAR||!down)return;
-  const downEvent=down;down=null;orbit.enabled=true;
+  if(realmImmersion?.isPanGesture()){down=null;orbit.enabled=false;return;}
+  const downEvent=down;down=null;orbit.enabled=!realmImmersion?.active();
   const destination=pick3DSquare(event.clientX,event.clientY);
   if(!destination)return;
   const moved=Math.hypot(event.clientX-downEvent.x,event.clientY-downEvent.y)>12;
@@ -467,7 +469,7 @@ canvas.addEventListener('pointerup',event=>{
     pickSquare(destination);
   }else if(!moved)pickSquare(destination);
 });
-canvas.addEventListener('pointercancel',()=>{down=null;orbit.enabled=true;});
+canvas.addEventListener('pointercancel',()=>{down=null;orbit.enabled=!realmImmersion?.active();});
 // Original locally hosted models: exactly six types, reused by 32 pieces.
 const chessModelTypes=['p','r','n','b','q','k'];
 const chessModelNames=['pawn','rook','knight','bishop','queen','king'];
@@ -624,6 +626,7 @@ function setGameMode(next){
   $('networkStatus').textContent=next==='online'?'DUELO ONLINE · BETA':next==='bot'?'VERSUS COMPUTADORA':'DOS JUGADORES LOCALES';
 }
 function gotoView(view){
+  if(view!=='game')realmImmersion?.exit();
   if(isAR && view!=='game'){voluntaryArExit=true;arInterrupted=false;arSession?.end().catch(()=>finishAR());}
   document.body.dataset.view=view;
   if(view==='menu')$('resumeGame').style.display=gameStarted?'block':'none';
@@ -807,6 +810,7 @@ $('startConfigured').onclick=()=>{
 const toolsPanel=$('gameTools'),menuButton=$('gameMenuBtn');
 function closeGameTools(){toolsPanel.hidden=true;menuButton.setAttribute('aria-expanded','false');}
 function openGameTools(){
+  realmImmersion?.showUI(true);
  toolsPanel.hidden=false;menuButton.setAttribute('aria-expanded','true');
  $('toolsTheme').value=theme;
  $('toolsTheme').disabled=Boolean(realmTheme(window.ecoBoardCatalogue?.getSelected()));
@@ -824,6 +828,13 @@ $('lastMoveBtn').onclick=showLastMove;
 $('toolsLastMove').onclick=showLastMove;
 $('quickArBtn').onclick=()=>startAR();
 $('toolsAR').onclick=()=>{closeGameTools();startAR();};
+function launchRealmChess(){
+ closeGameTools();
+ if(isAR){toast('Sal de AR para entrar al reino virtual 360°.');return;}
+ realmImmersion?.enter();
+}
+$('realmEnterBtn').onclick=launchRealmChess;
+$('realmQuickBtn').onclick=launchRealmChess;
 $('toolsTheme').onchange=event=>{
  const next=event.target.value;
  if(![...$('theme').options].some(o=>o.value===next))return;
@@ -935,6 +946,7 @@ function setHologram(){
   arHint('Holograma AR sin detección de mesa. Se puede jugar, pero no está anclado a una superficie.');
 }
 async function startAR(){
+  realmImmersion?.exit();
   if(isAR || !renderer)return;
   if(!window.isSecureContext){toast('AR requiere HTTPS.');return;}
   if(!navigator.xr){toast('WebXR AR no disponible en este navegador. Sigue jugando en 3D.');return;}
@@ -1159,6 +1171,15 @@ function render(timestamp,frame){
 arcaneUI=createArcaneUI({THREE,world});
 try{const saved=localStorage.getItem('ecoajedrez-graphics-profile');if(['auto','low','medium','high'].includes(saved))$('quality').value=saved;}catch(e){}
 magicEnv=createMagicWorld({THREE,world,scene,renderer,stage});
+realmImmersion=createImmersiveChess({
+ THREE,scene,camera,orbit,canvas,
+ getBoardId:()=>window.ecoBoardCatalogue?.getSelected()||'classic',
+ onInfo:message=>toast(message),
+ getInteractivePiece:(x,y)=>{
+  const sq=pick3DSquare(x,y),piece=sq&&game.get(sq);
+  return Boolean(piece&&piece.color===game.turn()&&canPlay());
+ }
+});
 ghostHint=makeLastMoveOverlay({THREE,world,positionOf,onText:text=>{$('lastMoveMessage').textContent=text;}});
 magicEnv.setProfile($('quality').value,theme);
 buildTiles();
@@ -1183,6 +1204,7 @@ if(catalogue){
 }
 document.addEventListener('eco:board-skin-select',event=>{
   const code=event.detail?.id;
+  realmImmersion?.exit();
   boardSurface?.select(code).catch(()=>{});
   syncSelectedRealm(code);
   if(typeof persistCurrentGame==='function')persistCurrentGame();

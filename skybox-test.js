@@ -8,6 +8,7 @@ const canvas=$('skyCanvas'),chooser=$('skyRealmSelect'),status=$('skyStatus');
 const panel=$('skyMessage'),heading=$('skyMessageTitle'),explanation=$('skyMessageBody');
 const upload=$('skyUpload'),gyroButton=$('skyGyro'),resetButton=$('skyReset');
 const enterButton=$('skyEnter'),retryButton=$('skyRetry'),exitButton=$('skyExit');
+const menuToggle=$('skyMenuToggle'),toolbar=$('skyToolbar');
 const repository='https://github.com/FUNDACIONECOPIENSAEVOLUTION/Ecoajedrez-AR';
 for(const realm of SKYBOX_REALMS){
  const option=document.createElement('option');option.value=realm.id;
@@ -132,6 +133,8 @@ function enterRealm(){
    texture=loaded;loaded.colorSpace=THREE.SRGBColorSpace;loaded.needsUpdate=true;
    scene.background=loaded;resetView();
    panel.hidden=true;exitButton.hidden=false;
+   toolbar.hidden=true;menuToggle.hidden=false;
+   menuToggle.textContent='☰ Mostrar menú';
    say('✓ Dentro de '+realm.label+' · gira con el dedo o activa los sensores del teléfono.');
    repaint();
   },undefined,error=>{
@@ -145,6 +148,7 @@ function enterRealm(){
  loadedTexture.colorSpace=THREE.SRGBColorSpace;
 }
 function exitRealm(){
+ toolbar.hidden=false;menuToggle.hidden=true;
  ++loadToken;unload();resetView();
  prepareRealm();
 }
@@ -152,6 +156,10 @@ chooser.addEventListener('change',()=>{
  const url=new URL(location.href);url.searchParams.set('reino',chooser.value);
  history.replaceState(null,'',url);
  prepareRealm();
+});
+menuToggle.addEventListener('click',()=>{
+ toolbar.hidden=!toolbar.hidden;
+ menuToggle.textContent=toolbar.hidden?'☰ Mostrar menú':'✕ Ocultar menú';
 });
 enterButton.addEventListener('click',enterRealm);
 retryButton.addEventListener('click',()=>prepareRealm({refresh:true}));
