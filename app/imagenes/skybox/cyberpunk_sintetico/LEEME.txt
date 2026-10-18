@@ -1,0 +1,28 @@
+ECOAJEDREZ - PAQUETE 10 - REINO CYBERPUNK / SINTETICO
+
+Caras para cargar directamente en el motor 3D (carpeta exactos/):
+  px.webp: Derecha +X
+  nx.webp: Izquierda -X
+  py.webp: Cielo +Y (vista mirando directamente arriba)
+  ny.webp: Suelo -Y (vista totalmente cenital, sin inclinacion)
+  pz.webp: Frente +Z
+  nz.webp: Atras -Z
+
+Carpeta descriptivos/: las mismas seis imagenes con nombre del reino y orientacion.
+Resolucion: 1254 x 1254 pixeles por cara, formato WebP de alta calidad.
+Extras: vista previa elaborada a partir de las seis imagenes reales y panorama reconstruido.
+Archivo manifest.json: index y mapeo de caras.
+
+NOTA IMPORTANTE DE REALISMO Y UNIONES:
+Este conjunto se construyo a partir de una lamina de seis escenas ilustradas;
+las escenas no procedian originalmente de una unica camara esferica 360.
+Se retiraron los titulos, se recortaron las plataformas del primer plano
+para las vistas horizontales, se creo un panorama envolvente con transiciones,
+y se genero el cubemap mediante proyeccion matematica comun de 90 grados.
+Los bordes de las texturas estan conectados en el panorama matematico,
+pero edificios repetidos o perspectivas artisticamente diferentes pueden
+aparecer por la reconstruccion. No es una captura 360 nativa ni geometria 3D.
+
+En realidad aumentada, un skybox cubre la imagen de la camara si se muestra
+opaco: para mantener la camara real visible usar una experiencia de portal
+u otro efecto mixto compatible con WebXR.

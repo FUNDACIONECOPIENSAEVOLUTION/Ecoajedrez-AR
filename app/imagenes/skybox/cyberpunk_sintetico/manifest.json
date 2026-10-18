@@ -1,0 +1,73 @@
+{
+  "paquete": 10,
+  "reino": "Reino Cyberpunk / Sintético",
+  "caras": {
+    "px": {
+      "orientacion": "Derecha",
+      "eje": "+X",
+      "archivo_corto": "exactos/px.webp",
+      "archivo_largo": "descriptivos/ECOAJEDREZ_10_Reino_Cyberpunk_Sintetico_px_Derecha_PositivoX.webp",
+      "resolucion": [
+        1254,
+        1254
+      ]
+    },
+    "nx": {
+      "orientacion": "Izquierda",
+      "eje": "-X",
+      "archivo_corto": "exactos/nx.webp",
+      "archivo_largo": "descriptivos/ECOAJEDREZ_10_Reino_Cyberpunk_Sintetico_nx_Izquierda_NegativoX.webp",
+      "resolucion": [
+        1254,
+        1254
+      ]
+    },
+    "py": {
+      "orientacion": "Cielo",
+      "eje": "+Y",
+      "archivo_corto": "exactos/py.webp",
+      "archivo_largo": "descriptivos/ECOAJEDREZ_10_Reino_Cyberpunk_Sintetico_py_Cielo_PositivoY.webp",
+      "resolucion": [
+        1254,
+        1254
+      ]
+    },
+    "ny": {
+      "orientacion": "Suelo",
+      "eje": "-Y",
+      "archivo_corto": "exactos/ny.webp",
+      "archivo_largo": "descriptivos/ECOAJEDREZ_10_Reino_Cyberpunk_Sintetico_ny_Suelo_NegativoY.webp",
+      "resolucion": [
+        1254,
+        1254
+      ]
+    },
+    "pz": {
+      "orientacion": "Frente",
+      "eje": "+Z",
+      "archivo_corto": "exactos/pz.webp",
+      "archivo_largo": "descriptivos/ECOAJEDREZ_10_Reino_Cyberpunk_Sintetico_pz_Frente_PositivoZ.webp",
+      "resolucion": [
+        1254,
+        1254
+      ]
+    },
+    "nz": {
+      "orientacion": "Atras",
+      "eje": "-Z",
+      "archivo_corto": "exactos/nz.webp",
+      "archivo_largo": "descriptivos/ECOAJEDREZ_10_Reino_Cyberpunk_Sintetico_nz_Atras_NegativoZ.webp",
+      "resolucion": [
+        1254,
+        1254
+      ]
+    }
+  },
+  "tamano_cara": [
+    1254,
+    1254
+  ],
+  "formato": "WebP",
+  "origen": "Panorama reconstruido desde ilustraciones; no captura 360 nativa",
+  "continuidad": "proyeccion comun del panorama; uniones sujetas a compresion WebP"
+}
