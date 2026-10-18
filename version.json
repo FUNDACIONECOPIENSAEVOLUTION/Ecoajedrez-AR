@@ -1,8 +1,8 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.12.1-beta.1",
+  "version": "0.13.0-beta.1",
   "updated": "2026-10-18",
-  "status": "Shared CacheStorage model loading with six real glTF Staunton types, manual cache verification/download and responsive status. Avoid duplicate network requests for 3D models when preloading and rendering. Physical browser/AR model validation pending.",
+  "status": "Implemented opt-in local 4.5s ghost showing last move without changing chess/PeerJS state, quick in-game AR button, four owner-art 3D arena backgrounds with lightweight procedural edges, selectable quality, board glow, extended game actions, preliminary terms and first-use legal acknowledgement. Requires real browser/AR verification.",
   "browserValidated": false,
   "physicalARValidated": false,
   "onlinePvP": "Casual PeerJS beta, six-character code and QR with camera scanner (native BarcodeDetector / lazy in-browser jsQR), validation restricts invite origin/path. Real two-device session requires device test; unranked and unaudited anti-cheat.",
@@ -18,7 +18,7 @@
   "privacyPolicy": "privacy.html",
   "apiSecretsExposedInCurrentBuild": false,
   "liveSecureServerConfigured": false,
-  "ui": "0.12.1: configurable 3D models with visible 0–6 progress, download/check button and confirmed CacheStorage storage count; other menus and cinematics retained.",
+  "ui": "Fantasy 3D v0.13: responsive forest, arcane temple, floating city and volcano ambience + quick actions near golden star + last-move phantom + in-game menu + legal/permission explanation.",
   "media": {
     "source": "Owner-uploaded repo videos/ 2026-10-17",
     "intro": "Vídeo sin título-17_10_2026, 16_58.mp4",
@@ -51,5 +51,32 @@
     "storagePersistenceRequestedOnlyOnClick": true,
     "retentionGuaranteed": false,
     "licensing": "Original procedurally created models; legacy fictional-character models not included"
+  },
+  "environments": {
+    "assets": "Owner-uploaded 05–08 WebP existing, no new downloads",
+    "graphicsProfiles": [
+      "auto",
+      "low",
+      "medium",
+      "high"
+    ],
+    "proceduralDecorations": true,
+    "AR": "decorations hidden; WebXR camera passthrough remains clean; extended AR immersion postponed"
+  },
+  "lastMoveHint": {
+    "visibleOnlyOnRequest": true,
+    "expiresSeconds": 4.5,
+    "localOnly": true,
+    "mutatesChess": false,
+    "sendsPeerMessage": false
+  },
+  "legalNotice": {
+    "terms": "terms.html",
+    "privacy": "privacy.html",
+    "firstUseAcknowledgement": "localStorage",
+    "cameraPermission": "browser, on AR/QR click",
+    "microphonePermission": "browser, on dictation click",
+    "noActivePurchases": true,
+    "requiresProfessionalLegalReview": true
   }
 }
