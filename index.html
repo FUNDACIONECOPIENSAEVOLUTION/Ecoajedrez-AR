@@ -187,6 +187,7 @@ body.xr-active #gameToast{display:none!important}
 <div id="joinPanel">
 <div class="joinHeader"><strong>✦ UNIRME A UN DUELO</strong><span>Escribe el código o escanea el QR del otro jugador.</span></div>
 <div class="joinActions"><label class="joinCodeLabel" for="joinCode">CÓDIGO DE SEIS CARACTERES</label><input id="joinCode" maxlength="6" placeholder="EJ. ABC234" autocapitalize="characters" inputmode="text" autocomplete="off" spellcheck="false"><button id="joinBtn" data-ui="joinBtn" class="primary" type="button">CONECTAR</button><button id="scanRoomQR" type="button" class="scanQRButton">▣ ESCANEAR QR CON CÁMARA</button></div>
+<p id="joinFeedback" class="joinFeedback" role="status" aria-live="polite">Selecciona un duelo, introduce el código o abre el escáner.</p>
 <div id="qrScannerPanel" class="qrScannerPanel" hidden>
 <p class="qrScannerHeading">✧ ESCÁNER DE PORTALES</p>
 <video id="qrCameraVideo" autoplay playsinline muted aria-label="Vista previa de la cámara para escanear QR"></video>
