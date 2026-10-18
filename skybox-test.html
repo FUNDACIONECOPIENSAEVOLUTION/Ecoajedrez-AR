@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#061827">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; img-src 'self' data: blob:; connect-src 'self' https://cdn.jsdelivr.net; font-src 'self'; form-action 'self'; upgrade-insecure-requests">
+<title>ECOAJEDREZ · Laboratorio Skybox 360°</title>
+<meta name="description" content="Visor de prueba panorámica cúbica de seis caras por cada reino mágico de ECOAJEDREZ.">
+<link rel="stylesheet" href="./skybox-test.css?v=0.14.5">
+</head><body>
+<main id="skyRoot">
+<canvas id="skyCanvas" aria-label="Mundo 360 grados: arrastra con el ratón o el dedo para mirar alrededor"></canvas>
+<div class="skyCrosshair" aria-hidden="true">✦</div>
+<section id="skyToolbar" aria-label="Herramientas para probar skyboxes">
+  <div class="skyHeading"><a class="skyBack" href="./">← ECOAJEDREZ</a><strong>✦ LABORATORIO SKYBOX 360°</strong></div>
+  <div class="skyOptions">
+    <label for="skyRealmSelect">Elige el reino <select id="skyRealmSelect" aria-label="Seleccionar reino 360"></select></label>
+    <button id="skyGyro" type="button" aria-pressed="false">◉ Girar con teléfono</button>
+    <button id="skyReset" type="button">↺ Centrar mirada</button>
+  </div>
+  <p id="skyStatus" role="status" aria-live="polite">Leyendo conjuntos de seis caras…</p>
+</section>
+<section id="skyMessage" aria-live="polite" aria-label="Estado del reino">
+  <h1 id="skyMessageTitle">✧ Entra al reino mágico</h1>
+  <p id="skyMessageBody">Selecciona un reino para comprobar sus seis caras.</p>
+  <p class="skyHint">Arrastra para mirar a tu alrededor; en un teléfono compatible, activa el giro por sensores.</p>
+  <a id="skyUpload" href="./app/imagenes/skybox/" target="_blank" rel="noopener">Carpetas de reinos</a>
+</section>
+<footer id="skyFooter">Prueba visual 3D · Mirada 360° desde un punto fijo · Sin alterar partidas ni realidad aumentada</footer>
+</main>
+<script type="module" src="./skybox-test.js?v=0.14.5"></script>
+</body></html>
