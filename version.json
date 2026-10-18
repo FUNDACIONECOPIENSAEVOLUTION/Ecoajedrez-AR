@@ -1,8 +1,8 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.14.2-beta.1",
+  "version": "0.14.3-beta.1",
   "updated": "2026-10-18",
-  "status": "Celebración mágica ligera añadida para jaque mate/derrota/tablas y modalidades bot/local/online, con texto en 3 idiomas, nuevas partidas y menú; conserva tableros 0.14.1. Pendiente prueba física móvil/AR.",
+  "status": "13 parejas tablero/reino definidas; fondos WebP opcionales mediante subidas a app/imagenes/entornos, manifest generado por Pages. Galería dual, fondo celeste de celebración, reino solo modo 3D. Pruebas físicas AR pendientes.",
   "browserValidated": false,
   "physicalARValidated": false,
   "onlinePvP": "Casual PeerJS beta, six-character code and QR with camera scanner (native BarcodeDetector / lazy in-browser jsQR), validation restricts invite origin/path. Real two-device session requires device test; unranked and unaudited anti-cheat.",
@@ -18,7 +18,7 @@
   "privacyPolicy": "privacy.html",
   "apiSecretsExposedInCurrentBuild": false,
   "liveSecureServerConfigured": false,
-  "ui": "0.14.1: 13 playable textures, 7 independent vista illustrations, automatic per-texture frame alignment; no manual grid coverage slider.",
+  "ui": "v0.14.3: per-board paired 3D kingdoms with dual preview; classic may choose biome, themed boards lock matching biome; victory uses vista_de_ajedrez_celestial_encantado.webp",
   "media": {
     "source": "Owner-uploaded repo videos/ 2026-10-17",
     "intro": "Vídeo sin título-17_10_2026, 16_58.mp4",
@@ -61,7 +61,12 @@
       "high"
     ],
     "proceduralDecorations": true,
-    "AR": "decorations hidden; WebXR camera passthrough remains clean; extended AR immersion postponed"
+    "AR": "decorations hidden; WebXR camera passthrough remains clean; extended AR immersion postponed",
+    "pairedMode": "each playable board has its own 3D kingdom background once owner uploads matching WebP; WebXR stays camera transparent",
+    "pairedDirectory": "app/imagenes/entornos",
+    "manifest": "app/imagenes/entornos/manifest.json, created only in static Pages build",
+    "pairCount": 13,
+    "availableUploadedAtRelease": 0
   },
   "lastMoveHint": {
     "visibleOnlyOnRequest": true,
