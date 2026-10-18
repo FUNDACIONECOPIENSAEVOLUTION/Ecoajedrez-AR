@@ -112,6 +112,7 @@ body.xr-active #gameToast{display:none!important}
 <link rel="stylesheet" href="./readability-qr.css?v=0.12.0">
 <link rel="stylesheet" href="./models-cache.css?v=0.12.1">
 <link rel="stylesheet" href="./magic-game.css?v=0.13.0">
+<link rel="stylesheet" href="./board-catalog.css?v=0.14.0">
 <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js" defer></script>
 <script src="https://unpkg.com/qrcodejs@1.0.0/qrcode.min.js" defer></script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}</script>
@@ -153,6 +154,8 @@ body.xr-active #gameToast{display:none!important}
 <select id="toolsTheme" aria-label="Cambiar entorno de la partida">
 <option value="classic">Clásico de obsidiana</option><option value="jungle">Bosque encantado</option><option value="neon">Templo arcano</option><option value="marble">Ciudad flotante</option><option value="volcano">Volcán celestial</option><option value="wood">Madera</option><option value="ice">Hielo</option>
 </select></label>
+<label class="toolsSelect">♟ DISEÑO DEL TABLERO
+<select id="toolsBoardSkin" aria-label="Elegir tablero de imagen jugable"><option value="classic">Clásico</option></select></label>
 <button id="toolsHistory" type="button">☷ HISTORIAL</button><button id="toolsSave" type="button">⇩ GUARDAR PGN</button>
 <button id="toolsLegal" type="button">ⓘ TÉRMINOS Y PRIVACIDAD</button><button id="toolsExit" type="button">↩ VOLVER AL MENÚ PRINCIPAL</button>
 </div>
@@ -187,7 +190,7 @@ body.xr-active #gameToast{display:none!important}
 <p id="loginStatus" role="status" style="margin:15px 0 0">Comprobando inicio de sesión…</p>
 <div class="ambientControls" hidden><span>✦ FONDO CINEMATOGRÁFICO</span><button type="button" id="toggleAmbientVideo" class="videoToggle" aria-pressed="false" title="El fondo queda fijo después de la introducción">▶ FONDO FIJO</button></div>
 <p class="version">✦ GRATIS · JUEGA COMO INVITADO · REALIDAD AUMENTADA</p>
-<p class="appVersion" data-app-version>v0.13.0-beta.1</p>
+<p class="appVersion" data-app-version>v0.14.0-beta.1</p>
 <p class="version"><a href="./privacy.html" style="color:#8bf6cd">Privacidad y protección de datos</a> · Google solo cuando el servidor seguro esté activo</p>
 </div></div></div>
 <div id="menuScreen" class="screen">
@@ -196,7 +199,7 @@ body.xr-active #gameToast{display:none!important}
 <img class="ambientPoster" loading="lazy" src="./videos/Ecoajedrez_%20Portales%20del%20Bosque%20M%C3%A1gico-3.png" alt="">
 <video id="menuAmbientVideo" class="ambientVideo" muted loop playsinline preload="none" data-video-src="./videos/V%C3%ADdeo%20sin%20t%C3%ADtulo-17_10_2026%2C%2017_10.mp4" aria-hidden="true"></video>
 </div>
-<div class="menuHead"><img src="./ecoajedrez.PNG" class="logo" alt="Logo ECOAJEDREZ"><div><div class="eyebrow">ELIGE TU BATALLA</div><h1 class="brand">ECO<span>AJEDREZ</span></h1><div class="version">GAMER · 3D · AR · SIN SUSCRIPCIÓN</div><div class="appVersion" data-app-version>v0.13.0-beta.1</div></div></div>
+<div class="menuHead"><img src="./ecoajedrez.PNG" class="logo" alt="Logo ECOAJEDREZ"><div><div class="eyebrow">ELIGE TU BATALLA</div><h1 class="brand">ECO<span>AJEDREZ</span></h1><div class="version">GAMER · 3D · AR · SIN SUSCRIPCIÓN</div><div class="appVersion" data-app-version>v0.14.0-beta.1</div></div></div>
 <div class="menuArtBanner"><div class="menuArtBannerText"><span class="eyebrow">✦ CUATRO PORTALES · UNA SOLA LEYENDA</span><strong>ELIGE TU PRÓXIMA AVENTURA</strong><small>Desafía al guardián, entrena o entra en duelo con un amigo.</small></div></div>
 <div class="menuMediaActions"><button id="menuIntroBtn" class="introButton menuIntroButton" type="button">▶ REPRODUCIR INTRO</button><button id="menuToggleAmbientVideo" class="videoToggle" type="button" aria-pressed="true">⏸ FONDO ANIMADO</button></div><div id="accountState" role="status">Invitado</div><p class="version" id="saveStatus">Partidas locales guardadas en este navegador.</p><button id="resumeGame" class="gold" style="display:none;width:100%;margin-bottom:13px">▶ CONTINUAR PARTIDA</button>
 <div class="menuGrid">
@@ -217,11 +220,15 @@ body.xr-active #gameToast{display:none!important}
 </div>
 </div>
 <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><button id="menuSettings" data-ui="menuSettings">⚙ CONFIGURACIÓN</button><button id="menuLegalInfo" type="button">ⓘ TÉRMINOS</button><button id="arenaPickerBtn" type="button">✧ PORTAL DE LA ARENA</button><button id="downloadPgn" data-ui="downloadPgn">⬇ GUARDAR PARTIDA PGN</button><button id="diagnoseBtn" data-ui="diagnostics">◈ DIAGNÓSTICO</button><button id="logoutBtn" data-ui="logout">⇥ CERRAR SESIÓN</button></div>
+<section id="visionGallery" class="visionGallery" aria-labelledby="visionGalleryHeading">
+<div class="visionTop"><span class="eyebrow">✦ ARTE DEL UNIVERSO ECOAJEDREZ</span><h2 id="visionGalleryHeading">VISIONES DE LOS REINOS</h2><p>Las imágenes «vista-» decoran este menú; los diseños jugables se eligen en configuración.</p></div>
+<div class="visionViewer"><button id="visionPrev" type="button" aria-label="Ilustración anterior">❮</button><img id="visionArt" loading="lazy" decoding="async" alt="Ilustración del universo ECOAJEDREZ"><button id="visionNext" type="button" aria-label="Ilustración siguiente">❯</button></div>
+<p id="visionTitle" class="visionCaption" aria-live="polite"></p></section>
 <p class="muted" style="font-size:12px;margin:14px 0 0">PvP beta mediante PeerJS: necesita conexión y puede fallar detrás de algunos NAT o redes móviles.</p>
 </div></div>
 <div id="arenaScreen" class="screen">
 <section id="arenaPanel" class="panel">
-<div class="arenaTop"><button id="arenaBack" type="button">← VOLVER AL MENÚ</button><span class="appVersion" data-app-version>v0.13.0-beta.1</span></div>
+<div class="arenaTop"><button id="arenaBack" type="button">← VOLVER AL MENÚ</button><span class="appVersion" data-app-version>v0.14.0-beta.1</span></div>
 <h2>✦ PORTAL DE LA ARENA</h2>
 <p class="arenaSubtitle">Explora los reinos. Cada partida, una nueva historia.</p>
 <div id="arenaGrid" class="arenaGrid" role="group" aria-label="Seleccionar el escenario del tablero">
@@ -239,7 +246,7 @@ body.xr-active #gameToast{display:none!important}
 <p>✦ Diseña tu reino<br>y tu ejército</p></nav>
 <aside id="settingsPanel" class="settingsPanel panel celestialSettings">
 <div id="biomePreview" class="biomePreview" aria-hidden="true"><span class="previewCaption">✦ VISTA DE TU REINO</span></div>
-<div class="settingsHeader"><span class="eyebrow">✦ PREPARA TU REINO</span><span data-app-version class="appVersion">v0.13.0-beta.1</span></div><h2 data-ui="settingsTitle">⚙ CONFIGURACIÓN DE BATALLA</h2>
+<div class="settingsHeader"><span class="eyebrow">✦ PREPARA TU REINO</span><span data-app-version class="appVersion">v0.14.0-beta.1</span></div><h2 data-ui="settingsTitle">⚙ CONFIGURACIÓN DE BATALLA</h2>
 <p class="muted" style="font-size:13px">Personaliza tu ejército y bioma antes de entrar al tablero. Todos los cambios son reversibles.</p>
 <div class="settingGrid">
 <div><label for="lang">Idioma · Language · 语言</label><select id="lang"><option value="es">Español</option><option value="en">English</option><option value="zh">简体中文</option></select></div>
@@ -247,6 +254,16 @@ body.xr-active #gameToast{display:none!important}
 <div><label for="difficulty" data-i18n="difficulty">Dificultad</label><select id="difficulty"><option value="easy" data-i18n="easy">Principiante</option><option value="medium" data-i18n="medium">Intermedio</option><option value="advanced" data-i18n="advanced">Avanzado (básico)</option></select></div>
 <div><label for="theme" data-i18n="scenario">Tablero / bioma</label><select id="theme"><option value="classic" data-i18n="classic">Obsidiana clásico</option><option value="wood">Bosque de madera</option><option value="marble">Mármol imperial</option><option value="neon">Neón galáctico</option><option value="jungle" data-i18n="jungle">Selva encantada</option><option value="volcano">Volcán carmesí</option><option value="ice">Templo de hielo</option></select></div>
 <div><label for="pieceSet">Piezas 3D</label><select id="pieceSet"><option value="staunton">Staunton 3D original</option><option value="royal">Realeza arcana 3D ✦</option><option value="fantasy">Fantasía encantada</option><option value="classic">Clásico ligero</option></select></div>
+<div class="boardPickerField"><label for="boardSkin">Diseño jugable del tablero</label>
+<select id="boardSkin" aria-label="Seleccionar imagen del tablero"><option value="classic">Clásico</option></select></div>
+<div class="boardSkinCard"><div class="boardSkinPreview">
+<img id="boardSkinPreview" loading="lazy" decoding="async" hidden alt="">
+<span id="boardSkinEmpty">♟ TABLERO CLÁSICO</span></div>
+<div class="boardSkinDescription"><strong id="boardSkinName">Tablero clásico</strong>
+<p id="boardSkinCaption">Las piezas permanecen sobre las mismas 64 casillas.</p>
+<label for="boardCoverage">Alinear las casillas con la imagen · <output id="boardCoverageLabel" for="boardCoverage">86%</output></label>
+<input id="boardCoverage" type="range" min="65" max="100" step="1" value="86" aria-label="Porcentaje de la imagen ocupado por la cuadrícula"/>
+<small>Las imágenes incluyen marco. Ajusta el encuadre si los bordes de sus casillas no coinciden con las piezas. El tablero mantiene el tamaño y la lógica.</small></div></div>
 <div><label for="quality">Calidad del mundo 3D</label><select id="quality"><option value="auto">Automático (recomendado)</option><option value="low">Ligero · móviles</option><option value="medium">Medio</option><option value="high">Alto · equipos potentes</option></select></div>
 <div><label for="boardSize">Tamaño de tablero AR</label><select id="boardSize"><option value="0.05">Pequeño (40 cm)</option><option value="0.065" selected>Mediano (55 cm)</option><option value="0.08">Grande (68 cm)</option></select></div>
 <div><label for="whiteColor">Color ejército blanco</label><select id="whiteColor"><option value="#f9d890">Oro</option><option value="#efffff">Marfil</option><option value="#7cf6e2">Esmeralda</option><option value="#e2a7ff">Amatista</option></select></div>
@@ -274,7 +291,7 @@ body.xr-active #gameToast{display:none!important}
 </section></div>
 <div id="diagnosticPanel" role="dialog" aria-modal="true" aria-labelledby="diagnosticTitle">
 <div id="diagnosticCard" class="panel">
-<h2 id="diagnosticTitle">◈ Diagnóstico ECOAJEDREZ</h2><p class="appVersion" data-app-version>v0.13.0-beta.1</p>
+<h2 id="diagnosticTitle">◈ Diagnóstico ECOAJEDREZ</h2><p class="appVersion" data-app-version>v0.14.0-beta.1</p>
 <p class="muted">Comprueba las capacidades de este equipo. No confirma que todos los servicios externos funcionen.</p>
 <pre id="diagnosticOutput">Preparando comprobaciones…</pre>
 <div style="display:flex;gap:8px;flex-wrap:wrap"><button id="copyDiagnostic">COPIAR INFORME</button><button id="closeDiagnostic" class="primary">CERRAR</button></div>
@@ -296,11 +313,12 @@ body.xr-active #gameToast{display:none!important}
 <span id="cinemaAssetCount">Comprobando el caché local…</span>
 </div>
 </div></div>
-<div id="loadingPortal"><div class="portalBoard" aria-hidden="true"><span>♜</span><i></i><i></i><i></i></div><strong id="portalText">INVOCANDO TABLERO...</strong><p class="portalVersion" data-app-version>v0.13.0-beta.1</p></div>
-<script type="module" src="./asset-cache.js?v=0.12.1"></script>
-<script type="module" src="./opening.js?v=0.13.0"></script>
+<div id="loadingPortal"><div class="portalBoard" aria-hidden="true"><span>♜</span><i></i><i></i><i></i></div><strong id="portalText">INVOCANDO TABLERO...</strong><p class="portalVersion" data-app-version>v0.14.0-beta.1</p></div>
+<script type="module" src="./asset-cache.js?v=0.14.0"></script>
+<script type="module" src="./opening.js?v=0.14.0"></script>
 <script type="module" src="./adventure-ui.js?v=0.11.0"></script>
 <script type="module" src="./celestial-ui.js?v=0.10.0"></script>
 <script type="module" src="./legal-consent.js?v=0.13.0"></script>
-<script type="module" src="./main.js?v=0.13.0"></script>
+<script type="module" src="./board-catalog-ui.js?v=0.14.0"></script>
+<script type="module" src="./main.js?v=0.14.0"></script>
 </body></html>
