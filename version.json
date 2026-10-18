@@ -1,8 +1,8 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.14.7-beta.1",
+  "version": "0.14.8-beta.1",
   "updated": "2026-10-18",
-  "status": "Experimental playable 3D realm skybox using existing Chess board/engine and original pieces. User can look around, hide menu and refocus board, with optional phone gyroscope. AR remains real-world anchored without synthetic skybox and no room safety bounds implemented.",
+  "status": "Configuración de tres experiencias jugables: 3D clásico, Reino 360° con cubemap de seis caras y AR con portal decorativo anclado por hit-test. Nombres del reino y tablero alineados. No se ha implementado todavía calibración espacial segura para caminar.",
   "browserValidated": false,
   "physicalARValidated": false,
   "onlinePvP": "Casual PeerJS beta, six-character code and QR with camera scanner (native BarcodeDetector / lazy in-browser jsQR), validation restricts invite origin/path. Real two-device session requires device test; unranked and unaudited anti-cheat.",
@@ -152,6 +152,26 @@
     "ui": "Hide or show HUD; persistent mini controls to refocus board or exit",
     "mobileGyro": "Optional permission-gated sensor orientation",
     "AR": "Existing real-surface WebXR hit-test only. Full virtual kingdom not available in AR, no physical area mapping.",
-    "roomBoundaryCalibrated": false
+    "roomBoundaryCalibrated": false,
+    "entry": "Configure the selected board and opponent, choose Reino 360, Start; lab is debug-only."
+  },
+  "playExperiences": {
+    "opponents": [
+      "bot",
+      "local",
+      "online beta"
+    ],
+    "types": [
+      "normal",
+      "skybox",
+      "ar"
+    ],
+    "ui": "settings experiencePicker",
+    "normal": "same game with paired panoramic backdrop",
+    "skybox": "same game, CubeTexture, 6 faces required, 3DoF gyroscope optional",
+    "ar": "real camera + surface hit-test + anchored chessboard and nonopaque decorative arch; no arch on unanchored hologram",
+    "walkableRealms": false,
+    "roomSafetyMapping": false,
+    "physicalValidationPending": true
   }
 }

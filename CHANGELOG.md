@@ -1,5 +1,12 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.14.8-beta.1 — 2026-10-18 · Tres experiencias de juego
+- Configuración elige contrincante y visualización por separado: 3D clásico / Skybox 360° jugable / AR con portal.
+- Se muestran juntos nombre del reino y tablero; se elimina el enlace de laboratorio del flujo principal y se comprueban las 6 caras antes de jugar en Skybox.
+- AR conserva su cámara real y muestra portal decorativo solo al fijar tablero mediante hit-test, sin ocultar obstáculos.
+- Versiones y pruebas actualizadas; validación física todavía pendiente.
+
+
 ## 0.14.7-beta.1 — 2026-10-18 · Tablero jugable en reino 3D inmersivo
 - Ajedrez existente jugable dentro del Cubemap del reino: la escena y motor main.js se conservan; sin segundo ajedrez ni cambios de reglas.
 - Botones de entrada, ocultar/mostrar menú, reenfocar tablero, sensor de giro opcional y salir del mundo virtual.

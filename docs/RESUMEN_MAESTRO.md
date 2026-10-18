@@ -1,5 +1,5 @@
 # ECOAJEDREZ 3D/AR · RESUMEN MAESTRO PARA LA PRÓXIMA IA
-**Revisión vigente:** 0.14.7-beta.1 · 2026-10-18. **Leer primero la sección más reciente al final.** Leer **este archivo primero**; consultar AGENTS.md y código solo si la tarea lo requiere. Evitar reanalizar conversaciones largas.
+**Revisión vigente:** 0.14.8-beta.1 · 2026-10-18. **Leer primero la sección más reciente al final.** Leer **este archivo primero**; consultar AGENTS.md y código solo si la tarea lo requiere. Evitar reanalizar conversaciones largas.
 
 ## Identidad y fuentes de verdad
 - Repositorio canónico con permisos de escritura: https://github.com/FUNDACIONECOPIENSAEVOLUTION/Ecoajedrez-AR (rama main).
@@ -129,3 +129,11 @@ Hay **seis** archivos glTF originales autocontenidos bajo `assets/models/staunto
 - `skybox-test.js` oculta su menú superior automáticamente al entrar y lo reemplaza por pequeño botón de abrir/cerrar menú; permanece visor independiente.
 - No se solicita cámara trasera para reino 3D. Al activar AR (immersive-ar existente), se abandona primero el Skybox, pues mezclar fondo opaco virtual con passthrough sin diseño y sin mapping espacial del perímetro sería engañoso e inseguro. El AR actual ya detecta superficie y ancla tablero; todavía NO detecta ni valida un área segura donde caminar o entrar, ni reemplaza entorno físico por reino. Para fase futura: portal AR opcional con límite visible, calibración de espacio físico, plane hit-test/anchors si soportados y pruebas de dispositivos; inmersión VR real 6DoF exige geometría/paralaje y hardware.
 - Tests: `tests/immersive-chess.test.mjs`; build incluye módulo/CSS; el nuevo camino debe validarse en Chrome Android con partidas, sensor, botones, zoom y memoria. No afirmar validación AR/VR física.
+
+## 0.14.8-beta.1 — Tres experiencias desde Configuración (2026-10-18)
+- Configuración separa CONTRINCANTE (computadora, dos jugadores, online beta) de EXPERIENCIA (3D clásico, Reino 360°, AR con portal), usando el mismo motor y el mismo tablero seleccionado. Un botón de iniciar partida lanza la experiencia elegida en el juego original.
+- El nombre de reino acompaña siempre al nombre de tablero: Cristales y runas = Mágico / Fantasía ancestral; Alquimia líquidos mágicos = Alquimista / Éter; Nebulosas y obsidiana = Galáctico / Cósmico. Fuente única en skybox-config.js, usada en board-catalog-ui.js.
+- Se quitó el enlace de Probar laboratorio Skybox del flujo de Configuración. El visor independiente queda para diagnóstico técnico, no para jugar. experience-modes.js valida las seis caras mediante manifest + HEAD antes de iniciar 360°. Si faltan archivos, deja al usuario en Configuración con un aviso claro.
+- AR con portal = cámara real, tablero colocado por hit-test de WebXR y arco 3D decorativo semitransparente agregado por ar-portal.js al grupo world del tablero. Sin hit-test anclado, solo holograma y SIN arco: no prometer seguimiento físico donde no existe.
+- Aún NO hay habitación virtual completa ni calibración automática de espacio transitable o seguridad física. La fase de caminar inmerso queda como trabajo futuro, preferiblemente con límites, detección de obstáculos y pruebas reales. Los juegos 3D/360 siguen siendo experiencia virtual rotacional 3DoF.
+- Se agregaron tarjetas de selección responsivas, mayor contraste de controles nativos y nuevas pruebas tests/experience-modes.test.mjs. Faltan pruebas visuales reales en Android y pruebas físicas AR.
