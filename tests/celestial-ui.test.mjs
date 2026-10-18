@@ -45,7 +45,7 @@ test('Settings sidebar and visual biome preview bind only to real existing contr
  assert.match(css,/#settingsNav/);
 });
 test('Safe static distribution and consistent current version',()=>{
- assert.equal(manifest.version,'0.14.4-beta.1');
+ assert.equal(manifest.version,'0.14.5-beta.1');
  assert.ok(html.includes('v'+manifest.version));
  assert.ok(build.includes("'celestial.css'"));
  assert.ok(build.includes("'cinematic-fix.css'"));

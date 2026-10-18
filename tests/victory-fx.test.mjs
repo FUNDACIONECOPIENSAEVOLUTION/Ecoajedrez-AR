@@ -40,5 +40,5 @@ test('Celebration is dismissible, motion-conscious and separate from game logic'
  assert.match(build,/'victory-fx\.js'/);
  assert.match(build,/'victory-fx\.css'/);
  assert.match(workflow,/node --check victory-fx\.js/);
- assert.equal(manifest.version,'0.14.4-beta.1');
+ assert.equal(manifest.version,'0.14.5-beta.1');
 });

@@ -1,8 +1,8 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.14.4-beta.1",
+  "version": "0.14.5-beta.1",
   "updated": "2026-10-18",
-  "status": "Los 10 WebP originales de reinos subidos por el usuario están emparejados con los 13 tableros 3D; Alquimia/Amatista/Gótico usan paisajes compartidos hasta recibir imagen exclusiva. Sin alterar fichas, reglas ni AR.",
+  "status": "Laboratorio visual independiente para 13 skyboxes cúbicos 360° de seis caras WebP; carpetas preparadas y visor probado por CI. No hay imágenes de seis caras cargadas todavía. Ajedrez 3D y AR intactos.",
   "browserValidated": false,
   "physicalARValidated": false,
   "onlinePvP": "Casual PeerJS beta, six-character code and QR with camera scanner (native BarcodeDetector / lazy in-browser jsQR), validation restricts invite origin/path. Real two-device session requires device test; unranked and unaudited anti-cheat.",
@@ -121,6 +121,29 @@
     "reducedMotion": true,
     "logicMutated": false,
     "onlineGuestRestartDisabled": true,
+    "physicalValidationPending": true
+  },
+  "skybox360": {
+    "phase": "Carpetas y probador independiente; batallas finales pendientes",
+    "basePath": "app/imagenes/skybox",
+    "realmCount": 13,
+    "facesPerRealm": 6,
+    "faceNames": [
+      "px.webp",
+      "nx.webp",
+      "py.webp",
+      "ny.webp",
+      "pz.webp",
+      "nz.webp"
+    ],
+    "resolution": "512..4096 píxeles cuadrados iguales (recomendada 1024 o 2048)",
+    "maxBytesPerFace": 3000000,
+    "fullCubemapsUploadedAtRelease": 0,
+    "onlyPublishCompleteSets": true,
+    "viewer": "skybox-test.html",
+    "motion": "3DoF: giro por arrastre o deviceorientation autorizado",
+    "gameplayIntegration": false,
+    "arPreserved": true,
     "physicalValidationPending": true
   }
 }

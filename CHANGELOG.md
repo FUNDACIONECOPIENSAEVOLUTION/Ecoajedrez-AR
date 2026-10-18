@@ -1,5 +1,12 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.14.5-beta.1 — 2026-10-18 · Laboratorio Skybox 360° para 13 reinos
+- Carpetas individuales app/imagenes/skybox/ID para seis caras WebP px, nx, py, ny, pz, nz de cada reino.
+- Visor separado skybox-test.html, mirada cúbica 360° con Three.js, arrastre y orientación de teléfono opcional; botón de acceso en Configuración.
+- Publicación segura de conjuntos de seis caras válidas por GitHub Pages; manifiesto informa faltantes y no bloquea al juego.
+- Aún no hay imágenes de seis caras cargadas, batallas finales ni validación visual en móvil; ajedrez y AR quedan sin modificar.
+
+
 ## 0.14.4-beta.1 — 2026-10-18 · Incorporados los 10 WebP de reino subidos
 - Se reconocen los 10 nombres originales numerados `01_` a `10_` en la carpeta entornos; 13 tableros usan 10 paisajes (3 compartidos provisionalmente).
 - Alquimia, Plata y amatista y Gótico son los únicos sin paisaje exclusivo; existen fondos compartidos y se pueden sobreescribir con `entorno_ID.webp` cuando se suban.

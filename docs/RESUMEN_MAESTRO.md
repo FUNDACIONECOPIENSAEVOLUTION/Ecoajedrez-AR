@@ -1,5 +1,5 @@
 # ECOAJEDREZ 3D/AR · RESUMEN MAESTRO PARA LA PRÓXIMA IA
-**Revisión vigente:** 0.14.4-beta.1 · 2026-10-18. **Leer primero la sección más reciente al final.** Leer **este archivo primero**; consultar AGENTS.md y código solo si la tarea lo requiere. Evitar reanalizar conversaciones largas.
+**Revisión vigente:** 0.14.5-beta.1 · 2026-10-18. **Leer primero la sección más reciente al final.** Leer **este archivo primero**; consultar AGENTS.md y código solo si la tarea lo requiere. Evitar reanalizar conversaciones largas.
 
 ## Identidad y fuentes de verdad
 - Repositorio canónico con permisos de escritura: https://github.com/FUNDACIONECOPIENSAEVOLUTION/Ecoajedrez-AR (rama main).
@@ -107,3 +107,11 @@ Hay **seis** archivos glTF originales autocontenidos bajo `assets/models/staunto
 - `realm-pairing.js` contiene ahora el **mapeo real por nombre original** de 10 imágenes a 13 tableros, sin renombrar/copiar recursos repetidos. `scripts/build-pages.mjs` usa el mismo objeto como whitelist y genera `manifest.json` con solo archivos presentes y válidos.
 - Diez tableros poseen fondo propio disponible; `alquimia` comparte `02_entorno_magico_fantasia_ancestral.webp`, `amatista` comparte `01_entorno_galactico_cosmico.webp`, `gotico` comparte `03_entorno_medieval_leyenda_fantasia.webp`. Esas tres imágenes exclusivas son las únicas faltantes. La prioridad futura es `entorno_alquimia.webp`, `entorno_amatista.webp`, `entorno_gotico.webp`, opcionales.
 - Referencia completa y cargas futuras en `app/imagenes/entornos/README.md`. 3D usa fondo del reino, AR conserva cámara y decoraciones 3D se ocultan. Verificar GitHub Actions y muestras en móviles para la validación física.
+
+## 0.14.5-beta.1 — Skybox 360°: infraestructura y prueba aislada (2026-10-18)
+- Se crearon 13 carpetas bajo app/imagenes/skybox/ para el Galáctico/Cósmico y 12 reinos adicionales. Cada una contiene README y admite exactamente px.webp, nx.webp, py.webp, ny.webp, pz.webp, nz.webp; al completarse son 78 WebP. No hay todavía caras cargadas.
+- skybox-config.js contiene 13 IDs de reino y relación futura con los 13 tableros. No se incorpora skybox a las partidas actuales ni a AR: se prepara para futuras batallas finales por reino.
+- scripts/build-pages.mjs publica exclusivamente conjuntos completos de seis WebP reales cuadrados de la misma resolución (512-4096 px, hasta 3MB por cara) y genera un manifiesto público con estados. No publica caras sueltas ni archivos arbitrarios; seis mal emparejadas quedan pendientes sin impedir publicación.
+- skybox-test.html, skybox-test.css, skybox-test.js forman un laboratorio Three.js CubeTextureLoader, rotación por arrastre o giroscopio opcional con autorización. En Configuración hay enlace para abrir el laboratorio directamente en el reino asociado al tablero.
+- Los skyboxes rotan desde un único centro virtual (3DoF) y parecen distantes; NO permiten caminar con paralaje real ni garantizan más nitidez que sus imágenes fuente. Futura fase VR 6DoF requeriría geometría real. AR sigue usando cámara real.
+- Validación pendiente: cargar al menos 6 caras WebP de un mismo panorama cúbico y comprobar continuidad de bordes, techo/suelo y sensores en teléfonos.
