@@ -9,6 +9,7 @@ import { initializeAccountAuth, loginGoogle, logoutFirebase, authAvailable } fro
 import { makeSnapshot, verifyAndRestore, saveLocalMatch, readLocalMatch } from './match-state.js?v=0.4.1';
 import { createArcaneUI } from './arcane-ui.js?v=0.6.0';
 import { createMagicWorld } from './magic-world.js?v=0.13.0';
+import { createBoardSurface } from './board-skins.js?v=0.14.0';
 import { makeLastMoveOverlay } from './last-move-ghost.js?v=0.13.0';
 
 const $ = (id) => document.getElementById(id);
@@ -35,7 +36,7 @@ const game = new Chess();
 const world = new THREE.Group(), tiles = new THREE.Group(), pieces = new THREE.Group();
 const decorations = new THREE.Group(), markers = new THREE.Group();
 world.add(tiles, decorations, pieces, markers); scene.add(world);
-let arcaneUI=null,magicEnv=null,ghostHint=null;
+let arcaneUI=null,magicEnv=null,ghostHint=null,boardSurface=null;
 const rootBase = new THREE.Mesh(new THREE.BoxGeometry(8.45, .35, 8.45), new THREE.MeshStandardMaterial({color:0x213544, metalness:.5, roughness:.28}));
 rootBase.position.y = -.23; rootBase.receiveShadow = true; tiles.add(rootBase);
 const raycaster = new THREE.Raycaster(), point = new THREE.Vector2();
@@ -264,7 +265,9 @@ function storageKey(){
 }
 function persistCurrentGame(){
   if(!gameStarted||mode==='online')return;
-  const preferences={theme,modelSet,lang,botDifficulty,boardScale,whiteColor:$('whiteColor').value,blackColor:$('blackColor').value};
+  const preferences={theme,modelSet,lang,botDifficulty,boardScale,
+    boardSkin:$('boardSkin').value,boardCoverage:Number($('boardCoverage').value),
+    whiteColor:$('whiteColor').value,blackColor:$('blackColor').value};
   const success=saveLocalMatch(window.localStorage,storageKey(),game,mode,preferences);
   $('saveStatus').textContent=success?'💾 Partida local guardada en este dispositivo.':'El navegador impide el guardado local.';
 }
@@ -286,6 +289,13 @@ function restoreLastGame(){
     if(pref[key]&&[...$(input).options].some(o=>o.value===pref[key])){
       $(input).value=pref[key];mat.color.set(pref[key]);
     }
+  }
+  if(pref.boardSkin && [...$('boardSkin').options].some(o=>o.value===pref.boardSkin)){
+    window.ecoBoardCatalogue?.selectBoard(pref.boardSkin);
+  }
+  if(Number.isFinite(Number(pref.boardCoverage))&&pref.boardCoverage>=65&&pref.boardCoverage<=100){
+    $('boardCoverage').value=String(pref.boardCoverage);
+    $('boardCoverage').dispatchEvent(new Event('input'));
   }
   theme=$('theme').value;modelSet=$('pieceSet').value;lang=$('lang').value;botDifficulty=$('difficulty').value;
   setTheme(theme);translate();renderPieces();updateStatus();
@@ -1122,6 +1132,24 @@ try{const saved=localStorage.getItem('ecoajedrez-graphics-profile');if(['auto','
 magicEnv=createMagicWorld({THREE,world,scene,renderer,stage});
 ghostHint=makeLastMoveOverlay({THREE,world,positionOf,onText:text=>{$('lastMoveMessage').textContent=text;}});
 magicEnv.setProfile($('quality').value,theme);
-buildTiles();setTheme(theme);renderPieces();updateStatus();translate();
+buildTiles();
+boardSurface=createBoardSurface({THREE,world,renderer,onStatus:message=>{
+  const target=$('boardSurfaceStatus');
+  if(target)target.textContent=message;
+}});
+const catalogue=window.ecoBoardCatalogue;
+if(catalogue){
+  boardSurface.setCoverage(catalogue.getCoverage());
+  boardSurface.select(catalogue.getSelected()).catch(()=>{});
+}
+document.addEventListener('eco:board-skin-select',event=>{
+  const code=event.detail?.id;
+  boardSurface?.select(code).catch(()=>{});
+  if(typeof persistCurrentGame==='function')persistCurrentGame();
+});
+document.addEventListener('eco:board-grid-coverage',event=>{
+  boardSurface?.setCoverage(event.detail?.fraction);
+});
+setTheme(theme);renderPieces();updateStatus();translate();
 renderer.setAnimationLoop(render);
 loadChessModels();
