@@ -87,3 +87,10 @@ Se incluyen 3 MP4 y 3 imágenes PNG de la carpeta `videos/` en GitHub Pages: un 
 
 ## 0.9.0-beta.1 · Ambiente gamer animado detrás de las opciones
 Tras las pruebas visuales del usuario, el clip de bosque pasó debajo del nombre ECOAJEDREZ, los botones y el logo; el lateral volvió a ser una galería de fotos con movimiento tenue. El clip de portal se muestra tras los botones y tarjetas del menú principal. Gradientes mantienen legibilidad, controles de pausa funcionan en ambas vistas, y se desactivan los fondos durante juego 3D, realidad aumentada y páginas ocultas. Se mantiene intro separada (Ver/Omitir). Ver `docs/ENTREGA_0.9.md`. Mantener presupuesto $0 COP.
+
+## v0.11.0-beta.1 — Ilustraciones aprobadas, primera intro y caché
+Se implementaron ocho tarjetas de fantasía con las imágenes que subió el propietario: VS Computadora, Dos jugadores, Crear duelo, Unirse; y selector Portal de la Arena: Bosque Encantado (`jungle`), Templo Arcano (`neon`), Ciudad Flotante (`marble`), Volcán Celestial (`volcano`). Las imágenes 2D acompañan los controles funcionales del tablero 3D, **no sustituyen modelos 3D**.
+
+La introducción MP4 se abre automáticamente en la primera visita de ese navegador (silenciada, si el navegador lo permite), con opción de omitir; el botón permite repetirla. Barra de preparación auténtica: ocho WebP + seis glTF se copian al CacheStorage público mediante el service worker. Ahorro de datos y fallos de caché no impiden jugar. El almacenamiento se puede borrar automáticamente y **no garantiza juego offline**; las librerías CDN y servicios PeerJS aún requieren red.
+
+Para dar continuidad sin gastar tokens, **leer primero [Resumen maestro](docs/RESUMEN_MAESTRO.md)**, después [Entrega 0.11](docs/ENTREGA_0.11.md) cuando se trabaje la UI o el caché. Solo se usan servicios gratuitos, no se cambian credenciales ni otros juegos.
