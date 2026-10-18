@@ -1,6 +1,6 @@
 // ECOAJEDREZ 0.9 · cinematic media choreography. The game and WebXR remain independent.
 // One ambient MP4 maximum, only on welcome/menu; photos animate gently on the side.
-const FALLBACK_RELEASE='0.11.0-beta.1';
+const FALLBACK_RELEASE='0.11.1-beta.1';
 const versionTags=()=>Array.from(document.querySelectorAll('[data-app-version]'));
 let resolvedVersion=FALLBACK_RELEASE;
 function showVersion(){
@@ -11,7 +11,7 @@ function showVersion(){
 }
 async function readVersion(){
  try{
-  const response=await fetch('./version.json?v=0.11.0',{cache:'no-store',headers:{Accept:'application/json'}});
+  const response=await fetch('./version.json?v=0.11.1',{cache:'no-store',headers:{Accept:'application/json'}});
   if(!response.ok)throw Error('Release manifest unavailable');
   const body=await response.json();
   if(typeof body.version==='string'&&/^0\.[0-9]+\.[0-9]+-beta\.[0-9]+$/.test(body.version))resolvedVersion=body.version;
@@ -38,6 +38,7 @@ function setupHero(){
  const cinemaVideo=document.getElementById('cinemaVideo');
  const note=document.getElementById('cinemaNote');
  const skip=document.getElementById('skipIntroBtn');
+ const INTRO_MAX_SECONDS=10;
  let lastFocus=null;
  // Only the first visit to this browser/origin auto-opens the video.
  // Previous visits can use the normal optional "VER INTRO" button.
@@ -58,6 +59,9 @@ function setupHero(){
  }
  function playAmbient(){
   pauseScenes();
+  // Only the optional cinematic overlay plays on the welcome screen. After at most
+  // 10 seconds it reveals the user-uploaded full-bleed still image permanently.
+  if(currentView()==='welcome')return;
   if(!enableVideos||document.hidden||introVisible||document.body.classList.contains('xr-active'))return;
   // Avoid wasting ~8 MB on an ambient film just before first-visit intro takes over.
   if(currentView()==='welcome'&&!hasWatchedIntro())return;
@@ -159,7 +163,16 @@ function setupHero(){
  setTimeout(()=>startIntro(true),380);
  skip?.addEventListener('click',closeIntro);
  cinemaVideo?.addEventListener('ended',closeIntro);
- cinemaVideo?.addEventListener('error',()=>{note.textContent='Este video no pudo reproducirse; el juego permanece disponible.';});
+ // Actual video playback time (not a fake loading timer): stop after 10 seconds
+ // even if the uploaded MP4 contains a longer sequence. A shorter film ends normally.
+ cinemaVideo?.addEventListener('timeupdate',()=>{
+  if(introVisible && cinemaVideo.currentTime>=INTRO_MAX_SECONDS)closeIntro();
+ });
+ cinemaVideo?.addEventListener('error',()=>{
+  note.textContent='No fue posible cargar el video. Puedes continuar como invitado.';
+  // Avoid a permanent overlay if media is unavailable, including on weak mobile networks.
+  if(introVisible)closeIntro();
+ });
  cinema?.addEventListener('pointerdown',e=>{if(e.target===cinema)closeIntro();});
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&introVisible)closeIntro();});
 
@@ -174,6 +187,10 @@ function setupHero(){
    cinemaVideo?.pause();
    pauseScenes();
    return;
+  }
+  if(introVisible){
+   // Android may suspend the media when the device locks. Resume when unlocked.
+   if(cinemaVideo?.paused && cinemaVideo?.readyState>=2)cinemaVideo.play().catch(()=>{});
   }
   if(!introVisible)playAmbient();
   else pauseScenes();
