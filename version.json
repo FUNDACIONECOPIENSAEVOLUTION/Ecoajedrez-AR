@@ -1,8 +1,8 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.10.1-beta.1",
-  "updated": "2026-10-17",
-  "status": "Screenshot-based cinematic hotfix: removed oversize 2D Unicode chess court and right-side isolated login. Owner-uploaded video/poster now paints across the welcome stage under accessible actual controls; responsiveness improved. Physical testing pending; chess and WebXR unchanged.",
+  "version": "0.11.0-beta.1",
+  "updated": "2026-10-18",
+  "status": "Eight owner-uploaded WebP images linked to real game modes and four real 3D biomes; approved-inspired cinematic responsive welcome/menu/settings/arena; first-visit autoplay intro with skip; counted one-time public resources preload in CacheStorage via scope-restricted service worker. Browser/mobile validation pending.",
   "browserValidated": false,
   "physicalARValidated": false,
   "onlinePvP": "Casual PeerJS beta, 6-character code and QR; unranked and not independently anti-cheat verified",
@@ -18,13 +18,26 @@
   "privacyPolicy": "privacy.html",
   "apiSecretsExposedInCurrentBuild": false,
   "liveSecureServerConfigured": false,
-  "ui": "Arcane Glass 0.10.1: full-bleed video / poster background, floating readable login glass card, removed 2D flat symbols and separate right-hand block, preserves cinematic intro and illustrated menu, safe viewport scroll",
+  "ui": "Adventure 0.11: eight approved fantasy cards, scenic responsive menus, four selectable biomes, first-visit intro and accurate download progress. Google auth remains unavailable on Github.io.",
   "media": {
     "source": "Owner-uploaded repo videos/ 2026-10-17",
     "intro": "Vídeo sin título-17_10_2026, 16_58.mp4",
     "forest": "Vídeo sin título-17_10_2026, 17_08.mp4",
     "portal": "Vídeo sin título-17_10_2026, 17_10.mp4",
-    "notes": "Foreground/chrome never masked by ambient video. Only one MP4 decoded at a time and autoplay never blocks guest mode. Mapping of MP4 by original filenames is provisional pending visual confirmation. Intro requires click."
+    "notes": "Intro 13.6MB muted automatic only on first visit when browser permits; Replay button any time, skip always. Ambient MP4 only in visible welcome/menu. Image+model cache does NOT ensure offline gameplay due external JS/vendor libraries."
   },
-  "visualFidelity": "Functional reinterpretation of user's approved fantasy look, not photo-identical; uses existing user-owned video and poster; no unlicensed materials"
+  "visualFidelity": "Functional reinterpretation of user's approved fantasy look, not photo-identical; uses existing user-owned video and poster; no unlicensed materials",
+  "assetCache": {
+    "mode": "CacheStorage plus scoped service worker",
+    "assetCount": 14,
+    "publicOnly": true,
+    "cached": [
+      "8 user-approved WebP cards",
+      "6 original glTF chess piece models"
+    ],
+    "videosNotPrefetched": true,
+    "dataSaverRespected": true,
+    "storageMayBeEvicted": true,
+    "offlineGameplayGuaranteed": false
+  }
 }
