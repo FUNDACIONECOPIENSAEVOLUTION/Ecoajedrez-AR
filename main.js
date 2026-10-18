@@ -430,23 +430,96 @@ canvas.addEventListener('pointerup',event=>{
   }else if(!moved)pickSquare(destination);
 });
 canvas.addEventListener('pointercancel',()=>{down=null;orbit.enabled=true;});
-async function loadChessModels(){
-  const label=$('modelsStatus');
-  if(label)label.textContent='Cargando seis modelos glTF originales…';
-  const types=['p','r','n','b','q','k'];
-  const names=['pawn','rook','knight','bishop','queen','king'];
-  await Promise.all(types.map(async(type,index)=>{
-    try{
-      const result=await loader.loadAsync('./assets/models/staunton/'+names[index]+'.gltf');
-      assets.set(type,result.scene);
-      if(modelSet==='staunton'||modelSet==='royal')renderPieces();
-    }catch(error){
-      console.warn('No se pudo cargar el modelo '+names[index],error);
-      assets.set(type,null);
-    }
-  }));
-  if(label)label.textContent=[...assets.values()].filter(Boolean).length+' / 6 modelos glTF cargados · respaldo 3D disponible';
+// Original locally hosted models: exactly six types, reused by 32 pieces.
+const chessModelTypes=['p','r','n','b','q','k'];
+const chessModelNames=['pawn','rook','knight','bishop','queen','king'];
+let modelsLoading=null;
+function updateModelReadiness(message,completed=0){
+ const label=$('modelsStatus'),bar=$('modelDownloadProgress');
+ if(label)label.textContent=message;
+ if(bar)bar.value=completed;
 }
+async function updateCacheReadiness(){
+ const cache=window.ecoPublicAssets;
+ const label=$('modelCacheState');
+ if(!label)return;
+ if(!cache){
+  label.textContent='Caché no disponible. Se cargarán los modelos desde la web.';
+  return;
+ }
+ const result=await cache.cacheReport();
+ const inMemory=[...assets.values()].filter(Boolean).length;
+ if(result.stored===6){
+  label.textContent='✓ 6 de 6 archivos almacenados en este navegador. '+
+   (result.persistent?'Almacenamiento persistente concedido.':'Se reutilizarán mientras el navegador conserve los datos.');
+ }else if(result.available){
+  label.textContent='En caché: '+result.stored+' / 6 archivos · Modelos activos: '+inMemory+' / 6. Puedes completar la descarga ahora.';
+ }else label.textContent='El navegador no permitió guardar los archivos. El juego puede seguir conectado a internet.';
+}
+async function loadChessModels({retry=false}={}){
+ if(modelsLoading)return modelsLoading;
+ modelsLoading=(async()=>{
+  const cached=window.ecoPublicAssets;
+  let loaded=chessModelTypes.filter(type=>assets.get(type)).length;
+  updateModelReadiness('Preparando las piezas 3D…',loaded);
+  await Promise.all(chessModelTypes.map(async(type,index)=>{
+   if(assets.get(type) && !retry)return;
+   const path='./assets/models/staunton/'+chessModelNames[index]+'.gltf';
+   try{
+    let result;
+    if(cached){
+     // First use and background preload share the same request/promise.
+     // Parse the original glTF directly from CacheStorage, with no duplicate GET.
+     const response=await cached.getResource(path);
+     result=await loader.parseAsync(await response.text(),'./assets/models/staunton/');
+    }else result=await loader.loadAsync(path);
+    if(!result?.scene)throw Error('Escena glTF no encontrada');
+    assets.set(type,result.scene);
+    loaded++;
+    updateModelReadiness('Piezas reales cargadas: '+loaded+' / 6…',loaded);
+    if(modelSet==='staunton'||modelSet==='royal')renderPieces();
+   }catch(error){
+    console.warn('Falla al interpretar modelo 3D '+chessModelNames[index],error);
+    assets.set(type,null);
+    updateModelReadiness('Piezas reales cargadas: '+loaded+' / 6 · reintento disponible',loaded);
+   }
+  }));
+  const ready=chessModelTypes.filter(type=>Boolean(assets.get(type))).length;
+  updateModelReadiness(ready===6?'✓ 6 / 6 modelos 3D originales listos para jugar.':
+   '⚠ '+ready+' / 6 modelos activos. Las piezas geométricas quedan disponibles.',ready);
+  await updateCacheReadiness();
+  return ready;
+ })();
+ try{return await modelsLoading;}
+ finally{modelsLoading=null;}
+}
+$('downloadModels').onclick=async()=>{
+ const button=$('downloadModels');
+ if(button.disabled)return;
+ button.disabled=true;
+ button.textContent='⌛ COMPROBANDO LOS SEIS MODELOS…';
+ try{
+  const cache=window.ecoPublicAssets;
+  // Browser may grant stronger eviction protection after this explicit user gesture.
+  const keep=cache?.requestPersistentStorage?.();
+  if(cache)await cache.preparePublicAssets({modelsOnly:true,force:true});
+  await loadChessModels({retry:false});
+  if(keep)await keep;
+  await updateCacheReadiness();
+ }catch(error){
+  updateModelReadiness('No fue posible preparar todas las piezas. Puedes volver a intentar.');
+ }finally{
+  button.disabled=false;
+  button.textContent='⬇ PREPARAR / COMPROBAR PIEZAS 3D';
+ }
+};
+window.addEventListener('eco:assets-ready',event=>{
+ if(event.detail?.modelsOnly || event.detail?.stored!==undefined)updateCacheReadiness().catch(()=>{});
+});
+$('pieceSet').addEventListener('change',()=>{
+ if(['staunton','royal'].includes($('pieceSet').value) &&
+  chessModelTypes.some(type=>!assets.get(type)))loadChessModels();
+});
 $('reset').onclick=()=>{if(mode==='online'&&!match.host){toast('Solo el anfitrión reinicia el duelo.');return;}reset();};
 $('undo').onclick=()=>{
   if(mode==='online'){toast('Deshacer no está disponible durante un duelo online.');return;}
