@@ -1,8 +1,8 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.11.0-beta.1",
+  "version": "0.11.1-beta.1",
   "updated": "2026-10-18",
-  "status": "Eight owner-uploaded WebP images linked to real game modes and four real 3D biomes; approved-inspired cinematic responsive welcome/menu/settings/arena; first-visit autoplay intro with skip; counted one-time public resources preload in CacheStorage via scope-restricted service worker. Browser/mobile validation pending.",
+  "status": "Clean owner-provided post-intro galaxy/chess background in login; 10-second once-per-first-visit cinematic opening then permanent still image, responsive desktop/tablet/mobile; other screens, chess, AR and caching unchanged.",
   "browserValidated": false,
   "physicalARValidated": false,
   "onlinePvP": "Casual PeerJS beta, 6-character code and QR; unranked and not independently anti-cheat verified",
@@ -18,13 +18,13 @@
   "privacyPolicy": "privacy.html",
   "apiSecretsExposedInCurrentBuild": false,
   "liveSecureServerConfigured": false,
-  "ui": "Adventure 0.11: eight approved fantasy cards, scenic responsive menus, four selectable biomes, first-visit intro and accurate download progress. Google auth remains unavailable on Github.io.",
+  "ui": "Adventure 0.11.1: full-bleed official clean app/imagenes/interfaces/login_post_intro_fondo.png; cinematic stops after 10 actual playback seconds or video end; accessible centered-left login controls; no loop on welcome",
   "media": {
     "source": "Owner-uploaded repo videos/ 2026-10-17",
     "intro": "Vídeo sin título-17_10_2026, 16_58.mp4",
     "forest": "Vídeo sin título-17_10_2026, 17_08.mp4",
     "portal": "Vídeo sin título-17_10_2026, 17_10.mp4",
-    "notes": "Intro 13.6MB muted automatic only on first visit when browser permits; Replay button any time, skip always. Ambient MP4 only in visible welcome/menu. Image+model cache does NOT ensure offline gameplay due external JS/vendor libraries."
+    "notes": "First visit muted cinematic auto-plays when permitted, stops at 10 seconds or end, reveals static owner PNG; return visits show still. Manual replay button remains. Menu video still separate. Mobile browser may block autoplay. No private data added."
   },
   "visualFidelity": "Functional reinterpretation of user's approved fantasy look, not photo-identical; uses existing user-owned video and poster; no unlicensed materials",
   "assetCache": {
