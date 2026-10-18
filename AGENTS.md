@@ -1,4 +1,4 @@
-# LECTURA RÁPIDA OBLIGATORIA (ECOAJEDREZ v0.11.0-beta.1)
+# LECTURA RÁPIDA OBLIGATORIA (ECOAJEDREZ v0.11.1-beta.1)
 Antes de leer el historial extenso, abrir `docs/RESUMEN_MAESTRO.md` (resumen canónico, mantenido por versión) y `docs/ENTREGA_0.11.md` si se modifica la UI, primer inicio o caché. Los ocho WebP están en `app/imagenes/tarjetas/` y YA se publican; nunca pedirlos otra vez sin comprobar GitHub. Conserva modo invitado, AR, privacidad y $0.
 
 # Instrucciones permanentes para ChatGPT, Codex y otras IAs — ECOAJEDREZ AR
@@ -115,3 +115,6 @@ Leer `docs/ENTREGA_0.10.md`. Nueva interfaz panorámica con gráfica **SVG origi
 
 ## Hotfix 0.10.1 — portada según captura (2026-10-17)
 Leer `docs/ENTREGA_0.10.1.md`. El usuario rechazó los caracteres Unicode gigantes de v0.10. Ya fueron eliminados del HTML. `welcomeVideoBackdrop` pasó a ser hijo directo de `#loginPanel`, y `cinematic-fix.css` debe cargar **después** de `celestial.css`; panel real de ingreso sobre media del propietario a pantalla completa. No volver a añadir la corte de caracteres planos. Mantener visible la versión fuera de partida, $0 y toda la mecánica/AR intacta. Verificar Android y escritorio.
+
+## 0.11.1 · Fondo fijo después del video de intro
+Ver `docs/ENTREGA_0.11.1.md` y `docs/RESUMEN_MAESTRO.md`. El PNG limpio aprobado es `app/imagenes/interfaces/login_post_intro_fondo.png`; nunca volver a usar collage de tarjetas como fondo de bienvenida. `login-scene.css` se carga después de `adventure.css`. El video de intro solo en primera visita y se detiene al llegar a los 10 segundos de reproducción, luego pantalla fija, sin iniciar `welcomeAmbientVideo` en bucle. No alterar otras pantallas ni la mecánica por esta entrega.
