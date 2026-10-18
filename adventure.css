@@ -1,0 +1,192 @@
+/* ECOAJEDREZ 0.11 · User-owned eight fantasy artworks · executable controls only.
+   This style layer supersedes older prototypes without changing chess/WebXR rules. */
+:root{--adventure-ink:#041622;--adventure-gold:#ffe0a0;--adventure-mint:#77ffd5}
+body[data-view="welcome"] #welcomeScreen,
+body[data-view="menu"] #menuScreen,
+body[data-view="arena"] #arenaScreen,
+body[data-view="settings"] #settingsScreen{
+  display:flex;position:fixed;inset:0;min-height:100dvh;height:100dvh;
+  padding:clamp(8px,1.5vw,20px);
+  overflow-x:hidden;overflow-y:auto;justify-content:center;align-items:flex-start;
+  scrollbar-color:#57d9b7a6 #041923;overscroll-behavior-y:contain;
+}
+body[data-view="welcome"] #welcomeScreen{background:#031521}
+body[data-view="menu"] #menuScreen,
+body[data-view="arena"] #arenaScreen{
+  background:
+   linear-gradient(180deg,#03111cd9,#04132475 47%,#041322c0),
+   url("./app/imagenes/tarjetas/05_bosque_encantado.webp") center 52% /cover fixed;
+}
+body[data-view="settings"] #settingsScreen{
+  background:
+   linear-gradient(110deg,#041524e0,#041b2fa1 70%,#07202a75),
+   url("./app/imagenes/tarjetas/06_templo_arcano.webp") center 45%/cover fixed;
+}
+#loginPanel{
+  min-height:max(630px,calc(100dvh - 35px));height:auto;
+  width:min(1550px,100%);padding:clamp(14px,2.7vw,40px);
+  display:flex;align-items:center;justify-content:center;
+  background:#031724;overflow:hidden;isolation:isolate;
+}
+#loginPanel > .welcomeVideoBackdrop{
+  inset:0;z-index:0;
+  background:#06282c url("./app/imagenes/tarjetas/05_bosque_encantado.webp") center/cover no-repeat;
+}
+#loginPanel > .welcomeVideoBackdrop .ambientPoster,
+#loginPanel > .welcomeVideoBackdrop .ambientVideo{
+  width:100%;height:100%;object-fit:cover;object-position:center;
+}
+#loginPanel:after{
+  z-index:1;
+  background:radial-gradient(ellipse at 49% 42%,#031018bd 4%,#03152466 46%,#0516274d 76%),
+  linear-gradient(0deg,#020d17ac,transparent 35%,#04142272);
+}
+#loginPanel .loginContent{
+  position:relative;z-index:3;
+  margin:0 auto;width:min(550px,100%);
+  padding:clamp(20px,2.7vw,37px);
+  background:linear-gradient(155deg,#051525bd,#071b29a3 55%,#051624b3);
+  border:1px solid #c1d79780;border-radius:19px;
+  backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+  box-shadow:0 0 65px #020c158a,0 0 20px #45ffc71f;
+}
+#loginPanel .loginContent .logo{height:clamp(60px,9vmin,100px);width:clamp(60px,9vmin,100px)}
+#loginPanel .loginContent .brand{font-size:clamp(35px,5.3vw,72px);letter-spacing:.015em;line-height:1.08}
+#loginPanel .loginContent .stack{max-width:440px}
+#loginPanel .loginContent .stack button{min-height:clamp(43px,5.5vh,55px)}
+#loginPanel .loginContent .ambientControls{gap:8px}
+.gameHighlights{display:flex;align-items:center;justify-content:center;gap:clamp(5px,1vw,16px);flex-wrap:wrap}
+.gameHighlights span{
+  font:750 10px/1.4 system-ui,sans-serif;letter-spacing:.08em;color:#f7e5aa;
+  padding:6px 8px;border-radius:25px;border:1px solid #78d8b073;
+  background:#031b2fc0;text-shadow:0 0 9px #000;
+}
+#menuPanel,#arenaPanel{
+ position:relative;isolation:isolate;
+ width:min(1380px,100%);max-width:1380px;min-height:calc(100dvh - 42px);
+ margin:auto;padding:clamp(15px,2.6vw,37px);
+ border:1px solid #f3d79783;border-radius:23px;
+ background:linear-gradient(160deg,#041725bd,#06233998);
+ box-shadow:0 25px 90px #000b,inset 0 0 35px #e6da9a13;
+ backdrop-filter:blur(7px);
+}
+#menuPanel .menuHead{display:flex;align-items:center;gap:14px;max-width:600px;margin:0 0 8px}
+#menuPanel .menuHead .logo{width:54px;height:54px}
+#menuPanel .menuHead .brand{font-size:27px}
+#menuPanel .menuArtBanner{
+ min-height:130px;margin:3px 0 22px;border-color:#facf82b3;
+ background:linear-gradient(90deg,#041322b8,#061d2b32),url("./app/imagenes/tarjetas/05_bosque_encantado.webp") center 50%/cover;
+}
+#menuPanel .menuArtBannerText{min-height:130px;text-align:center;align-items:center;padding:17px 12px}
+#menuPanel .menuArtBannerText strong{
+ font-size:clamp(23px,3.2vw,42px);color:var(--adventure-gold);
+ text-shadow:0 3px 20px #000d;
+}
+#menuPanel .menuArtBannerText small{font-size:13px}
+#menuPanel .menuAtmosphere{opacity:.28;pointer-events:none}
+#menuPanel .menuAtmosphere .ambientPoster,#menuPanel .menuAtmosphere .ambientVideo{filter:brightness(.48)}
+#menuPanel .menuGrid{
+ display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(9px,1.4vw,18px)
+}
+#menuPanel .menuTile{
+ min-height:clamp(225px,31vw,355px);height:auto;
+ padding:0;display:flex;flex-direction:column;align-items:stretch;
+ justify-content:flex-end;overflow:hidden;isolation:isolate;
+ position:relative;text-align:center;border:1.5px solid #f7d38a9c;
+ background:#04212b;box-shadow:0 8px 18px #000a,0 0 12px #54ffad20;
+ transition:transform .23s ease,box-shadow .25s ease;
+}
+#menuPanel .menuTile:enabled:before,#menuPanel .menuTile:enabled:hover:before{content:none!important;display:none!important}
+#menuPanel .menuTile .modeCardImage{
+ position:absolute;inset:0;width:100%;height:100%;
+ object-fit:cover;object-position:center center;z-index:0;display:block;
+ filter:brightness(.91) saturate(1.08);
+ transition:transform .5s ease,filter .5s ease;
+}
+#menuPanel .menuTile:after{
+ content:"";position:absolute;inset:0;z-index:1;
+ background:linear-gradient(180deg,#04152312 20%,#0413223a 49%,#041321e9 76%,#020d1af7);
+ pointer-events:none;
+}
+#menuPanel .menuTile:enabled:hover .modeCardImage{transform:scale(1.055);filter:brightness(1.1) saturate(1.17)}
+#menuPanel .menuTile:enabled:hover{transform:translateY(-5px);box-shadow:0 15px 30px #000c,0 0 19px #d2ffa45c}
+#menuPanel .menuTile b,#menuPanel .menuTile small{
+ position:relative;z-index:2;display:block;text-shadow:0 1px 10px #000,0 2px 14px #000;
+ width:100%;white-space:normal;padding:0 10px;
+}
+#menuPanel .menuTile b{font:900 clamp(13px,1.45vw,18px)/1.2 Georgia,serif;color:#ffebb9;margin:0 0 6px}
+#menuPanel .menuTile small{font-size:clamp(10px,1vw,12px);line-height:1.4;color:#dff8eb;padding-bottom:13px}
+#menuPanel .menuTile.featured{border-color:#6effa6}
+#menuPanel .menuMediaActions{position:relative;z-index:3;display:flex;justify-content:flex-end;gap:8px;margin-top:0}
+#menuPanel #accountState,#menuPanel #saveStatus{position:relative;z-index:3;margin:6px 0}
+#menuPanel #resumeGame{position:relative;z-index:4}
+#menuPanel #arenaPickerBtn{border-color:#f3d797;color:#fff3d1;font-weight:800}
+#arenaPanel{display:flex;flex-direction:column;gap:10px}
+.arenaTop{display:flex;align-items:center;justify-content:space-between;gap:10px}
+#arenaPanel h2{
+ text-align:center;font:900 clamp(26px,3.3vw,44px)/1.2 Georgia,serif;
+ color:#ffe7a4;letter-spacing:.07em;text-shadow:0 3px 20px #000;
+ margin:4px 0;
+}
+#arenaPanel .arenaSubtitle{text-align:center;color:#d7ffed;margin:0 0 9px;font-size:14px}
+#arenaPanel .arenaGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(9px,1.45vw,20px);margin:auto 0}
+.arenaCard{position:relative;isolation:isolate;overflow:hidden;min-height:clamp(240px,33vw,390px);
+ background:#062333;border:2px solid #deb679bd;padding:0;
+ display:flex;align-items:center;flex-direction:column;justify-content:flex-end;
+ transition:transform .2s ease,box-shadow .2s ease;
+}
+.arenaCard img{position:absolute;inset:0;height:100%;width:100%;object-fit:cover;z-index:-2;transition:transform .5s ease}
+.arenaCard:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,#030f1df5,#041d30bf 20%,transparent 65%)}
+.arenaCard strong{font:900 clamp(12px,1.2vw,16px)/1.2 Georgia,serif;color:#ffebb3;text-shadow:0 2px 12px #000}
+.arenaCard small{margin:6px 0 14px;color:#d3f9eb;font-size:12px}
+.arenaCard:hover{box-shadow:0 0 26px #61ffd67d;border-color:#7bffc1;transform:translateY(-4px)}
+.arenaCard:hover img{transform:scale(1.045)}
+.arenaCard[aria-pressed="true"]{border-color:#84ffb6;box-shadow:0 0 22px #77ffbc85}
+.arenaCard[aria-pressed="true"]:after{content:"✓";position:absolute;right:9px;top:7px;color:#d1ffe9;background:#026b5d;border-radius:50%;padding:5px 9px}
+.arenaHint{margin:9px 0 0;text-align:center;color:#c2eadd;font-size:12px}
+#settingsPanel{background:linear-gradient(155deg,#051728eb,#062339d0);border:1px solid #f8daa2c9}
+#settingsPanel .biomePreview{height:clamp(120px,20vh,200px);background-image:linear-gradient(90deg,#06172280,#071d2530),url("./app/imagenes/tarjetas/05_bosque_encantado.webp")}
+#settingsPanel .biomePreview[data-biome="jungle"],#settingsPanel .biomePreview[data-biome="wood"]{background-image:linear-gradient(90deg,#06172280,#071d2530),url("./app/imagenes/tarjetas/05_bosque_encantado.webp")}
+#settingsPanel .biomePreview[data-biome="neon"],#settingsPanel .biomePreview[data-biome="ice"]{background-image:linear-gradient(90deg,#06172280,#071d2530),url("./app/imagenes/tarjetas/06_templo_arcano.webp")}
+#settingsPanel .biomePreview[data-biome="marble"],#settingsPanel .biomePreview[data-biome="classic"]{background-image:linear-gradient(90deg,#06172280,#071d2530),url("./app/imagenes/tarjetas/07_ciudad_flotante.webp")}
+#settingsPanel .biomePreview[data-biome="volcano"]{background-image:linear-gradient(90deg,#210e11a1,#210e112b),url("./app/imagenes/tarjetas/08_volcan_celestial.webp");filter:none}
+#settingsPanel .biomePreview .previewChess{display:none}
+#settingsScreen #settingsPanel .settingsFoot button{font-weight:750}
+.downloadStatus,.cinemaAssets{display:flex;flex-direction:column;gap:5px;align-items:center;justify-content:center;
+ width:100%;max-width:420px;margin:7px auto;color:#eff7d8;font-size:11px}
+.downloadStatus[hidden],.cinemaAssets[hidden]{display:none!important}
+.downloadStatus progress,.cinemaAssets progress{
+ display:block;width:100%;height:11px;accent-color:#68ffb6;
+ border:1px solid #acd6c799;border-radius:20px;overflow:hidden;background:#081c2b}
+.downloadStatus progress::-webkit-progress-value,.cinemaAssets progress::-webkit-progress-value{background:linear-gradient(90deg,#36a9bb,#64ffba,#f6d39e)}
+#cinemaOverlay .cinemaFrame{width:min(1180px,100%);max-width:98vw;border:1px solid #f3d89db5}
+#cinemaOverlay .cinemaVideo{max-height:min(67dvh,680px)}
+#cinemaOverlay .cinemaAssets{max-width:650px}
+@media(min-width:1200px) and (max-height:850px){
+ #menuPanel .menuArtBanner{min-height:95px;margin-bottom:10px}
+ #menuPanel .menuArtBannerText{min-height:95px}
+ #menuPanel .menuTile{min-height:245px}
+}
+@media(max-width:1050px){
+ #menuPanel .menuGrid,#arenaPanel .arenaGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #menuPanel .menuTile,.arenaCard{min-height:260px}
+ #menuPanel .menuArtBannerText strong{font-size:25px}
+}
+@media(max-width:620px){
+ #menuPanel,#arenaPanel{padding:14px 10px;min-height:calc(100dvh - 16px)}
+ #menuPanel .menuGrid,#arenaPanel .arenaGrid{gap:9px}
+ #menuPanel .menuTile,.arenaCard{min-height:190px}
+ #menuPanel .menuTile b{font-size:13px}
+ #menuPanel .menuTile small{font-size:10px;padding:0 5px 10px}
+ #menuPanel .menuArtBannerText strong{font-size:18px}
+ #arenaPanel h2{font-size:26px}
+ #loginPanel .loginContent{width:min(510px,100%);padding:15px 13px}
+ .gameHighlights span{font-size:9px;padding:4px 6px}
+}
+@media(max-width:395px){
+ #menuPanel .menuGrid,#arenaPanel .arenaGrid{grid-template-columns:1fr 1fr}
+ #menuPanel .menuTile,.arenaCard{min-height:160px}
+ #menuPanel .menuTile b{font-size:11px}
+ #menuPanel .menuTile small{font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){.arenaCard,.arenaCard img,#menuPanel .menuTile,#menuPanel .menuTile .modeCardImage{transition:none!important}}
