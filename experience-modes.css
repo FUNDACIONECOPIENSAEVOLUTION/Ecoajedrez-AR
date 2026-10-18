@@ -1,0 +1,19 @@
+/* ECOAJEDREZ · clear choice of three VIEWING modes, distinct from opponent. */
+#settingsPanel .experiencePicker{margin:18px 0;padding:16px;border:1px solid #80e8d5a2;
+ border-radius:18px;background:linear-gradient(140deg,#0b2b40f0,#071d33ef);position:relative;z-index:4}
+.experiencePicker h3{margin:0 0 3px;font:900 clamp(17px,2.5vw,22px) Georgia,serif;color:#ffe2a2}
+.experiencePicker .experienceIntro{margin:0 0 14px;color:#beece4;font-size:12px}
+.experienceChoices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.experienceChoice{display:flex;min-width:0;gap:8px;cursor:pointer;position:relative;
+ padding:12px 10px;border:1px solid #639eaf;border-radius:13px;background:#103b4e;
+ color:#effff7;font:700 12px system-ui}
+.experienceChoice input{flex:none;accent-color:#91f8da;align-self:start;min-width:16px;min-height:16px;margin:1px 0}
+.experienceChoice strong{display:block;color:#ffdea4;margin-bottom:5px;line-height:1.3}
+.experienceChoice small{display:block;color:#d3eee7;font:400 11px/1.45 system-ui}
+.experienceChoice:has(input:checked){border:2px solid #ffe3a2;background:#17475a;box-shadow:0 0 20px #7de2ce26}
+.experienceChoice:focus-within{outline:2px solid #ffdfa6;outline-offset:2px}
+#experienceStatus{display:block;margin-top:12px;color:#bafee2;font:600 12px/1.5 system-ui}
+#experienceStatus[data-warning=true]{color:#ffdea4}
+#settingsPanel select,#settingsPanel select option,#gameTools select,#gameTools select option{color-scheme:dark;color:#effff6;background-color:#0c2e40}
+@media(max-width:620px){.experienceChoices{grid-template-columns:1fr}
+.experienceChoice{padding:11px 12px}.experienceChoice small{font-size:12px}}

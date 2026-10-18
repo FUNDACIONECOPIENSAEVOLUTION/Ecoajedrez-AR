@@ -115,6 +115,7 @@ body.xr-active #gameToast{display:none!important}
 <link rel="stylesheet" href="./board-catalog.css?v=0.14.3">
 <link rel="stylesheet" href="./victory-fx.css?v=0.14.3">
 <link rel="stylesheet" href="./immersive-chess.css?v=0.14.7">
+<link rel="stylesheet" href="./experience-modes.css?v=0.14.8">
 <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js" defer></script>
 <script src="https://unpkg.com/qrcodejs@1.0.0/qrcode.min.js" defer></script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}</script>
@@ -263,7 +264,7 @@ body.xr-active #gameToast{display:none!important}
 <div><label for="difficulty" data-i18n="difficulty">Dificultad</label><select id="difficulty"><option value="easy" data-i18n="easy">Principiante</option><option value="medium" data-i18n="medium">Intermedio</option><option value="advanced" data-i18n="advanced">Avanzado (básico)</option></select></div>
 <div><label for="theme" data-i18n="scenario">Escenario del tablero clásico</label><select id="theme"><option value="classic" data-i18n="classic">Obsidiana clásico</option><option value="wood">Bosque de madera</option><option value="marble">Mármol imperial</option><option value="neon">Neón galáctico</option><option value="jungle" data-i18n="jungle">Selva encantada</option><option value="volcano">Volcán carmesí</option><option value="ice">Templo de hielo</option></select></div>
 <div><label for="pieceSet">Piezas 3D</label><select id="pieceSet"><option value="staunton">Staunton 3D original</option><option value="royal">Realeza arcana 3D ✦</option><option value="fantasy">Fantasía encantada</option><option value="classic">Clásico ligero</option></select></div>
-<div class="boardPickerField"><label for="boardSkin">Diseño jugable del tablero</label>
+<div class="boardPickerField"><label for="boardSkin">Reino y tablero (se eligen juntos)</label>
 <select id="boardSkin" aria-label="Seleccionar imagen del tablero"><option value="classic">Clásico</option></select></div>
 <div class="boardSkinCard"><div class="boardPairImages">
 <div class="boardSkinPreview"><img id="boardSkinPreview" loading="lazy" decoding="async" hidden alt="">
@@ -273,12 +274,21 @@ body.xr-active #gameToast{display:none!important}
 </div><div class="boardSkinDescription"><strong id="boardSkinName">Tablero clásico</strong>
 <p id="boardSkinCaption">Las piezas permanecen sobre las mismas 64 casillas.</p>
 <small>Elige un tablero y su reino se activa automáticamente en modo 3D cuando publiques el fondo correspondiente. El tablero clásico conserva escenarios libres. En AR se mantiene la cámara real.</small>
-<a id="skyboxTryBtn" class="skyboxTryBtn" href="./skybox-test.html" target="_blank" rel="noopener">✦ PROBAR SKYBOX 360° (laboratorio)</a></div></div>
+<small>El entorno 360° de este reino se abrirá desde el modo de juego «Reino 360°» al iniciar la partida.</small></div></div>
 <div><label for="quality">Calidad del mundo 3D</label><select id="quality"><option value="auto">Automático (recomendado)</option><option value="low">Ligero · móviles</option><option value="medium">Medio</option><option value="high">Alto · equipos potentes</option></select></div>
 <div><label for="boardSize">Tamaño de tablero AR</label><select id="boardSize"><option value="0.05">Pequeño (40 cm)</option><option value="0.065" selected>Mediano (55 cm)</option><option value="0.08">Grande (68 cm)</option></select></div>
 <div><label for="whiteColor">Color ejército blanco</label><select id="whiteColor"><option value="#f9d890">Oro</option><option value="#efffff">Marfil</option><option value="#7cf6e2">Esmeralda</option><option value="#e2a7ff">Amatista</option></select></div>
 <div><label for="blackColor">Color ejército negro</label><select id="blackColor"><option value="#203d54">Obsidiana</option><option value="#f0788d">Carmesí</option><option value="#a3bfff">Zafiro</option><option value="#72e0bf">Jade</option></select></div>
 </div>
+<section id="experiencePicker" class="experiencePicker" aria-labelledby="experienceTitle">
+<h3 id="experienceTitle">✦ ¿CÓMO QUIERES ENTRAR AL REINO?</h3>
+<p class="experienceIntro">El rival, las piezas y el tablero que escogiste son los mismos en las tres experiencias.</p>
+<div class="experienceChoices" role="radiogroup" aria-label="Experiencia visual de la partida">
+<label class="experienceChoice"><input type="radio" name="experienceMode" value="normal" checked><span><strong>♟ 3D CLÁSICO</strong><small>Tablero jugable con la imagen panorámica del reino.</small></span></label>
+<label class="experienceChoice"><input type="radio" name="experienceMode" value="skybox"><span><strong>✦ REINO 360°</strong><small>Tablero jugable dentro de las seis caras del mundo mágico.</small></span></label>
+<label class="experienceChoice"><input type="radio" name="experienceMode" value="ar"><span><strong>◎ AR CON PORTAL</strong><small>Cámara real, tablero fijado a una superficie y portal decorativo.</small></span></label>
+</div>
+<p id="experienceStatus" role="status" aria-live="polite">Elige cómo jugar y pulsa Iniciar partida.</p></section>
 <div id="modelDownloadPanel" class="modelDownloadPanel">
 <div class="modelDownloadLabel">
 <strong>✧ Colección de piezas 3D</strong>
@@ -288,7 +298,7 @@ body.xr-active #gameToast{display:none!important}
 <progress id="modelDownloadProgress" value="0" max="6" aria-label="Modelos glTF preparados"></progress>
 <button id="downloadModels" type="button">⬇ PREPARAR / COMPROBAR PIEZAS 3D</button>
 </div>
-<div class="settingFoot"><button id="backToMenu" data-ui="back">← VOLVER</button><button id="startConfigured" data-ui="startGame" class="primary">⚔ INICIAR PARTIDA</button></div>
+<div class="settingFoot"><button id="backToMenu" data-ui="back">← VOLVER</button><button id="startConfigured" class="primary">⚔ JUGAR EN 3D CLÁSICO</button></div>
 </aside></div>
 <div id="legalDialog" class="legalDialog" hidden role="dialog" aria-modal="true" aria-labelledby="legalTitle">
 <section class="legalCard">
@@ -342,6 +352,6 @@ body.xr-active #gameToast{display:none!important}
 <script type="module" src="./adventure-ui.js?v=0.11.0"></script>
 <script type="module" src="./celestial-ui.js?v=0.10.0"></script>
 <script type="module" src="./legal-consent.js?v=0.13.0"></script>
-<script type="module" src="./board-catalog-ui.js?v=0.14.4"></script>
-<script type="module" src="./main.js?v=0.14.7"></script>
+<script type="module" src="./board-catalog-ui.js?v=0.14.8"></script>
+<script type="module" src="./main.js?v=0.14.8"></script>
 </body></html>

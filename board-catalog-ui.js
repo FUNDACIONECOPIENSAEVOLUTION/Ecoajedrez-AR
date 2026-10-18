@@ -3,6 +3,7 @@
 import {BOARD_SKINS,VISION_ART,boardURL,findBoard} from './board-skins.js?v=0.14.3';
 import { publishedRealmURL } from './realm-pairing.js?v=0.14.4';
 import {realmForBoard} from './skybox-config.js?v=0.14.5';
+import {gameRealmName} from './experience-modes.js?v=0.14.8';
 const setting=document.getElementById('boardSkin');
 const menuSelect=document.getElementById('toolsBoardSkin');
 const preview=document.getElementById('boardSkinPreview');
@@ -11,7 +12,7 @@ const label=document.getElementById('boardSkinName');
 const empty=document.getElementById('boardSkinEmpty');
 const realmPreview=document.getElementById('boardRealmPreview');
 const realmEmpty=document.getElementById('boardRealmEmpty');
-const skyboxTryBtn=document.getElementById('skyboxTryBtn');
+
 let realmSequence=0;
 const gallery=document.getElementById('visionGallery');
 const photo=document.getElementById('visionArt');
@@ -22,7 +23,7 @@ for(const select of [setting,menuSelect]){
  select.replaceChildren();
  for(const entry of BOARD_SKINS){
   const option=document.createElement('option');
-  option.value=entry.id;option.textContent=entry.label;
+  option.value=entry.id;option.textContent=entry.id==='classic'?entry.label:gameRealmName(entry.id)+' — '+entry.label;
   select.add(option);
  }
 }
@@ -45,12 +46,12 @@ async function previewRealm(id){
 function updatePreview(id){
  const skin=findBoard(id);
  const skyRealm=realmForBoard(skin.id);
- if(skyboxTryBtn)skyboxTryBtn.href='./skybox-test.html'+(skyRealm?'?reino='+encodeURIComponent(skyRealm.id):'');
+
  previewRealm(skin.id).catch(()=>{});
  for(const node of [setting,menuSelect])if(node)node.value=skin.id;
- if(label)label.textContent=skin.label;
+ if(label)label.textContent=skin.id==='classic'?skin.label:(skyRealm.label+' · '+skin.label);
  if(caption)caption.textContent=skin.file?
-   'El tablero y su reino se eligen juntos. Las 64 casillas conservan su alineación.':
+   'Reino '+skyRealm.label+' seleccionado. Juega en 3D, 360° o AR con el mismo tablero y piezas.':
    'Diseño clásico nativo, sin imagen superpuesta.';
  if(preview){
   // Only the selected texture is loaded. Avoid fetching all 13 at once on mobile.
