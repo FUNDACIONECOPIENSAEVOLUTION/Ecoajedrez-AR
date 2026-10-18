@@ -1,5 +1,16 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.10.0-beta.1 — 2026-10-17 · Universo celestial interactivo
+- Inspirado por las interfaces aprobadas: arte SVG vectorial original de islas flotantes, galaxia y figuras de ajedrez; piezas flotantes con CSS y destellos ornamentados en la portada.
+- El video ambiental permanece detrás del texto real; se oculta la galería lateral con collages y se reemplaza por arena galáctica animada.
+- Menú gamer más panorámico con cuatro portales de juego; conserva identificación, invitado, QR y botones.
+- Configuración sobre escena ilustrada, vista previa cambiante por bioma, navegación lateral real (escritorio), panel transparente y ornamentos dorados.
+- Desplazamiento seguro en pantalla vertical/corta y breakpoints. Reducción de movimiento para accesibilidad.
+- Nuevos `celestial.css`, `celestial-ui.js`, `assets/ui/celestial-arena.svg`, tests y documento `docs/ENTREGA_0.10.md`.
+- La estética interpreta las propuestas conceptuales, no copia literalmente la tipografía rasterizada de sus imágenes. Verificación física pendiente. Sin gastos ni cambios de 3D/AR/login/PvP.
+
+
+
 ## 0.9.0-beta.1 — 2026-10-17 · Cine gamer debajo del contenido
 - Tras revisar capturas del usuario, se reposicionan los MP4: bienvenida con fondo animado **detrás de las letras y botones**, lateral con imágenes y movimiento mínimo, menú principal con otro video bajo las tarjetas.
 - Degradados de contraste y controles para pausar/activar fondos; CSS responsive evita el collage recortado que producía mezclar video e imagen en el panel lateral.
