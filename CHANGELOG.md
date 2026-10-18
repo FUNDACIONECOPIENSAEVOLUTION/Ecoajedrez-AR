@@ -1,5 +1,14 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.12.1-beta.1 — 2026-10-18 · Modelos 3D cacheados sin descargas duplicadas
+- Validación de las seis figuras glTF originales de ajedrez autocontenidas en `assets/models/staunton/`.
+- Unificada la descarga en `asset-cache.js` con la lectura de `GLTFLoader.parseAsync` para que intro y partida compartan solicitudes sin duplicaciones.
+- La colección de modelos se guarda en CacheStorage y se reutiliza en las visitas siguientes, mientras el navegador conserve el almacenamiento. Conservado el nombre de caché `v0.11.0` para no perder archivos ya descargados.
+- Nueva barra real de seis modelos y botón `Preparar / comprobar piezas 3D`, más indicador independiente de disponibilidad en memoria y caché. Persistencia reforzada solicitada al navegador tras interacción del usuario, sin garantía de conservación permanente.
+- Estilos Staunton/Realeza reutilizan seis glTF; Fantasía y Clásico son geometría procedural, no paquetes descargables externos. No se incluyeron modelos antiguos de franquicias sin licencia.
+- Test de dos visitas compartiendo caché en `tests/model-cache-persistence.test.mjs`; consultar `docs/ENTREGA_0.12.1.md`. AR, PvP y BFF sin modificar, coste $0.
+
+
 ## 0.12.0-beta.1 — 2026-10-18
 - Contraste reforzado en la bienvenida: título, subtítulo, letras pequeñas, textos de estado y privacidad, conservando la imagen limpia aprobada.
 - Introducción automática al iniciar una pestaña nueva; una vez por sesión, saltable, hasta 10s de video; recursos públicos descargados en paralelo con progreso real; fondo permanece estático al salir.
