@@ -4,7 +4,7 @@ import path from 'node:path';
 const dest='dist';
 fs.rmSync(dest,{recursive:true,force:true});
 fs.mkdirSync(dest,{recursive:true});
-const files=['index.html','arcane.css','opening.css','opening.js','celestial.css','cinematic-fix.css','adventure.css','asset-cache.js','adventure-ui.js','sw.js','celestial-ui.js','arcane-ui.js','privacy.html','version.json','main.js','auth.js','commands.js','pvp.js','match-state.js','ecoajedrez.PNG','_headers'];
+const files=['index.html','arcane.css','opening.css','opening.js','celestial.css','cinematic-fix.css','adventure.css','login-scene.css','asset-cache.js','adventure-ui.js','sw.js','celestial-ui.js','arcane-ui.js','privacy.html','version.json','main.js','auth.js','commands.js','pvp.js','match-state.js','ecoajedrez.PNG','_headers'];
 for(const name of files){
  if(!fs.existsSync(name))throw Error('Missing asset: '+name);
  fs.copyFileSync(name,path.join(dest,name));
@@ -28,6 +28,15 @@ for(const name of cardNames){
  fs.writeFileSync(path.join(cardDest,name),file);
 }
 
+
+// Exact single owner-uploaded post-intro background (not arbitrary directory publishing).
+const loginImage='app/imagenes/interfaces/login_post_intro_fondo.png';
+const loginBytes=fs.readFileSync(loginImage);
+const pngMagic=Buffer.from([137,80,78,71,13,10,26,10]);
+if(loginBytes.length<1024||loginBytes.length>6000000||!loginBytes.subarray(0,8).equals(pngMagic))
+ throw Error('Invalid or missing approved login backdrop: '+loginImage);
+fs.mkdirSync(path.join(dest,'app/imagenes/interfaces'),{recursive:true});
+fs.writeFileSync(path.join(dest,loginImage),loginBytes);
 
 // Explicitly publish the user-approved game media. Never publish whole arbitrary directories.
 const mediaFiles=[
