@@ -6,6 +6,9 @@ const menuSelect=document.getElementById('toolsBoardSkin');
 const preview=document.getElementById('boardSkinPreview');
 const caption=document.getElementById('boardSkinCaption');
 const label=document.getElementById('boardSkinName');
+const empty=document.getElementById('boardSkinEmpty');
+const coverageInput=document.getElementById('boardCoverage');
+const coverageLabel=document.getElementById('boardCoverageLabel');
 const gallery=document.getElementById('visionGallery');
 const photo=document.getElementById('visionArt');
 const title=document.getElementById('visionTitle');
@@ -30,6 +33,7 @@ function updatePreview(id){
   // Only the selected texture is loaded. Avoid fetching all 13 at once on mobile.
   const url=boardURL(skin);
   preview.hidden=!url;
+  if(empty)empty.hidden=Boolean(url);
   if(url)preview.src=url;
   else preview.removeAttribute('src');
   preview.alt=url?'Superficie seleccionada: '+skin.label:'';
@@ -47,7 +51,19 @@ for(const node of [setting,menuSelect])node?.addEventListener('change',event=>se
 let initial='classic';
 try{initial=localStorage.getItem('ecoajedrez-board-skin')||'classic';}catch(error){}
 selectBoard(initial,false);
-window.ecoBoardCatalogue={selectBoard,getSelected:()=>setting?.value||'classic'};
+let initialCoverage=86;
+try{const saved=Number(localStorage.getItem('ecoajedrez-board-coverage'));if(saved>=65&&saved<=100)initialCoverage=saved;}catch(error){}
+if(coverageInput)coverageInput.value=String(initialCoverage);
+if(coverageLabel)coverageLabel.textContent=initialCoverage+'%';
+function applyCoverage(value){
+ const v=Math.max(65,Math.min(100,Math.round(Number(value)||86)));
+ if(coverageLabel)coverageLabel.textContent=v+'%';
+ if(coverageInput)coverageInput.value=String(v);
+ try{localStorage.setItem('ecoajedrez-board-coverage',String(v));}catch(error){}
+ document.dispatchEvent(new CustomEvent('eco:board-grid-coverage',{detail:{fraction:v/100}}));
+}
+coverageInput?.addEventListener('input',event=>applyCoverage(event.target.value));
+window.ecoBoardCatalogue={selectBoard,getSelected:()=>setting?.value||'classic',getCoverage:()=>Number(coverageInput?.value||86)/100};
 function drawGallery(){
  if(!photo||!title)return;
  const selected=VISION_ART[galleryIndex];
