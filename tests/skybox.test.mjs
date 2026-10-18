@@ -54,9 +54,9 @@ test('360 degree tester uses CubeTextureLoader, drag, gyro permission and no che
  assert.match(viewer,/menuToggle\.addEventListener\('click'/);
  for(const id of ['skyCanvas','skyRealmSelect','skyGyro','skyReset','skyStatus','skyEnter','skyRetry','skyExit','skyMenuToggle'])
   assert.ok(page.includes('id="'+id+'"'));
- assert.match(game,/id="skyboxTryBtn"/);
+ assert.doesNotMatch(game,/id="skyboxTryBtn"/);
  assert.match(chooser,/realmForBoard\(skin\.id\)/);
- assert.equal(version.version,'0.14.7-beta.1');
+ assert.equal(version.version,'0.14.8-beta.1');
  assert.equal(version.skybox360.realmCount,13);
  assert.equal(version.skybox360.fullCubemapsUploadedAtRelease,1);
  assert.equal(version.physicalARValidated,false);
