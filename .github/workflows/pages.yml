@@ -24,6 +24,8 @@ jobs:
         run: |
           node --check main.js
           node --check magic-world.js
+          node --check board-skins.js
+          node --check board-catalog-ui.js
           node --check last-move-ghost.js
           node --check legal-consent.js
           node --check arcane-ui.js
