@@ -4,7 +4,7 @@ import path from 'node:path';
 const dest='dist';
 fs.rmSync(dest,{recursive:true,force:true});
 fs.mkdirSync(dest,{recursive:true});
-const files=['index.html','arcane.css','opening.css','opening.js','celestial.css','cinematic-fix.css','adventure.css','login-scene.css','readability-qr.css','models-cache.css','magic-game.css','victory-fx.css','victory-fx.js','board-catalog.css','realm-pairing.js','board-skins.js','board-catalog-ui.js','magic-world.js','last-move-ghost.js','legal-consent.js','terms.html','qr-scanner.js','asset-cache.js','adventure-ui.js','sw.js','celestial-ui.js','arcane-ui.js','privacy.html','version.json','main.js','auth.js','commands.js','pvp.js','match-state.js','ecoajedrez.PNG','_headers'];
+const files=['index.html','arcane.css','opening.css','opening.js','celestial.css','cinematic-fix.css','adventure.css','login-scene.css','readability-qr.css','models-cache.css','magic-game.css','victory-fx.css','victory-fx.js','board-catalog.css','realm-pairing.js','board-skins.js','board-catalog-ui.js','magic-world.js','last-move-ghost.js','legal-consent.js','terms.html','qr-scanner.js','asset-cache.js','adventure-ui.js','sw.js','celestial-ui.js','arcane-ui.js','privacy.html','version.json','skybox-test.html','skybox-test.css','skybox-test.js','skybox-config.js','main.js','auth.js','commands.js','pvp.js','match-state.js','ecoajedrez.PNG','_headers'];
 for(const name of files){
  if(!fs.existsSync(name))throw Error('Missing asset: '+name);
  fs.copyFileSync(name,path.join(dest,name));
@@ -90,6 +90,60 @@ for(const name of realmFiles){
 fs.writeFileSync(path.join(realmDest,'manifest.json'),
  JSON.stringify({available:availableRealms},null,2)+'\n');
 console.log('Uploaded kingdom environments: '+availableRealms.length+' published.');
+
+// Optional owner-uploaded cubemaps for the *separate 360° test viewer*.
+// Publish only when all six square WebP faces match the same dimensions.
+const {SKYBOX_REALMS,SKYBOX_FACES}=await import('../skybox-config.js');
+function webpDimensions(data){
+ if(data.length<30||data.toString('ascii',0,4)!=='RIFF'||
+    data.toString('ascii',8,12)!=='WEBP')return null;
+ const kind=data.toString('ascii',12,16);
+ if(kind==='VP8X'){
+  const width=1+data[24]+(data[25]<<8)+(data[26]<<16);
+  const height=1+data[27]+(data[28]<<8)+(data[29]<<16);
+  return {width,height};
+ }
+ if(kind==='VP8 '&&data[23]===0x9d&&data[24]===0x01&&data[25]===0x2a){
+  return {width:data.readUInt16LE(26)&0x3fff,height:data.readUInt16LE(28)&0x3fff};
+ }
+ if(kind==='VP8L'&&data[20]===0x2f){
+  return {
+   width:1+(data[21]|((data[22]&0x3f)<<8)),
+   height:1+((data[22]>>6)|(data[23]<<2)|((data[24]&0x0f)<<10))
+  };
+ }
+ return null;
+}
+const skyRoot='app/imagenes/skybox';
+const skyDest=path.join(dest,skyRoot);
+fs.mkdirSync(skyDest,{recursive:true});
+const skyManifest={version:1,realms:{}};
+let completeSkyboxes=0;
+for(const entry of SKYBOX_REALMS){
+ const directory=path.join(skyRoot,entry.id);
+ const present=SKYBOX_FACES.filter(face=>fs.existsSync(path.join(directory,face+'.webp')));
+ const missing=SKYBOX_FACES.filter(face=>!present.includes(face));
+ const result={ready:false,present,missing};
+ skyManifest.realms[entry.id]=result;
+ if(missing.length)continue; // Do not publish half a cubemap.
+ const data=SKYBOX_FACES.map(face=>fs.readFileSync(path.join(directory,face+'.webp')));
+ const dimensions=data.map(webpDimensions);
+ const first=dimensions[0];
+ if(data.some(buf=>buf.length<1024||buf.length>3000000) ||
+    dimensions.some(d=>!d||d.width!==d.height||d.width<512||d.width>4096||
+     d.width!==first?.width||d.height!==first?.height)){
+  result.reason='Las 6 caras deben ser WebP cuadrados de idéntica resolución (512–4096 px), con máximo 3 MB por cara.';
+  continue; // Safely retain the rest of the game deployment.
+ }
+ const destination=path.join(skyDest,entry.id);
+ fs.mkdirSync(destination,{recursive:true});
+ SKYBOX_FACES.forEach((face,i)=>fs.writeFileSync(path.join(destination,face+'.webp'),data[i]));
+ result.ready=true;result.resolution=first.width;
+ completeSkyboxes++;
+}
+fs.writeFileSync(path.join(skyDest,'manifest.json'),JSON.stringify(skyManifest,null,2)+'\n');
+console.log('Complete 360 skybox kingdoms published: '+completeSkyboxes+' / '+SKYBOX_REALMS.length+'.');
+
 // Exact single owner-uploaded post-intro background (not arbitrary directory publishing).
 const loginImage='app/imagenes/interfaces/login_post_intro_fondo.png';
 const loginBytes=fs.readFileSync(loginImage);

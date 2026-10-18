@@ -2,6 +2,7 @@
 // independent decorative 'vista-' gallery. Does not manage game logic.
 import {BOARD_SKINS,VISION_ART,boardURL,findBoard} from './board-skins.js?v=0.14.3';
 import { publishedRealmURL } from './realm-pairing.js?v=0.14.4';
+import {realmForBoard} from './skybox-config.js?v=0.14.5';
 const setting=document.getElementById('boardSkin');
 const menuSelect=document.getElementById('toolsBoardSkin');
 const preview=document.getElementById('boardSkinPreview');
@@ -10,6 +11,7 @@ const label=document.getElementById('boardSkinName');
 const empty=document.getElementById('boardSkinEmpty');
 const realmPreview=document.getElementById('boardRealmPreview');
 const realmEmpty=document.getElementById('boardRealmEmpty');
+const skyboxTryBtn=document.getElementById('skyboxTryBtn');
 let realmSequence=0;
 const gallery=document.getElementById('visionGallery');
 const photo=document.getElementById('visionArt');
@@ -42,6 +44,8 @@ async function previewRealm(id){
 }
 function updatePreview(id){
  const skin=findBoard(id);
+ const skyRealm=realmForBoard(skin.id);
+ if(skyboxTryBtn)skyboxTryBtn.href='./skybox-test.html'+(skyRealm?'?reino='+encodeURIComponent(skyRealm.id):'');
  previewRealm(skin.id).catch(()=>{});
  for(const node of [setting,menuSelect])if(node)node.value=skin.id;
  if(label)label.textContent=skin.label;
