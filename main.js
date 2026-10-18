@@ -1152,7 +1152,7 @@ function resize(){
 const resizeObserver=new ResizeObserver(resize);resizeObserver.observe(stage);resize();
 function render(timestamp,frame){
   if(isAR){updateAR(frame);}
-  else orbit.update();
+  else if(!realmImmersion?.active())orbit.update(); // OrbitControls must not overwrite free 360° look.
   if(moving){
     const progress=Math.min(1,(timestamp-moving.start)/moving.duration);
     const smooth=progress*progress*(3-2*progress);
