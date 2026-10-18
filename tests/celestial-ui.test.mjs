@@ -23,9 +23,14 @@ test('Released celestial art and styles render with responsive mobile fallback',
  assert.match(css,/@media\(max-width:620px\)/);
  assert.match(css,/@media\(prefers-reduced-motion:reduce\)/);
  assert.match(css,/overflow-y:auto/);
- assert.match(html,/class="celestialCourt"/);
- assert.match(html,/class="arcanePiece pieceKing"/);
- assert.match(html,/class="arcanePiece pieceKnight"/);
+ assert.doesNotMatch(html,/class="celestialCourt"/);
+ assert.doesNotMatch(html,/class="arcanePiece pieceKing"/);
+ const fix=fs.readFileSync('cinematic-fix.css','utf8');
+ assert.match(fix,/#loginPanel > \.welcomeVideoBackdrop/);
+ assert.match(fix,/object-fit:cover/);
+ assert.match(fix,/#loginPanel \.loginContent/);
+ assert.match(fix,/@media\(max-width:540px\)/);
+ assert.ok(html.indexOf('class="welcomeVideoBackdrop"')<html.indexOf('class="loginContent"'),'background is sibling of actual login card');
 });
 test('Settings sidebar and visual biome preview bind only to real existing controls',()=>{
  for(const id of ['settingsGoMenu','settingsGoPlay','biomePreview','theme','pieceSet','backToMenu','startConfigured']){
@@ -40,9 +45,10 @@ test('Settings sidebar and visual biome preview bind only to real existing contr
  assert.match(css,/#settingsNav/);
 });
 test('Safe static distribution and consistent current version',()=>{
- assert.equal(manifest.version,'0.10.0-beta.1');
+ assert.equal(manifest.version,'0.10.1-beta.1');
  assert.ok(html.includes('v'+manifest.version));
  assert.ok(build.includes("'celestial.css'"));
+ assert.ok(build.includes("'cinematic-fix.css'"));
  assert.ok(build.includes("'celestial-ui.js'"));
  assert.match(html,/celestial\.css\?v=0\.10\.0/);
  assert.match(html,/celestial-ui\.js\?v=0\.10\.0/);
