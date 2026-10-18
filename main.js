@@ -385,7 +385,7 @@ function playBot(){
   if(mode!=='bot'||game.turn()!=='b'||game.isGameOver())return;
   const m=chooseBot();
   if(m)game.move({from:m.from,to:m.to,promotion:'q'});
-  selected=null;arcaneUI?.selected(null);renderPieces();if(m){animateMove(m.from,m.to);arcaneUI?.move(m.to,Boolean(m.captured));}updateStatus();persistCurrentGame();
+  ghostHint?.clear();selected=null;arcaneUI?.selected(null);renderPieces();if(m){animateMove(m.from,m.to);arcaneUI?.move(m.to,Boolean(m.captured));}updateStatus();persistCurrentGame();
 }
 function animateMove(from,to){
   const target=[...pieces.children].find(x=>x.userData.square===to);
@@ -762,7 +762,47 @@ $('startConfigured').onclick=()=>{
   if(mode==='online'&&!match.connected()){toast('Para jugar online crea o entra a una sala desde el menú.');transitionTo('menu');return;}
   reset();transitionTo('game');
 };
-$('gameMenuBtn').onclick=()=>gotoView('menu');
+// Accessible game actions preserve active board state and do not send PeerJS packets.
+const toolsPanel=$('gameTools'),menuButton=$('gameMenuBtn');
+function closeGameTools(){toolsPanel.hidden=true;menuButton.setAttribute('aria-expanded','false');}
+function openGameTools(){
+ toolsPanel.hidden=false;menuButton.setAttribute('aria-expanded','true');
+ $('toolsTheme').value=theme;
+ $('toolsHistoryList').hidden=true;
+ $('toolsClose').focus({preventScroll:true});
+}
+menuButton.onclick=openGameTools;
+$('toolsClose').onclick=closeGameTools;
+$('toolsContinue').onclick=closeGameTools;
+function showLastMove(){
+ ghostHint?.show(game.history({verbose:true}));
+ closeGameTools();
+}
+$('lastMoveBtn').onclick=showLastMove;
+$('toolsLastMove').onclick=showLastMove;
+$('quickArBtn').onclick=()=>startAR();
+$('toolsAR').onclick=()=>{closeGameTools();startAR();};
+$('toolsTheme').onchange=event=>{
+ const next=event.target.value;
+ if(![...$('theme').options].some(o=>o.value===next))return;
+ $('theme').value=next;
+ $('theme').dispatchEvent(new Event('change',{bubbles:true}));
+ toast('✦ Nuevo escenario: '+$('theme').selectedOptions[0].textContent);
+};
+$('toolsHistory').onclick=()=>{
+ const moves=game.history(),out=$('toolsHistoryList');
+ out.hidden=!out.hidden;
+ out.textContent=!out.hidden?(moves.length?moves.map((san,i)=>(i%2===0?(Math.floor(i/2)+1)+'. ':'')+san).join('  '):'Aún no hay movimientos.'):'';
+};
+$('toolsSave').onclick=()=>{$('downloadPgn').click();closeGameTools();};
+$('toolsLegal').onclick=()=>{closeGameTools();window.ecoLegal?.openInfo();};
+$('toolsExit').onclick=()=>{closeGameTools();gotoView('menu');};
+toolsPanel.addEventListener('click',event=>{if(event.target===toolsPanel)closeGameTools();});
+toolsPanel.addEventListener('keydown',event=>{if(event.key==='Escape'){closeGameTools();menuButton.focus();}});
+$('quality').addEventListener('change',event=>{
+ magicEnv?.setProfile(event.target.value,theme);
+ try{localStorage.setItem('ecoajedrez-graphics-profile',event.target.value);}catch(e){}
+});
 const invite=new URL(location.href).searchParams.get('room');
 if(invite){
  const sanitized=String(invite).trim().toUpperCase();
