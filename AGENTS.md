@@ -104,3 +104,7 @@ Leer `docs/ENTREGA_0.8.md` antes de editar `videos/`, `opening.js`, `opening.css
 
 ## 0.9 · El video de bienvenida va debajo de las letras (2026-10-17)
 El usuario rechazó la superposición lateral imagen+video 0.8 por franjas/recortes. La solución 0.9 está en `docs/ENTREGA_0.9.md`: `welcomeVideoBackdrop` dentro del contenido de bienvenida, lateral `heroShowcase` con imágenes animadas suavemente, `menuAtmosphere` detrás del menú. `opening.js` reproduce a lo sumo un MP4 ambiental y pausa en partida/AR, `opening.css` aplica gradientes de legibilidad y z-index 0/2. Conservar ambos controles de pausa y el intro bajo demanda. Versión 0.9.0-beta.1; validar con captura real del usuario y CI. No tocar 3 LINE-AR, ni servicios de pago ni secretos.
+
+
+## v0.10.0-beta.1 · Arena celestial inspirada en interfaces aprobadas
+Leer `docs/ENTREGA_0.10.md`. Nueva interfaz panorámica con gráfica **SVG original** `assets/ui/celestial-arena.svg`, CSS animado `celestial.css`, acciones reales/vista previa `celestial-ui.js`. No son los botones rasterizados de las imágenes conceptuales del usuario: se preservan los botones DOM reales, local, computador, AR y PeerJS. Las imágenes conceptuales se usan como referencia aprobada; no afirmar reconstrucción píxel-perfecta. En menú usar cuatro tarjetas desktop/dos móvil; settings paisaje+preview; `overflow-y:auto` evita cortes en viewport corto. Incrementar versión y cache-busting en todos los cambios. Presupuesto $0 y no modificar 3 LINE-AR o Firebase.
