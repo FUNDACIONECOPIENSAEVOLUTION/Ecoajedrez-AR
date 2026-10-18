@@ -51,7 +51,7 @@ test('The intro is first-visit-only, muted, replayable, always skippable and rep
  assert.match(loader,/new CustomEvent\('eco:asset-progress'/);
  assert.match(opening,/done\*100\/total/);
  assert.match(loader,/asset-progress/);
- assert.equal(version.version,'0.12.1-beta.1');
+ assert.equal(version.version,'0.13.0-beta.1');
 });
 test('Cache holds ONLY public images and six Staunton glTFs, never videos or accounts',()=>{
  for(const name of names)assert.ok(loader.includes(name));
