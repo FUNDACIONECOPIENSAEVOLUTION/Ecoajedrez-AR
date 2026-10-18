@@ -59,6 +59,8 @@ function setupHero(){
  function playAmbient(){
   pauseScenes();
   if(!enableVideos||document.hidden||introVisible||document.body.classList.contains('xr-active'))return;
+  // Avoid wasting ~8 MB on an ambient film just before first-visit intro takes over.
+  if(currentView()==='welcome'&&!hasWatchedIntro())return;
   const view=currentView();
   const video=view==='welcome'?welcomeVideo:view==='menu'?menuVideo:null;
   if(!video||video.dataset.failed==='1')return;
@@ -132,7 +134,7 @@ function setupHero(){
  }
  function startIntro(automatic=false){
   if(!cinema||!cinemaVideo)return;
-  if(automatic && (hasWatchedIntro()||document.hidden||currentView()!=='welcome'))return;
+  if(automatic && (hasWatchedIntro()||document.hidden||currentView()!=='welcome'||reduced||constrained))return;
   lastFocus=document.activeElement;
   introVisible=true;
   pauseScenes();
