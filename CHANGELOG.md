@@ -1,5 +1,13 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.11.1-beta.1 — 2026-10-18 · Portada con imagen limpia y video 10s
+- Fondo exclusivo aprobado y subido por el usuario: `app/imagenes/interfaces/login_post_intro_fondo.png` con firma PNG verificada, empaquetado específico para GitHub Pages.
+- Video de intro automática primera visita: cierra al final o a 10s de reproducción; aparece imagen fija. Ya no hay video ambiental en bucle en bienvenida. Puede omitirse o reproducirse de nuevo manualmente.
+- Nuevos estilos `login-scene.css` para PC, tablet y celular: logo, título ECOAJEDREZ sin dividirse, botones reales legibles sobre fondo panorámico, scroll seguro.
+- Registro técnico `docs/ENTREGA_0.11.1.md` y tests del contenido/flujo. No se modifican menú, partidas, AR, OAuth ni infraestructura gratuita.
+
+
+
 ## 0.11.0-beta.1 — 2026-10-18 · Ocho ilustraciones reales, intro inicial y caché
 - Se verificaron y publicaron las ocho imágenes WebP que el usuario subió a `app/imagenes/tarjetas/`: cuatro modalidades y cuatro escenarios.
 - Los controles reales del menú muestran tarjetas ilustradas; nuevo Portal de la Arena selecciona bosque/templo/ciudad/volcán y actualiza los biomas reales de ajedrez 3D.
