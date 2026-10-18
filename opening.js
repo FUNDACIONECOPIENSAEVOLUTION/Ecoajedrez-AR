@@ -1,6 +1,6 @@
 // ECOAJEDREZ 0.9 · cinematic media choreography. The game and WebXR remain independent.
 // One ambient MP4 maximum, only on welcome/menu; photos animate gently on the side.
-const FALLBACK_RELEASE='0.9.0-beta.1';
+const FALLBACK_RELEASE='0.10.0-beta.1';
 const versionTags=()=>Array.from(document.querySelectorAll('[data-app-version]'));
 let resolvedVersion=FALLBACK_RELEASE;
 function showVersion(){
@@ -11,7 +11,7 @@ function showVersion(){
 }
 async function readVersion(){
  try{
-  const response=await fetch('./version.json?v=0.9.0',{cache:'no-store',headers:{Accept:'application/json'}});
+  const response=await fetch('./version.json?v=0.10.0',{cache:'no-store',headers:{Accept:'application/json'}});
   if(!response.ok)throw Error('Release manifest unavailable');
   const body=await response.json();
   if(typeof body.version==='string'&&/^0\.[0-9]+\.[0-9]+-beta\.[0-9]+$/.test(body.version))resolvedVersion=body.version;
