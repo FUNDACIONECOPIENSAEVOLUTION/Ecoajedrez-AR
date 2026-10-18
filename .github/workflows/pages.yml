@@ -23,6 +23,9 @@ jobs:
       - name: Check JS syntax
         run: |
           node --check main.js
+          node --check magic-world.js
+          node --check last-move-ghost.js
+          node --check legal-consent.js
           node --check arcane-ui.js
           node --check opening.js
           node --check qr-scanner.js
