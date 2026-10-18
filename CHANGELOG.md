@@ -1,5 +1,16 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.11.0-beta.1 — 2026-10-18 · Ocho ilustraciones reales, intro inicial y caché
+- Se verificaron y publicaron las ocho imágenes WebP que el usuario subió a `app/imagenes/tarjetas/`: cuatro modalidades y cuatro escenarios.
+- Los controles reales del menú muestran tarjetas ilustradas; nuevo Portal de la Arena selecciona bosque/templo/ciudad/volcán y actualiza los biomas reales de ajedrez 3D.
+- La introducción MP4 del usuario se abre automáticamente solo en la primera visita del navegador cuando se permite reproducción automática silenciada. Siempre se puede omitir o repetir con el botón.
+- Indicador de progreso verdadero para 14 archivos (8 WebP + 6 glTF), cantidad en caché/descargados/pendientes. CacheStorage y service worker solo guardan recursos públicos, sin datos privados ni videos de gran tamaño; ahorro de datos respetado.
+- Nuevo diseño adaptativo con las imágenes aprobadas, barra de progreso en bienvenida e intro, versión visible fuera de partida; `adventure.css`, `adventure-ui.js`, `asset-cache.js`, `sw.js`.
+- CI, lista blanca Pages y comprobaciones de seguridad actualizadas. Guías `docs/ENTREGA_0.11.md` y `docs/RESUMEN_MAESTRO.md` para ahorrar lectura y mantener la continuidad.
+- La reproducción y AR reales aún requieren pruebas físicas; los navegadores pueden desalojar caché y no se promete modo offline completo. Sin nuevos gastos ni cambios de autenticación.
+
+
+
 ## 0.10.1-beta.1 — 2026-10-17 · Corrección de bienvenida cinematográfica
 - Quitados rey, caballo, torre y alfil Unicode exagerados de la portada tras captura del usuario; eran caracteres 2D, no fichas 3D.
 - Media original PNG/MP4 del propietario vuelve al fondo de toda la arena con tarjeta legible encima, sin caja aislada a la derecha.
