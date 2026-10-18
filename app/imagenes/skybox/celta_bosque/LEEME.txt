@@ -1,0 +1,15 @@
+ECOAJEDREZ - Paquete 04 - Reino Celta / Bosque Encantado
+
+Caras exactas para skybox cúbico:
+px.webp = Derecha (+X)
+nx.webp = Izquierda (-X)
+py.webp = Cielo / Techo (+Y)
+ny.webp = Suelo / Piso (-Y)
+pz.webp = Frente (+Z)
+nz.webp = Atrás (-Z)
+
+Criterio aplicado:
+- Cuatro caras verticales centradas, rectas y sin suelo extendido.
+- ny.webp es cenital para el suelo.
+- py.webp es vista completamente hacia arriba para el dosel/techo.
+- Todas las imágenes son WebP cuadradas y de idéntica resolución.

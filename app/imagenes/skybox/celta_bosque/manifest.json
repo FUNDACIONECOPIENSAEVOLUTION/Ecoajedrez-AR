@@ -1,0 +1,56 @@
+{
+  "package": "ECOAJEDREZ_04_Reino_Celta_Bosque_Encantado_Skybox_6_Caras_WEBP",
+  "realm": "Reino Celta / Bosque Encantado",
+  "resolution": "1254x1254",
+  "format": "webp",
+  "faces": {
+    "pz": {
+      "label": "frente_+Z",
+      "source": "/mnt/data/ghostwriter_images/generated/a_highly_detailed_cinematic_fantasy_forest_scene_1.png",
+      "exact_filename": "pz.webp",
+      "descriptive_filename": "reino_celta_bosque_encantado__pz__frente_+Z.webp",
+      "width": 1254,
+      "height": 1254
+    },
+    "nx": {
+      "label": "izquierda_-X",
+      "source": "/mnt/data/ghostwriter_images/generated/wide_immersive_fantasy_landscape_vista_a_cinemat_2_batch_1.png",
+      "exact_filename": "nx.webp",
+      "descriptive_filename": "reino_celta_bosque_encantado__nx__izquierda_-X.webp",
+      "width": 1254,
+      "height": 1254
+    },
+    "px": {
+      "label": "derecha_+X",
+      "source": "/mnt/data/ghostwriter_images/generated/a_highly_detailed_fantasy_landscape_scene_in_cinem_3_batch_2.png",
+      "exact_filename": "px.webp",
+      "descriptive_filename": "reino_celta_bosque_encantado__px__derecha_+X.webp",
+      "width": 1254,
+      "height": 1254
+    },
+    "py": {
+      "label": "cielo_+Y",
+      "source": "/mnt/data/ghostwriter_images/generated/a_magical_cinematic_highly_detailed_fantasy_fore_4_batch_3.png",
+      "exact_filename": "py.webp",
+      "descriptive_filename": "reino_celta_bosque_encantado__py__cielo_+Y.webp",
+      "width": 1254,
+      "height": 1254
+    },
+    "ny": {
+      "label": "suelo_-Y",
+      "source": "/mnt/data/ghostwriter_images/generated/top_down_highly_detailed_fantasy_nature_scene_ci_5_batch_4.png",
+      "exact_filename": "ny.webp",
+      "descriptive_filename": "reino_celta_bosque_encantado__ny__suelo_-Y.webp",
+      "width": 1254,
+      "height": 1254
+    },
+    "nz": {
+      "label": "atras_-Z",
+      "source": "/mnt/data/ghostwriter_images/generated/a_hyper_detailed_fantasy_environment_scene_an_enc_6_batch_5.png",
+      "exact_filename": "nz.webp",
+      "descriptive_filename": "reino_celta_bosque_encantado__nz__atras_-Z.webp",
+      "width": 1254,
+      "height": 1254
+    }
+  }
+}
