@@ -1,0 +1,26 @@
+ECOAJEDREZ — PAQUETE 09 — REINO EGIPCIO / ALQUIMIA MISTICA
+
+Archivos de la carpeta exactos/ para importar directamente en el visor:
+  px.webp = Derecha (+X)
+  nx.webp = Izquierda (-X)
+  py.webp = Techo / Cielo (+Y)
+  ny.webp = Suelo / Piso (-Y), vista cenital
+  pz.webp = Frente (+Z)
+  nz.webp = Atras (-Z)
+
+Cada cara es WebP cuadrada 1254 × 1254 con perspectiva cubica de 90 grados.
+La carpeta descriptivos/ contiene copias de las seis imagenes con el reino, vista y eje en el nombre.
+
+PROCEDIMIENTO:
+Las imagenes se derivan de ilustraciones individuales obtenidas de una lamina de referencia.
+Las cuatro vistas horizontales se fusionaron en un panorama continuo. El cielo y el suelo
+se incorporaron como regiones polares; desde ese panorama se proyectaron matematicamente
+las seis caras para lograr orientacion cubica geometrica, y suavizar las uniones visibles.
+El panorama no es una captura/render 360 nativo: pueden repetirse edificios, aparecer
+perspectivas artisticas no fisicas o alguna deformacion en vistas verticales.
+Las seis caras no deben considerarse un modelo 3D con paralaje ni geometria real.
+
+Para realidad aumentada real con camara, el cielo virtual debe ser un portal o entorno virtual;
+un cubemap opaco oculta el fondo de la camara real.
+
+Contenido: exactos/, descriptivos/, extras/ (vista previa y panorama) y manifest.json.
