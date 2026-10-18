@@ -38,9 +38,9 @@ test('Realm portal enables four real 3D biomes with safe paths back to original 
  assert.match(css,/@media\(prefers-reduced-motion:reduce\)/);
 });
 test('The intro is first-visit-only, muted, replayable, always skippable and reports actual file progress',()=>{
- assert.match(opening,/ecoajedrez-intro-played-v1/);
- assert.match(opening,/localStorage\.getItem/);
- assert.match(opening,/localStorage\.setItem/);
+ assert.match(opening,/ecoajedrez-intro-session-v2/);
+ assert.match(opening,/sessionStorage\.getItem/);
+ assert.match(opening,/sessionStorage\.setItem/);
  assert.match(opening,/setTimeout\(\(\)=>startIntro\(true\)/);
  assert.match(opening,/addEventListener\('click',closeIntro\)/);
  assert.match(html,/id="cinemaVideo"[^>]* muted playsinline/);
@@ -51,7 +51,7 @@ test('The intro is first-visit-only, muted, replayable, always skippable and rep
  assert.match(loader,/new CustomEvent\('eco:asset-progress'/);
  assert.match(opening,/done\*100\/total/);
  assert.match(loader,/asset-progress/);
- assert.equal(version.version,'0.11.1-beta.1');
+ assert.equal(version.version,'0.12.0-beta.1');
 });
 test('Cache holds ONLY public images and six Staunton glTFs, never videos or accounts',()=>{
  for(const name of names)assert.ok(loader.includes(name));
