@@ -14,6 +14,8 @@ import { createBoardSurface } from './board-skins.js?v=0.14.3';
 import { makeLastMoveOverlay } from './last-move-ghost.js?v=0.13.0';
 import { createVictoryFX } from './victory-fx.js?v=0.14.2';
 import { createImmersiveChess } from './immersive-chess.js?v=0.14.7';
+import {createARChessPortal} from './ar-portal.js?v=0.14.8';
+import {checkSkybox,linkedRealm,validExperience,gameRealmName} from './experience-modes.js?v=0.14.8';
 
 const $ = (id) => document.getElementById(id);
 const canvas = $('render'), stage = $('scene');
@@ -39,7 +41,7 @@ const game = new Chess();
 const world = new THREE.Group(), tiles = new THREE.Group(), pieces = new THREE.Group();
 const decorations = new THREE.Group(), markers = new THREE.Group();
 world.add(tiles, decorations, pieces, markers); scene.add(world);
-let arcaneUI=null,magicEnv=null,ghostHint=null,boardSurface=null,victoryFX=null,realmImmersion=null;
+let arcaneUI=null,magicEnv=null,ghostHint=null,boardSurface=null,victoryFX=null,realmImmersion=null,arPortal=null;
 const rootBase = new THREE.Mesh(new THREE.BoxGeometry(8.45, .35, 8.45), new THREE.MeshStandardMaterial({color:0x213544, metalness:.5, roughness:.28}));
 rootBase.position.y = -.23; rootBase.receiveShadow = true; tiles.add(rootBase);
 const raycaster = new THREE.Raycaster(), point = new THREE.Vector2();
@@ -801,10 +803,60 @@ qrReader=setupQrJoin({
  hideJoinPanel:() => !$('joinPanel').classList.contains('visible')
 });
 $('backToMenu').onclick=()=>transitionTo('menu');
-$('startConfigured').onclick=()=>{
+// The opponent (bot/local/online) is distinct from the experience (3D/360/AR).
+const experienceRadios=[...document.querySelectorAll('input[name="experienceMode"]')];
+let chosenExperience='normal',experienceCheck=0;
+try{chosenExperience=validExperience(localStorage.getItem('ecoajedrez-view-mode')||'normal');}catch(error){}
+function chooseExperience(next){
+  chosenExperience=validExperience(next);
+  for(const radio of experienceRadios)radio.checked=radio.value===chosenExperience;
+  try{localStorage.setItem('ecoajedrez-view-mode',chosenExperience);}catch(error){}
+  const labels={normal:'⚔ JUGAR EN 3D CLÁSICO',skybox:'✦ JUGAR EN REINO 360°',ar:'◎ JUGAR EN AR CON PORTAL'};
+  $('startConfigured').textContent=labels[chosenExperience];
+  refreshExperienceStatus();
+}
+async function refreshExperienceStatus(){
+  const status=$('experienceStatus'),board=window.ecoBoardCatalogue?.getSelected()||'classic';
+  const selected=chosenExperience,seq=++experienceCheck;
+  status.dataset.warning='false';
+  if(selected==='normal'){status.textContent='3D clásico: '+gameRealmName(board)+' con tablero jugable y paisaje panorámico.';return;}
+  if(selected==='ar'){
+    status.textContent='AR con portal: usarás la cámara real. Apunta a una mesa o suelo para fijar el tablero. No camines mirando únicamente la pantalla.';
+    return;
+  }
+  status.textContent='Comprobando las seis imágenes del reino '+gameRealmName(board)+'…';
+  const result=await checkSkybox(board);
+  if(seq!==experienceCheck)return;
+  status.dataset.warning=String(!result.ready);
+  status.textContent=result.ready?'✓ Skybox 360° listo: '+result.realm.label+'. El tablero aparecerá delante de ti.':
+   (result.reason||'Este reino necesita sus seis caras Skybox para jugar en 360°');
+}
+experienceRadios.forEach(radio=>radio.addEventListener('change',event=>chooseExperience(event.target.value)));
+document.addEventListener('eco:board-skin-select',refreshExperienceStatus);
+chooseExperience(chosenExperience);
+let startingConfigured=false;
+$('startConfigured').onclick=async()=>{
+  if(startingConfigured)return;
+  const experience=chosenExperience;
   setGameMode($('mode').value);
-  if(mode==='online'&&!match.connected()){toast('Para jugar online crea o entra a una sala desde el menú.');transitionTo('menu');return;}
-  reset();transitionTo('game');
+  if(mode==='online'&&!match.connected()){toast('Conecta primero el duelo online desde el menú.');gotoView('menu');return;}
+  // Do not leave configuration for an incomplete 360° world.
+  if(experience==='skybox'){
+    startingConfigured=true;$('startConfigured').disabled=true;
+    const check=await checkSkybox(window.ecoBoardCatalogue?.getSelected()||'classic');
+    startingConfigured=false;$('startConfigured').disabled=false;
+    if(!check.ready){
+      $('experienceStatus').dataset.warning='true';
+      $('experienceStatus').textContent=check.reason||'Skybox incompleto.';
+      toast('Faltan imágenes del reino. Elige 3D clásico o sube las seis caras.');
+      return;
+    }
+  }
+  reset();
+  // AR requestSession MUST run from the same user click (transient activation).
+  gotoView('game');
+  if(experience==='skybox')realmImmersion?.enter();
+  else if(experience==='ar')startAR();
 };
 // Accessible game actions preserve active board state and do not send PeerJS packets.
 const toolsPanel=$('gameTools'),menuButton=$('gameMenuBtn');
@@ -831,6 +883,7 @@ $('toolsAR').onclick=()=>{closeGameTools();startAR();};
 function launchRealmChess(){
  closeGameTools();
  if(isAR){toast('Sal de AR para entrar al reino virtual 360°.');return;}
+ chooseExperience('skybox');
  realmImmersion?.enter();
 }
 $('realmEnterBtn').onclick=launchRealmChess;
@@ -899,6 +952,7 @@ const pointers=new Set();
 function arHint(message){$('arHint').textContent=message;}
 function showAR(){
   document.body.classList.add('xr-active');
+  arPortal?.setVisible(false);
   $('placeArBtn').style.display='inline-block';
   $('arTouchBtn').style.display='inline-block';
   $('arAimBtn').style.display='inline-block';
@@ -908,6 +962,7 @@ function showAR(){
   arHint('Busca una mesa o suelo, después pulsa FIJAR TABLERO.');
 }
 function hideAR(){
+  arPortal?.setVisible(false);
   document.body.classList.remove('xr-active');
   $('arCrosshair').classList.add('hidden');
   $('arSelectBtn').style.display='none';
@@ -932,6 +987,7 @@ function placeARBoard(){
   world.quaternion.identity();
   world.scale.setScalar(boardScale*Number($('arScale').value));
   world.visible=true;boardPlaced=true;reticle.visible=false;hitRequested=true;
+  arPortal?.setVisible(true); // Decoration tied to tracked board only, never an opaque room.
   $('placeArBtn').style.display='none';setARPicking('touch');
   arHint('Tablero fijado. Toca una pieza y su destino para jugar.');
   return true;
@@ -942,6 +998,7 @@ function setHologram(){
   world.position.set(0,-.35,-1.4);world.quaternion.identity();
   world.scale.setScalar(boardScale*Number($('arScale').value));
   world.visible=true;boardPlaced=true;lastHit=null;reticle.visible=false;
+  arPortal?.setVisible(false); // Unanchored holograms must not pretend to map safe physical space.
   $('placeArBtn').style.display='none';
   arHint('Holograma AR sin detección de mesa. Se puede jugar, pero no está anclado a una superficie.');
 }
@@ -1171,6 +1228,7 @@ function render(timestamp,frame){
 arcaneUI=createArcaneUI({THREE,world});
 try{const saved=localStorage.getItem('ecoajedrez-graphics-profile');if(['auto','low','medium','high'].includes(saved))$('quality').value=saved;}catch(e){}
 magicEnv=createMagicWorld({THREE,world,scene,renderer,stage});
+arPortal=createARChessPortal({THREE,world});
 realmImmersion=createImmersiveChess({
  THREE,scene,camera,orbit,canvas,
  getBoardId:()=>window.ecoBoardCatalogue?.getSelected()||'classic',
