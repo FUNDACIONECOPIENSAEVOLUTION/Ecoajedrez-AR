@@ -4,7 +4,7 @@ import path from 'node:path';
 const dest='dist';
 fs.rmSync(dest,{recursive:true,force:true});
 fs.mkdirSync(dest,{recursive:true});
-const files=['index.html','arcane.css','opening.css','opening.js','celestial.css','cinematic-fix.css','adventure.css','login-scene.css','readability-qr.css','models-cache.css','magic-game.css','victory-fx.css','victory-fx.js','board-catalog.css','board-skins.js','board-catalog-ui.js','magic-world.js','last-move-ghost.js','legal-consent.js','terms.html','qr-scanner.js','asset-cache.js','adventure-ui.js','sw.js','celestial-ui.js','arcane-ui.js','privacy.html','version.json','main.js','auth.js','commands.js','pvp.js','match-state.js','ecoajedrez.PNG','_headers'];
+const files=['index.html','arcane.css','opening.css','opening.js','celestial.css','cinematic-fix.css','adventure.css','login-scene.css','readability-qr.css','models-cache.css','magic-game.css','victory-fx.css','victory-fx.js','board-catalog.css','realm-pairing.js','board-skins.js','board-catalog-ui.js','magic-world.js','last-move-ghost.js','legal-consent.js','terms.html','qr-scanner.js','asset-cache.js','adventure-ui.js','sw.js','celestial-ui.js','arcane-ui.js','privacy.html','version.json','main.js','auth.js','commands.js','pvp.js','match-state.js','ecoajedrez.PNG','_headers'];
 for(const name of files){
  if(!fs.existsSync(name))throw Error('Missing asset: '+name);
  fs.copyFileSync(name,path.join(dest,name));
@@ -68,6 +68,23 @@ for(const name of [...boardFiles,...decorativeVistaFiles]){
 }
 console.log('Approved board images: '+boardFiles.length+' playable, '+decorativeVistaFiles.length+' decorative.');
 
+// Optional and exact owner-uploaded 3D kingdoms (no arbitrary user files).
+const realmIds=["alquimia","celta","cyber","cosmos","amatista","dorado","atlantis","hielo","lava","egipto","gotico","cristales","steampunk"];
+const realmBase='app/imagenes/entornos',realmDest=path.join(dest,realmBase);
+fs.mkdirSync(realmDest,{recursive:true});
+const availableRealms=[];
+for(const id of realmIds){
+ const name='entorno_'+id+'.webp',src=path.join(realmBase,name);
+ if(!fs.existsSync(src))continue;
+ const data=fs.readFileSync(src);
+ if(data.length<1024||data.length>3000000||data.toString('ascii',0,4)!=='RIFF'
+    ||data.toString('ascii',8,12)!=='WEBP')throw Error('Invalid realm WebP: '+name);
+ fs.writeFileSync(path.join(realmDest,name),data);
+ availableRealms.push(name);
+}
+fs.writeFileSync(path.join(realmDest,'manifest.json'),
+ JSON.stringify({available:availableRealms},null,2)+'\n');
+console.log('Kingdoms paired: '+availableRealms.length+' / 13.');
 // Exact single owner-uploaded post-intro background (not arbitrary directory publishing).
 const loginImage='app/imagenes/interfaces/login_post_intro_fondo.png';
 const loginBytes=fs.readFileSync(loginImage);

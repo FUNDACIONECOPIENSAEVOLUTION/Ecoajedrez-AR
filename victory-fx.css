@@ -4,7 +4,10 @@
 .ecoVictoryOverlay{
  position:fixed;inset:0;z-index:2000;display:grid;place-items:center;
  padding:clamp(12px,4vw,28px);overflow-y:auto;overscroll-behavior:contain;
- background:radial-gradient(circle at 50% 44%,#103b4cbf,#020917ed 76%);
+ background:#020b17;
+ background-image:linear-gradient(115deg,#030c1ae9,#032639a1 45%,#061226e7),
+ url('./app/imagenes/tableros/vista_de_ajedrez_celestial_encantado.webp');
+ background-position:center;background-repeat:no-repeat;background-size:cover;
  backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)
 }
 .ecoVictoryCard{

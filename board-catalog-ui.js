@@ -1,12 +1,16 @@
 // ECOAJEDREZ · v0.14 interactive chooser for REAL board textures and
 // independent decorative 'vista-' gallery. Does not manage game logic.
-import {BOARD_SKINS,VISION_ART,boardURL,findBoard} from './board-skins.js?v=0.14.1';
+import {BOARD_SKINS,VISION_ART,boardURL,findBoard} from './board-skins.js?v=0.14.3';
+import { publishedRealmURL } from './realm-pairing.js?v=0.14.3';
 const setting=document.getElementById('boardSkin');
 const menuSelect=document.getElementById('toolsBoardSkin');
 const preview=document.getElementById('boardSkinPreview');
 const caption=document.getElementById('boardSkinCaption');
 const label=document.getElementById('boardSkinName');
 const empty=document.getElementById('boardSkinEmpty');
+const realmPreview=document.getElementById('boardRealmPreview');
+const realmEmpty=document.getElementById('boardRealmEmpty');
+let realmSequence=0;
 const gallery=document.getElementById('visionGallery');
 const photo=document.getElementById('visionArt');
 const title=document.getElementById('visionTitle');
@@ -20,12 +24,29 @@ for(const select of [setting,menuSelect]){
   select.add(option);
  }
 }
+async function previewRealm(id){
+ const sequence=++realmSequence;
+ if(realmPreview){realmPreview.hidden=true;realmPreview.removeAttribute('src');}
+ if(realmEmpty){
+  realmEmpty.hidden=false;
+  realmEmpty.textContent=id==='classic'?'Reino clásico · libre':'Reino en espera de su imagen WebP';
+ }
+ const url=await publishedRealmURL(id);
+ if(sequence!==realmSequence)return;
+ if(url&&realmPreview){
+  realmPreview.src=url;
+  realmPreview.alt='Reino 3D del tablero '+findBoard(id).label;
+  realmPreview.hidden=false;
+  if(realmEmpty)realmEmpty.hidden=true;
+ }
+}
 function updatePreview(id){
  const skin=findBoard(id);
+ previewRealm(skin.id).catch(()=>{});
  for(const node of [setting,menuSelect])if(node)node.value=skin.id;
  if(label)label.textContent=skin.label;
  if(caption)caption.textContent=skin.file?
-   '64 casillas alineadas automáticamente; el marco se integra al tablero 3D.':
+   'El tablero y su reino se eligen juntos. Las 64 casillas conservan su alineación.':
    'Diseño clásico nativo, sin imagen superpuesta.';
  if(preview){
   // Only the selected texture is loaded. Avoid fetching all 13 at once on mobile.

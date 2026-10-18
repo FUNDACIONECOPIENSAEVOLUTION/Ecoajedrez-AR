@@ -58,3 +58,25 @@
  .visionViewer img{max-height:250px}
 }
 @media(prefers-reduced-motion:reduce){.boardSkinCard,.visionGallery{animation:none!important}}
+
+/* Preview the linked playable board and its kingdom as one selection. */
+.boardSkinCard{grid-template-columns:minmax(210px,1.1fr) minmax(0,1fr)}
+.boardPairImages{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.boardPairImages .boardSkinPreview,.boardRealmPreview{
+ position:relative;width:100%;aspect-ratio:1;border:2px solid #d9c393bf;border-radius:14px;
+ background:linear-gradient(130deg,#114459,#032335);
+ display:flex;align-items:center;justify-content:center;overflow:hidden;
+ box-shadow:0 0 22px #4eeed53f;
+}
+.boardRealmPreview{border-color:#7cead5a6}
+.boardRealmPreview img{width:100%;height:100%;object-fit:cover;display:block}
+.boardRealmPreview img[hidden],#boardRealmEmpty[hidden]{display:none!important}
+#boardRealmEmpty{color:#c8fcf0;font:750 12px/1.5 system-ui;text-align:center;padding:15px}
+.boardPairImages .pairTag{position:absolute;left:5px;right:5px;bottom:5px;
+ text-align:center;padding:4px;background:#03182bdc;border:1px solid #80ded280;
+ border-radius:8px;color:#e5ffee;font:800 10px system-ui}
+@media(max-width:620px){
+ .boardSkinCard{grid-template-columns:1fr}
+ .boardPairImages{max-width:450px;margin:0 auto;width:100%}
+ .boardPairImages .boardSkinPreview{margin:0;width:100%}
+}

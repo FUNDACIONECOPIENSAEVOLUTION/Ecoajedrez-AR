@@ -8,8 +8,9 @@ import { setupQrJoin } from './qr-scanner.js?v=0.12.0';
 import { initializeAccountAuth, loginGoogle, logoutFirebase, authAvailable } from './auth.js?v=0.4.0';
 import { makeSnapshot, verifyAndRestore, saveLocalMatch, readLocalMatch } from './match-state.js?v=0.4.1';
 import { createArcaneUI } from './arcane-ui.js?v=0.6.0';
-import { createMagicWorld } from './magic-world.js?v=0.13.0';
-import { createBoardSurface } from './board-skins.js?v=0.14.1';
+import { createMagicWorld } from './magic-world.js?v=0.14.3';
+import { realmTheme,publishedRealmURL } from './realm-pairing.js?v=0.14.3';
+import { createBoardSurface } from './board-skins.js?v=0.14.3';
 import { makeLastMoveOverlay } from './last-move-ghost.js?v=0.13.0';
 import { createVictoryFX } from './victory-fx.js?v=0.14.2';
 
@@ -213,7 +214,9 @@ function makeJungle(){
   }
 }
 function setTheme(next){
-  theme=next;
+  const paired=realmTheme(window.ecoBoardCatalogue?.getSelected());
+  theme=paired||next;
+  if($('theme'))$('theme').value=theme;
   const biomes={
     classic:['#cadbd0','#315d63','#1d3b4d','#0a1724'],wood:['#e8c792','#7c5136','#513122','#2b2119'],
     marble:['#f2f3ef','#5b6686','#7a8087','#191e35'],neon:['#78f4d8','#28325a','#11193b','#081027'],
@@ -237,6 +240,20 @@ function setTheme(next){
   makeJungle();
   magicEnv?.rebuild(theme);
   magicEnv?.setAR(isAR);
+}
+let realmRequest=0;
+function syncSelectedRealm(id){
+ const linked=realmTheme(id),sequence=++realmRequest;
+ magicEnv?.setRealmImage(null); // Clear previous kingdom during selection.
+ for(const el of [$('theme'),$('toolsTheme')])if(el){
+  el.disabled=Boolean(linked);
+  el.title=linked?'El entorno se selecciona junto al tablero':'Escenario libre del tablero clásico';
+ }
+ if(!linked)return;
+ setTheme(linked);
+ publishedRealmURL(id).then(url=>{
+  if(sequence===realmRequest)magicEnv?.setRealmImage(url);
+ }).catch(()=>{if(sequence===realmRequest)magicEnv?.setRealmImage(null);});
 }
 function updateStatus(){
   let text='';
@@ -792,6 +809,7 @@ function closeGameTools(){toolsPanel.hidden=true;menuButton.setAttribute('aria-e
 function openGameTools(){
  toolsPanel.hidden=false;menuButton.setAttribute('aria-expanded','true');
  $('toolsTheme').value=theme;
+ $('toolsTheme').disabled=Boolean(realmTheme(window.ecoBoardCatalogue?.getSelected()));
  $('toolsHistoryList').hidden=true;
  $('toolsClose').focus({preventScroll:true});
 }
@@ -1166,8 +1184,11 @@ if(catalogue){
 document.addEventListener('eco:board-skin-select',event=>{
   const code=event.detail?.id;
   boardSurface?.select(code).catch(()=>{});
+  syncSelectedRealm(code);
   if(typeof persistCurrentGame==='function')persistCurrentGame();
 });
-setTheme(theme);renderPieces();updateStatus();translate();
+setTheme(theme);
+syncSelectedRealm(catalogue?.getSelected()||'classic');
+renderPieces();updateStatus();translate();
 renderer.setAnimationLoop(render);
 loadChessModels();

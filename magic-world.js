@@ -14,7 +14,11 @@ export function createMagicWorld({THREE,world,scene,renderer,stage}){
  const sceneArt=new THREE.Group();
  sceneArt.name='LocalLightweightArena';world.add(sceneArt);
  const reduce=window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches===true;
- let profile='auto', particles=null, particlePhase=[];
+ let profile='auto', particles=null, particlePhase=[], realmImage=null, selectedTheme='classic';
+ function syncBackground(){
+  const src=realmImage||BIOME_BACKDROPS[selectedTheme]||BIOME_BACKDROPS.classic;
+  stage.style.setProperty('--eco-world-image','url("'+src+'")');
+ }
  const palettes={
  classic:[0x5de6cb,0xffe8a0],wood:[0xa6ff83,0xf8cf8e],
  marble:[0xabcaff,0xffecbe],neon:[0x45fff0,0x8b76ff],
@@ -42,7 +46,8 @@ export function createMagicWorld({THREE,world,scene,renderer,stage}){
   clear();
   const level=profileLevel(),activeTheme=theme in BIOME_BACKDROPS?theme:'classic';
   stage.dataset.biome=activeTheme;
-  stage.style.setProperty('--eco-world-image','url("'+BIOME_BACKDROPS[activeTheme]+'")');
+  selectedTheme=activeTheme;
+  syncBackground();
   scene.background=null;
   renderer.setClearColor(0x000000,0);
   const colors=palettes[activeTheme]||palettes.classic;
@@ -117,5 +122,6 @@ export function createMagicWorld({THREE,world,scene,renderer,stage}){
     particles.rotation.y=Math.sin(time*.00015)*.06;
   }
  }
- return {rebuild,setProfile,setAR,tick,profileLevel};
+ function setRealmImage(path){realmImage=path||null;syncBackground();}
+ return {rebuild,setProfile,setAR,setRealmImage,tick,profileLevel};
 }
