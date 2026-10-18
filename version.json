@@ -1,8 +1,8 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.14.0-beta.1",
+  "version": "0.14.1-beta.1",
   "updated": "2026-10-18",
-  "status": "13 owner-uploaded WebP gameplay boards with framed texture alignment, lazy browser CacheStorage reuse, 7 separate decorative vista artworks on menu. In-game and pre-game selection; real camera/two-device tests pending.",
+  "status": "Per-board measured 8x8 grid bounds and matching 3D frame dimensions. 7x7 cyber artwork repaired via CanvasTexture to 8x8, original selectable meshes preserved and z-fighting eliminated by hiding only their rendered top faces; mobile AR retest pending.",
   "browserValidated": false,
   "physicalARValidated": false,
   "onlinePvP": "Casual PeerJS beta, six-character code and QR with camera scanner (native BarcodeDetector / lazy in-browser jsQR), validation restricts invite origin/path. Real two-device session requires device test; unranked and unaudited anti-cheat.",
@@ -18,7 +18,7 @@
   "privacyPolicy": "privacy.html",
   "apiSecretsExposedInCurrentBuild": false,
   "liveSecureServerConfigured": false,
-  "ui": "0.14: separate 13 actual top-down chess board images from 7 independent fantasy vista- images, UI gallery and settings preview, board frame alignment slider 65–100%",
+  "ui": "0.14.1: 13 playable textures, 7 independent vista illustrations, automatic per-texture frame alignment; no manual grid coverage slider.",
   "media": {
     "source": "Owner-uploaded repo videos/ 2026-10-17",
     "intro": "Vídeo sin título-17_10_2026, 16_58.mp4",
@@ -85,7 +85,7 @@
     "basePath": "app/imagenes/tableros",
     "component": "board-skins.js",
     "selector": "board-catalog-ui.js",
-    "imageMapping": "centered fixed-aspect 8x8 3D PlaneGeometry with independently adjustable frame coverage",
+    "imageMapping": "13 calibrated per-image grid rectangles projected to exactly 8x8 world units; frame dimensions and offset match; 7x7 WebP reconstructed as 8x8",
     "gameStateMutated": false,
     "ARScalesTogether": true,
     "lazyCache": true,

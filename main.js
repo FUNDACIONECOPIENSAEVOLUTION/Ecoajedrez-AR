@@ -9,7 +9,7 @@ import { initializeAccountAuth, loginGoogle, logoutFirebase, authAvailable } fro
 import { makeSnapshot, verifyAndRestore, saveLocalMatch, readLocalMatch } from './match-state.js?v=0.4.1';
 import { createArcaneUI } from './arcane-ui.js?v=0.6.0';
 import { createMagicWorld } from './magic-world.js?v=0.13.0';
-import { createBoardSurface } from './board-skins.js?v=0.14.0';
+import { createBoardSurface } from './board-skins.js?v=0.14.1';
 import { makeLastMoveOverlay } from './last-move-ghost.js?v=0.13.0';
 
 const $ = (id) => document.getElementById(id);
@@ -87,7 +87,7 @@ function buildTiles(){
   for(let row=0;row<8;row++) for(let col=0;col<8;col++){
     const s=FILES[col]+String(8-row);
     const tile=mesh(new THREE.BoxGeometry(.99,.075,.99),(row+col)%2===0?lightTile:darkTile,col-3.5,.025,row-3.5);
-    tile.receiveShadow=true;tile.userData.square=s;tiles.add(tile);squares.push(tile);
+    tile.receiveShadow=true;tile.userData.square=s;tile.userData.boardMaterial=tile.material;tiles.add(tile);squares.push(tile);
   }
 }
 function addPart(group,geometry,mat,x,y,z){const p=mesh(geometry,mat,x,y,z);group.add(p);return p;}
@@ -222,15 +222,16 @@ function setTheme(next){
   const palette=biomes[theme]||biomes.classic;
   squares.forEach((tile,i)=>{
     const even=(Math.floor(i/8)+i%8)%2===0;
-    tile.material.color.set(even?palette[0]:palette[1]);
+    tile.userData.boardMaterial.color.set(even?palette[0]:palette[1]);
   });
   rootBase.material.color.set(palette[2]);
   scene.background=null;
   const illuminated=['neon','jungle','volcano','ice'].includes(theme);
   for(const tile of squares){
-    tile.material.emissive.set(illuminated?palette[2]:0x050e17);
-    tile.material.emissiveIntensity=illuminated?.16:.015;
-    tile.material.roughness=theme==='marble'?.25:.45;
+    const material=tile.userData.boardMaterial;
+    material.emissive.set(illuminated?palette[2]:0x050e17);
+    material.emissiveIntensity=illuminated?.16:.015;
+    material.roughness=theme==='marble'?.25:.45;
   }
   makeJungle();
   magicEnv?.rebuild(theme);
@@ -266,7 +267,7 @@ function storageKey(){
 function persistCurrentGame(){
   if(!gameStarted||mode==='online')return;
   const preferences={theme,modelSet,lang,botDifficulty,boardScale,
-    boardSkin:$('boardSkin').value,boardCoverage:Number($('boardCoverage').value),
+    boardSkin:$('boardSkin').value,
     whiteColor:$('whiteColor').value,blackColor:$('blackColor').value};
   const success=saveLocalMatch(window.localStorage,storageKey(),game,mode,preferences);
   $('saveStatus').textContent=success?'💾 Partida local guardada en este dispositivo.':'El navegador impide el guardado local.';
@@ -292,10 +293,6 @@ function restoreLastGame(){
   }
   if(pref.boardSkin && [...$('boardSkin').options].some(o=>o.value===pref.boardSkin)){
     window.ecoBoardCatalogue?.selectBoard(pref.boardSkin);
-  }
-  if(Number.isFinite(Number(pref.boardCoverage))&&pref.boardCoverage>=65&&pref.boardCoverage<=100){
-    $('boardCoverage').value=String(pref.boardCoverage);
-    $('boardCoverage').dispatchEvent(new Event('input'));
   }
   theme=$('theme').value;modelSet=$('pieceSet').value;lang=$('lang').value;botDifficulty=$('difficulty').value;
   setTheme(theme);translate();renderPieces();updateStatus();
@@ -1133,22 +1130,29 @@ magicEnv=createMagicWorld({THREE,world,scene,renderer,stage});
 ghostHint=makeLastMoveOverlay({THREE,world,positionOf,onText:text=>{$('lastMoveMessage').textContent=text;}});
 magicEnv.setProfile($('quality').value,theme);
 buildTiles();
+// Only mask TOP faces; invisible-but-raycastable top material has no color/depth
+// writes, preventing triangle artifacts while keeping chess selection untouched.
+const boardTopMask=new THREE.MeshBasicMaterial({colorWrite:false,depthWrite:false});
+function syncBoardTexture(active,width=8.45,depth=8.45){
+ for(const tile of squares){
+   const material=tile.userData.boardMaterial;
+   tile.material=active?[material,material,boardTopMask,material,material,material]:material;
+ }
+ rootBase.scale.x=active?width/8.45:1;
+ rootBase.scale.z=active?depth/8.45:1;
+}
 boardSurface=createBoardSurface({THREE,world,renderer,onStatus:message=>{
   const target=$('boardSurfaceStatus');
   if(target)target.textContent=message;
-}});
+},onSurfaceChange:({active,width,depth})=>syncBoardTexture(active,width,depth)});
 const catalogue=window.ecoBoardCatalogue;
 if(catalogue){
-  boardSurface.setCoverage(catalogue.getCoverage());
   boardSurface.select(catalogue.getSelected()).catch(()=>{});
 }
 document.addEventListener('eco:board-skin-select',event=>{
   const code=event.detail?.id;
   boardSurface?.select(code).catch(()=>{});
   if(typeof persistCurrentGame==='function')persistCurrentGame();
-});
-document.addEventListener('eco:board-grid-coverage',event=>{
-  boardSurface?.setCoverage(event.detail?.fraction);
 });
 setTheme(theme);renderPieces();updateStatus();translate();
 renderer.setAnimationLoop(render);
