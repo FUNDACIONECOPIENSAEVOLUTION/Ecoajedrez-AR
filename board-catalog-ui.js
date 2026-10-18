@@ -1,14 +1,12 @@
 // ECOAJEDREZ · v0.14 interactive chooser for REAL board textures and
 // independent decorative 'vista-' gallery. Does not manage game logic.
-import {BOARD_SKINS,VISION_ART,boardURL,findBoard} from './board-skins.js?v=0.14.0';
+import {BOARD_SKINS,VISION_ART,boardURL,findBoard} from './board-skins.js?v=0.14.1';
 const setting=document.getElementById('boardSkin');
 const menuSelect=document.getElementById('toolsBoardSkin');
 const preview=document.getElementById('boardSkinPreview');
 const caption=document.getElementById('boardSkinCaption');
 const label=document.getElementById('boardSkinName');
 const empty=document.getElementById('boardSkinEmpty');
-const coverageInput=document.getElementById('boardCoverage');
-const coverageLabel=document.getElementById('boardCoverageLabel');
 const gallery=document.getElementById('visionGallery');
 const photo=document.getElementById('visionArt');
 const title=document.getElementById('visionTitle');
@@ -27,7 +25,7 @@ function updatePreview(id){
  for(const node of [setting,menuSelect])if(node)node.value=skin.id;
  if(label)label.textContent=skin.label;
  if(caption)caption.textContent=skin.file?
-   'Textura real sobre las 64 casillas; las piezas y movimientos siguen en 3D.':
+   '64 casillas alineadas automáticamente; el marco se integra al tablero 3D.':
    'Diseño clásico nativo, sin imagen superpuesta.';
  if(preview){
   // Only the selected texture is loaded. Avoid fetching all 13 at once on mobile.
@@ -51,19 +49,7 @@ for(const node of [setting,menuSelect])node?.addEventListener('change',event=>se
 let initial='classic';
 try{initial=localStorage.getItem('ecoajedrez-board-skin')||'classic';}catch(error){}
 selectBoard(initial,false);
-let initialCoverage=86;
-try{const saved=Number(localStorage.getItem('ecoajedrez-board-coverage'));if(saved>=65&&saved<=100)initialCoverage=saved;}catch(error){}
-if(coverageInput)coverageInput.value=String(initialCoverage);
-if(coverageLabel)coverageLabel.textContent=initialCoverage+'%';
-function applyCoverage(value){
- const v=Math.max(65,Math.min(100,Math.round(Number(value)||86)));
- if(coverageLabel)coverageLabel.textContent=v+'%';
- if(coverageInput)coverageInput.value=String(v);
- try{localStorage.setItem('ecoajedrez-board-coverage',String(v));}catch(error){}
- document.dispatchEvent(new CustomEvent('eco:board-grid-coverage',{detail:{fraction:v/100}}));
-}
-coverageInput?.addEventListener('input',event=>applyCoverage(event.target.value));
-window.ecoBoardCatalogue={selectBoard,getSelected:()=>setting?.value||'classic',getCoverage:()=>Number(coverageInput?.value||86)/100};
+window.ecoBoardCatalogue={selectBoard,getSelected:()=>setting?.value||'classic'};
 function drawGallery(){
  if(!photo||!title)return;
  const selected=VISION_ART[galleryIndex];

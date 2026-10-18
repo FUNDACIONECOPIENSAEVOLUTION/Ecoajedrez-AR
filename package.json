@@ -1,11 +1,11 @@
 {
-  "name":"ecoajedrez-ar",
-  "version":"0.5.0-beta.1",
-  "private":true,
-  "type":"module",
-  "scripts":{
-    "build":"node scripts/build-pages.mjs",
-    "check-security":"node scripts/security-check.mjs",
-    "test":"node --check main.js && node --check auth.js && node --check pvp.js && node --check commands.js && node --check match-state.js && node --check worker-lib/security.js && node --test tests/*.test.mjs && node scripts/security-check.mjs"
+  "name": "ecoajedrez-ar",
+  "version": "0.14.1-beta.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-pages.mjs",
+    "check-security": "node scripts/security-check.mjs",
+    "test": "node --check main.js && node --check auth.js && node --check pvp.js && node --check commands.js && node --check match-state.js && node --check worker-lib/security.js && node --test tests/*.test.mjs && node scripts/security-check.mjs"
   }
 }
