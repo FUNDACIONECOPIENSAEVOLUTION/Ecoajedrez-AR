@@ -1,5 +1,12 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.14.6-beta.1 — 2026-10-18 · Corrección de acceso a skybox en Android
+- El Galáctico tiene seis WebP verificados y una compilación confirmó cubo completo; en celular aparecía pendiente por depender de manifest.json no disponible o desactualizado.
+- El visor ahora comprueba directamente las seis rutas con HEAD cuando el manifest no acredita el skybox; mensajes claros para archivos realmente faltantes y errores de red.
+- Botón ENTRAR AL REINO 360°, reintentar y SALIR DEL REINO, sin permisos de cámara real ni cambios a ajedrez/AR.
+- Pendiente comprobación física de la experiencia y de las costuras en Android.
+
+
 ## 0.14.5-beta.1 — 2026-10-18 · Laboratorio Skybox 360° para 13 reinos
 - Carpetas individuales app/imagenes/skybox/ID para seis caras WebP px, nx, py, ny, pz, nz de cada reino.
 - Visor separado skybox-test.html, mirada cúbica 360° con Three.js, arrastre y orientación de teléfono opcional; botón de acceso en Configuración.

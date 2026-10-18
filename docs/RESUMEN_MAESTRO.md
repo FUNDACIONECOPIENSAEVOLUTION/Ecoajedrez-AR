@@ -1,5 +1,5 @@
 # ECOAJEDREZ 3D/AR · RESUMEN MAESTRO PARA LA PRÓXIMA IA
-**Revisión vigente:** 0.14.5-beta.1 · 2026-10-18. **Leer primero la sección más reciente al final.** Leer **este archivo primero**; consultar AGENTS.md y código solo si la tarea lo requiere. Evitar reanalizar conversaciones largas.
+**Revisión vigente:** 0.14.6-beta.1 · 2026-10-18. **Leer primero la sección más reciente al final.** Leer **este archivo primero**; consultar AGENTS.md y código solo si la tarea lo requiere. Evitar reanalizar conversaciones largas.
 
 ## Identidad y fuentes de verdad
 - Repositorio canónico con permisos de escritura: https://github.com/FUNDACIONECOPIENSAEVOLUTION/Ecoajedrez-AR (rama main).
@@ -115,3 +115,10 @@ Hay **seis** archivos glTF originales autocontenidos bajo `assets/models/staunto
 - skybox-test.html, skybox-test.css, skybox-test.js forman un laboratorio Three.js CubeTextureLoader, rotación por arrastre o giroscopio opcional con autorización. En Configuración hay enlace para abrir el laboratorio directamente en el reino asociado al tablero.
 - Los skyboxes rotan desde un único centro virtual (3DoF) y parecen distantes; NO permiten caminar con paralaje real ni garantizan más nitidez que sus imágenes fuente. Futura fase VR 6DoF requeriría geometría real. AR sigue usando cámara real.
 - Validación pendiente: cargar al menos 6 caras WebP de un mismo panorama cúbico y comprobar continuidad de bordes, techo/suelo y sensores en teléfonos.
+
+## 0.14.6-beta.1 — Skybox Galáctico detectado en móvil y botón de entrada (2026-10-18)
+- Usuario subió las seis caras WebP de galactico_cosmico y además seis archivos de nombre largo idénticos por SHA; las caras cortas px/nx/py/ny/pz/nz son las únicas usadas. CI de Pages había confirmado 1/13 cubos completos, 66/66 pruebas.
+- Captura Android mostró falso negativo «faltan 6» en skybox-test.html. Motivo práctico: el frontend confiaba exclusivamente en manifest.json; si GitHub Pages entregaba una versión sin manifest o aún sin actualizar, el código asumía 0 caras.
+- Corregido skybox-test.js: si manifest no confirma conjunto listo, hace seis consultas HEAD a URLs reales publicadas y solo reporta faltantes cuando da HTTP negativo; errores de red se indican como verificación pendiente.
+- UI ahora tiene ENTRAR AL REINO 360°, Comprobar imágenes y Salir del reino. La cámara Three.js está en origen del cubemap y no solicita cámara trasera del teléfono: giro por dedo o sensores opcionales. Sigue sin batallas, desplazamiento 6DoF ni alteraciones de AR.
+- Pendiente confirmar en móvil que aparece ENTRAR y el cubo carga/permite mirar todas las direcciones, además de inspeccionar costuras/orientación con fotografías.

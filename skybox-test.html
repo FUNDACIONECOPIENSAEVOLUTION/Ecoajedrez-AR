@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; img-src 'self' data: blob:; connect-src 'self' https://cdn.jsdelivr.net; font-src 'self'; form-action 'self'; upgrade-insecure-requests">
 <title>ECOAJEDREZ · Laboratorio Skybox 360°</title>
 <meta name="description" content="Visor de prueba panorámica cúbica de seis caras por cada reino mágico de ECOAJEDREZ.">
-<link rel="stylesheet" href="./skybox-test.css?v=0.14.5">
+<link rel="stylesheet" href="./skybox-test.css?v=0.14.6">
 </head><body>
 <main id="skyRoot">
 <canvas id="skyCanvas" aria-label="Mundo 360 grados: arrastra con el ratón o el dedo para mirar alrededor"></canvas>
@@ -18,16 +18,21 @@
     <label for="skyRealmSelect">Elige el reino <select id="skyRealmSelect" aria-label="Seleccionar reino 360"></select></label>
     <button id="skyGyro" type="button" aria-pressed="false">◉ Girar con teléfono</button>
     <button id="skyReset" type="button">↺ Centrar mirada</button>
+    <button id="skyExit" type="button" hidden>✕ Salir del reino</button>
   </div>
   <p id="skyStatus" role="status" aria-live="polite">Leyendo conjuntos de seis caras…</p>
 </section>
 <section id="skyMessage" aria-live="polite" aria-label="Estado del reino">
   <h1 id="skyMessageTitle">✧ Entra al reino mágico</h1>
   <p id="skyMessageBody">Selecciona un reino para comprobar sus seis caras.</p>
-  <p class="skyHint">Arrastra para mirar a tu alrededor; en un teléfono compatible, activa el giro por sensores.</p>
+  <p class="skyHint">Este mundo es virtual: no necesita activar la cámara trasera. Al entrar, arrastra para mirar alrededor o usa los sensores del teléfono.</p>
+  <div class="skyEntryActions">
+    <button id="skyEnter" type="button" hidden>✦ ENTRAR AL REINO 360°</button>
+    <button id="skyRetry" type="button">↻ Comprobar imágenes</button>
+  </div>
   <a id="skyUpload" href="./app/imagenes/skybox/" target="_blank" rel="noopener">Carpetas de reinos</a>
 </section>
 <footer id="skyFooter">Prueba visual 3D · Mirada 360° desde un punto fijo · Sin alterar partidas ni realidad aumentada</footer>
 </main>
-<script type="module" src="./skybox-test.js?v=0.14.5"></script>
+<script type="module" src="./skybox-test.js?v=0.14.6"></script>
 </body></html>

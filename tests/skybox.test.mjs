@@ -40,17 +40,23 @@ test('Pages only publishes complete, matching, validated six-face WebP sets',()=
 });
 test('360 degree tester uses CubeTextureLoader, drag, gyro permission and no chess or XR mutation',()=>{
  assert.match(viewer,/new THREE\.CubeTextureLoader\(\)\.load\(skyboxFaceUrls\(id\)/);
+ assert.match(viewer,/method:'HEAD'/);
+ assert.match(viewer,/const checked=fromManifest\?\.ready\?fromManifest:await probeFaces\(id\)/);
+ assert.match(viewer,/enterButton\.addEventListener\('click',enterRealm\)/);
+ assert.match(viewer,/retryButton\.addEventListener\('click'/);
+ assert.match(viewer,/exitButton\.addEventListener\('click',exitRealm\)/);
+ assert.doesNotMatch(viewer,/getUserMedia/);
  assert.match(viewer,/camera\.position\.set\(0,0,0\)/);
  assert.match(viewer,/DeviceOrientationEvent\.requestPermission/);
  assert.match(viewer,/pointermove/);
  assert.match(viewer,/loaded\.colorSpace=THREE\.SRGBColorSpace/);
  assert.doesNotMatch(viewer,/game\.move\(|match\.send\(|navigator\.xr\.requestSession/);
- for(const id of ['skyCanvas','skyRealmSelect','skyGyro','skyReset','skyStatus'])
+ for(const id of ['skyCanvas','skyRealmSelect','skyGyro','skyReset','skyStatus','skyEnter','skyRetry','skyExit'])
   assert.ok(page.includes('id="'+id+'"'));
  assert.match(game,/id="skyboxTryBtn"/);
  assert.match(chooser,/realmForBoard\(skin\.id\)/);
- assert.equal(version.version,'0.14.5-beta.1');
+ assert.equal(version.version,'0.14.6-beta.1');
  assert.equal(version.skybox360.realmCount,13);
- assert.equal(version.skybox360.fullCubemapsUploadedAtRelease,0);
+ assert.equal(version.skybox360.fullCubemapsUploadedAtRelease,1);
  assert.equal(version.physicalARValidated,false);
 });
