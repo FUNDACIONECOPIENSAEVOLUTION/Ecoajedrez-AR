@@ -1,0 +1,25 @@
+/* ECOAJEDREZ 0.12.1 · 3D models pack status, not a fake download meter */
+#modelDownloadPanel{
+ display:flex;flex-direction:column;gap:10px;align-items:stretch;
+ border:1px solid #65d2b49b;background:linear-gradient(125deg,#062436ec,#0c3641dd);
+ border-radius:13px;padding:clamp(10px,1.5vw,16px);
+ box-shadow:0 6px 24px #00121b86;
+}
+#modelDownloadPanel .modelDownloadLabel{display:flex;flex-direction:column;gap:4px}
+#modelDownloadPanel strong{font:800 clamp(13px,1.4vw,17px) Georgia,serif;color:#ffdd9a}
+#modelDownloadPanel p{margin:0!important;max-width:unset!important;line-height:1.45;font-size:clamp(11px,1vw,13px);color:#f2fff8!important}
+#modelDownloadPanel #modelCacheState{color:#c0f9e0!important}
+#modelDownloadPanel progress{
+ display:block;width:100%;height:12px;overflow:hidden;
+ border-radius:20px;background:#04141f;accent-color:#6dffb4;
+ border:1px solid #b7e8d479;
+}
+#modelDownloadPanel progress::-webkit-progress-value{background:linear-gradient(90deg,#079f9a,#7dffb0)}
+#modelDownloadPanel #downloadModels{
+ min-height:44px;border:1px solid #e6d69e;color:#fff3bd;
+ font-weight:800;font-size:clamp(11px,1.1vw,13px);
+ background:linear-gradient(115deg,#09575a,#0a333e);
+ white-space:normal;
+}
+#modelDownloadPanel #downloadModels:disabled{opacity:.72;cursor:progress}
+@media(max-width:620px){#modelDownloadPanel{padding:10px}#modelDownloadPanel #downloadModels{font-size:12px}}
