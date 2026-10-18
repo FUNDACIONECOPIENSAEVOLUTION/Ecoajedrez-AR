@@ -71,7 +71,17 @@ export function createMagicWorld({THREE,world,scene,renderer,stage}){
     crystal.userData.glow=true;
    }
   }
-  // Up to 40 small sparkling points on high-quality mode only.
+  // Magic runes float on the non-playable rim; don't alter the chess 8x8 grid.
+  const runeMat=new THREE.MeshBasicMaterial({
+    color:colors[0],transparent:true,opacity:.52,
+    side:THREE.DoubleSide,depthWrite:false
+  });
+  for(const x of [-4.12,4.12])for(const z of [-4.12,4.12]){
+    const rune=mesh(new THREE.RingGeometry(.13,.195,18),runeMat.clone(),x,.066,z);
+    rune.rotation.x=-Math.PI/2;
+  }
+  runeMat.dispose();
+    // Up to 40 small sparkling points on high-quality mode only.
   const n=reduce?0:level==='low'?0:level==='high'?40:18;
   if(n){
    const positions=new Float32Array(n*3);
