@@ -4,6 +4,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { Chess } from 'https://cdn.jsdelivr.net/npm/chess.js@1.4.0/dist/esm/chess.js';
 import { parseMoveCommand } from './commands.js?v=0.4.0';
 import { PeerMatch } from './pvp.js?v=0.4.0';
+import { setupQrJoin } from './qr-scanner.js?v=0.12.0';
 import { initializeAccountAuth, loginGoogle, logoutFirebase, authAvailable } from './auth.js?v=0.4.0';
 import { makeSnapshot, verifyAndRestore, saveLocalMatch, readLocalMatch } from './match-state.js?v=0.4.1';
 import { createArcaneUI } from './arcane-ui.js?v=0.6.0';
@@ -549,6 +550,11 @@ $('loginGoogleBtn').onclick=async()=>{
 $('loginGuestBtn').onclick=()=>{
   guestLocal=true;account={uid:'local-guest',name:'INVITADO',provider:'local'};
   $('accountState').textContent='INVITADO · sesión local sin nube';restoreLastGame();transitionTo('menu');
+  // When phone's native camera opens our own room QR URL, join after guest entry.
+  // No external QR links are followed; room is prevalidated below.
+  const code=new URL(location.href).searchParams.get('room');
+  if(code&&/^[A-HJ-NP-Z2-9]{6}$/.test(code.toUpperCase()))
+   setTimeout(()=>{if(document.body.dataset.view==='menu'){$('joinCode').value=code.toUpperCase();$('joinBtn').click();}},520);
 };
 $('logoutBtn').onclick=async()=>{
   match.close();
@@ -614,9 +620,12 @@ $('downloadPgn').onclick=()=>{
   document.body.appendChild(a);a.click();a.remove();
   setTimeout(()=>URL.revokeObjectURL(url),1000);
 };
+let qrReader=null;
 $('menuJoin').onclick=()=>{
-  $('joinPanel').classList.toggle('visible');
-  if($('joinPanel').classList.contains('visible'))$('joinCode').focus();
+  const panel=$('joinPanel');
+  panel.classList.toggle('visible');
+  if(panel.classList.contains('visible'))$('joinCode').focus();
+  else qrReader?.stop();
 };
 $('menuHost').onclick=()=>{
   setGameMode('online');reset();roomVersion=0;
@@ -644,11 +653,29 @@ $('menuHost').onclick=()=>{
   }catch(error){toast(error.message||'No se pudo crear sala');setGameMode('bot');}
 };
 $('joinBtn').onclick=()=>{
+  const code=$('joinCode').value.trim().toUpperCase();
+  if(!/^[A-HJ-NP-Z2-9]{6}$/.test(code)){
+   $('qrScannerStatus').textContent='El código debe tener seis símbolos válidos. Comprueba la invitación.';
+   $('joinCode').focus();
+   return;
+  }
+  qrReader?.stop();
   setGameMode('online');reset();roomVersion=0;
-  try{match.join($('joinCode').value);$('networkStatus').textContent='CONECTANDO…';}
+  try{match.join(code);$('networkStatus').textContent='CONECTANDO…';}
   catch(error){toast(error.message);setGameMode('bot');}
 };
 $('joinCode').onkeydown=event=>{if(event.key==='Enter')$('joinBtn').click();};
+qrReader=setupQrJoin({
+ onRoom(code){
+  $('joinPanel').classList.add('visible');
+  $('joinCode').value=code;
+  $('joinBtn').click(); // Same validated PeerJS workflow as typing the six symbols.
+ },
+ onStatus(message){
+  $('qrScannerStatus').textContent=message;
+ },
+ hideJoinPanel:() => !$('joinPanel').classList.contains('visible')
+});
 $('backToMenu').onclick=()=>transitionTo('menu');
 $('startConfigured').onclick=()=>{
   setGameMode($('mode').value);
@@ -657,7 +684,13 @@ $('startConfigured').onclick=()=>{
 };
 $('gameMenuBtn').onclick=()=>gotoView('menu');
 const invite=new URL(location.href).searchParams.get('room');
-if(invite){$('joinCode').value=invite.toUpperCase();$('joinPanel').classList.add('visible');}
+if(invite){
+ const sanitized=String(invite).trim().toUpperCase();
+ if(/^[A-HJ-NP-Z2-9]{6}$/.test(sanitized)){
+  $('joinCode').value=sanitized;
+  $('joinPanel').classList.add('visible');
+ }
+}
 startAccountAuth();
 
 let arSession=null, arSpace=null, lastHit=null, arPointerStart=null;
