@@ -104,3 +104,7 @@ Se adaptó por capturas del usuario la disposición del video: ahora está **det
 
 ## ECOAJEDREZ v0.10.0-beta.1 · Nueva interfaz fantasía galáctica (2026-10-17)
 Portada panorama con arte SVG de islas, piezas 2.5D flotantes, intro/video ambiental existente detrás del contenido. Menú de cuatro portales ilustrados. Configuración tematizada con vista previa del bioma y controles verdaderos, diseño responsivo con scroll seguro en alturas limitadas. Archivos nuevos: `assets/ui/celestial-arena.svg`, `celestial.css`, `celestial-ui.js`, `tests/celestial-ui.test.mjs`; detalle `docs/ENTREGA_0.10.md`. La fuente es el mockup visual aprobado, pero la implementación HTML/SVG es reinterpretación original, no un fotograma idéntico. Google BFF no desplegado, costo $0, AR/3D y PvP sin alterar. Confirmar Actions y pruebas reales en móvil y escritorio.
+
+
+## v0.10.1-beta.1 — Corrección portada (2026-10-17)
+En captura real v0.10 el usuario detectó cuatro caracteres Unicode gigantes a la izquierda. Se retiraron del DOM; video/PNG del propietario ocupa el fondo de todo `#loginPanel` (sibling del formulario) y se superpone tarjeta legible con botones funcionales. Nueva capa `cinematic-fix.css` (último CSS en index) y corrección responsive. Versión actualizada; no cambian 3D/AR, Firebase, PeerJS ni los 6 medios originales. Ver `docs/ENTREGA_0.10.1.md` y comprobar GitHub Actions.
