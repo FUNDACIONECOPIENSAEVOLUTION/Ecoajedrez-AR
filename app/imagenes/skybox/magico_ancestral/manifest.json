@@ -1,0 +1,56 @@
+{
+  "package": "ECOAJEDREZ_02_Reino_Magico_Fantasia_Ancestral_Skybox_6_Caras_WEBP_v3_CORREGIDO",
+  "realm": "Reino Mágico / Fantasía Ancestral",
+  "resolution": "1254x1254",
+  "format": "webp",
+  "faces": {
+    "pz": {
+      "label": "frente_+Z",
+      "source": "/mnt/data/ghostwriter_images/generated/a_highly_detailed_cinematic_fantasy_interior_scen_1.png",
+      "exact_filename": "pz.webp",
+      "descriptive_filename": "reino_magico_fantasia_ancestral__pz__frente_+Z.webp",
+      "width": 1254,
+      "height": 1254
+    },
+    "nz": {
+      "label": "atras_-Z",
+      "source": "/mnt/data/biblioteca_gótica_de_astrolabios_celestiales.png",
+      "exact_filename": "nz.webp",
+      "descriptive_filename": "reino_magico_fantasia_ancestral__nz__atras_-Z.webp",
+      "width": 1254,
+      "height": 1254
+    },
+    "py": {
+      "label": "cielo_+Y",
+      "source": "/mnt/data/domo_gótico_celestial_bajo_las_estrellas.png",
+      "exact_filename": "py.webp",
+      "descriptive_filename": "reino_magico_fantasia_ancestral__py__cielo_+Y.webp",
+      "width": 1254,
+      "height": 1254
+    },
+    "px": {
+      "label": "derecha_+X",
+      "source": "/mnt/data/biblioteca_gótica_bajo_la_aurora_encendida.png",
+      "exact_filename": "px.webp",
+      "descriptive_filename": "reino_magico_fantasia_ancestral__px__derecha_+X.webp",
+      "width": 1254,
+      "height": 1254
+    },
+    "nx": {
+      "label": "izquierda_-X",
+      "source": "/mnt/data/observatorio_gótico_bajo_auroras_mágicas.png",
+      "exact_filename": "nx.webp",
+      "descriptive_filename": "reino_magico_fantasia_ancestral__nx__izquierda_-X.webp",
+      "width": 1254,
+      "height": 1254
+    },
+    "ny": {
+      "label": "suelo_-Y",
+      "source": "/mnt/data/observatorio_celestial_de_mármol_azul.png",
+      "exact_filename": "ny.webp",
+      "descriptive_filename": "reino_magico_fantasia_ancestral__ny__suelo_-Y.webp",
+      "width": 1254,
+      "height": 1254
+    }
+  }
+}

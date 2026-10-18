@@ -1,0 +1,15 @@
+ECOAJEDREZ - Paquete 02 - Reino Mágico / Fantasía Ancestral - V3 Corregido
+
+Caras exactas para skybox cúbico:
+px.webp = Derecha (+X)
+nx.webp = Izquierda (-X)
+py.webp = Cielo / Techo (+Y)
+ny.webp = Suelo / Piso (-Y)
+pz.webp = Frente (+Z)
+nz.webp = Atrás (-Z)
+
+Criterio de corrección aplicado:
+- Las cuatro caras verticales fueron rehechas con cámara centrada y vista recta.
+- No muestran piso extendido; solo la base arquitectónica inferior para empatar con ny.webp.
+- ny.webp es una vista cenital del suelo.
+- py.webp es una vista totalmente hacia el techo.
