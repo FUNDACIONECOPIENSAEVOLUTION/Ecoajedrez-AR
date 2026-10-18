@@ -4,13 +4,30 @@ import path from 'node:path';
 const dest='dist';
 fs.rmSync(dest,{recursive:true,force:true});
 fs.mkdirSync(dest,{recursive:true});
-const files=['index.html','arcane.css','opening.css','opening.js','celestial.css','cinematic-fix.css','celestial-ui.js','arcane-ui.js','privacy.html','version.json','main.js','auth.js','commands.js','pvp.js','match-state.js','ecoajedrez.PNG','_headers'];
+const files=['index.html','arcane.css','opening.css','opening.js','celestial.css','cinematic-fix.css','adventure.css','asset-cache.js','adventure-ui.js','sw.js','celestial-ui.js','arcane-ui.js','privacy.html','version.json','main.js','auth.js','commands.js','pvp.js','match-state.js','ecoajedrez.PNG','_headers'];
 for(const name of files){
  if(!fs.existsSync(name))throw Error('Missing asset: '+name);
  fs.copyFileSync(name,path.join(dest,name));
 }
 fs.cpSync('assets/models',path.join(dest,'assets/models'),{recursive:true});
 fs.cpSync('assets/ui',path.join(dest,'assets/ui'),{recursive:true});
+
+// Eight user-uploaded and specifically approved visual cards: only these named files.
+const cardNames=[
+ '01_vs_computadora.webp','02_dos_jugadores.webp','03_duelo_online.webp','04_unirme_partida.webp',
+ '05_bosque_encantado.webp','06_templo_arcano.webp','07_ciudad_flotante.webp','08_volcan_celestial.webp'
+];
+const cardDest=path.join(dest,'app/imagenes/tarjetas');
+fs.mkdirSync(cardDest,{recursive:true});
+for(const name of cardNames){
+ const src=path.join('app/imagenes/tarjetas',name);
+ if(!fs.existsSync(src))throw Error('Missing approved fantasy card: '+name);
+ const file=fs.readFileSync(src);
+ if(file.length<1024||file.length>3000000 || file.toString('ascii',0,4)!=='RIFF'||file.toString('ascii',8,12)!=='WEBP')
+  throw Error('Invalid or unexpectedly large WebP: '+name);
+ fs.writeFileSync(path.join(cardDest,name),file);
+}
+
 
 // Explicitly publish the user-approved game media. Never publish whole arbitrary directories.
 const mediaFiles=[
