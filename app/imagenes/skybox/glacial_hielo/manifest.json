@@ -1,0 +1,88 @@
+{
+  "nombre": "Reino 06 - Glacial / Reino de Hielo",
+  "formato": "WebP",
+  "dimensiones": [
+    1254,
+    1254
+  ],
+  "coordenadas": "Three.js CubeTexture +X,-X,+Y,-Y,+Z,-Z",
+  "cobertura": "Seis caras cuadradas; suelo cenital, cielo hacia arriba",
+  "origen": "Recortes de lamina ilustrada de referencia, remuestreados a 1254x1254; no son seis renders originales nativos.",
+  "continuidad": "Bordes suavizados matematicamente con proyeccion y mezcla angular; la coherencia geometrica de una escena 3D reconstruida no queda garantizada.",
+  "resolucion_origen_cara_aprox": [
+    368,
+    368
+  ],
+  "caras": {
+    "px": {
+      "archivo_corto": "px.webp",
+      "archivo_largo": "ECOAJEDREZ_06_Reino_Glacial_Reino_de_Hielo_px_Derecha_+X.webp",
+      "orientacion": "Derecha",
+      "eje": "+X"
+    },
+    "nx": {
+      "archivo_corto": "nx.webp",
+      "archivo_largo": "ECOAJEDREZ_06_Reino_Glacial_Reino_de_Hielo_nx_Izquierda_-X.webp",
+      "orientacion": "Izquierda",
+      "eje": "-X"
+    },
+    "py": {
+      "archivo_corto": "py.webp",
+      "archivo_largo": "ECOAJEDREZ_06_Reino_Glacial_Reino_de_Hielo_py_Techo_Cielo_+Y.webp",
+      "orientacion": "Techo_Cielo",
+      "eje": "+Y"
+    },
+    "ny": {
+      "archivo_corto": "ny.webp",
+      "archivo_largo": "ECOAJEDREZ_06_Reino_Glacial_Reino_de_Hielo_ny_Suelo_Cenital_-Y.webp",
+      "orientacion": "Suelo_Cenital",
+      "eje": "-Y"
+    },
+    "pz": {
+      "archivo_corto": "pz.webp",
+      "archivo_largo": "ECOAJEDREZ_06_Reino_Glacial_Reino_de_Hielo_pz_Frente_+Z.webp",
+      "orientacion": "Frente",
+      "eje": "+Z"
+    },
+    "nz": {
+      "archivo_corto": "nz.webp",
+      "archivo_largo": "ECOAJEDREZ_06_Reino_Glacial_Reino_de_Hielo_nz_Atras_-Z.webp",
+      "orientacion": "Atras",
+      "eje": "-Z"
+    }
+  },
+  "revisiones_bordes": {
+    "px:left->pz:right": {
+      "mean_diff": 0.0,
+      "reversed": false
+    },
+    "px:right->nz:left": {
+      "mean_diff": 0.0,
+      "reversed": false
+    },
+    "nx:right->pz:left": {
+      "mean_diff": 0.0,
+      "reversed": false
+    },
+    "nx:left->nz:right": {
+      "mean_diff": 0.0,
+      "reversed": false
+    },
+    "py:bottom->pz:top": {
+      "mean_diff": 0.0,
+      "reversed": false
+    },
+    "ny:top->pz:bottom": {
+      "mean_diff": 0.0,
+      "reversed": false
+    },
+    "py:top->nz:top": {
+      "mean_diff": 0.0,
+      "reversed": true
+    },
+    "ny:bottom->nz:bottom": {
+      "mean_diff": 0.0,
+      "reversed": true
+    }
+  }
+}

@@ -1,0 +1,21 @@
+ECOAJEDREZ - SKYBOX 06 - REINO GLACIAL / REINO DE HIELO
+
+Exactos (subir estas seis imagenes juntas):
+px.webp - derecha +X
+nx.webp - izquierda -X
+py.webp - cielo/techo +Y
+ny.webp - suelo cenital -Y
+pz.webp - frente +Z
+nz.webp - atras -Z
+
+La carpeta descriptivos contiene exactamente las mismas seis imagenes con nombres largos.
+Todas son WebP cuadradas de 1254 x 1254.
+
+AVISO DE CALIDAD Y GEOMETRIA:
+Las imagenes se extrajeron de una lamina visual compuesta (368x368 por cara antes del remuestreo a 1254).
+Se aplico interpolacion y mezcla de bordes basada en direcciones cubicas para suavizar discontinuidades visuales.
+Esto NO equivale a seis fotografias/renders perfectos de un unico punto con camara de 90 grados.
+La geometria de algunos edificios y paisajes puede no corresponder entre caras, aunque los pixeles cercanos al borde esten mezclados.
+Compruebe la orientacion de cada cara en su motor; Three.js puede usar una convencion de volteo segun el importador.
+
+El suelo ny es una vista superior directa, no perspectiva diagonal. El techo py mira hacia arriba.
