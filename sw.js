@@ -12,7 +12,10 @@ const ASSETS=[
  'app/imagenes/tarjetas/08_volcan_celestial.webp',
  ...['pawn','rook','knight','bishop','queen','king'].map(name=>'assets/models/staunton/'+name+'.gltf')
 ];
-const allowed=new Set(ASSETS.map(path=>new URL(path,self.registration.scope).pathname));
+// v0.14: 13 approved gameplay boards, lazy fetched when user selects one.
+const boardNames=["tablero_alquímico_de_líquidos_mágicos.webp","tablero_celta_mágico_de_ajedrez.webp","tablero_cibernético_de_neón_magenta_y_cian.webp","tablero_cósmico_de_nebulosas_y_obsidiana.webp","tablero_cósmico_de_plata_y_amatista.webp","tablero_de_ajedrez_mágico_con_vetas_doradas.webp","tablero_de_atlantis_en_nácar_y_oro.webp","tablero_de_hielo_mágico_con_runas_luminosas.webp","tablero_de_lava_y_basalto.webp","tablero_egipcio_de_oro_y_lapislázuli.webp","tablero_gótico_de_almas_espectrales.webp","tablero_místico_de_cristales_y_runas.webp","tablero_steampunk_de_engranajes_y_cobre.webp"];
+const boardPaths=boardNames.map(name=>'app/imagenes/tableros/'+encodeURIComponent(name));
+const allowed=new Set([...ASSETS,...boardPaths].map(path=>new URL(path,self.registration.scope).pathname));
 self.addEventListener('install',event=>{
  // Don't force preload: bootstrap controls downloads/progress and user can skip intro.
  self.skipWaiting();
