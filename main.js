@@ -989,7 +989,7 @@ function placeARBoard(){
   world.visible=true;boardPlaced=true;reticle.visible=false;hitRequested=true;
   arPortal?.setVisible(true); // Decoration tied to tracked board only, never an opaque room.
   $('placeArBtn').style.display='none';setARPicking('touch');
-  arHint('Tablero fijado. Toca una pieza y su destino para jugar.');
+  arHint('Tablero fijado con portal decorativo. Toca una pieza y su destino para jugar. Mantén visible tu entorno real.');
   return true;
 }
 function setHologram(){

@@ -8,7 +8,7 @@ export function createARChessPortal({THREE,world}){
  const geometry=new THREE.TorusGeometry(2.15,.065,8,72,Math.PI);
  const arch=new THREE.Mesh(geometry,azure);
  // Vertical glowing arch just beyond the far edge of the board (z=-4.8).
- arch.rotation.z=Math.PI/2;arch.position.set(0,2.08,-5.05);
+ arch.position.set(0,2.08,-5.05);
  root.add(arch);
  for(const x of [-2.15,2.15]){
   const column=new THREE.Mesh(new THREE.CylinderGeometry(.075,.11,2.18,10),gold);
