@@ -1,8 +1,8 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.14.8-beta.1",
+  "version": "0.14.9-beta.1",
   "updated": "2026-10-18",
-  "status": "Configuración de tres experiencias jugables: 3D clásico, Reino 360° con cubemap de seis caras y AR con portal decorativo anclado por hit-test. Nombres del reino y tablero alineados. No se ha implementado todavía calibración espacial segura para caminar.",
+  "status": "Tres WebP aprobados se muestran en las tarjetas de 3D clásico, Reino 360 y AR con portal. Selector responsivo sin deformación y sin modificar la jugabilidad de ningún modo.",
   "browserValidated": false,
   "physicalARValidated": false,
   "onlinePvP": "Casual PeerJS beta, six-character code and QR with camera scanner (native BarcodeDetector / lazy in-browser jsQR), validation restricts invite origin/path. Real two-device session requires device test; unranked and unaudited anti-cheat.",
@@ -173,5 +173,24 @@
     "walkableRealms": false,
     "roomSafetyMapping": false,
     "physicalValidationPending": true
+  },
+  "experienceModeCards": {
+    "directory": "app/imagenes/interfaces/modos",
+    "files": [
+      {
+        "experience": "normal",
+        "file": "01_3d_clasico.webp"
+      },
+      {
+        "experience": "skybox",
+        "file": "02_reino_360.webp"
+      },
+      {
+        "experience": "ar",
+        "file": "03_ar_con_portal.webp"
+      }
+    ],
+    "ui": "Three cards desktop, compact rows on mobile; square originals, no stretching",
+    "visualDeviceValidationPending": true
   }
 }

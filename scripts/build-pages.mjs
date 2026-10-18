@@ -37,7 +37,7 @@ const modeCardDest=path.join(dest,modeCardSource);
 fs.mkdirSync(modeCardDest,{recursive:true});
 for(const name of modeCardNames){
  const src=path.join(modeCardSource,name);
- if(!fs.existsSync(src))continue; // Images uploaded by owner later.
+ if(!fs.existsSync(src))throw Error('Missing approved experience mode WebP: '+name);
  const data=fs.readFileSync(src);
  if(data.length<1024||data.length>3000000||
     data.toString('ascii',0,4)!=='RIFF'||data.toString('ascii',8,12)!=='WEBP')
