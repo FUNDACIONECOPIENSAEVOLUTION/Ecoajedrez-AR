@@ -1,0 +1,14 @@
+/* ECOAJEDREZ full-skybox gameplay UI. A small menu remains reachable at all times. */
+#realmMiniControls[hidden]{display:none!important}
+#realmMiniControls{position:fixed;right:12px;top:max(10px,env(safe-area-inset-top));z-index:7;
+ display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;max-width:min(95vw,490px)}
+#realmMiniControls button{padding:10px 11px;min-height:42px;min-width:48px;cursor:pointer;
+ border:1px solid #8affdd;border-radius:12px;color:#effff9;background:#0a2437ed;
+ box-shadow:0 3px 14px #0008;font:800 12px system-ui;backdrop-filter:blur(9px)}
+#realmMiniControls button:focus-visible{outline:3px solid #ffe7a1;outline-offset:2px}
+body.realm-hud-hidden #gameHud{display:none!important}
+body.realm-hud-hidden #commandHint{display:none!important}
+body.realm-active #scene{background:#05111e}
+body.xr-active #realmMiniControls{display:none!important}
+@media(max-width:620px){#realmMiniControls{top:max(7px,env(safe-area-inset-top));left:8px;right:8px}
+ #realmMiniControls button{font-size:11px;padding:8px;flex:1 1 auto}}
