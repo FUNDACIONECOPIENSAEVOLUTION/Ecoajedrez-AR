@@ -1,5 +1,5 @@
 # ECOAJEDREZ 3D/AR · RESUMEN MAESTRO PARA LA PRÓXIMA IA
-**Revisión vigente:** 0.14.8-beta.1 · 2026-10-18. **Leer primero la sección más reciente al final.** Leer **este archivo primero**; consultar AGENTS.md y código solo si la tarea lo requiere. Evitar reanalizar conversaciones largas.
+**Revisión vigente:** 0.14.9-beta.1 · 2026-10-18. **Leer primero la sección más reciente al final.** Leer **este archivo primero**; consultar AGENTS.md y código solo si la tarea lo requiere. Evitar reanalizar conversaciones largas.
 
 ## Identidad y fuentes de verdad
 - Repositorio canónico con permisos de escritura: https://github.com/FUNDACIONECOPIENSAEVOLUTION/Ecoajedrez-AR (rama main).
@@ -137,3 +137,9 @@ Hay **seis** archivos glTF originales autocontenidos bajo `assets/models/staunto
 - AR con portal = cámara real, tablero colocado por hit-test de WebXR y arco 3D decorativo semitransparente agregado por ar-portal.js al grupo world del tablero. Sin hit-test anclado, solo holograma y SIN arco: no prometer seguimiento físico donde no existe.
 - Aún NO hay habitación virtual completa ni calibración automática de espacio transitable o seguridad física. La fase de caminar inmerso queda como trabajo futuro, preferiblemente con límites, detección de obstáculos y pruebas reales. Los juegos 3D/360 siguen siendo experiencia virtual rotacional 3DoF.
 - Se agregaron tarjetas de selección responsivas, mayor contraste de controles nativos y nuevas pruebas tests/experience-modes.test.mjs. Faltan pruebas visuales reales en Android y pruebas físicas AR.
+
+## 0.14.9-beta.1 — Imágenes de selección de tres experiencias (2026-10-18)
+- Las 3 imágenes originales WebP subidas por el usuario se enlazaron a las tarjetas en Configuración, exactamente con estas parejas: 3D clásico = `app/imagenes/interfaces/modos/01_3d_clasico.webp`, Reino 360° = `02_reino_360.webp`, AR con portal = `03_ar_con_portal.webp`.
+- `index.html`: cada imagen corresponde al radio `normal`, `skybox` o `ar`; conserva nombre y explicación y las tres acciones de jugar. `experience-modes.css`: respeta imágenes originales cuadradas con `object-fit:contain` y evita deformación; PC muestra tres tarjetas en fila y móvil tres filas compactas imagen-texto.
+- `scripts/build-pages.mjs`: listas blancas exactas de los tres archivos y validación real WebP ≤3MB; ahora exige la presencia de todas las tarjetas, sin publicar toda la carpeta arbitrariamente. Las tres subidas fueron confirmadas en GitHub antes del cambio.
+- `tests/experience-mode-images.test.mjs` verifica asociación, formato y maquetación; comprobar CI y publicación. Aún pendiente inspección visual física de tablet/celular. Ninguna regla, modelo, escena 360 ni sesión WebXR fue modificada.

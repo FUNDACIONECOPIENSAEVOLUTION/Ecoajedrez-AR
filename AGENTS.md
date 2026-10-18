@@ -1,4 +1,4 @@
-# LECTURA RÁPIDA OBLIGATORIA (ECOAJEDREZ v0.14.8-beta.1)
+# LECTURA RÁPIDA OBLIGATORIA (ECOAJEDREZ v0.14.9-beta.1)
 Antes de leer el historial extenso, abrir `docs/RESUMEN_MAESTRO.md` (resumen canónico, mantenido por versión) y `docs/ENTREGA_0.11.md` si se modifica la UI, primer inicio o caché. Los ocho WebP están en `app/imagenes/tarjetas/` y YA se publican; nunca pedirlos otra vez sin comprobar GitHub. Conserva modo invitado, AR, privacidad y $0.
 
 # Instrucciones permanentes para ChatGPT, Codex y otras IAs — ECOAJEDREZ AR

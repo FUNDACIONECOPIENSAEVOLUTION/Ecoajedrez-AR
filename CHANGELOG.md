@@ -1,5 +1,11 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.14.9-beta.1 — 2026-10-18 · Tarjetas de selección ilustradas
+- Tres WebP ligeros del propietario visibles en 3D clásico, Reino 360° y AR con portal, asignados al radio correcto en Configuración.
+- Diseño en tres columnas en escritorio y filas de imagen/texto en móvil, imágenes cuadradas sin estiramiento ni recorte, selección accesible.
+- Publicación en Pages con lista blanca de recursos, sin cambiar lógica de ajedrez/AR; pruebas regresivas y revisión móvil pendientes.
+
+
 ## 0.14.8-beta.1 — 2026-10-18 · Tres experiencias de juego
 - Configuración elige contrincante y visualización por separado: 3D clásico / Skybox 360° jugable / AR con portal.
 - Se muestran juntos nombre del reino y tablero; se elimina el enlace de laboratorio del flujo principal y se comprueban las 6 caras antes de jugar en Skybox.
