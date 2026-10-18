@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-const paths=['index.html','main.js','arcane-ui.js','celestial-ui.js','adventure-ui.js','asset-cache.js','sw.js','auth.js','pvp.js','commands.js','match-state.js','version.json','worker-lib/security.js'];
+const paths=['index.html','main.js','arcane-ui.js','celestial-ui.js','adventure-ui.js','qr-scanner.js','asset-cache.js,'sw.js','auth.js','pvp.js','commands.js','match-state.js','version.json','worker-lib/security.js'];
 const patterns=[
  ['Google/Firebase API keys',/AIza[A-Za-z0-9_-]{20,}/],
  ['Private keys',/-----BEGIN\s+(?:RSA |EC |OPENSSH )?PRIVATE KEY-----/],
