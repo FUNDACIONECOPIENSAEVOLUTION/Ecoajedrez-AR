@@ -1,5 +1,14 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.13.0-beta.1 — 2026-10-18
+- Fondo mágico 3D con ambientes de bosque, templo, ciudad y volcán mediante imágenes del usuario y geometría ligera, con perfiles de rendimiento.
+- Última jugada: silueta temporal, origen y destino visibles solo en el dispositivo solicitante. Online no permite deshacer.
+- Acceso AR junto a estrella y menú de partida ampliado (historial, PGN, escenarios, legal y salir).
+- Aviso inicial de condiciones de uso, política de privacidad y permisos contextualizados. Términos provisionales sujetos a revisión institucional.
+- Añadidos magic-world.js, last-move-ghost.js, magic-game.css, legal-consent.js y terms.html.
+- Se conserva caché de piezas, intro, QR y reglas. Más detalles en docs/ENTREGA_0.13.md.
+
+
 ## 0.12.1-beta.1 — 2026-10-18 · Modelos 3D cacheados sin descargas duplicadas
 - Validación de las seis figuras glTF originales de ajedrez autocontenidas en `assets/models/staunton/`.
 - Unificada la descarga en `asset-cache.js` con la lectura de `GLTFLoader.parseAsync` para que intro y partida compartan solicitudes sin duplicaciones.
