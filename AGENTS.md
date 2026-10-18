@@ -1,4 +1,4 @@
-# LECTURA RÁPIDA OBLIGATORIA (ECOAJEDREZ v0.13.0-beta.1)
+# LECTURA RÁPIDA OBLIGATORIA (ECOAJEDREZ v0.14.0-beta.1)
 Antes de leer el historial extenso, abrir `docs/RESUMEN_MAESTRO.md` (resumen canónico, mantenido por versión) y `docs/ENTREGA_0.11.md` si se modifica la UI, primer inicio o caché. Los ocho WebP están en `app/imagenes/tarjetas/` y YA se publican; nunca pedirlos otra vez sin comprobar GitHub. Conserva modo invitado, AR, privacidad y $0.
 
 # Instrucciones permanentes para ChatGPT, Codex y otras IAs — ECOAJEDREZ AR
@@ -121,3 +121,12 @@ Ver `docs/ENTREGA_0.11.1.md` y `docs/RESUMEN_MAESTRO.md`. El PNG limpio aprobado
 
 ## Actualización v0.12.0-beta.1
 Nuevo `qr-scanner.js` para escanear QR de PeerJS con validación mismo origen/ruta y cierre de cámara; `readability-qr.css` último CSS para textos legibles; `opening.js` inicia intro por sesión nueva con video 10s máximo y precarga paralela de 14 assets. Código manual sigue vigente. Consultar `docs/ENTREGA_0.12.md` y `docs/RESUMEN_MAESTRO.md`. No mezclar Firebase ni 3 LINE-AR. Prueba QR real entre dos celulares todavía pendiente.
+
+## Actualización v0.14.0-beta.1 — Tableros de imagen reales y vistas decorativas
+- **El usuario aclaró:** hay **13** WebP `tablero_...` que muestran tablero real con marco, piezas deben jugar ENCIMA; y **7** WebP `vista-...` que son solo imágenes bonitas para ambientar el menú (NO vistas previas de tableros). Catálogo exacto en `board-skins.js` y visor en `board-catalog-ui.js`.
+- Pantalla Configuración: selector `#boardSkin`, miniatura del tablero real, `#boardCoverage` (encuadre 65–100% con valor inicial 86% para marcos). En menú de partida `#toolsBoardSkin` cambia el diseño durante una partida sin afectar estado chess.js ni PeerJS.
+- `board-skins.js`: textura WebP sRGB en superficie plana 3D 8×8 sobre casillas existentes, sin raycast; `THREE.GridHelper` tenue revela límites. La superficie es hija de `world`, así se escala automáticamente con el tablero en AR. Si falla carga se queda diseño clásico. **No se conoce todavía el recorte exacto dentro de cada imagen:** el slider permite afinar y es importante comprobar físicamente alineación tras publicación.
+- Menú principal: `#visionGallery` contiene arte `vista-` con botones anterior/siguiente, sin vincularlo con selección de tablero.
+- CacheStorage/SW incluye 13 tableros como rutas permitidas ON-DEMAND; no cargar automáticamente 13 x 0.5–0.8 MB al inicio, solo el elegido. Mantener id de caché `v0.11.0` para no volver a descargar antiguos 14 recursos. Las vistas usan caché HTTP normal de navegador.
+- Build whitelist publica únicamente 13 + 7 archivos autorizados y valida WebP. `board-catalog.css` responsive, tests en `tests/board-skins.test.mjs`. Detalles `docs/ENTREGA_0.14.md`.
+- No se han probado físicamente todos los encuadres ni la modalidad AR con estas imágenes. No tocar jugabilidad/reglas/autenticación en esta entrega.
