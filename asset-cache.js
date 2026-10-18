@@ -7,7 +7,10 @@ const resourcePaths=[
  ...['01_vs_computadora','02_dos_jugadores','03_duelo_online','04_unirme_partida','05_bosque_encantado','06_templo_arcano','07_ciudad_flotante','08_volcan_celestial'].map(file=>'./app/imagenes/tarjetas/'+file+'.webp'),
  ...['pawn','rook','knight','bishop','queen','king'].map(file=>'./assets/models/staunton/'+file+'.gltf')
 ];
-const resources=new Set(resourcePaths.map(file=>new URL(file,document.baseURI).pathname));
+// On-demand only: do NOT prefetch 13 extra 0.5–0.8MB board skins on every visit.
+const boardFiles=["tablero_alquímico_de_líquidos_mágicos.webp","tablero_celta_mágico_de_ajedrez.webp","tablero_cibernético_de_neón_magenta_y_cian.webp","tablero_cósmico_de_nebulosas_y_obsidiana.webp","tablero_cósmico_de_plata_y_amatista.webp","tablero_de_ajedrez_mágico_con_vetas_doradas.webp","tablero_de_atlantis_en_nácar_y_oro.webp","tablero_de_hielo_mágico_con_runas_luminosas.webp","tablero_de_lava_y_basalto.webp","tablero_egipcio_de_oro_y_lapislázuli.webp","tablero_gótico_de_almas_espectrales.webp","tablero_místico_de_cristales_y_runas.webp","tablero_steampunk_de_engranajes_y_cobre.webp"];
+const boardPaths=boardFiles.map(name=>'./app/imagenes/tableros/'+encodeURIComponent(name));
+const resources=new Set([...resourcePaths,...boardPaths].map(file=>new URL(file,document.baseURI).pathname));
 const modelPaths=resourcePaths.filter(path=>path.endsWith('.gltf'));
 const inFlight=new Map();
 let cachePromise=null;
