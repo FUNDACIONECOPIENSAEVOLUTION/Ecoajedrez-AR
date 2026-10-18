@@ -8,6 +8,8 @@ import { setupQrJoin } from './qr-scanner.js?v=0.12.0';
 import { initializeAccountAuth, loginGoogle, logoutFirebase, authAvailable } from './auth.js?v=0.4.0';
 import { makeSnapshot, verifyAndRestore, saveLocalMatch, readLocalMatch } from './match-state.js?v=0.4.1';
 import { createArcaneUI } from './arcane-ui.js?v=0.6.0';
+import { createMagicWorld } from './magic-world.js?v=0.13.0';
+import { makeLastMoveOverlay } from './last-move-ghost.js?v=0.13.0';
 
 const $ = (id) => document.getElementById(id);
 const canvas = $('render'), stage = $('scene');
@@ -33,7 +35,7 @@ const game = new Chess();
 const world = new THREE.Group(), tiles = new THREE.Group(), pieces = new THREE.Group();
 const decorations = new THREE.Group(), markers = new THREE.Group();
 world.add(tiles, decorations, pieces, markers); scene.add(world);
-let arcaneUI=null;
+let arcaneUI=null,magicEnv=null,ghostHint=null;
 const rootBase = new THREE.Mesh(new THREE.BoxGeometry(8.45, .35, 8.45), new THREE.MeshStandardMaterial({color:0x213544, metalness:.5, roughness:.28}));
 rootBase.position.y = -.23; rootBase.receiveShadow = true; tiles.add(rootBase);
 const raycaster = new THREE.Raycaster(), point = new THREE.Vector2();
@@ -180,13 +182,7 @@ function renderPieces(){
     if(p.color==='b')g.rotation.y=Math.PI;
     pieces.add(g);
   }
-  const verbose=game.history({verbose:true});
-  const latest=verbose[verbose.length-1];
-  if(latest)for(const sq of [latest.from,latest.to]){
-    const loc=positionOf(sq);
-    const outline=mesh(new THREE.CylinderGeometry(.46,.46,.01,24),lastMoveMat,loc.x,.103,loc.z);
-    outline.userData.square=sq; markers.add(outline);
-  }
+  // Local-only previous-move hint is shown on request, never transmitted online.
   if(selected){
     const source=positionOf(selected);
     const outline=mesh(new THREE.CylinderGeometry(.46,.46,.015,24),selectedMat,source.x,.105,source.z);
@@ -225,8 +221,16 @@ function setTheme(next){
     tile.material.color.set(even?palette[0]:palette[1]);
   });
   rootBase.material.color.set(palette[2]);
-  scene.background=isAR?null:new THREE.Color(palette[3]);
+  scene.background=null;
+  const illuminated=['neon','jungle','volcano','ice'].includes(theme);
+  for(const tile of squares){
+    tile.material.emissive.set(illuminated?palette[2]:0x050e17);
+    tile.material.emissiveIntensity=illuminated?.16:.015;
+    tile.material.roughness=theme==='marble'?.25:.45;
+  }
   makeJungle();
+  magicEnv?.rebuild(theme);
+  magicEnv?.setAR(isAR);
 }
 function updateStatus(){
   let text='';
@@ -297,6 +301,7 @@ function playMove(from,to,promotion='q',source='local'){
     if(!moved)return false;
     captured=Boolean(moved.captured);
   }catch(error){return false;}
+  ghostHint?.clear();
   selected=null;arcaneUI?.selected(null);moving=null;renderPieces();animateMove(from,to);
   arcaneUI?.move(to,captured);updateStatus();
   if(mode==='online'){roomVersion++;broadcastState();}
@@ -389,7 +394,7 @@ function animateMove(from,to){
   moving={piece:target,a,b,start:performance.now(),duration:370};
 }
 function reset(){
-  clearTimeout(timer);game.reset();selected=null;arcaneUI?.selected(null);moving=null;renderPieces();updateStatus();
+  ghostHint?.clear();clearTimeout(timer);game.reset();selected=null;arcaneUI?.selected(null);moving=null;renderPieces();updateStatus();
   if(mode==='online' && match.host){roomVersion++;broadcastState();}
   else if(mode!=='online')persistCurrentGame();
 }
@@ -525,7 +530,7 @@ $('undo').onclick=()=>{
   if(mode==='online'){toast('Deshacer no está disponible durante un duelo online.');return;}
   clearTimeout(timer);
   if(game.history().length){
-    game.undo();
+    ghostHint?.clear();game.undo();
     if(mode==='bot' && game.turn()==='b' && game.history().length)game.undo();
     selected=null;moving=null;renderPieces();updateStatus();persistCurrentGame();
   }
@@ -564,7 +569,7 @@ const match=new PeerMatch({
       return;
     }
     roomVersion=message.version;
-    if(changed){selected=null;arcaneUI?.selected(null);moving=null;renderPieces();}
+    if(changed){ghostHint?.clear();selected=null;arcaneUI?.selected(null);moving=null;renderPieces();}
     updateStatus();
   },
   onReady(isHost){
@@ -861,7 +866,7 @@ async function startAR(){
     arInterrupted=false;voluntaryArExit=false;
     $('arRecoveryPanel').classList.remove('visible');
     arSession=session;isAR=true;boardPlaced=false;lastHit=null;hitSource=null;hitRequested=false;
-    world.visible=false;scene.background=null;orbit.enabled=false;
+    world.visible=false;scene.background=null;orbit.enabled=false;magicEnv?.setAR(true);
     showAR();
     session.addEventListener('select',onARXRSelect);
     session.addEventListener('end',finishAR);
@@ -893,7 +898,7 @@ function finishAR(){
   pointers.clear();arPointerStart=null;
   world.position.set(0,0,0);world.quaternion.identity();world.scale.setScalar(1);
   world.visible=true;reticle.visible=false;orbit.enabled=true;
-  hideAR();setTheme(theme);
+  hideAR();setTheme(theme);magicEnv?.setAR(false);
   resize();
   offerARRecovery();
   voluntaryArExit=false;
@@ -1066,9 +1071,14 @@ function render(timestamp,frame){
   }
   if(theme==='jungle'&&!isAR)decorations.children.forEach((p,i)=>{p.rotation.z=Math.sin(timestamp*.0016+i*.8)*.12;});
   arcaneUI?.tick(timestamp||performance.now());
+  magicEnv?.tick(timestamp||performance.now());
   renderer.render(scene,camera);
 }
 arcaneUI=createArcaneUI({THREE,world});
+try{const saved=localStorage.getItem('ecoajedrez-graphics-profile');if(['auto','low','medium','high'].includes(saved))$('quality').value=saved;}catch(e){}
+magicEnv=createMagicWorld({THREE,world,scene,renderer,stage});
+ghostHint=makeLastMoveOverlay({THREE,world,positionOf,onText:text=>{$('lastMoveMessage').textContent=text;}});
+magicEnv.setProfile($('quality').value,theme);
 buildTiles();setTheme(theme);renderPieces();updateStatus();translate();
 renderer.setAnimationLoop(render);
 loadChessModels();
