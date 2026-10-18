@@ -108,3 +108,7 @@ El usuario rechazó la superposición lateral imagen+video 0.8 por franjas/recor
 
 ## v0.10.0-beta.1 · Arena celestial inspirada en interfaces aprobadas
 Leer `docs/ENTREGA_0.10.md`. Nueva interfaz panorámica con gráfica **SVG original** `assets/ui/celestial-arena.svg`, CSS animado `celestial.css`, acciones reales/vista previa `celestial-ui.js`. No son los botones rasterizados de las imágenes conceptuales del usuario: se preservan los botones DOM reales, local, computador, AR y PeerJS. Las imágenes conceptuales se usan como referencia aprobada; no afirmar reconstrucción píxel-perfecta. En menú usar cuatro tarjetas desktop/dos móvil; settings paisaje+preview; `overflow-y:auto` evita cortes en viewport corto. Incrementar versión y cache-busting en todos los cambios. Presupuesto $0 y no modificar 3 LINE-AR o Firebase.
+
+
+## Hotfix 0.10.1 — portada según captura (2026-10-17)
+Leer `docs/ENTREGA_0.10.1.md`. El usuario rechazó los caracteres Unicode gigantes de v0.10. Ya fueron eliminados del HTML. `welcomeVideoBackdrop` pasó a ser hijo directo de `#loginPanel`, y `cinematic-fix.css` debe cargar **después** de `celestial.css`; panel real de ingreso sobre media del propietario a pantalla completa. No volver a añadir la corte de caracteres planos. Mantener visible la versión fuera de partida, $0 y toda la mecánica/AR intacta. Verificar Android y escritorio.
