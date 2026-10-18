@@ -112,6 +112,10 @@
   border-color:#ffd995;color:#fff1c1;
   background:linear-gradient(120deg,#07425c,#103252);
 }
+#joinPanel .joinFeedback{
+  margin:0;padding:9px 12px;line-height:1.45;font-size:12px;text-align:center;
+  color:#eafff2;background:#092e40;border:1px solid #8ae8c277;border-radius:9px;
+}
 #joinPanel #qrScannerPanel[hidden]{display:none!important}
 #joinPanel #qrScannerPanel{
   display:flex;flex-direction:column;align-items:center;gap:10px;
