@@ -25,6 +25,7 @@ jobs:
           node --check main.js
           node --check arcane-ui.js
           node --check opening.js
+          node --check qr-scanner.js
           node --check celestial-ui.js
           node --check adventure-ui.js
           node --check asset-cache.js
