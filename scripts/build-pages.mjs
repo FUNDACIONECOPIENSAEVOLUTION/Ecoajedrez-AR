@@ -29,6 +29,22 @@ for(const name of cardNames){
 }
 
 
+// Optional visual mode cards prepared by the owner (not gameplay assets).
+// Use only exact file names and never publish arbitrary directory contents.
+const modeCardNames=['01_3d_clasico.webp','02_reino_360.webp','03_ar_con_portal.webp'];
+const modeCardSource='app/imagenes/interfaces/modos';
+const modeCardDest=path.join(dest,modeCardSource);
+fs.mkdirSync(modeCardDest,{recursive:true});
+for(const name of modeCardNames){
+ const src=path.join(modeCardSource,name);
+ if(!fs.existsSync(src))continue; // Images uploaded by owner later.
+ const data=fs.readFileSync(src);
+ if(data.length<1024||data.length>3000000||
+    data.toString('ascii',0,4)!=='RIFF'||data.toString('ascii',8,12)!=='WEBP')
+   throw Error('Invalid selected mode card WebP: '+name);
+ fs.writeFileSync(path.join(modeCardDest,name),data);
+}
+
 // User-approved, real gameplay boards (13) and decorative vista artwork (7).
 // Never publish unspecified files from app/imagenes/tableros.
 const boardFiles=[
