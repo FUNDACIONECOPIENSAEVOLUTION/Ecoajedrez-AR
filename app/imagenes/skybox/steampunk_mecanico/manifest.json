@@ -1,0 +1,57 @@
+{
+  "juego": "ECOAJEDREZ",
+  "reino_numero": 7,
+  "reino": "Steampunk / Mecánico",
+  "formato": "WebP",
+  "resolucion_px": [
+    1254,
+    1254
+  ],
+  "proyeccion": "Cubic mapping, 90 degrees per face",
+  "caras": {
+    "px": {
+      "filename": "px.webp",
+      "descripcion": "Derecha",
+      "eje": "+X",
+      "descriptivo": "ECOAJEDREZ_07_Reino_Steampunk_Mecanico_Derecha_px.webp"
+    },
+    "nx": {
+      "filename": "nx.webp",
+      "descripcion": "Izquierda",
+      "eje": "-X",
+      "descriptivo": "ECOAJEDREZ_07_Reino_Steampunk_Mecanico_Izquierda_nx.webp"
+    },
+    "py": {
+      "filename": "py.webp",
+      "descripcion": "Techo / cielo",
+      "eje": "+Y",
+      "descriptivo": "ECOAJEDREZ_07_Reino_Steampunk_Mecanico_Techo_py.webp"
+    },
+    "ny": {
+      "filename": "ny.webp",
+      "descripcion": "Suelo cenital",
+      "eje": "-Y",
+      "descriptivo": "ECOAJEDREZ_07_Reino_Steampunk_Mecanico_Suelo_Cenital_ny.webp"
+    },
+    "pz": {
+      "filename": "pz.webp",
+      "descripcion": "Frente",
+      "eje": "+Z",
+      "descriptivo": "ECOAJEDREZ_07_Reino_Steampunk_Mecanico_Frente_pz.webp"
+    },
+    "nz": {
+      "filename": "nz.webp",
+      "descripcion": "Atrás",
+      "eje": "-Z",
+      "descriptivo": "ECOAJEDREZ_07_Reino_Steampunk_Mecanico_Atras_nz.webp"
+    }
+  },
+  "nota_origen": "Las pinturas de origen provienen de una lámina generada por IA; el reproyectado y la mezcla espacial corrigen la continuidad del color y los píxeles de los bordes, pero no garantizan geometría arquitectónica físicamente coherente ni una fotografía esférica 360 real.",
+  "nota_ar": "El skybox es un entorno virtual de fondo; la cámara de realidad aumentada necesita composición especial para no ocultar el entorno real.",
+  "verificaciones": {
+    "caras_exactas": 6,
+    "cuadradas": true,
+    "resolucion_uniforme": true,
+    "bordes_aproximados_en_array_base": "0 antes de codificacion WebP"
+  }
+}

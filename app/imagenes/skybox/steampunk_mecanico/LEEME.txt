@@ -1,0 +1,23 @@
+ECOAJEDREZ — REINO 07: STEAMPUNK / MECÁNICO
+
+CONTENIDO:
+- exactos/: 6 archivos para subir directamente al importador de skyboxes.
+- descriptivos/: las mismas 6 imágenes, con nombre de reino, orientación y código.
+- Vista_Previa_Reino_07.jpg: miniaturas de las seis caras.
+- manifest.json: relación entre nombres, ejes y resolución.
+
+ORIENTACIONES:
+px.webp = Derecha (+X)
+nx.webp = Izquierda (-X)
+py.webp = Techo / cielo (+Y)
+ny.webp = Suelo cenital (-Y)
+pz.webp = Frente (+Z)
+nz.webp = Atrás (-Z)
+
+RECOMENDACIONES:
+1. Subir SOLO los 6 archivos de la carpeta exactos/ al importador. La carpeta descriptivos/ es de consulta.
+2. Todas las imágenes son cuadradas de 1254 x 1254 px, con WebP alta calidad.
+3. Las vistas laterales están dirigidas hacia el horizonte, el techo hacia arriba y el suelo hacia abajo.
+4. Los bordes de las seis imágenes se han reconciliado en un campo direccional 3D antes de la exportación, para suavizar las uniones.
+5. IMPORTANTE: las fuentes visuales fueron generadas como pinturas de un atlas, no capturadas desde una misma cámara real de 360 grados. Por ello, aunque la unión superficial es continua, las estructuras y objetos pueden cambiar al cruzar algunas aristas.
+6. Para un skybox geométricamente exacto se requeriría renderizar las 6 caras con una misma cámara virtual de 90 grados en una escena 3D auténtica, o capturar una panorámica esférica equirectangular válida.
