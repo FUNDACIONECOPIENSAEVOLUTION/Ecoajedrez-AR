@@ -1,4 +1,4 @@
-# LECTURA RÁPIDA OBLIGATORIA (ECOAJEDREZ v0.11.1-beta.1)
+# LECTURA RÁPIDA OBLIGATORIA (ECOAJEDREZ v0.12.0-beta.1)
 Antes de leer el historial extenso, abrir `docs/RESUMEN_MAESTRO.md` (resumen canónico, mantenido por versión) y `docs/ENTREGA_0.11.md` si se modifica la UI, primer inicio o caché. Los ocho WebP están en `app/imagenes/tarjetas/` y YA se publican; nunca pedirlos otra vez sin comprobar GitHub. Conserva modo invitado, AR, privacidad y $0.
 
 # Instrucciones permanentes para ChatGPT, Codex y otras IAs — ECOAJEDREZ AR
@@ -118,3 +118,6 @@ Leer `docs/ENTREGA_0.10.1.md`. El usuario rechazó los caracteres Unicode gigant
 
 ## 0.11.1 · Fondo fijo después del video de intro
 Ver `docs/ENTREGA_0.11.1.md` y `docs/RESUMEN_MAESTRO.md`. El PNG limpio aprobado es `app/imagenes/interfaces/login_post_intro_fondo.png`; nunca volver a usar collage de tarjetas como fondo de bienvenida. `login-scene.css` se carga después de `adventure.css`. El video de intro solo en primera visita y se detiene al llegar a los 10 segundos de reproducción, luego pantalla fija, sin iniciar `welcomeAmbientVideo` en bucle. No alterar otras pantallas ni la mecánica por esta entrega.
+
+## Actualización v0.12.0-beta.1
+Nuevo `qr-scanner.js` para escanear QR de PeerJS con validación mismo origen/ruta y cierre de cámara; `readability-qr.css` último CSS para textos legibles; `opening.js` inicia intro por sesión nueva con video 10s máximo y precarga paralela de 14 assets. Código manual sigue vigente. Consultar `docs/ENTREGA_0.12.md` y `docs/RESUMEN_MAESTRO.md`. No mezclar Firebase ni 3 LINE-AR. Prueba QR real entre dos celulares todavía pendiente.
