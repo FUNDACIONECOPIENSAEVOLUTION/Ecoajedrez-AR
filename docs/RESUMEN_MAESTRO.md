@@ -1,5 +1,5 @@
 # ECOAJEDREZ 3D/AR · RESUMEN MAESTRO PARA LA PRÓXIMA IA
-**Revisión vigente:** 0.11.0-beta.1 · 2026-10-18. Leer **este archivo primero**; consultar AGENTS.md y código solo si la tarea lo requiere. Evitar reanalizar conversaciones largas.
+**Revisión vigente:** 0.11.1-beta.1 · 2026-10-18. Leer **este archivo primero**; consultar AGENTS.md y código solo si la tarea lo requiere. Evitar reanalizar conversaciones largas.
 
 ## Identidad y fuentes de verdad
 - Repositorio canónico con permisos de escritura: https://github.com/FUNDACIONECOPIENSAEVOLUTION/Ecoajedrez-AR (rama main).
@@ -38,3 +38,6 @@
 - Validar AR y PvP físicamente; ninguna prueba de código los sustituye.
 
 **Documentación detallada de esta entrega:** `docs/ENTREGA_0.11.md`; historia: `CHANGELOG.md`. 
+
+## Cambio puntual 0.11.1 (bienvenida)
+Imagen limpia del usuario verificada en `app/imagenes/interfaces/login_post_intro_fondo.png` (2.96 MB). `login-scene.css` ahora va al final de los estilos y coloca ese PNG a pantalla completa bajo los botones reales; título ECOAJEDREZ en una sola línea, responsive PC/tablet/celular. `opening.js` deja reproducir la introducción en primera visita como máximo 10 segundos de tiempo de video; luego fondo **estático** sin loop adicional. Botón manual repite video, Omitir sigue funcional. `scripts/build-pages.mjs` permite exactamente el PNG con validación. **No modificar otras pantallas** por esta tarea. Ver `docs/ENTREGA_0.11.1.md`.
