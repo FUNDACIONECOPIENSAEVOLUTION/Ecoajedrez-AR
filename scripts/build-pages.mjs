@@ -4,7 +4,7 @@ import path from 'node:path';
 const dest='dist';
 fs.rmSync(dest,{recursive:true,force:true});
 fs.mkdirSync(dest,{recursive:true});
-const files=['index.html','arcane.css','opening.css','opening.js','celestial.css','celestial-ui.js','arcane-ui.js,'privacy.html','version.json','main.js','auth.js','commands.js','pvp.js','match-state.js','ecoajedrez.PNG','_headers'];
+const files=['index.html','arcane.css','opening.css','opening.js','celestial.css','celestial-ui.js','arcane-ui.js','privacy.html','version.json','main.js','auth.js','commands.js','pvp.js','match-state.js','ecoajedrez.PNG','_headers'];
 for(const name of files){
  if(!fs.existsSync(name))throw Error('Missing asset: '+name);
  fs.copyFileSync(name,path.join(dest,name));
