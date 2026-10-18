@@ -1,8 +1,8 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.14.1-beta.1",
+  "version": "0.14.2-beta.1",
   "updated": "2026-10-18",
-  "status": "Per-board measured 8x8 grid bounds and matching 3D frame dimensions. 7x7 cyber artwork repaired via CanvasTexture to 8x8, original selectable meshes preserved and z-fighting eliminated by hiding only their rendered top faces; mobile AR retest pending.",
+  "status": "Celebración mágica ligera añadida para jaque mate/derrota/tablas y modalidades bot/local/online, con texto en 3 idiomas, nuevas partidas y menú; conserva tableros 0.14.1. Pendiente prueba física móvil/AR.",
   "browserValidated": false,
   "physicalARValidated": false,
   "onlinePvP": "Casual PeerJS beta, six-character code and QR with camera scanner (native BarcodeDetector / lazy in-browser jsQR), validation restricts invite origin/path. Real two-device session requires device test; unranked and unaudited anti-cheat.",
@@ -91,5 +91,24 @@
     "lazyCache": true,
     "decorativeVistaCount": 7,
     "validatedInMobileBrowser": false
+  },
+  "victoryFX": {
+    "component": "victory-fx.js",
+    "styles": "victory-fx.css",
+    "results": [
+      "win",
+      "loss",
+      "draw",
+      "local white/black winner"
+    ],
+    "languages": [
+      "es",
+      "en",
+      "zh"
+    ],
+    "reducedMotion": true,
+    "logicMutated": false,
+    "onlineGuestRestartDisabled": true,
+    "physicalValidationPending": true
   }
 }

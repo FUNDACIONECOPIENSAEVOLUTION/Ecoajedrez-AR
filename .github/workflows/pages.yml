@@ -23,6 +23,7 @@ jobs:
       - name: Check JS syntax
         run: |
           node --check main.js
+          node --check victory-fx.js
           node --check magic-world.js
           node --check board-skins.js
           node --check board-catalog-ui.js

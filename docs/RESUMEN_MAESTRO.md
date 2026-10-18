@@ -1,5 +1,5 @@
 # ECOAJEDREZ 3D/AR · RESUMEN MAESTRO PARA LA PRÓXIMA IA
-**Revisión vigente:** 0.14.0-beta.1 · 2026-10-18. Leer **este archivo primero**; consultar AGENTS.md y código solo si la tarea lo requiere. Evitar reanalizar conversaciones largas.
+**Revisión vigente:** 0.14.2-beta.1 · 2026-10-18. **Leer primero la sección más reciente al final.** Leer **este archivo primero**; consultar AGENTS.md y código solo si la tarea lo requiere. Evitar reanalizar conversaciones largas.
 
 ## Identidad y fuentes de verdad
 - Repositorio canónico con permisos de escritura: https://github.com/FUNDACIONECOPIENSAEVOLUTION/Ecoajedrez-AR (rama main).
@@ -64,3 +64,29 @@ Hay **seis** archivos glTF originales autocontenidos bajo `assets/models/staunto
 - CacheStorage/SW incluye 13 tableros como rutas permitidas ON-DEMAND; no cargar automáticamente 13 x 0.5–0.8 MB al inicio, solo el elegido. Mantener id de caché `v0.11.0` para no volver a descargar antiguos 14 recursos. Las vistas usan caché HTTP normal de navegador.
 - Build whitelist publica únicamente 13 + 7 archivos autorizados y valida WebP. `board-catalog.css` responsive, tests en `tests/board-skins.test.mjs`. Detalles `docs/ENTREGA_0.14.md`.
 - No se han probado físicamente todos los encuadres ni la modalidad AR con estas imágenes. No tocar jugabilidad/reglas/autenticación en esta entrega.
+
+## 0.14.1-beta.1 — Corrección visual de tableros (2026-10-18)
+- Capturas: triángulos turquesa/violeta por superposición de caras 3D y casillas de imagen descentradas respecto a fichas. Se corrigió en board-skins.js mediante calibración de cada WebP, mapeo 8×8 exacto, marco en su lugar y render del tablero sin z-fighting.
+- La imagen cyber original tenía solo 7×7 casillas y se recompone visualmente en CanvasTexture a 8×8, conservando su original WebP. Las casillas 3D siguen siendo las únicas que reciben clic.
+- El ajuste manual genérico (%) de 0.14.0 fue retirado: se usan metadatos grid/cells por cada diseño. Las siete imágenes vista- siguen como decoraciones del menú, NO tableros jugables.
+- El usuario comunicó que visualmente quedó bien. Falta comprobar todas las combinaciones en navegadores móviles y AR real. Las notas 0.14.0 anteriores son históricas, NO volver a introducir slider.
+
+## 0.14.2-beta.1 — Efectos de victoria y documento central (2026-10-18)
+- Archivos nuevos victory-fx.js / victory-fx.css: fin de partida con anillo giratorio, partículas ligeras CSS, textos de victoria, derrota y tablas. Soporta es/en/zh y reduce movimiento por accesibilidad.
+- chess.js determina bando ganador: humano blanco vs computadora, partida local con ganador blanco/negro y online host blanco/invitado negro. El invitado online NO puede reiniciar la sala.
+- Controles reales del modal: NUEVA PARTIDA, VOLVER AL MENÚ y VER TABLERO (ocultar sin modificar la posición final).
+- main.js llama la presentación desde updateStatus(), la limpia al reset(), y la sincroniza al entrar a la vista game. No altera reglas, piezas, transacciones PeerJS, autenticación ni la sesión WebXR.
+- Build Pages incorpora los nuevos archivos a la allowlist. Tests de lógica en tests/victory-fx.test.mjs; workflow valida sintaxis del nuevo JS. Pruebas en Android/AR físico y dos dispositivos pendientes.
+
+### Menú rápido para una próxima sesión (leer solo lo necesario)
+1. LEER PRIMERO este resumen y AGENTS.md. Después únicamente código de la función que se pretende cambiar y el commit HEAD. No releer chats completos.
+2. Juego, IA heurística, movimiento, render y AR → main.js; comandos → commands.js; partida remota PeerJS beta → pvp.js y match-state.js; no hay servidor autoritativo ni antitrampas.
+3. Tableros reales: board-skins.js, board-catalog-ui.js, board-catalog.css y app/imagenes/tableros/. Trece WebP tablero_ jugables y siete vista- decorativas, todos preservados.
+4. Celebración de finales: victory-fx.js / victory-fx.css. Para nuevas traducciones/efectos editar primero esos archivos.
+5. UI/ambientación: index.html, magic-world.js, adventure-ui.js, magic-game.css, celestial.css; seis glTF de piezas en assets/models/staunton/.
+6. Publicación: scripts/build-pages.mjs → dist/ segura; CI en .github/workflows/pages.yml: node --test tests/*.test.mjs y node scripts/security-check.mjs. GitHub Pages al aprobar acciones, sin publicar docs/tests/secretos.
+7. Historial y realidad técnica: CHANGELOG.md, version.json (browserValidated y physicalARValidated continúan false), este documento canónico.
+8. Validar: mate jugador vs CPU, mate CPU, empate, ambos ganadores locales, online host/invitado, cerrar panel, reiniciar, vista final, AR y tamaños de pantalla. No afirmar pruebas físicas sin ejecutarlas.
+9. Próxima fase: comprobar efectos en dispositivos y, tras aprobación, audio opcional; mejorar bot, online, PWA/APK solo después de estabilizar.
+
+**Norma:** al finalizar cada cambio, añadir aquí nueva sección de máximo una página con versión, cambios reales, archivos tocados, pruebas, pendientes y enlace a commit. Evitar documentos maestros duplicados.

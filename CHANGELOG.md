@@ -1,5 +1,13 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.14.2-beta.1 — 2026-10-18 · Final mágico y continuidad en un solo resumen
+- Modal de victoria, derrota y tablas, con efectos CSS ligeros, animación de aro/partículas y los controles reiniciar, menú y ver tablero.
+- Ganador calculado con chess.js, según bot/local/online host/invitado; textos ES/EN/ZH, accesibilidad reducida y sin alterar reglas o AR.
+- NUEVOS victory-fx.js, victory-fx.css y tests/victory-fx.test.mjs. Actualizada allowlist Pages y chequeo sintáctico en CI.
+- Actualizado docs/RESUMEN_MAESTRO.md: mapa único del proyecto, historial 0.14.1 y 0.14.2, archivos y tareas prioritarias.
+- Pendientes: inspección visual en Chrome Android, WebXR real, modalidad remota entre dos teléfonos.
+
+
 ## 0.14.0-beta.1 — 2026-10-18 · Tableros reales sobre 3D, colección de vistas separada
 - 13 imágenes `tablero_*.webp` importadas como texturas jugables 8x8 sin cambiar posiciones de casillas, clics, fichas ni turnos. Selector configurable antes y durante la partida.
 - Encadre del marco ajustable al 65–100% (predeterminado 86%); proporción conservada al cambiar zoom y tamaño AR. Se requiere prueba visual de cuadrícula real por imagen.

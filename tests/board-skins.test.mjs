@@ -66,7 +66,7 @@ test('Separate selectable real board and independent vista menu art; scaling ind
  assert.match(main,/boardSurface\.select/);
  assert.match(main,/boardSkin:\$\('boardSkin'\)\.value/);
  assert.match(html,/board-catalog\.css\?v=0\.14\.1/);
- assert.equal(manifest.version,'0.14.1-beta.1');
+ assert.equal(manifest.version,'0.14.2-beta.1');
 });
 test('Approved board texture list is lazy: initial downloads stay at 14 original resources',()=>{
  assert.match(prefetch,/const boardPaths=boardFiles\.map/);

@@ -11,6 +11,7 @@ import { createArcaneUI } from './arcane-ui.js?v=0.6.0';
 import { createMagicWorld } from './magic-world.js?v=0.13.0';
 import { createBoardSurface } from './board-skins.js?v=0.14.1';
 import { makeLastMoveOverlay } from './last-move-ghost.js?v=0.13.0';
+import { createVictoryFX } from './victory-fx.js?v=0.14.2';
 
 const $ = (id) => document.getElementById(id);
 const canvas = $('render'), stage = $('scene');
@@ -36,7 +37,7 @@ const game = new Chess();
 const world = new THREE.Group(), tiles = new THREE.Group(), pieces = new THREE.Group();
 const decorations = new THREE.Group(), markers = new THREE.Group();
 world.add(tiles, decorations, pieces, markers); scene.add(world);
-let arcaneUI=null,magicEnv=null,ghostHint=null,boardSurface=null;
+let arcaneUI=null,magicEnv=null,ghostHint=null,boardSurface=null,victoryFX=null;
 const rootBase = new THREE.Mesh(new THREE.BoxGeometry(8.45, .35, 8.45), new THREE.MeshStandardMaterial({color:0x213544, metalness:.5, roughness:.28}));
 rootBase.position.y = -.23; rootBase.receiveShadow = true; tiles.add(rootBase);
 const raycaster = new THREE.Raycaster(), point = new THREE.Vector2();
@@ -246,6 +247,10 @@ function updateStatus(){
   const history=game.history();
   $('history').textContent=history.length?history.map((v,i)=>(i%2===0?String(Math.floor(i/2)+1)+'. ':'')+v).join('  '):'—';
   arcaneUI?.state({turn:game.turn(),check:game.isCheck(),mate:game.isCheckmate(),mode,connected:mode!=='online'||match.connected()});
+  syncVictory();
+}
+function syncVictory(){
+  victoryFX?.sync({game,mode,lang,isHost:mode!=='online'||match.host,visible:document.body.dataset.view==='game'});
 }
 function canPlay(source='local'){
   if(game.isGameOver())return false;
@@ -404,6 +409,7 @@ function animateMove(from,to){
   moving={piece:target,a,b,start:performance.now(),duration:370};
 }
 function reset(){
+  victoryFX?.reset();
   ghostHint?.clear();clearTimeout(timer);game.reset();selected=null;arcaneUI?.selected(null);moving=null;renderPieces();updateStatus();
   if(mode==='online' && match.host){roomVersion++;broadcastState();}
   else if(mode!=='online')persistCurrentGame();
@@ -587,6 +593,13 @@ const match=new PeerMatch({
     gotoView('game');updateStatus();
   }
 });
+victoryFX=createVictoryFX({
+  onNewGame:()=>{
+    if(mode==='online'&&!match.host){toast('Solo el anfitrión puede reiniciar el duelo.');return;}
+    reset();
+  },
+  onBackToMenu:()=>gotoView('menu')
+});
 function setGameMode(next){
   if(next!=='online' && mode==='online')match.close();
   mode=next;$('mode').value=next;
@@ -601,6 +614,7 @@ function gotoView(view){
     gameStarted=true;resize();
     $('networkStatus').textContent=mode==='online'?('SALA '+match.room+(match.connected()?' · CONECTADA':' · ESPERANDO')):(mode==='bot'?'VERSUS COMPUTADORA':'DUELO LOCAL');
   }
+  syncVictory();
 }
 function transitionTo(view){
   $('loadingPortal').classList.add('show');
