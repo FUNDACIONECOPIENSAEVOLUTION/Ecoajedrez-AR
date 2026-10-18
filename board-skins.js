@@ -38,7 +38,7 @@ export function createBoardSurface({THREE,world,renderer,onStatus=()=>{}}){
    new THREE.MeshBasicMaterial({color:0xffffff,side:THREE.DoubleSide,toneMapped:false})
  );
  plane.rotation.x=-Math.PI/2;
- plane.position.y=.069; // tile tops are .0625; piece bases begin near .065
+ plane.position.y=.0638; // tile tops are .0625; live chess-piece bases begin near .07
  plane.raycast=()=>{}; // transparent to selection; chess tiles own the hit targets
  plane.visible=false;
  plane.renderOrder=1;
@@ -46,7 +46,7 @@ export function createBoardSurface({THREE,world,renderer,onStatus=()=>{}}){
  // Independent 8x8 guide ensures visual squares stay aligned with chess logic
  // even if a user's artwork contains decorative framing or perspective elements.
  const helper=new THREE.GridHelper(8,8,0xd1fff4,0x9acfe3);
- helper.position.y=.073;
+ helper.position.y=.0642;
  helper.material.transparent=true;
  helper.material.opacity=.24;
  helper.material.depthWrite=false;
@@ -54,7 +54,7 @@ export function createBoardSurface({THREE,world,renderer,onStatus=()=>{}}){
  helper.visible=false;
  surfaceGroup.add(helper);
  const textureLoader=new THREE.TextureLoader();
- let generation=0,selected='classic',current=null;
+ let generation=0,selected='classic',gridCoverage=.86;
  function clear(){
    const prior=plane.material.map;
    plane.material.map=null;
@@ -89,20 +89,31 @@ export function createBoardSurface({THREE,world,renderer,onStatus=()=>{}}){
      if(w>h){texture.repeat.set(h/w,1);texture.offset.set((1-h/w)/2,0);}
      else if(h>w){texture.repeat.set(1,w/h);texture.offset.set(0,(1-w/h)/2);}
      texture.needsUpdate=true;
+     // The image includes a painted frame: center its actual 8x8 artwork
+     // on the logical board and let the decorative frame extend outside.
+     plane.scale.setScalar(1/gridCoverage);
      const old=plane.material.map;
      plane.material.map=texture;
      plane.material.needsUpdate=true;
      plane.visible=true;helper.visible=true;
      if(old&&old!==texture)old.dispose();
-     current=entry.id;
      onStatus('✓ «'+entry.label+'» aplicado a la superficie 8×8. Se conserva la cuadrícula jugable.');
      return true;
    }catch(err){
+     if(texture)texture.dispose();
      if(seq!==generation)return false;
      clear();
      onStatus('No se pudo cargar este diseño; el tablero clásico sigue disponible. Reintentar desde configuración.');
      return false;
    }finally{if(objectURL)URL.revokeObjectURL(objectURL);}
  }
- return {select,getSelected:()=>selected,isVisible:()=>plane.visible,dispose(){generation++;clear();plane.geometry.dispose();plane.material.dispose();helper.geometry.dispose();helper.material.dispose();world.remove(surfaceGroup);}};
+ function setCoverage(coverage){
+   const value=Number(coverage);
+   if(!Number.isFinite(value)||value<.65||value>1)return gridCoverage;
+   gridCoverage=value;
+   plane.scale.setScalar(1/gridCoverage);
+   // Scale extends/retreats image frame; the underlying chess board stays fixed.
+   return gridCoverage;
+ }
+ return {select,setCoverage,getCoverage:()=>gridCoverage,getSelected:()=>selected,isVisible:()=>plane.visible,dispose(){generation++;clear();plane.geometry.dispose();plane.material.dispose();helper.geometry.dispose();helper.material.dispose();world.remove(surfaceGroup);}};
 }
