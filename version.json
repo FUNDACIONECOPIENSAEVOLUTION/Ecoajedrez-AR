@@ -1,8 +1,8 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.10.0-beta.1",
+  "version": "0.10.1-beta.1",
   "updated": "2026-10-17",
-  "status": "Immersive approved-inspired fantasy UI: panoramic celestial chess arena, animated floating figures, themed responsive settings and illustrated biome preview. Core chess, PvP and WebXR unaffected; human browser/mobile acceptance tests pending.",
+  "status": "Screenshot-based cinematic hotfix: removed oversize 2D Unicode chess court and right-side isolated login. Owner-uploaded video/poster now paints across the welcome stage under accessible actual controls; responsiveness improved. Physical testing pending; chess and WebXR unchanged.",
   "browserValidated": false,
   "physicalARValidated": false,
   "onlinePvP": "Casual PeerJS beta, 6-character code and QR; unranked and not independently anti-cheat verified",
@@ -18,7 +18,7 @@
   "privacyPolicy": "privacy.html",
   "apiSecretsExposedInCurrentBuild": false,
   "liveSecureServerConfigured": false,
-  "ui": "Arcane Glass 0.10: expanded desktop cinematic welcome with playing stage and local themed original celestial illustration + CSS float, high-contrast actual buttons, illustrated menu, settings preview and sidebar real controls, no clipped logo with scroll-safe screens",
+  "ui": "Arcane Glass 0.10.1: full-bleed video / poster background, floating readable login glass card, removed 2D flat symbols and separate right-hand block, preserves cinematic intro and illustrated menu, safe viewport scroll",
   "media": {
     "source": "Owner-uploaded repo videos/ 2026-10-17",
     "intro": "Vídeo sin título-17_10_2026, 16_58.mp4",
@@ -26,5 +26,5 @@
     "portal": "Vídeo sin título-17_10_2026, 17_10.mp4",
     "notes": "Foreground/chrome never masked by ambient video. Only one MP4 decoded at a time and autoplay never blocks guest mode. Mapping of MP4 by original filenames is provisional pending visual confirmation. Intro requires click."
   },
-  "visualFidelity": "Original vector recreation based on approved mockup, NOT pixel-identical generated artwork; approved screenshots contain non-interactive UI and are not used verbatim as background"
+  "visualFidelity": "Functional reinterpretation of user's approved fantasy look, not photo-identical; uses existing user-owned video and poster; no unlicensed materials"
 }
