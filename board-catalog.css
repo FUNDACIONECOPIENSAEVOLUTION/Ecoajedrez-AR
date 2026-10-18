@@ -1,0 +1,60 @@
+/* ECOAJEDREZ 0.14 · real board-surface picker + independent decorative vistas */
+.boardPickerField{min-width:0}
+.boardSkinCard{
+ grid-column:1/-1;
+ display:grid;grid-template-columns:minmax(140px,.78fr) minmax(0,1.22fr);
+ gap:clamp(10px,2vw,20px);align-items:center;
+ border-radius:16px;padding:clamp(12px,2vw,18px);
+ border:1px solid #8af8ca86;background:#08283ddc;
+ box-shadow:0 4px 22px #00121d89;
+}
+.boardSkinPreview{
+ width:100%;aspect-ratio:1;border:2px solid #d9c393bf;border-radius:14px;
+ background:linear-gradient(130deg,#114459,#032335);
+ display:flex;align-items:center;justify-content:center;
+ box-shadow:0 0 22px #4eeed53f;overflow:hidden;
+}
+.boardSkinPreview img{width:100%;height:100%;object-fit:contain;display:block}
+.boardSkinPreview img[hidden],.boardSkinPreview #boardSkinEmpty[hidden]{display:none!important}
+#boardSkinEmpty{font:bold clamp(14px,1.8vw,19px) Georgia,serif;color:#ffe3b8;text-align:center;padding:14px}
+.boardSkinDescription{display:flex;flex-direction:column;gap:9px;min-width:0}
+.boardSkinDescription strong{color:#ffe2a1;font:900 clamp(14px,2vw,20px) Georgia,serif}
+.boardSkinDescription p{color:#e2fff6!important;font:13px/1.5 system-ui;margin:0}
+.boardSkinDescription label{color:#d9fcf1;font-size:12px;font-weight:700}
+.boardSkinDescription input[type=range]{width:100%;height:25px;accent-color:#76e2bb}
+.boardSkinDescription small{color:#c0dfda;font:11px/1.55 system-ui}
+.visionGallery{
+ margin:clamp(16px,2vw,27px) auto 0;
+ border:1px solid #7cead88c;border-radius:18px;
+ overflow:hidden;background:#061d32e8;
+ box-shadow:0 6px 30px #0008;
+ padding:clamp(10px,2.5vw,20px);
+}
+.visionTop{text-align:center;margin:0 auto 13px}
+.visionTop h2{font:900 clamp(18px,3vw,26px) Georgia,serif;color:#ffe4a0;margin:6px auto}
+.visionTop p{font:12px/1.55 system-ui;color:#d3f5f0;margin:0 auto 8px;max-width:650px}
+.visionViewer{
+ display:grid;grid-template-columns:45px minmax(0,1fr) 45px;
+ align-items:center;gap:9px;
+ background:#031725;border-radius:11px;
+}
+.visionViewer img{
+ display:block;object-fit:contain;width:100%;
+ max-height:clamp(160px,35vw,360px);
+ aspect-ratio:16/9;
+ filter:drop-shadow(0 3px 10px #0009);
+}
+.visionViewer button{
+ align-self:stretch;min-width:44px;border:1px solid #8ce7cfa8;
+ color:#fff0b7;background:#052c3c;border-radius:10px;font-size:19px;
+}
+.visionViewer button:focus-visible{outline:2px solid #ffe199;outline-offset:3px}
+.visionCaption{text-align:center;color:#ffe9ba;margin:11px auto 0;font-size:12px}
+@media(max-width:620px){
+ .boardSkinCard{grid-template-columns:1fr;gap:11px}
+ .boardSkinPreview{width:min(100%,290px);margin:0 auto}
+ .visionViewer{grid-template-columns:40px minmax(0,1fr) 40px;gap:4px}
+ .visionViewer button{min-width:40px}
+ .visionViewer img{max-height:250px}
+}
+@media(prefers-reduced-motion:reduce){.boardSkinCard,.visionGallery{animation:none!important}}
