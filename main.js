@@ -199,7 +199,10 @@ function makeJungle(){
   if(theme!=='jungle')return;
   const stem=new THREE.MeshStandardMaterial({color:0x33785a,roughness:1});
   const bloom=new THREE.MeshStandardMaterial({color:0xe15372,emissive:0x4d1422,emissiveIntensity:.3});
-  for(let i=0;i<90;i++){
+  // Keep fewer procedural plants on low-end phones; 3D scenery is cosmetic.
+  const plantCount=['low'].includes($('quality').value) ||
+   ($('quality').value==='auto'&&matchMedia('(max-width:760px)').matches) ? 20 : 58;
+  for(let i=0;i<plantCount;i++){
     let a=i*2.39996, radius=4.35+(i%4)*.23;
     const x=Math.cos(a)*radius,z=Math.sin(a)*radius, h=.17+(i%5)*.09;
     const plant=new THREE.Group();plant.position.set(x,0,z);
