@@ -1,6 +1,6 @@
 // ECOAJEDREZ 0.9 · cinematic media choreography. The game and WebXR remain independent.
 // One ambient MP4 maximum, only on welcome/menu; photos animate gently on the side.
-const FALLBACK_RELEASE='0.10.1-beta.1';
+const FALLBACK_RELEASE='0.11.0-beta.1';
 const versionTags=()=>Array.from(document.querySelectorAll('[data-app-version]'));
 let resolvedVersion=FALLBACK_RELEASE;
 function showVersion(){
@@ -11,7 +11,7 @@ function showVersion(){
 }
 async function readVersion(){
  try{
-  const response=await fetch('./version.json?v=0.10.1',{cache:'no-store',headers:{Accept:'application/json'}});
+  const response=await fetch('./version.json?v=0.11.0',{cache:'no-store',headers:{Accept:'application/json'}});
   if(!response.ok)throw Error('Release manifest unavailable');
   const body=await response.json();
   if(typeof body.version==='string'&&/^0\.[0-9]+\.[0-9]+-beta\.[0-9]+$/.test(body.version))resolvedVersion=body.version;
@@ -39,6 +39,12 @@ function setupHero(){
  const note=document.getElementById('cinemaNote');
  const skip=document.getElementById('skipIntroBtn');
  let lastFocus=null;
+ // Only the first visit to this browser/origin auto-opens the video.
+ // Previous visits can use the normal optional "VER INTRO" button.
+ const INTRO_KEY='ecoajedrez-intro-played-v1';
+ function hasWatchedIntro(){try{return localStorage.getItem(INTRO_KEY)==='1';}catch(error){return false;}}
+ function recordIntroSeen(){try{localStorage.setItem(INTRO_KEY,'1');}catch(error){}}
+
 
  function pauseScenes(){
   // Deliberately stop BOTH sources before activating one; avoids double media decoding on phones.
@@ -120,17 +126,21 @@ function setupHero(){
   cinema.hidden=true;
   cinema.setAttribute('aria-hidden','true');
   introVisible=false;
+  recordIntroSeen();
   if(lastFocus?.isConnected)lastFocus.focus({preventScroll:true});
   playAmbient();
  }
- function startIntro(){
+ function startIntro(automatic=false){
   if(!cinema||!cinemaVideo)return;
+  if(automatic && (hasWatchedIntro()||document.hidden||currentView()!=='welcome'))return;
   lastFocus=document.activeElement;
   introVisible=true;
   pauseScenes();
   cinema.hidden=false;
   cinema.removeAttribute('aria-hidden');
-  note.textContent='ECOAJEDREZ · Puedes omitir la introducción y empezar a jugar en cualquier momento.';
+  note.textContent=automatic
+   ?'✦ ¡Bienvenido a ECOAJEDREZ! Mientras ves la intro preparamos tus escenarios y piezas 3D.'
+   :'ECOAJEDREZ · Puedes omitir la introducción y empezar a jugar en cualquier momento.';
   skip?.focus({preventScroll:true});
   if(!cinemaVideo.src){
    cinemaVideo.src=cinemaVideo.dataset.videoSrc; // 13 MB only after explicit user action
@@ -140,8 +150,11 @@ function setupHero(){
   const p=cinemaVideo.play();
   if(p?.catch)p.catch(()=>{note.textContent='No fue posible iniciar este video. Puedes continuar jugando como invitado.';});
  }
- document.getElementById('playIntroBtn')?.addEventListener('click',startIntro);
- document.getElementById('menuIntroBtn')?.addEventListener('click',startIntro);
+ document.getElementById('playIntroBtn')?.addEventListener('click',()=>startIntro(false));
+ document.getElementById('menuIntroBtn')?.addEventListener('click',()=>startIntro(false));
+ // Muted inline video is permitted to autoplay in most modern browsers.
+ // When blocked, the video controls + OMITIR INTRO remain fully accessible.
+ setTimeout(()=>startIntro(true),380);
  skip?.addEventListener('click',closeIntro);
  cinemaVideo?.addEventListener('ended',closeIntro);
  cinemaVideo?.addEventListener('error',()=>{note.textContent='Este video no pudo reproducirse; el juego permanece disponible.';});
@@ -196,3 +209,28 @@ showVersion();
 setupHero();
 decorateDynamicRoom();
 readVersion();
+
+/* Real download progress: completed file count, not an invented timer or fictitious percent. */
+const downloadStatus=document.getElementById('downloadStatus');
+const downloadText=document.getElementById('downloadText');
+const downloadProgress=document.getElementById('downloadProgress');
+const downloadCount=document.getElementById('downloadCount');
+const cinemaAssetText=document.getElementById('cinemaAssetText');
+const cinemaAssetProgress=document.getElementById('cinemaAssetProgress');
+const cinemaAssetCount=document.getElementById('cinemaAssetCount');
+window.addEventListener('eco:asset-progress',event=>{
+ const {done=0,total=14,cached=0,downloaded=0,failed=0,stage}=event.detail||{};
+ const percent=total?Math.round(done*100/total):100;
+ if(downloadProgress)downloadProgress.value=percent;
+ if(cinemaAssetProgress)cinemaAssetProgress.value=percent;
+ let label=stage==='saving-data'?'Ahorro de datos activado: descargaremos cada recurso cuando lo necesites.'
+  :stage==='complete'&&failed===0?'Piezas 3D y escenarios preparados para jugar.'
+  :stage==='complete'?'Algunos archivos no se pudieron precargar; el juego intentará cargarlos normalmente.'
+  :'Preparando piezas 3D y escenarios: '+done+' de '+total+' archivos.';
+ if(downloadText)downloadText.textContent=label;
+ if(cinemaAssetText)cinemaAssetText.textContent=label;
+ if(downloadCount)downloadCount.textContent=stage==='saving-data'?'Sin descargas automáticas':done+' / '+total+' · '+cached+' en caché · '+downloaded+' descargados'+(failed?' · '+failed+' pendientes':'');
+ if(cinemaAssetCount)cinemaAssetCount.textContent=downloadCount?.textContent||'';
+ if(downloadStatus)downloadStatus.hidden=stage==='complete'&&failed===0;
+ if(stage==='saving-data'&&downloadStatus)downloadStatus.hidden=false;
+});
