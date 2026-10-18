@@ -1,0 +1,261 @@
+/* ECOAJEDREZ 0.10: approved visual direction · interactive UI above decorative assets.
+   All art and effects are local. No fonts, credentials, or new services. */
+:root{--arenaGold:#f9d590;--arenaGlow:#57ffe0;--arenaDeep:#03111c}
+body[data-view="welcome"] #welcomeScreen,
+body[data-view="menu"] #menuScreen,
+body[data-view="settings"] #settingsScreen{
+  position:fixed;inset:0;min-height:100dvh;height:100dvh;
+  overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;
+  align-items:flex-start;justify-content:center;
+  padding:clamp(9px,2vmin,21px);
+  scrollbar-color:#69cdb27a #061726;
+}
+body[data-view="welcome"] #welcomeScreen{
+ background:radial-gradient(ellipse at 75% 20%,#19537a69,transparent 65%),#051320;
+}
+#loginPanel{
+ display:flex;flex-direction:row;isolation:isolate;align-items:center;
+ width:min(1510px,100%);max-width:none;
+ min-height:min(790px,calc(100dvh - 34px));
+ margin:auto;padding:clamp(14px,2.7vw,45px);border-radius:24px;
+ overflow:hidden;background:#051423;box-shadow:0 22px 90px #000d,0 0 60px #25b5c01b;
+}
+#loginPanel::before{
+ content:"";position:absolute;inset:-4%;z-index:-2;width:auto;height:auto;
+ border:0;border-radius:0;
+ background:linear-gradient(95deg,#04121bd9 4%,#061625cc 39%,#04142a33 72%,#06142630),
+ url("./assets/ui/celestial-arena.svg") center center /cover no-repeat;
+ animation:celestialDrift 35s ease-in-out infinite alternate;
+}
+#loginPanel::after{
+ content:"";position:absolute;inset:0;z-index:-1;width:auto;height:auto;
+ pointer-events:none;border:none;border-radius:0;
+ background:linear-gradient(0deg,#04132283,transparent 25%),radial-gradient(ellipse at 78% 58%,transparent 28%,#03131d7c 92%);
+}
+#heroShowcase{display:none!important}
+#loginPanel .loginContent{
+ display:flex;flex-direction:column;align-items:center;justify-content:center;
+ position:relative;z-index:4;grid-column:auto;grid-row:auto;
+ width:clamp(320px,41%,560px);min-width:0;flex:0 0 auto;
+ padding:clamp(14px,2.3vw,30px);min-height:unset;
+ max-height:none;overflow:visible;
+ background:linear-gradient(110deg,#041526d1,#071e2bb8);border:1px solid #8bd9be40;border-radius:22px;
+ backdrop-filter:blur(9px);box-shadow:0 10px 65px #030e1cac;
+}
+#loginPanel .loginContent .logo{width:clamp(57px,8.5vmin,87px);height:clamp(57px,8.5vmin,87px);flex:none}
+#loginPanel .loginContent .brand{
+ font-size:clamp(30px,3.9vw,61px);letter-spacing:.015em;
+ margin:0;line-height:1.15;white-space:normal;overflow-wrap:anywhere;
+}
+#loginPanel .loginContent .stack{width:100%;max-width:450px;gap:9px;margin:8px 0}
+#loginPanel .loginContent .stack button{min-height:clamp(42px,6.4vmin,54px);padding:9px;font-size:clamp(12px,1.13vw,15px)}
+#loginPanel .loginContent .eyebrow{margin-top:4px!important}
+#loginPanel .loginContent p{margin:3px 0;max-width:440px;line-height:1.36}
+#loginPanel #loginStatus{margin:4px 0 0!important}
+#loginPanel .loginContent .appVersion{margin:2px auto}
+#loginPanel .loginContent .welcomeVideoBackdrop{border-radius:20px;inset:0}
+#loginPanel .loginContent .welcomeVideoBackdrop .ambientPoster,
+#loginPanel .loginContent .welcomeVideoBackdrop .ambientVideo{filter:saturate(1.22) brightness(.59)}
+#loginPanel .loginContent:before{
+ background:linear-gradient(180deg,#061625d0,#061724e0 45%,#041422f2 100%);
+}
+#loginPanel .loginContent:after{background:radial-gradient(ellipse at 46% 20%,#3ff5da0c,transparent 75%)}
+#loginPanel .loginContent> :not(.welcomeVideoBackdrop){position:relative;z-index:2}
+.celestialCourt{
+ pointer-events:none;position:relative;z-index:3;flex:1 1 auto;align-self:stretch;
+ min-width:0;min-height:450px;perspective:600px;
+ display:flex;align-items:center;justify-content:center;
+}
+.courtHalo{
+ width:min(42vw,580px);height:min(32vw,410px);
+ border:2px solid #f6d29a6e;border-radius:50%;
+ box-shadow:0 0 18px #ffe0a66b,0 0 60px #55f7df38,inset 0 0 65px #20d5c826;
+ transform:rotate(-11deg) rotateX(51deg);
+ animation:courtOrbit 19s ease-in-out infinite alternate;
+}
+.courtHalo:before,.courtHalo:after{
+ content:"";position:absolute;inset:10%;border:1px dashed #7df9f39b;border-radius:50%;
+}
+.courtHalo:after{inset:-19%;border:1px solid #f1e5af2c;filter:drop-shadow(0 0 9px #ffe8a2)}
+.arcanePiece{
+ position:absolute;font-family:"DejaVu Sans","Segoe UI Symbol",serif;
+ font-size:clamp(100px,14vw,230px);line-height:1;
+ color:#fff0c2;filter:drop-shadow(0 8px 5px #001321c9) drop-shadow(0 0 19px #ffd78a);
+ text-shadow:0 1px #fff4d7,3px 3px #af733d,7px 8px #714c31,0 0 30px #ffdba8;
+ animation:pieceFloat 6s ease-in-out infinite alternate;will-change:transform;
+}
+.pieceKing{left:42%;top:20%;color:#ffe7a4;transform:rotate(-4deg);animation-duration:7.1s}
+.pieceKnight{left:10%;top:43%;color:#6beaff;font-size:clamp(110px,13vw,190px);text-shadow:0 1px #a6faff,3px 5px #13658c,6px 8px #102c63,0 0 27px #44dcff;animation-delay:-1.7s}
+.pieceBishop{right:2%;top:48%;color:#82ffd8;font-size:clamp(85px,10vw,165px);text-shadow:0 1px #e2fff2,3px 4px #199b77,6px 9px #0a3a34,0 0 29px #8effd8;animation-delay:-3s}
+.pieceRook{left:39%;bottom:5%;color:#bcb6ff;font-size:clamp(85px,9vw,150px);text-shadow:0 1px #fff,3px 5px #5353af,6px 9px #202253,0 0 22px #90abff;animation-delay:-4s}
+.celestialCourt .orb{position:absolute;width:13px;height:13px;border-radius:50%;background:#fff4c5;box-shadow:0 0 20px #ffed91,0 0 48px #38fdd8;animation:celestialOrb 4s ease-in-out infinite alternate}
+.celestialCourt .o1{left:12%;top:15%}.celestialCourt .o2{right:22%;top:17%;animation-delay:-2s;background:#91fcff}.celestialCourt .o3{right:12%;bottom:16%;animation-delay:-3.5s;background:#b3a1ff}
+.courtCaption{position:absolute;bottom:4%;right:7%;letter-spacing:.2em;text-shadow:0 0 15px #000;color:#f3dab0;font:900 clamp(10px,1.1vw,15px) Georgia,serif}
+#loginPanel .ambientControls{font-size:10px}
+#loginPanel .loginContent .version:last-child{font-size:11px}
+
+body[data-view="menu"] #menuScreen{
+ background:linear-gradient(#031322a0,#031423a1),url("./assets/ui/celestial-arena.svg") center/cover;
+}
+#menuPanel{
+ width:min(1200px,100%);max-width:none;margin:auto;padding:clamp(15px,2.8vw,35px);
+ overflow:hidden;border:1px solid #ffe0a44f;border-radius:24px;box-shadow:0 20px 80px #000c,0 0 40px #ffd68c18;
+ background:linear-gradient(145deg,#061c2adf,#03111bdb);
+}
+#menuPanel .menuAtmosphere{z-index:0}
+#menuPanel .menuAtmosphere .ambientPoster{filter:brightness(.38) saturate(1.4)}
+#menuPanel .menuAtmosphere .ambientVideo{filter:brightness(.42) saturate(1.2)}
+#menuPanel .menuAtmosphere:after{
+ background:linear-gradient(180deg,#041320ad,#04162095 40%,#041522d9),
+ radial-gradient(ellipse at 50% 20%,#27475b29,transparent 67%);
+}
+#menuPanel .menuArtBanner{
+ min-height:180px;background:linear-gradient(90deg,#041523a4,#06162462),url("./assets/ui/celestial-arena.svg") center 48%/cover;
+}
+#menuPanel .menuArtBannerText{min-height:179px}
+#menuPanel .menuGrid{grid-template-columns:repeat(4,minmax(0,1fr))}
+#menuPanel .menuTile{min-height:190px;justify-content:flex-end;padding:17px 12px;border:1px solid #a6daa67b;box-shadow:0 12px 30px #0007}
+#menuPanel .menuTile b{font-size:clamp(12px,1.3vw,18px)}
+#menuPanel .menuTile small{font-size:11px}
+#menuPanel .menuTile:enabled:before{opacity:.75;background-position:center}
+#menuPanel .menuTile:enabled:hover:before{opacity:.96}
+#menuPanel .menuTile:after{opacity:.4}
+#menuPanel .menuHead{margin-bottom:12px}
+#menuPanel .menuHead .brand{font-size:clamp(28px,2.8vw,42px)}
+#menuPanel .menuHead .logo{width:78px;height:78px}
+
+body[data-view="settings"] #settingsScreen{
+ gap:clamp(10px,2vw,28px);
+ background:linear-gradient(90deg,#020e18b6,#03152672 45%,#05162640),
+ url("./assets/ui/celestial-arena.svg") center 50% / cover no-repeat;
+}
+#settingsScreen::before{
+ content:"";position:fixed;inset:0;pointer-events:none;
+ background:radial-gradient(ellipse at 70% 20%,#5beaff15,transparent 60%);
+ animation:celestialPulse 13s ease-in-out infinite alternate;
+}
+#settingsNav{
+ position:relative;z-index:2;flex:0 0 clamp(145px,17vw,240px);
+ align-self:flex-start;display:flex;flex-direction:column;gap:11px;
+ margin-top:clamp(4px,3.5vh,44px);padding:18px 12px;
+ border-radius:17px;background:linear-gradient(160deg,#061e2ec2,#031420b8);
+ backdrop-filter:blur(9px);border:1px solid #dabc7c51;
+}
+#settingsNav .settingsBrand{height:68px;width:68px;border-radius:50%;object-fit:cover;margin:0 auto 8px;box-shadow:0 0 23px #8ffff87b}
+#settingsNav strong{font:900 20px Georgia,serif;letter-spacing:.015em;color:#d9fff5;text-align:center;overflow-wrap:anywhere}
+#settingsNav strong span{color:#ffd796}
+#settingsNav button,#settingsNav .selected{
+ display:block;width:100%;padding:13px 10px;font:750 12px/1.4 system-ui,sans-serif;
+ color:#dafff3;border:1px solid #5fb0a95e;border-radius:9px;
+ background:#092439ad;text-align:left;
+}
+#settingsNav .selected{color:#fce1a0;border-color:#f9d48e;box-shadow:0 0 19px #fed88535}
+#settingsNav p{font:12px/1.7 Georgia,serif;color:#e7dbab;text-align:center;margin:18px 0 0}
+#settingsPanel{
+ position:relative;z-index:2;width:min(820px,100%);max-width:none;
+ margin:8px 0 15px;padding:clamp(19px,2.9vw,42px);
+ max-height:none;overflow:visible;
+ background:linear-gradient(140deg,#051826eb,#071e2bdf 75%,#092739d3);
+ border:1.5px solid #ffe4a4a8;border-radius:25px;box-shadow:0 25px 78px #000d,0 0 30px #ffdc9824;
+}
+#settingsPanel h2{color:#ffe0a3;font:900 clamp(19px,2.5vw,30px)/1.2 Georgia,serif;letter-spacing:.05em}
+#settingsPanel .settingsHeader{position:relative;z-index:2}
+#settingsPanel p{position:relative;z-index:2}
+#settingsPanel .settingGrid{position:relative;z-index:2;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(11px,2vw,23px)}
+#settingsPanel .settingGrid label{color:#e5dcbf;font-weight:600;font-size:12px}
+#settingsPanel .settingGrid label:before{color:#f9dc9a;font-size:14px;margin-right:8px}
+#settingsPanel label[for="lang"]:before{content:"◉"}
+#settingsPanel label[for="mode"]:before{content:"⚔"}
+#settingsPanel label[for="difficulty"]:before{content:"▂"}
+#settingsPanel label[for="theme"]:before{content:"◇"}
+#settingsPanel label[for="pieceSet"]:before{content:"♞"}
+#settingsPanel label[for="boardSize"]:before{content:"⬡"}
+#settingsPanel label[for="whiteColor"]:before,#settingsPanel label[for="blackColor"]:before{content:"♛"}
+#settingsPanel select{
+ background:linear-gradient(155deg,#062c40ee,#103c4bd9);border:1px solid #50b3c1ad;
+ box-shadow:inset 0 2px 6px #001725;font-size:14px;min-height:47px;
+}
+#settingsPanel select:focus-visible{outline-color:#ffe5a0}
+#settingsPanel .settingFoot{position:relative;z-index:2;gap:14px}
+#settingsPanel .settingFoot button{min-height:46px}
+#settingsPanel #modelsStatus{position:relative;z-index:2;margin:13px 0;font-size:12px}
+.biomePreview{
+ display:flex;align-items:flex-end;justify-content:space-between;
+ position:relative;z-index:1;height:clamp(95px,14vh,155px);margin-bottom:21px;
+ border-radius:16px;overflow:hidden;border:1px solid #7ce4b17c;
+ background:linear-gradient(90deg,#03121dc2,#03162232),url("./assets/ui/celestial-arena.svg") center 50% / cover;
+ box-shadow:inset 0 0 20px #00121b;
+}
+.biomePreview::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,#031422b6,transparent 65%)}
+.biomePreview .previewCaption{z-index:2;padding:13px;font:800 11px/1.4 system-ui;color:#f5e3bc;letter-spacing:.16em;text-shadow:0 0 10px #000}
+.biomePreview .previewChess{font:900 90px Georgia,serif;z-index:2;color:#c3fdea;text-shadow:0 0 26px #4cffbd;margin-right:10%;animation:pieceFloat 5s ease-in-out infinite alternate}
+.biomePreview[data-biome="jungle"]{background-image:linear-gradient(90deg,#03121dc7,#06242b25),url("./videos/Ecoajedrez_%20La%20Arena%20Cobra%20Vida-2.png")}
+.biomePreview[data-biome="neon"],.biomePreview[data-biome="ice"]{background-image:linear-gradient(90deg,#03121dc7,#06242b25),url("./videos/Ecoajedrez_%20Portales%20del%20Bosque%20M%C3%A1gico-3.png")}
+.biomePreview[data-biome="volcano"]{background-image:linear-gradient(90deg,#2e0c11d6,#1b0b124d),url("./assets/ui/celestial-arena.svg");filter:hue-rotate(125deg)}
+.biomePreview[data-biome="wood"]{background-image:linear-gradient(90deg,#143c21be,#1234284e),url("./assets/ui/forest-arena.svg")}
+@keyframes pieceFloat{0%{translate:0 10px;rotate:-3deg}100%{translate:0 -20px;rotate:3deg}}
+@keyframes courtOrbit{0%{rotate:-4deg;filter:drop-shadow(0 0 9px #e6cf8b)}100%{rotate:10deg;filter:drop-shadow(0 0 25px #e6cf8b)}}
+@keyframes celestialOrb{to{transform:translate3d(30px,-20px,0);opacity:.45}}
+@keyframes celestialDrift{from{transform:scale(1)}to{transform:scale(1.045) translateX(-.5%)}}
+@keyframes celestialPulse{to{opacity:.45}}
+@media(min-width:1200px) and (max-height:800px){
+ #loginPanel{min-height:unset}
+ #loginPanel .loginContent{padding:14px 22px}
+ #loginPanel .loginContent .logo{width:59px;height:59px}
+ #loginPanel .loginContent .brand{font-size:43px}
+ #loginPanel .loginContent .stack button{min-height:41px}
+}
+@media(max-width:960px){
+ #loginPanel{min-height:unset;flex-direction:column;align-items:center;padding:14px}
+ .celestialCourt{order:2;flex:none;width:100%;min-height:160px;max-height:24dvh}
+ .celestialCourt .arcanePiece{font-size:clamp(75px,15vw,130px)}
+ .celestialCourt .pieceKing{top:8%;left:43%}
+ .celestialCourt .pieceKnight{left:25%;top:3%}
+ .celestialCourt .pieceBishop{right:26%;top:6%}
+ .celestialCourt .pieceRook{display:none}
+ .celestialCourt .courtHalo{height:125px;width:270px}
+ .celestialCourt .courtCaption{display:none}
+ #loginPanel .loginContent{order:1;width:min(590px,100%);max-width:100%;flex:0 1 auto;padding:14px}
+ #loginPanel .loginContent .brand{font-size:clamp(30px,6vw,48px)}
+ #menuPanel .menuGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #menuPanel .menuTile{min-height:153px}
+ #settingsNav{display:none}
+ #settingsPanel{width:min(760px,100%);padding:22px}
+}
+@media(max-width:620px){
+ body[data-view="welcome"] #welcomeScreen,body[data-view="menu"] #menuScreen,body[data-view="settings"] #settingsScreen{padding:7px}
+ #loginPanel{width:100%;margin:auto;padding:10px}
+ #loginPanel .loginContent{width:100%;padding:14px 9px}
+ #loginPanel .loginContent .logo{height:55px;width:55px}
+ #loginPanel .loginContent .brand{font-size:clamp(29px,8.5vw,46px)}
+ #loginPanel .loginContent p{font-size:12px}
+ #loginPanel .loginContent .stack{gap:7px}
+ #loginPanel .loginContent .stack button{min-height:43px}
+ .celestialCourt{min-height:125px}
+ .celestialCourt .arcanePiece{font-size:78px}
+ .celestialCourt .courtHalo{height:98px;width:200px}
+ #menuPanel{padding:14px 9px}
+ #menuPanel .menuGrid{gap:8px}
+ #menuPanel .menuTile{min-height:129px;padding:10px}
+ #menuPanel .menuTile b{font-size:12px}
+ #menuPanel .menuArtBanner{min-height:125px}
+ #menuPanel .menuArtBannerText{min-height:125px}
+ #menuPanel .menuHead .logo{width:55px;height:55px}
+ #settingsPanel{margin:0;width:100%;padding:16px 12px;border-radius:16px}
+ #settingsPanel .settingGrid{gap:10px 8px}
+ #settingsPanel .settingGrid label{font-size:11px;line-height:1.4}
+ #settingsPanel select{min-height:43px;font-size:12px;padding:8px}
+ #settingsPanel .settingFoot button{padding:9px;font-size:12px}
+ .biomePreview{height:90px;margin-bottom:14px}
+}
+@media(max-width:380px){
+ #settingsPanel .settingGrid{grid-template-columns:1fr}
+ #menuPanel .menuGrid{grid-template-columns:1fr}
+ #menuPanel .menuTile{min-height:110px}
+ #loginPanel .loginContent .brand{font-size:29px}
+}
+@media(prefers-reduced-motion:reduce){
+ #loginPanel::before,.celestialCourt *,#settingsScreen::before,.biomePreview .previewChess{
+  animation:none!important;transition:none!important
+ }
+}
