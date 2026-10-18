@@ -73,7 +73,7 @@ test('Background clips play one at a time without cropping, with static fallback
  assert.match(css,/object-fit:contain/);
  assert.match(html,/muted loop playsinline preload="none"/);
  assert.match(html,/id="toggleAmbientVideo"/);
- assert.match(html,/data-app-version>v0\.12\.0-beta\.1/);
+ assert.match(html,/data-app-version>v0\.12\.1-beta\.1/);
  assert.equal(manifest.version,'0.12.1-beta.1');
 });
 
