@@ -1,5 +1,5 @@
 # ECOAJEDREZ 3D/AR · RESUMEN MAESTRO PARA LA PRÓXIMA IA
-**Revisión vigente:** 0.12.0-beta.1 · 2026-10-18. Leer **este archivo primero**; consultar AGENTS.md y código solo si la tarea lo requiere. Evitar reanalizar conversaciones largas.
+**Revisión vigente:** 0.12.1-beta.1 · 2026-10-18. Leer **este archivo primero**; consultar AGENTS.md y código solo si la tarea lo requiere. Evitar reanalizar conversaciones largas.
 
 ## Identidad y fuentes de verdad
 - Repositorio canónico con permisos de escritura: https://github.com/FUNDACIONECOPIENSAEVOLUTION/Ecoajedrez-AR (rama main).
@@ -44,3 +44,6 @@ Imagen limpia del usuario verificada en `app/imagenes/interfaces/login_post_intr
 
 ## 0.12.0-beta.1 (2026-10-18)
 Portada más legible usando `readability-qr.css` (último CSS), intro automática por pestaña/sesión al comenzar y precarga paralela de 14 archivos con barra real, intro saltable y limitada a 10s de reproducción; no se reproduce en bucle. El menú Unirme ahora incluye cámara `qr-scanner.js` para QR de sala, con verificación del origen y código de 6 caracteres, cierre seguro de la cámara y alternativa de conexión manual. Deep link QR de cámara nativa puede conectar tras entrar como invitado. Nuevos tests en `tests/qr-join-intro.test.mjs`. Ver `docs/ENTREGA_0.12.md` para el detalle. Requiere prueba real dos teléfonos; no modificar AR ni Firebase.
+
+## 0.12.1-beta.1 · Corrección de modelos 3D y caché
+Hay **seis** archivos glTF originales autocontenidos bajo `assets/models/staunton/`. Configuración permite Staunton y Realeza arcana con esos glTF; Fantasía y Clásico son geometrías procedurales. `asset-cache.js` y `main.js` ahora comparten `window.ecoPublicAssets.getResource()` con promesas en vuelo deduplicadas y CacheStorage persistido entre visitas, en lugar de solicitudes paralelas del preloader y GLTFLoader. Mantener `CACHE_NAME=ecoajedrez-public-assets-v0.11.0` y `sw.js` sin cambiar para no destruir lo ya descargado; incrementar solo al actualizar los bytes de assets. En Configuración hay botón `downloadModels`, barra `modelDownloadProgress`, estado `modelCacheState`; intento de persistencia de almacenamiento solo tras clic. No garantizar retención indefinida ni que modelos de franquicias viejos estén aquí; no están incluidos. Test de caché dos visitas en `tests/model-cache-persistence.test.mjs`. Entrega detallada en `docs/ENTREGA_0.12.1.md`.
