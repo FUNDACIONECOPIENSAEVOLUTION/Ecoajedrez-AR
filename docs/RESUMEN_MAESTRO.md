@@ -1,5 +1,5 @@
 # ECOAJEDREZ 3D/AR · RESUMEN MAESTRO PARA LA PRÓXIMA IA
-**Revisión vigente:** 0.14.2-beta.1 · 2026-10-18. **Leer primero la sección más reciente al final.** Leer **este archivo primero**; consultar AGENTS.md y código solo si la tarea lo requiere. Evitar reanalizar conversaciones largas.
+**Revisión vigente:** 0.14.3-beta.1 · 2026-10-18. **Leer primero la sección más reciente al final.** Leer **este archivo primero**; consultar AGENTS.md y código solo si la tarea lo requiere. Evitar reanalizar conversaciones largas.
 
 ## Identidad y fuentes de verdad
 - Repositorio canónico con permisos de escritura: https://github.com/FUNDACIONECOPIENSAEVOLUTION/Ecoajedrez-AR (rama main).
@@ -90,3 +90,14 @@ Hay **seis** archivos glTF originales autocontenidos bajo `assets/models/staunto
 9. Próxima fase: comprobar efectos en dispositivos y, tras aprobación, audio opcional; mejorar bot, online, PWA/APK solo después de estabilizar.
 
 **Norma:** al finalizar cada cambio, añadir aquí nueva sección de máximo una página con versión, cambios reales, archivos tocados, pruebas, pendientes y enlace a commit. Evitar documentos maestros duplicados.
+
+## 0.14.3-beta.1 — Pares automáticos tablero + reino 3D (2026-10-18)
+
+- **Única carpeta de subida:** `app/imagenes/entornos/`. Los nombres exactos y las instrucciones de GitHub están en su `README.md`. Son **13 archivos opcionales** `entorno_ID.webp` a medida que el propietario los cargue; todavía no se han suministrado estos fondos de reino.
+- `realm-pairing.js` enlaza determinísticamente los 13 tableros jugables a un bioma temático y un fondo real mediante `manifest.json` generado **durante cada build de GitHub Pages**. No intenta cargar fondos faltantes ni modificar texturas originales.
+- `scripts/build-pages.mjs` valida y copia solamente nombres de reino autorizados, archivos realmente presentes WebP de menos de 3 MB. La carpeta no se copia completa; sin accesos privados, costes ni descargas anticipadas.
+- `board-catalog-ui.js` / `board-catalog.css` muestran **TABLERO + REINO** juntos en Configuración. Si falta el reino, la miniatura explica que está pendiente. Un único selector determina ambos. El selector libre de bioma se mantiene exclusivamente para `classic`.
+- `magic-world.js` conserva el ambiente por defecto si falta un fondo y reemplaza el fondo del escenario por el reino seleccionado si fue publicado. **WebXR no recibe imágenes de reino**: cámara y entorno físico reales, para prevenir confundir imagen artificial con superficies ancladas.
+- Resultado de victoria, derrota y tablas ahora tiene una de las ilustraciones decorativas `vista_de_ajedrez_celestial_encantado.webp` detrás del modal, con sombreado legible y partículas CSS intactas.
+- Tests `tests/realm-pairing.test.mjs` y los tests de versión sincronizados. CI valida scripts, tests y publicación segura; prueba física móvil/AR real sigue pendiente.
+- **Próxima acción del propietario:** cargar imágenes 16:9 en la carpeta, con nombres exactos `entorno_alquimia.webp` etc.; comprobar selección y el fondo relacionado en 3D tras el commit y despliegue automático.

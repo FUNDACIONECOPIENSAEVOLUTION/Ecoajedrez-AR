@@ -1,5 +1,13 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.14.3-beta.1 — 2026-10-18 · Tablero y reino son una pareja única en 3D
+- Nueva carpeta de subida `app/imagenes/entornos/` con README de los 13 WebP `entorno_ID.webp` y manifest generado por GitHub Pages solo con archivos existentes y seguros.
+- Cada tablero jugable selecciona su bioma y fondo 3D automáticamente. El clásico conserva escenarios libres; los 13 modelos ilustrados no tienen selector separado de reino. No hay cambios al fondo AR (cámara real).
+- Configuración muestra tablero + reino en paralelo, con aviso visual de reino pendiente hasta que su propietario publique imagen válida.
+- Pantallas de empate, derrota o victoria incorporan una ilustración `vista-` celestial como fondo de ambientación, manteniendo los efectos anteriores.
+- Pruebas de mapeo y seguridad del bundle actualizadas; falta validación de AR en equipo físico.
+
+
 ## 0.14.2-beta.1 — 2026-10-18 · Final mágico y continuidad en un solo resumen
 - Modal de victoria, derrota y tablas, con efectos CSS ligeros, animación de aro/partículas y los controles reiniciar, menú y ver tablero.
 - Ganador calculado con chess.js, según bot/local/online host/invitado; textos ES/EN/ZH, accesibilidad reducida y sin alterar reglas o AR.
