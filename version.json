@@ -1,8 +1,8 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.9.0-beta.1",
+  "version": "0.10.0-beta.1",
   "updated": "2026-10-17",
-  "status": "Professional gamer composition: one ambient video BEHIND welcome title/buttons and another behind menu options; side gallery is subtle animated stills; old intro remains optional; mobile autoplay with fallback and low-data safeguards. Real-device testing pending.",
+  "status": "Immersive approved-inspired fantasy UI: panoramic celestial chess arena, animated floating figures, themed responsive settings and illustrated biome preview. Core chess, PvP and WebXR unaffected; human browser/mobile acceptance tests pending.",
   "browserValidated": false,
   "physicalARValidated": false,
   "onlinePvP": "Casual PeerJS beta, 6-character code and QR; unranked and not independently anti-cheat verified",
@@ -14,16 +14,17 @@
   "googleAuth": "Server-only BFF code exists but no Cloudflare Functions secrets deployed; Google unavailable on GitHub Pages; guest fully usable",
   "localPersistence": "LocalStorage por UID o invitado, sin servicio externo",
   "diagnostics": "WebXR, WebGL2, Firebase SDK, PeerJS, modelos, conexión, micrófono",
-  "securityReview": "Same-origin media-src 'self'; explicit media allowlist and signature checks, no new external requests, secrets, billing or Firebase activation.",
+  "securityReview": "No external domains, keys, paid services, new login, third-party fonts, pixels or tracking; no changes to server and gameplay",
   "privacyPolicy": "privacy.html",
   "apiSecretsExposedInCurrentBuild": false,
   "liveSecureServerConfigured": false,
-  "ui": "Arcane Glass v0.9: full-bleed darkened welcoming video under legible text, subtle Ken Burns on lateral original imagery, second atmospheric video behind menu game cards; existing optional intro, single active video, reduced-motion/data-saver and WebXR pause; labels outside game/AR.",
+  "ui": "Arcane Glass 0.10: expanded desktop cinematic welcome with playing stage and local themed original celestial illustration + CSS float, high-contrast actual buttons, illustrated menu, settings preview and sidebar real controls, no clipped logo with scroll-safe screens",
   "media": {
     "source": "Owner-uploaded repo videos/ 2026-10-17",
     "intro": "Vídeo sin título-17_10_2026, 16_58.mp4",
     "forest": "Vídeo sin título-17_10_2026, 17_08.mp4",
     "portal": "Vídeo sin título-17_10_2026, 17_10.mp4",
     "notes": "Foreground/chrome never masked by ambient video. Only one MP4 decoded at a time and autoplay never blocks guest mode. Mapping of MP4 by original filenames is provisional pending visual confirmation. Intro requires click."
-  }
+  },
+  "visualFidelity": "Original vector recreation based on approved mockup, NOT pixel-identical generated artwork; approved screenshots contain non-interactive UI and are not used verbatim as background"
 }
