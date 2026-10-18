@@ -1,0 +1,217 @@
+/* ECOAJEDREZ 0.10.1 · Focused correction of the confirmed welcome screenshot.
+   Keep the user-uploaded video and original assets; remove decorative Unicode glyphs.
+   Later than celestial.css in the cascade, intentionally overriding previous grid art. */
+body[data-view="welcome"] #welcomeScreen {
+  padding:clamp(8px,1.6vmin,16px);
+  background:#04111b;
+  align-items:flex-start;
+  overflow-x:hidden;
+  overflow-y:auto;
+}
+#loginPanel {
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content:flex-start;
+  position:relative;
+  isolation:isolate;
+  width:min(1600px,100%);
+  max-width:none;
+  min-height:max(620px,calc(100dvh - 25px));
+  height:auto;
+  margin:auto;
+  padding:clamp(12px,3vw,42px);
+  overflow:hidden;
+  border:1px solid #8be0c879;
+  border-radius:24px;
+  background:#061a28;
+  box-shadow:0 24px 80px #000c,inset 0 0 0 1px #ffe3a514;
+}
+#loginPanel:before {
+  content:none!important;
+  display:none!important;
+}
+#loginPanel:after {
+  content:"";
+  position:absolute;
+  inset:0;
+  width:auto;
+  height:auto;
+  z-index:1;
+  pointer-events:none;
+  border:0;
+  border-radius:0;
+  background:
+    linear-gradient(90deg,#03101bec 0%,#051827d7 22%,#06213081 45%,#061f3030 70%,#0313222b 100%),
+    linear-gradient(0deg,#03121fa8,transparent 21%,transparent 74%,#04122055);
+}
+#loginPanel > .welcomeVideoBackdrop {
+  display:block;
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:0;
+  background:#0a2933 url("./videos/Ecoajedrez_%20La%20Arena%20Cobra%20Vida-2.png") center/cover no-repeat;
+}
+#loginPanel > .welcomeVideoBackdrop .ambientPoster,
+#loginPanel > .welcomeVideoBackdrop .ambientVideo {
+  position:absolute;
+  inset:0;
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:55% 52%;
+  border:none;
+}
+#loginPanel > .welcomeVideoBackdrop .ambientPoster {
+  opacity:1;
+  filter:brightness(.87) saturate(1.14);
+}
+#loginPanel > .welcomeVideoBackdrop .ambientVideo {
+  opacity:0;
+  filter:brightness(.89) saturate(1.15);
+  transition:opacity .75s ease;
+}
+#loginPanel > .welcomeVideoBackdrop.videoReady .ambientVideo {
+  opacity:1;
+}
+#loginPanel .loginContent {
+  position:relative;
+  z-index:3;
+  display:flex;
+  flex:0 1 auto;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  isolation:isolate;
+  width:min(490px,49%);
+  max-width:none;
+  min-width:0;
+  height:auto;
+  min-height:0;
+  max-height:none;
+  margin-left:clamp(0px,2.5vw,48px);
+  padding:clamp(17px,2.3vw,31px) clamp(14px,2.6vw,34px);
+  gap:6px;
+  border:1px solid #94efd45e;
+  border-radius:22px;
+  background:linear-gradient(155deg,#071c2acc,#081c2acb 60%,#041621db);
+  box-shadow:0 12px 65px #000a,0 0 35px #37fad718,inset 0 1px #ffffff24;
+  backdrop-filter:blur(8px) saturate(135%);
+  -webkit-backdrop-filter:blur(8px) saturate(135%);
+}
+#loginPanel .loginContent:before {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  border-radius:inherit;
+  pointer-events:none;
+  background:radial-gradient(ellipse at 60% -15%,#70efd621,transparent 70%);
+}
+#loginPanel .loginContent:after {
+  content:none!important;
+  display:none!important;
+}
+#loginPanel .loginContent > * {
+  position:relative;
+  z-index:1;
+}
+#loginPanel .loginContent .logo {
+  width:clamp(62px,7.5vmin,83px);
+  height:clamp(62px,7.5vmin,83px);
+  object-fit:cover;
+  flex-shrink:0;
+}
+#loginPanel .loginContent .brand {
+  margin:2px 0;
+  font:900 clamp(33px,3.7vw,55px)/1.13 Georgia,"Times New Roman",serif;
+  letter-spacing:.015em;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  filter:drop-shadow(0 3px 12px #001220);
+}
+#loginPanel .loginContent .eyebrow { letter-spacing:.18em; }
+#loginPanel .loginContent p {
+  margin:3px 0;
+  line-height:1.42;
+  max-width:420px;
+  font-size:clamp(12px,1.1vw,14px);
+  text-shadow:0 2px 11px #000c;
+}
+#loginPanel .loginContent .stack {
+  display:grid;
+  width:100%;
+  max-width:410px;
+  gap:10px;
+  margin:10px 0 3px;
+}
+#loginPanel .loginContent .stack button {
+  width:100%;
+  min-height:47px;
+  padding:10px 12px;
+  white-space:normal;
+  font-size:clamp(12px,1.15vw,15px);
+}
+#loginPanel #loginStatus {margin:4px 0!important;min-height:0;}
+#loginPanel .loginContent .ambientControls {margin:6px 0 3px;}
+#loginPanel .loginContent .appVersion {margin:4px auto;}
+#loginPanel .loginContent .version {line-height:1.43;}
+/* The flat chess character stage from v0.10 is intentionally not shown. */
+#loginPanel .celestialCourt,#loginPanel .arcanePiece,#loginPanel .courtHalo {display:none!important;}
+/* Keep old hero carousel out of the interaction tree and painting order. */
+#loginPanel #heroShowcase {display:none!important;}
+@media(max-width:960px){
+  #loginPanel{
+    justify-content:center;
+    min-height:calc(100dvh - 16px);
+    width:100%;
+    padding:clamp(9px,2vw,20px);
+  }
+  #loginPanel:after{
+    background:
+      linear-gradient(90deg,#03101ba6,#06182c5e,#0313229b),
+      linear-gradient(0deg,#03101aca,transparent 25%,#03101b61 100%);
+  }
+  #loginPanel .loginContent {
+    margin:10px auto;
+    width:min(490px,100%);
+    padding:20px 17px;
+    backdrop-filter:blur(10px);
+  }
+}
+@media(max-width:540px){
+  body[data-view="welcome"] #welcomeScreen{padding:5px}
+  #loginPanel{
+    min-height:calc(100dvh - 10px);
+    margin:auto;
+    padding:9px;
+    border-radius:16px;
+  }
+  #loginPanel .loginContent{
+    width:min(480px,100%);
+    padding:16px 12px;
+    border-radius:14px;
+    gap:5px;
+  }
+  #loginPanel .loginContent .logo{height:57px;width:57px}
+  #loginPanel .loginContent .brand{font-size:clamp(29px,8.4vw,43px)}
+  #loginPanel .loginContent .stack{gap:7px;margin:5px auto}
+  #loginPanel .loginContent .stack button{min-height:42px;font-size:12px;padding:8px}
+  #loginPanel .loginContent p{font-size:12px;margin:2px 0}
+  #loginPanel .loginContent .eyebrow{font-size:9px}
+  #loginPanel .loginContent .ambientControls{font-size:9px;margin:4px auto}
+}
+@media(max-height:650px) and (min-width:961px) {
+  #loginPanel{min-height:650px}
+  #loginPanel .loginContent{padding:13px 22px;gap:3px}
+  #loginPanel .loginContent .logo{width:57px;height:57px}
+  #loginPanel .loginContent .stack button{min-height:40px}
+}
+@media(prefers-reduced-motion:reduce){
+  #loginPanel > .welcomeVideoBackdrop .ambientVideo {transition:none!important;}
+}
