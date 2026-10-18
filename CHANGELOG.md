@@ -1,5 +1,12 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.12.0-beta.1 — 2026-10-18
+- Contraste reforzado en la bienvenida: título, subtítulo, letras pequeñas, textos de estado y privacidad, conservando la imagen limpia aprobada.
+- Introducción automática al iniciar una pestaña nueva; una vez por sesión, saltable, hasta 10s de video; recursos públicos descargados en paralelo con progreso real; fondo permanece estático al salir.
+- La opción Unirme a partida ahora permite escanear el QR generado al crear un duelo, mediante cámara con permiso del usuario y validación de invitación propia. Se mantiene entrada manual de seis símbolos y deep link desde cámara del teléfono.
+- Archivos nuevos `qr-scanner.js`, `readability-qr.css`, `tests/qr-join-intro.test.mjs`; guía `docs/ENTREGA_0.12.md`. Las pruebas automatizadas no sustituyen una prueba física entre dos celulares. Sin costos ni cambios en AR/Firebase.
+
+
 ## 0.11.1-beta.1 — 2026-10-18 · Portada con imagen limpia y video 10s
 - Fondo exclusivo aprobado y subido por el usuario: `app/imagenes/interfaces/login_post_intro_fondo.png` con firma PNG verificada, empaquetado específico para GitHub Pages.
 - Video de intro automática primera visita: cierra al final o a 10s de reproducción; aparece imagen fija. Ya no hay video ambiental en bucle en bienvenida. Puede omitirse o reproducirse de nuevo manualmente.
