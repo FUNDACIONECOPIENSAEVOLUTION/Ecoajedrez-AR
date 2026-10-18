@@ -1,0 +1,222 @@
+/* ECOAJEDREZ v0.11.1 — landing screen only.
+   Approved clean background is an original user-uploaded 2.96 MB image.
+   Buttons remain accessible DOM controls; cinematic first-visit video is an overlay,
+   not a permanently looping competing background video. */
+body[data-view="welcome"] #welcomeScreen {
+  display:flex;
+  position:fixed;
+  inset:0;
+  height:100dvh;
+  min-height:100dvh;
+  padding:0;
+  overflow-y:auto;
+  overflow-x:hidden;
+  background:#041521;
+  scrollbar-color:#6bceb2b3 transparent;
+}
+#loginPanel {
+  width:100%;
+  max-width:none;
+  min-height:100dvh;
+  height:auto;
+  display:flex;
+  justify-content:flex-start;
+  align-items:center;
+  margin:auto;
+  padding:clamp(14px,3.6vw,66px);
+  background:#061729;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+  isolation:isolate;
+}
+#loginPanel > .welcomeVideoBackdrop {
+  position:absolute;
+  inset:0;
+  z-index:0;
+  display:block;
+  background:#041b2d url("./app/imagenes/interfaces/login_post_intro_fondo.png") center center/cover no-repeat;
+}
+#loginPanel > .welcomeVideoBackdrop .ambientPoster {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  object-position:51% center;
+  filter:none;
+  opacity:1;
+}
+#loginPanel > .welcomeVideoBackdrop .ambientVideo {
+  display:none!important;
+  opacity:0!important;
+}
+#loginPanel::before {content:none!important}
+#loginPanel::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  width:auto;height:auto;
+  pointer-events:none;
+  border:0;
+  background:
+   linear-gradient(90deg,rgba(1,11,21,.82) 0%,rgba(3,20,30,.7) 27%,rgba(4,21,30,.3) 47%,rgba(2,14,26,.02) 77%),
+   linear-gradient(0deg,rgba(1,11,20,.52),transparent 22%,transparent 84%,rgba(1,10,19,.16));
+}
+#loginPanel #heroShowcase {display:none!important}
+#loginPanel .loginContent {
+  display:flex;
+  flex-direction:column;
+  flex:0 0 auto;
+  width:min(565px,46vw);
+  max-width:none;
+  min-width:0;
+  margin:0 0 0 clamp(1px,9vw,130px);
+  padding:clamp(12px,1.8vw,24px) 8px;
+  gap:clamp(5px,1vh,11px);
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  z-index:3;
+  text-align:center;
+  isolation:isolate;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+  background:none;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+}
+#loginPanel .loginContent::before,#loginPanel .loginContent::after {display:none!important}
+#loginPanel .loginContent .logo {
+  width:clamp(65px,9.5vmin,113px);
+  height:clamp(65px,9.5vmin,113px);
+  margin:0 auto 2px;
+  border-radius:50%;
+  box-shadow:0 0 24px #baffb493,0 0 7px #fffad7;
+}
+#loginPanel .loginContent .brand {
+  width:100%;
+  max-width:none;
+  margin:0 0 4px;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(34px,4.1vw,65px);
+  font-weight:900;
+  line-height:1.08;
+  letter-spacing:-.025em;
+  white-space:nowrap;
+  overflow-wrap:normal;
+  word-break:normal;
+  text-shadow:0 3px 14px #000,0 0 25px #042c3e;
+  filter:none;
+}
+#loginPanel .loginContent .eyebrow {
+  margin:1px 0!important;
+  font:800 clamp(11px,1.2vw,16px)/1.35 system-ui,sans-serif;
+  letter-spacing:.22em;
+  color:#88fff2;
+  text-shadow:0 3px 10px #001119;
+}
+#loginPanel .loginContent p{
+  line-height:1.4;
+  font-size:clamp(12px,1.15vw,15px);
+  color:#f3f7f6;
+  text-shadow:0 2px 12px #000,0 1px 4px #000;
+}
+#loginPanel .loginContent > p:not(.version):not(.appVersion){max-width:475px}
+#loginPanel .loginContent .stack{
+  width:min(450px,100%);
+  max-width:450px;
+  margin:7px auto 3px;
+  display:grid;
+  gap:clamp(8px,1.3vh,13px);
+}
+#loginPanel .loginContent .stack button{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  width:100%;
+  min-height:clamp(44px,6.2vh,62px);
+  padding:10px 16px;
+  font:900 clamp(12px,1.15vw,16px)/1.22 system-ui,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.01em;
+  border-radius:12px;
+  box-shadow:0 4px 16px #000a;
+}
+#loginPanel .loginContent .introButton{
+  color:#fff1b3;
+  border:1px solid #f8db94;
+  background:linear-gradient(95deg,#053249e8,#05243ddc);
+  box-shadow:0 0 13px #55ffc866,0 0 5px #f8d68655;
+}
+#loginPanel #loginGoogleBtn:disabled{
+  opacity:.72;
+  color:#e7f8f6;
+  background:linear-gradient(95deg,#106b64c9,#087e6dbb);
+}
+#loginPanel #loginGuestBtn{
+  color:#251708;
+  border:1px solid #fff1b7;
+  background:linear-gradient(120deg,#fff0b7,#dea85d);
+}
+#loginPanel .gameHighlights{display:flex;gap:8px;flex-wrap:wrap;margin:5px auto}
+#loginPanel .gameHighlights span{font-size:clamp(9px,.8vw,11px);background:#031a2cc7}
+#loginPanel .ambientControls{display:none!important}
+#loginPanel .version{line-height:1.4;margin:3px 0}
+#loginPanel .appVersion{margin:3px auto!important}
+#loginPanel .downloadStatus:not([hidden]){background:#041b2bd9;border-radius:10px;padding:7px}
+@media(max-width:1080px) {
+  #loginPanel .loginContent{
+    width:min(530px,52vw);
+    margin-left:clamp(0px,3vw,32px);
+  }
+  #loginPanel .loginContent .brand{font-size:clamp(33px,4.3vw,52px)}
+  #loginPanel::after{background:linear-gradient(90deg,#04121de8,#061926c1 36%,#05172548 70%,transparent),linear-gradient(0deg,#03131da8,transparent 40%)}
+}
+@media(max-width:760px) {
+  #loginPanel {
+    justify-content:center;
+    align-items:center;
+    padding:clamp(10px,3vw,22px);
+  }
+  #loginPanel::after{
+    background:linear-gradient(0deg,#04131de3 0%,#031624cb 22%,#05192988 58%,#03141da2 100%);
+  }
+  #loginPanel > .welcomeVideoBackdrop .ambientPoster{object-position:66% 50%}
+  #loginPanel .loginContent{
+    width:min(520px,100%);
+    margin:0 auto;
+    padding:clamp(12px,2.5vw,22px);
+    border:1px solid #9ff6e23b;
+    border-radius:18px;
+    background:#03192b78;
+    backdrop-filter:blur(3px);
+    -webkit-backdrop-filter:blur(3px);
+  }
+  #loginPanel .loginContent .brand{font-size:clamp(33px,7vw,51px)}
+}
+@media(max-width:440px){
+  #loginPanel{padding:8px;min-height:100dvh}
+  #loginPanel .loginContent{padding:12px 9px;gap:5px}
+  #loginPanel .loginContent .logo{width:58px;height:58px}
+  #loginPanel .loginContent .brand{font-size:clamp(28px,8.5vw,39px)}
+  #loginPanel .loginContent .eyebrow{font-size:10px;letter-spacing:.15em}
+  #loginPanel .loginContent p{font-size:12px}
+  #loginPanel .loginContent .stack{gap:7px;margin:4px auto}
+  #loginPanel .loginContent .stack button{min-height:43px;font-size:12px}
+  #loginPanel .gameHighlights span{font-size:9px;padding:4px 7px}
+  #loginPanel .loginContent .version{font-size:10px}
+}
+@media(max-height:650px) and (min-width:761px){
+  #loginPanel .loginContent{gap:3px;padding:12px 8px}
+  #loginPanel .loginContent .logo{width:62px;height:62px}
+  #loginPanel .loginContent .stack{gap:7px}
+  #loginPanel .loginContent .stack button{min-height:39px}
+  #loginPanel .loginContent .eyebrow{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce) {
+  #loginPanel .loginContent *{animation:none!important;transition:none!important}
+}
