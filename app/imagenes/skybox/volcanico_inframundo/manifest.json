@@ -1,0 +1,56 @@
+{
+  "package": "ECOAJEDREZ_05_Reino_Volcanico_Inframundo_Skybox_6_Caras_WEBP",
+  "realm": "Reino Volcánico / Inframundo",
+  "resolution": "1254x1254",
+  "format": "webp",
+  "faces": {
+    "pz": {
+      "label": "frente_+Z",
+      "source": "/mnt/data/fortaleza_infernal_entre_lava_y_sombras.png",
+      "exact_filename": "pz.webp",
+      "descriptive_filename": "reino_volcanico_inframundo__pz__frente_+Z.webp",
+      "width": 1254,
+      "height": 1254
+    },
+    "nz": {
+      "label": "atras_-Z",
+      "source": "/mnt/data/fortaleza_infernal_entre_ríos_de_lava.png",
+      "exact_filename": "nz.webp",
+      "descriptive_filename": "reino_volcanico_inframundo__nz__atras_-Z.webp",
+      "width": 1254,
+      "height": 1254
+    },
+    "nx": {
+      "label": "izquierda_-X",
+      "source": "/mnt/data/fortaleza_gótica_entre_ríos_de_lava.png",
+      "exact_filename": "nx.webp",
+      "descriptive_filename": "reino_volcanico_inframundo__nx__izquierda_-X.webp",
+      "width": 1254,
+      "height": 1254
+    },
+    "px": {
+      "label": "derecha_+X",
+      "source": "/mnt/data/panorama_del_inframundo_volcánico.png",
+      "exact_filename": "px.webp",
+      "descriptive_filename": "reino_volcanico_inframundo__px__derecha_+X.webp",
+      "width": 1254,
+      "height": 1254
+    },
+    "py": {
+      "label": "cielo_+Y",
+      "source": "/mnt/data/cielo_volcánico_entre_obsidiana_y_fuego.png",
+      "exact_filename": "py.webp",
+      "descriptive_filename": "reino_volcanico_inframundo__py__cielo_+Y.webp",
+      "width": 1254,
+      "height": 1254
+    },
+    "ny": {
+      "label": "suelo_-Y",
+      "source": "/mnt/data/arena_volcánica_de_runas_ardientes.png",
+      "exact_filename": "ny.webp",
+      "descriptive_filename": "reino_volcanico_inframundo__ny__suelo_-Y.webp",
+      "width": 1254,
+      "height": 1254
+    }
+  }
+}
