@@ -51,4 +51,4 @@ async function preparePublicAssets(){
  window.dispatchEvent(new CustomEvent('eco:assets-ready',{detail:{total,cached,downloaded,failed,stored:!!cache}}));
 }
 // Delay network prefetch very slightly so the optional first-visit intro paints immediately.
-setTimeout(()=>{preparePublicAssets().catch(()=>{});},650);
+setTimeout(()=>{preparePublicAssets().catch(()=>{});},120);
