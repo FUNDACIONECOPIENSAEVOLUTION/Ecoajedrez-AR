@@ -1,0 +1,56 @@
+{
+  "package": "ECOAJEDREZ_03_Reino_Medieval_Leyenda_de_Fantasia_Skybox_6_Caras_WEBP",
+  "realm": "Reino Medieval / Leyenda de Fantasía",
+  "resolution": "1254x1254",
+  "format": "webp",
+  "faces": {
+    "pz": {
+      "label": "frente_+Z",
+      "source": "/mnt/data/ghostwriter_images/generated/a_dramatic_cinematic_high_detail_fantasy_medieva_1.png",
+      "exact_filename": "pz.webp",
+      "descriptive_filename": "reino_medieval_leyenda_de_fantasia__pz__frente_+Z.webp",
+      "width": 1254,
+      "height": 1254
+    },
+    "nx": {
+      "label": "izquierda_-X",
+      "source": "/mnt/data/ghostwriter_images/generated/a_richly_detailed_cinematic_symmetrical_high_fa_2_batch_1.png",
+      "exact_filename": "nx.webp",
+      "descriptive_filename": "reino_medieval_leyenda_de_fantasia__nx__izquierda_-X.webp",
+      "width": 1254,
+      "height": 1254
+    },
+    "px": {
+      "label": "derecha_+X",
+      "source": "/mnt/data/ghostwriter_images/generated/a_highly_detailed_cinematic_realistic_fantasy_me_3_batch_2.png",
+      "exact_filename": "px.webp",
+      "descriptive_filename": "reino_medieval_leyenda_de_fantasia__px__derecha_+X.webp",
+      "width": 1254,
+      "height": 1254
+    },
+    "py": {
+      "label": "cielo_+Y",
+      "source": "/mnt/data/ghostwriter_images/generated/a_dramatic_symmetrical_ultra_detailed_photoreal_4_batch_3.png",
+      "exact_filename": "py.webp",
+      "descriptive_filename": "reino_medieval_leyenda_de_fantasia__py__cielo_+Y.webp",
+      "width": 1254,
+      "height": 1254
+    },
+    "ny": {
+      "label": "suelo_-Y",
+      "source": "/mnt/data/ghostwriter_images/generated/top_down_symmetrical_cinematic_high_detail_fant_5_batch_4.png",
+      "exact_filename": "ny.webp",
+      "descriptive_filename": "reino_medieval_leyenda_de_fantasia__ny__suelo_-Y.webp",
+      "width": 1254,
+      "height": 1254
+    },
+    "nz": {
+      "label": "atras_-Z",
+      "source": "/mnt/data/ghostwriter_images/generated/wide_cinematic_highly_detailed_fantasy_gothic_ca_6_batch_5.png",
+      "exact_filename": "nz.webp",
+      "descriptive_filename": "reino_medieval_leyenda_de_fantasia__nz__atras_-Z.webp",
+      "width": 1254,
+      "height": 1254
+    }
+  }
+}
