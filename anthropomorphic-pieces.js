@@ -20,6 +20,35 @@ export function collectAnthroSources(gltf){
  return templates;
 }
 const geometries=new WeakMap();
+const glowTextures=new WeakMap();
+function glowTexture(THREE,color){
+ let textureMap=glowTextures.get(THREE);
+ if(!textureMap){textureMap=new Map();glowTextures.set(THREE,textureMap);}
+ if(textureMap.has(color))return textureMap.get(color);
+ const canvas=document.createElement('canvas');canvas.width=64;canvas.height=64;
+ const ctx=canvas.getContext('2d');
+ const grd=ctx.createRadialGradient(32,32,0,32,32,32);
+ const rgb=color==='w'?'85,210,255':'184,85,255';
+ grd.addColorStop(0,'rgba('+rgb+',.68)');
+ grd.addColorStop(.19,'rgba('+rgb+',.34)');
+ grd.addColorStop(.5,'rgba('+rgb+',.11)');
+ grd.addColorStop(1,'rgba('+rgb+',0)');
+ ctx.fillStyle=grd;ctx.fillRect(0,0,64,64);
+ const tex=new THREE.CanvasTexture(canvas);tex.colorSpace=THREE.SRGBColorSpace;
+ textureMap.set(color,tex);return tex;
+}
+function addGlowHalo(THREE,group,color,height){
+ if(typeof document==='undefined')return;
+ const glow=new THREE.Sprite(new THREE.SpriteMaterial({
+  map:glowTexture(THREE,color),transparent:true,
+  blending:THREE.AdditiveBlending,depthWrite:false,opacity:.68
+ }));
+ glow.scale.set(.95,1.15,1);
+ glow.position.y=height;
+ glow.name='Luz mágico-neón';
+ group.add(glow);
+}
+
 function shared(THREE,name,create){
  let m=geometries.get(THREE);if(!m){m=new Map();geometries.set(THREE,m);}
  if(!m.has(name))m.set(name,create());return m.get(name);
@@ -104,6 +133,7 @@ function procedural(THREE,p){
   return pivot;
  }
  const armL=limb(true,true),armR=limb(false,true),legL=limb(true,false),legR=limb(false,false);
+ addGlowHalo(THREE,g,p.color,p.type==='k'?1.1:.75);
  g.userData.anthro={kind:'procedural',body,armL,armR,legL,legR,gem:mats.gem,idleOffset:Math.random()*7};
  return g;
 }
