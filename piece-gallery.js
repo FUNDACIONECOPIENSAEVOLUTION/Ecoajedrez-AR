@@ -1,5 +1,4 @@
-// Galería accesible de nueve acabados. Renderiza fotografías LOCALES del manifest filtrado.
-// No usa CDNs del navegador y mantiene siempre el selector clásico como respaldo.
+// Galería accesible: 9 fuentes PBR locales CC0 + variantes tintadas. Sin hotlinks ni claves.
 export function setupMaterialGallery({root,select,materials,readManifest,assetRoot}){
  if(!root||!select)return;
  root.replaceChildren();
@@ -8,7 +7,8 @@ export function setupMaterialGallery({root,select,materials,readManifest,assetRo
   if(key==='arcane')continue;
   const button=document.createElement('button');
   button.type='button';button.className='ecoPbrSample';
-  button.dataset.material=key;button.style.setProperty('--ecoPbrColor',info.base);
+  button.dataset.material=key;
+  button.style.setProperty('--ecoPbrColor',info.tint||info.base);
   button.setAttribute('aria-label','Elegir '+info.label);
   button.setAttribute('aria-pressed','false');
   const surface=document.createElement('span');surface.className='ecoPbrSurface';
@@ -17,50 +17,32 @@ export function setupMaterialGallery({root,select,materials,readManifest,assetRo
   button.addEventListener('click',()=>{
    select.value=key;select.dispatchEvent(new Event('change',{bubbles:true}));
   });
-  items.set(key,{button,surface});
+  items.set(key,{button,surface,info});
   root.append(button);
  }
- const sync=()=>{
+ function sync(){
   for(const [key,{button}] of items){
-   const current=key===select.value;
-   button.classList.toggle('active',current);
-   button.setAttribute('aria-pressed',String(current));
+   const active=key===select.value;button.classList.toggle('active',active);
+   button.setAttribute('aria-pressed',String(active));
   }
- };
+ }
  select.addEventListener('change',sync);sync();
  const status=document.getElementById('ecoPbrStatus');
  readManifest().then(doc=>{
   let found=0;
-  for(const [key,{button,surface}] of items){
-   const origin=materials[key].photoSource||key;
-   const color=doc?.materials?.[origin]?.color;
-   if(typeof color!=='string'||!new RegExp('^'+origin+'/color\\.(jpg|webp|png).test(color))continue;
+  for(const [key,{button,surface,info}] of items){
+   const source=info.photoSource||key,filename=doc?.materials?.[source]?.color;
+   if(typeof filename!=='string'||
+      !new RegExp('^'+source+'/color\\.(jpg|webp|png)$').test(filename))continue;
    const photo=document.createElement('img');
-   photo.src=assetRoot+'/'+color;
-   if(materials[key].photoSource){photo.style.filter='saturate(.65)';surface.style.backgroundColor=materials[key].tint||materials[key].base;}
+   photo.src=assetRoot+'/'+filename;
    photo.alt='';photo.loading='lazy';photo.decoding='async';
-   photo.addEventListener('load',()=>{button.classList.add('hasPhoto')},{once:true});
-   photo.addEventListener('error',()=>{photo.remove();button.classList.remove('hasPhoto')},{once:true});
+   if(info.photoSource){photo.className='ecoPbrTinted';surface.style.setProperty('--ecoTint',info.tint||info.base);}
+   photo.addEventListener('load',()=>button.classList.add('hasPhoto'),{once:true});
+   photo.addEventListener('error',()=>photo.remove(),{once:true});
    surface.append(photo);found++;
   }
-  if(status){
-   status.textContent=found>=9?'9 fotografías PBR CC0 y variantes de color listas':
-    found?found+' opciones PBR disponibles; las demás usan respaldo ligero':
-    'Fototexturas no publicadas: se muestran los acabados ligeros.';
-  }
- }).catch(()=>{if(status)status.textContent='No se pudo comprobar el paquete PBR; funciona el modo ligero.'});
-}).test(color))continue;
-   const photo=document.createElement('img');
-   photo.src=assetRoot+'/'+color;
-   photo.alt='';photo.loading='lazy';photo.decoding='async';
-   photo.addEventListener('load',()=>{button.classList.add('hasPhoto')},{once:true});
-   photo.addEventListener('error',()=>{photo.remove();button.classList.remove('hasPhoto')},{once:true});
-   surface.append(photo);found++;
-  }
-  if(status){
-   status.textContent=found===9?'9 acabados fotográficos PBR CC0 listos':
-    found?found+'/9 acabados PBR disponibles; los demás usan respaldo ligero':
-    'Fototexturas no publicadas: se muestran los acabados ligeros.';
-  }
- }).catch(()=>{if(status)status.textContent='No se pudo comprobar el paquete PBR; funciona el modo ligero.'});
+  if(status)status.textContent=found?'Fototexturas CC0: '+Math.min(found,9)+' fuentes, '+found+' opciones (incluidas variantes tintadas).':
+   'Fototexturas no publicadas: se conservan los materiales ligeros.';
+ }).catch(()=>{if(status)status.textContent='Sin acceso a las fototexturas: materiales ligeros disponibles.'});
 }
