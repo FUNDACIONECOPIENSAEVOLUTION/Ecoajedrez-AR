@@ -5,7 +5,7 @@
     "https://polyhaven.com/license",
     "https://ambientcg.com/license"
   ],
-  "generation": "2026-10-19T17:33:31.136405+00:00",
+  "generation": "2026-10-19T17:37:53.575492+00:00",
   "materials": {
     "walnut": {
       "provider": "Poly Haven",
@@ -19,7 +19,8 @@
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": false
         },
         "normal": {
           "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/black_walnut_veneer_03/black_walnut_veneer_03_nor_gl_1k.jpg",
@@ -28,7 +29,8 @@
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": false
         },
         "roughness": {
           "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/black_walnut_veneer_03/black_walnut_veneer_03_rough_1k.jpg",
@@ -37,7 +39,8 @@
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": false
         }
       }
     },
@@ -53,7 +56,8 @@
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": false
         },
         "normal": {
           "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/oak_wood_planks/oak_wood_planks_nor_gl_1k.jpg",
@@ -62,7 +66,8 @@
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": false
         },
         "roughness": {
           "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/oak_wood_planks/oak_wood_planks_rough_1k.jpg",
@@ -71,7 +76,8 @@
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": false
         }
       }
     },
@@ -87,7 +93,8 @@
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": false
         },
         "normal": {
           "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face/rock_face_nor_gl_1k.jpg",
@@ -96,7 +103,8 @@
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": false
         },
         "roughness": {
           "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face/rock_face_rough_1k.jpg",
@@ -105,7 +113,8 @@
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": false
         }
       }
     },
@@ -121,7 +130,8 @@
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": false
         },
         "normal": {
           "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/marble_01/marble_01_nor_gl_1k.jpg",
@@ -130,7 +140,8 @@
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": false
         },
         "roughness": {
           "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/marble_01/marble_01_rough_1k.jpg",
@@ -139,7 +150,8 @@
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": false
         }
       }
     },
@@ -155,7 +167,8 @@
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": false
         },
         "normal": {
           "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/dark_rock_02/dark_rock_02_nor_gl_1k.jpg",
@@ -164,7 +177,8 @@
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": false
         },
         "roughness": {
           "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/dark_rock_02/dark_rock_02_rough_1k.jpg",
@@ -173,7 +187,8 @@
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": false
         }
       }
     },
@@ -185,11 +200,12 @@
         "color": {
           "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rusty_metal_05/rusty_metal_05_diff_1k.jpg",
           "sha256": "c48e9064ef1a1a1f745c605669adfac9391980c31a68f4f06808a2ab25aeaca8",
-          "size": 108382,
+          "size": 47676,
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": true
         },
         "normal": {
           "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rusty_metal_05/rusty_metal_05_nor_gl_1k.jpg",
@@ -198,7 +214,8 @@
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": false
         },
         "roughness": {
           "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rusty_metal_05/rusty_metal_05_rough_1k.jpg",
@@ -207,7 +224,8 @@
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": false
         }
       }
     },
@@ -219,11 +237,12 @@
         "color": {
           "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rusty_metal_05/rusty_metal_05_diff_1k.jpg",
           "sha256": "c48e9064ef1a1a1f745c605669adfac9391980c31a68f4f06808a2ab25aeaca8",
-          "size": 108382,
+          "size": 72040,
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": true
         },
         "normal": {
           "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rusty_metal_05/rusty_metal_05_nor_gl_1k.jpg",
@@ -232,7 +251,8 @@
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": false
         },
         "roughness": {
           "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rusty_metal_05/rusty_metal_05_rough_1k.jpg",
@@ -241,41 +261,45 @@
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": false
         }
       }
     },
     "ice": {
       "provider": "Poly Haven",
-      "asset": "rocks_ground_04",
-      "source": "https://polyhaven.com/a/rocks_ground_04",
+      "asset": "snow_02",
+      "source": "https://polyhaven.com/a/snow_02",
       "maps": {
         "color": {
-          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rocks_ground_04/rocks_ground_04_diff_1k.jpg",
-          "sha256": "7399f1e11292899f143c12c79cd7c7aa30294fa5564052f92a45a1bf80c615ba",
-          "size": 145652,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/snow_02/snow_02_diff_1k.jpg",
+          "sha256": "523a4e69c90b96d787dd69b897f29a2b3761a017024405c60aa630d1e8e9009a",
+          "size": 12996,
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": true
         },
         "normal": {
-          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rocks_ground_04/rocks_ground_04_nor_gl_1k.jpg",
-          "sha256": "2bd220a803e5e6be9b7bde0312a20a06d239f6ca8b17b78215cc3b99818a82f7",
-          "size": 184436,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/snow_02/snow_02_nor_gl_1k.jpg",
+          "sha256": "9495ec680616b8340e2cbecbd151bff84c690cfad4209e90cc98d2d0ba81f810",
+          "size": 171536,
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": false
         },
         "roughness": {
-          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rocks_ground_04/rocks_ground_04_rough_1k.jpg",
-          "sha256": "9c189349e48f630f5d504fcb051a042599703b45adf42236d10989527d2dc5f7",
-          "size": 149628,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/snow_02/snow_02_rough_1k.jpg",
+          "sha256": "b6dea8039ac2a5beaed6fd41834fb55540cc76b492edd1d48ba2da2f30f1cb75",
+          "size": 8304,
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": false
         }
       }
     },
@@ -291,7 +315,8 @@
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": false
         },
         "normal": {
           "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face_03/rock_face_03_nor_gl_1k.jpg",
@@ -300,7 +325,8 @@
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": false
         },
         "roughness": {
           "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face_03/rock_face_03_rough_1k.jpg",
@@ -309,7 +335,8 @@
           "resolution": [
             768,
             768
-          ]
+          ],
+          "color_reinterpreted_for_fantasy": false
         }
       }
     }
