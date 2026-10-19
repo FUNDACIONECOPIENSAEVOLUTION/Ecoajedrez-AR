@@ -53,6 +53,8 @@ jobs:
           node --check functions/api/auth/logout.js
           node --check functions/api/auth/google/start.js
           node --check functions/api/auth/google/callback.js
+      - name: Report uploaded 3D model inventory (informational)
+        run: node scripts/revisar-modelos-3d.mjs
       - name: Check project consistency
         run: |
           node --test tests/*.test.mjs
