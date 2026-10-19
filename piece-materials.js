@@ -1,3 +1,4 @@
+import {getPhotoPBR} from './piece-pbr.js?v=0.15.5';
 // ECOAJEDREZ: lightweight, procedurally painted 128px fantasy materials.
 // Shared textures, per-piece material colors and selectable emitted-light palettes.
 export const PIECE_MATERIALS=Object.freeze({
@@ -98,7 +99,12 @@ export function applyPieceAppearance(THREE,root,config={}){
     continue;
    }
    if(name!=='arcane'&&role!=='accent'){
-    m.map=textureFor(THREE,name);
+    const pbr=getPhotoPBR(name);
+    m.map=pbr?.color||textureFor(THREE,name);
+    m.normalMap=pbr?.normal||null;
+    m.roughnessMap=pbr?.roughness||null;
+    m.metalnessMap=pbr?.metalness||null;
+    if(m.normalMap&&m.normalScale?.set)m.normalScale.set(.32,.32);
     if(m.color?.set)m.color.set(color==='b'?'#b2abb8':'#ffffff');
     if('roughness' in m)m.roughness=base.roughness;
     if('metalness' in m)m.metalness=base.metalness;

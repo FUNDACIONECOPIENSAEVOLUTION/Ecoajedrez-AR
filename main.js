@@ -20,9 +20,10 @@ import {checkSkybox,linkedRealm,validExperience,gameRealmName} from './experienc
 import {createQuestMap,successfulQuestMove} from './quest-map.js?v=0.15.2';
 import {COMMUNITY_FILES,communityPiecePath,communityPieceKey,communityPieceHeight} from './community-models.js?v=0.15.2';
 import {ANTHRO_GLB,ANTHRO_MANIFEST,collectAnthroSources,createAnthroVisual,tickAnthroVisuals} from './anthropomorphic-pieces.js?v=0.15.3';
-import {PIECE_MATERIALS,PIECE_GLOWS,validPieceMaterial,validPieceGlow,applyPieceAppearance} from './piece-materials.js?v=0.15.4';
+import {PIECE_MATERIALS,PIECE_GLOWS,validPieceMaterial,validPieceGlow,applyPieceAppearance} from './piece-materials.js?v=0.15.5';
 import {createChessCombat,faceMovement} from './piece-combat.js?v=0.15.4';
-import {createPiecePreview} from './piece-preview.js?v=0.15.4';
+import {createPiecePreview} from './piece-preview.js?v=0.15.5';
+import {loadPhotoPBR} from './piece-pbr.js?v=0.15.5';
 
 const $ = (id) => document.getElementById(id);
 const canvas = $('render'), stage = $('scene');
@@ -754,10 +755,19 @@ function bindPieceAppearance(){
   }
   control.value=chosen;
  }
+ async function prepareSelectedPBR(){
+  if(modelSet!=='anthro'||pieceMaterial==='arcane')return;
+  const requested=pieceMaterial;
+  const result=await loadPhotoPBR(THREE,requested);
+  if(result&&modelSet==='anthro'&&pieceMaterial===requested){
+   moving=null;renderPieces();piecePreview?.rebuild();
+  }
+ }
  $('pieceMaterial').onchange=()=>{
   pieceMaterial=validPieceMaterial($('pieceMaterial').value);
   try{localStorage.setItem('eco-piece-material',pieceMaterial)}catch(error){}
   moving=null;renderPieces();piecePreview?.rebuild();
+  prepareSelectedPBR().catch(()=>{});
  };
  $('pieceGlow').onchange=()=>{
   pieceGlow=validPieceGlow($('pieceGlow').value);
@@ -765,12 +775,13 @@ function bindPieceAppearance(){
   moving=null;renderPieces();piecePreview?.rebuild();
  };
  $('piecePreviewType').onchange=event=>piecePreview?.rebuild(event.target.value);
+ prepareSelectedPBR().catch(()=>{});
 }
 bindPieceAppearance();
 $('pieceSet').onchange=()=>{
  modelSet=$('pieceSet').value;moving=null;renderPieces();piecePreview?.rebuild();
  if(modelSet==='community')loadCommunityPieces();
- if(modelSet==='anthro')loadAnthroModel();
+ if(modelSet==='anthro'){loadAnthroModel();loadPhotoPBR(THREE,pieceMaterial).then(data=>{if(data&&modelSet==='anthro'){renderPieces();piecePreview?.rebuild();}}).catch(()=>{});}
 };
 $('boardSize').onchange=()=>{boardScale=Number($('boardSize').value)||0.065;};
 $('whiteColor').onchange=()=>{goldMat.color.set($('whiteColor').value);renderPieces();piecePreview?.rebuild();};
@@ -1569,4 +1580,7 @@ syncSelectedRealm(catalogue?.getSelected()||'classic');
 renderPieces();updateStatus();translate();
 if($('pieceSet').value==='anthro')loadAnthroModel();
 renderer.setAnimationLoop(render);
+loadPhotoPBR(THREE,pieceMaterial).then(data=>{
+ if(data&&modelSet==='anthro'){renderPieces();piecePreview?.rebuild();}
+}).catch(()=>{});
 loadChessModels();

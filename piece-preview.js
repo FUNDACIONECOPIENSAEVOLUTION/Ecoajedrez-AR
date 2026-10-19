@@ -12,7 +12,7 @@ export function createPiecePreview({THREE,canvas,createVisual,isShowing=()=>true
    scene=new THREE.Scene();scene.add(new THREE.HemisphereLight(0xdaeefa,0x142a42,2));
    const light=new THREE.DirectionalLight(0xffe6ba,2.5);light.position.set(3,5,5);scene.add(light);
    camera=new THREE.PerspectiveCamera(42,1,.01,30);
-   camera.position.set(0,2.0,5.3);camera.lookAt(0,.68,0);
+   camera.position.set(0,1.55,3.55);camera.lookAt(0,.73,0);
    pair=new THREE.Group();scene.add(pair);
    return true;
   }catch(err){console.warn('Visor 3D no disponible en este dispositivo:',err);return false;}
@@ -21,7 +21,7 @@ export function createPiecePreview({THREE,canvas,createVisual,isShowing=()=>true
   if(!pair)return;
   for(const g of pieces){pair.remove(g);
    g.traverse(node=>{
-    if(node.isMesh){
+    if(node.isMesh||node.isSprite){
      if(node.geometry&&!node.userData.sharedGeo)node.geometry.dispose();
      const mats=Array.isArray(node.material)?node.material:[node.material];
      if(node.userData.ownedMaterial)for(const m of mats) m?.dispose?.();
@@ -35,7 +35,7 @@ export function createPiecePreview({THREE,canvas,createVisual,isShowing=()=>true
   if(!renderer&&!isShowing())return;
   if(!init())return;
   clear();
-  for(const [color,x] of [['w',-1],['b',1]]){
+  for(const [color,x] of [['w',-.80],['b',.80]]){
    const piece=createVisual({type,color,square:color==='w'?'d1':'d8'});
    piece.position.set(x,.05,0);pair.add(piece);pieces.push(piece);
   }

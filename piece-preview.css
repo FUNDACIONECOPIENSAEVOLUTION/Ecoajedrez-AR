@@ -12,12 +12,12 @@
  border:1px solid #69bfbc;border-radius:9px;font:600 12px system-ui;color-scheme:dark}
 .piecePreviewViewport{position:relative;min-width:0;border:1px solid #76d9c18a;border-radius:13px;overflow:hidden;
  background:radial-gradient(ellipse at 50% 40%,#164968,#051627 74%);isolation:isolate}
-#piecePreviewCanvas{display:block;width:100%;height:205px;touch-action:pan-y;cursor:grab}
+#piecePreviewCanvas{display:block;width:100%;height:246px;touch-action:pan-y;cursor:grab}
 #piecePreviewCanvas:active{cursor:grabbing}
 .piecePreviewLegend{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-around;
  gap:8px;padding:4px 8px;background:#04172ccc;color:#e9fff5;font:700 11px system-ui;pointer-events:none}
 .piecePreviewLegend span{color:#b6eee6}
 @media(max-width:750px){.piecePreviewPanel{grid-template-columns:1fr;gap:10px}
- #piecePreviewCanvas{height:175px}.piecePreviewOptions{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #piecePreviewCanvas{height:218px}.piecePreviewOptions{grid-template-columns:repeat(2,minmax(0,1fr))}
  .piecePreviewOptions label:nth-child(2){grid-column:auto}}
 @media(max-width:410px){.piecePreviewOptions{grid-template-columns:1fr}}

@@ -4,7 +4,7 @@ import path from 'node:path';
 const dest='dist';
 fs.rmSync(dest,{recursive:true,force:true});
 fs.mkdirSync(dest,{recursive:true});
-const files=['index.html','arcane.css','opening.css','opening.js','celestial.css','cinematic-fix.css','adventure.css','login-scene.css','readability-qr.css','models-cache.css','magic-game.css','victory-fx.css','victory-fx.js','immersive-chess.js','immersive-chess.css','immersive-room.js','immersive-room.css','quest-map.js','quest-map.css','experience-modes.js','experience-modes.css','community-models.js','anthropomorphic-pieces.js','piece-materials.js','piece-combat.js','piece-preview.js','piece-preview.css','ar-portal.js','board-catalog.css','realm-pairing.js','board-skins.js','board-catalog-ui.js','magic-world.js','last-move-ghost.js','legal-consent.js','terms.html','qr-scanner.js','asset-cache.js','adventure-ui.js','sw.js','celestial-ui.js','arcane-ui.js','privacy.html','version.json','skybox-test.html','skybox-test.css','skybox-test.js','skybox-config.js','main.js','auth.js','commands.js','pvp.js','match-state.js','ecoajedrez.PNG','_headers'];
+const files=['index.html','arcane.css','opening.css','opening.js','celestial.css','cinematic-fix.css','adventure.css','login-scene.css','readability-qr.css','models-cache.css','magic-game.css','victory-fx.css','victory-fx.js','immersive-chess.js','immersive-chess.css','immersive-room.js','immersive-room.css','quest-map.js','quest-map.css','experience-modes.js','experience-modes.css','community-models.js','anthropomorphic-pieces.js','piece-materials.js','piece-pbr.js','piece-combat.js','piece-preview.js','piece-preview.css','ar-portal.js','board-catalog.css','realm-pairing.js','board-skins.js','board-catalog-ui.js','magic-world.js','last-move-ghost.js','legal-consent.js','terms.html','qr-scanner.js','asset-cache.js','adventure-ui.js','sw.js','celestial-ui.js','arcane-ui.js','privacy.html','version.json','skybox-test.html','skybox-test.css','skybox-test.js','skybox-config.js','main.js','auth.js','commands.js','pvp.js','match-state.js','ecoajedrez.PNG','_headers'];
 for(const name of files){
  if(!fs.existsSync(name))throw Error('Missing asset: '+name);
  fs.copyFileSync(name,path.join(dest,name));
@@ -46,6 +46,39 @@ for(const name of modeCardNames){
    throw Error('Invalid selected mode card WebP: '+name);
  fs.writeFileSync(path.join(modeCardDest,name),data);
 }
+
+// Publish only explicitly approved PBR maps; never copy arbitrary downloaded ZIPs.
+const allowedPBR=['walnut','oak','stone','marble','obsidian','bronze','gold','ice','basalt'];
+const pbrDest=path.join(dest,'assets/texturas-pbr');
+fs.mkdirSync(pbrDest,{recursive:true});
+const pbrManifest={version:1,materials:{}};
+let pbrBytes=0;
+for(const id of allowedPBR){
+ const maps={};
+ const source=path.join('assets/texturas-pbr',id);
+ for(const role of ['color','normal','roughness','metalness']){
+  for(const extension of ['webp','jpg','png']){
+   const name=role+'.'+extension,local=path.join(source,name);
+   if(!fs.existsSync(local))continue;
+   const file=fs.readFileSync(local);
+   const valid=(extension==='webp'?file.toString('ascii',0,4)==='RIFF'&&file.toString('ascii',8,12)==='WEBP':
+    extension==='jpg'?file.length>4&&file[0]===255&&file[1]===216&&file[2]===255:
+    file.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])));
+   if(!valid||file.length<256||file.length>2000000)throw Error('Invalid PBR texture (expected <=2MB): '+local);
+   pbrBytes+=file.length;
+   if(pbrBytes>30000000)throw Error('Real PBR texture library exceeds 30MB overall');
+   const destination=path.join(pbrDest,id);
+   fs.mkdirSync(destination,{recursive:true});
+   fs.writeFileSync(path.join(destination,name),file);
+   maps[role]=id+'/'+name;
+   break;
+  }
+ }
+ if(maps.color)pbrManifest.materials[id]=maps;
+ else if(Object.keys(maps).length)console.log('Skipping incomplete PBR preset lacking color map: '+id);
+}
+fs.writeFileSync(path.join(pbrDest,'manifest.json'),JSON.stringify(pbrManifest,null,2)+'\n');
+console.log('Approved PBR photographed materials: '+Object.keys(pbrManifest.materials).length+' / 9. Uploads optional.');
 
 // Original anthropomorphic chess GLB supplied by the user: one file for 32 figures.
 const anthroPath='assets/models/anthropomorphic/anthropomorphic-chess.glb';
