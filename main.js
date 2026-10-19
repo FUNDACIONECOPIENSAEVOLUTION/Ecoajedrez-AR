@@ -920,7 +920,7 @@ if(invite){
 }
 startAccountAuth();
 
-let arSession=null, arSpace=null, lastHit=null, arPointerStart=null;
+let arSession=null, arSpace=null, lastHit=null, lastHitResult=null, spatialAnchor=null, arPointerStart=null;
 let arInterrupted=false, voluntaryArExit=false;
 function offerARRecovery(){
   if(document.hidden||isAR||!arInterrupted)return;
@@ -993,6 +993,15 @@ function placeARBoard(){
   world.quaternion.identity();
   world.scale.setScalar(boardScale*Number($('arScale').value));
   world.visible=true;boardPlaced=true;reticle.visible=false;hitRequested=true;
+  // Real XR anchors provide a steadier position when supported.
+  // If anchor creation is unavailable, the existing local-space hit pose still works.
+  if(lastHitResult && typeof lastHitResult.createAnchor==='function'){
+    const thisSession=arSession;
+    lastHitResult.createAnchor().then(anchor=>{
+      if(isAR&&boardPlaced&&arSession===thisSession){spatialAnchor=anchor;}
+      else anchor.delete?.();
+    }).catch(()=>{}); // Anchors are optional on AR-capable browsers.
+  }
   arPortal?.setVisible(true); // Decoration tied to tracked board only.
   // Six aligned kingdom photos enclose a 3D chamber. Camera passthrough remains visible.
   arRoom?.place(window.ecoBoardCatalogue?.getSelected()||'classic',world.position.clone());
@@ -1006,7 +1015,7 @@ function setHologram(){
   // Sin hit-test, no se promete anclaje a superficie: posición de referencia local.
   world.position.set(0,-.35,-1.4);world.quaternion.identity();
   world.scale.setScalar(boardScale*Number($('arScale').value));
-  world.visible=true;boardPlaced=true;lastHit=null;reticle.visible=false;
+  world.visible=true;boardPlaced=true;lastHit=null;lastHitResult=null;reticle.visible=false;
   arPortal?.setVisible(false); // Unanchored holograms must not pretend to map safe physical space.
   arRoom?.clear();
   $('arRoomStatus').textContent='Sin superficie detectada: el holograma no está anclado. Cuarto inmersivo desactivado.';
@@ -1022,12 +1031,12 @@ async function startAR(){
   try{
     // Mismo enfoque probado en 3 LINE-AR: hit-test opcional + DOM overlay.
     session=await navigator.xr.requestSession('immersive-ar',{
-      optionalFeatures:['hit-test','dom-overlay','local-floor','bounded-floor'],
+      optionalFeatures:['hit-test','dom-overlay','local-floor','bounded-floor','anchors'],
       domOverlay:{root:document.body}
     });
     arInterrupted=false;voluntaryArExit=false;
     $('arRecoveryPanel').classList.remove('visible');
-    arSession=session;isAR=true;boardPlaced=false;lastHit=null;hitSource=null;hitRequested=false;
+    arSession=session;isAR=true;boardPlaced=false;lastHit=null;lastHitResult=null;spatialAnchor=null;hitSource=null;hitRequested=false;
     world.visible=false;scene.background=null;orbit.enabled=false;magicEnv?.setAR(true);
     showAR();
     session.addEventListener('select',onARXRSelect);
@@ -1056,7 +1065,8 @@ function finishAR(){
   if(wasActive&&!voluntaryArExit)arInterrupted=true;
   if(arSession)arSession.removeEventListener('select',onARXRSelect);
   if(hitSource){try{hitSource.cancel();}catch(error){}hitSource=null;}
-  arSession=null;arSpace=null;lastHit=null;hitRequested=false;isAR=false;boardPlaced=true;
+  if(spatialAnchor){try{spatialAnchor.delete?.();}catch(error){}spatialAnchor=null;}
+  arSession=null;arSpace=null;lastHit=null;lastHitResult=null;hitRequested=false;isAR=false;boardPlaced=true;
   pointers.clear();arPointerStart=null;
   world.position.set(0,0,0);world.quaternion.identity();world.scale.setScalar(1);
   world.visible=true;reticle.visible=false;orbit.enabled=true;
@@ -1171,16 +1181,26 @@ function onARXRSelect(event){
 }
 function updateAR(frame){
   if(!frame||!arSession)return;
+  if(spatialAnchor&&arSpace&&boardPlaced){
+    try{
+      const tracked=frame.getPose(spatialAnchor.anchorSpace,arSpace);
+      if(tracked){
+        const p=tracked.transform.position;
+        world.position.set(p.x,p.y+.018,p.z);
+        arRoom?.moveTo(world.position);
+      }
+    }catch(error){} // Some WebXR implementations do not expose the anchor pose.
+  }
   if(hitSource&&!boardPlaced){
     const result=frame.getHitTestResults(hitSource);
-    if(!result.length){reticle.visible=false;lastHit=null;return;}
+    if(!result.length){reticle.visible=false;lastHit=null;lastHitResult=null;return;}
     const pose=result[0].getPose(arSpace);
-    if(!pose){reticle.visible=false;lastHit=null;return;}
+    if(!pose){reticle.visible=false;lastHit=null;lastHitResult=null;return;}
     const mat=new THREE.Matrix4().fromArray(pose.transform.matrix);
     reticle.position.setFromMatrixPosition(mat);
     reticle.quaternion.setFromRotationMatrix(mat);
     reticle.quaternion.multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),-Math.PI/2));
-    reticle.visible=true;lastHit=mat;
+    reticle.visible=true;lastHit=mat;lastHitResult=result[0];
   }
   if(boardPlaced&&arPicking==='aim'){
     aimedSquare=closestARSquare(window.innerWidth/2,window.innerHeight/2);
