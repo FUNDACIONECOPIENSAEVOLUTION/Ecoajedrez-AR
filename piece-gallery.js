@@ -32,8 +32,24 @@ export function setupMaterialGallery({root,select,materials,readManifest,assetRo
  readManifest().then(doc=>{
   let found=0;
   for(const [key,{button,surface}] of items){
-   const color=doc?.materials?.[key]?.color;
-   if(typeof color!=='string'||!new RegExp('^'+key+'/color\\.(jpg|webp|png)$').test(color))continue;
+   const origin=materials[key].photoSource||key;
+   const color=doc?.materials?.[origin]?.color;
+   if(typeof color!=='string'||!new RegExp('^'+origin+'/color\\.(jpg|webp|png).test(color))continue;
+   const photo=document.createElement('img');
+   photo.src=assetRoot+'/'+color;
+   if(materials[key].photoSource){photo.style.filter='saturate(.65)';surface.style.backgroundColor=materials[key].tint||materials[key].base;}
+   photo.alt='';photo.loading='lazy';photo.decoding='async';
+   photo.addEventListener('load',()=>{button.classList.add('hasPhoto')},{once:true});
+   photo.addEventListener('error',()=>{photo.remove();button.classList.remove('hasPhoto')},{once:true});
+   surface.append(photo);found++;
+  }
+  if(status){
+   status.textContent=found>=9?'9 fotografías PBR CC0 y variantes de color listas':
+    found?found+' opciones PBR disponibles; las demás usan respaldo ligero':
+    'Fototexturas no publicadas: se muestran los acabados ligeros.';
+  }
+ }).catch(()=>{if(status)status.textContent='No se pudo comprobar el paquete PBR; funciona el modo ligero.'});
+}).test(color))continue;
    const photo=document.createElement('img');
    photo.src=assetRoot+'/'+color;
    photo.alt='';photo.loading='lazy';photo.decoding='async';
