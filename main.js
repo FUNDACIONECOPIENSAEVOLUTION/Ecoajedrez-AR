@@ -20,6 +20,9 @@ import {checkSkybox,linkedRealm,validExperience,gameRealmName} from './experienc
 import {createQuestMap,successfulQuestMove} from './quest-map.js?v=0.15.2';
 import {COMMUNITY_FILES,communityPiecePath,communityPieceKey,communityPieceHeight} from './community-models.js?v=0.15.2';
 import {ANTHRO_GLB,ANTHRO_MANIFEST,collectAnthroSources,createAnthroVisual,tickAnthroVisuals} from './anthropomorphic-pieces.js?v=0.15.3';
+import {PIECE_MATERIALS,PIECE_GLOWS,validPieceMaterial,validPieceGlow,applyPieceAppearance} from './piece-materials.js?v=0.15.4';
+import {createChessCombat,faceMovement} from './piece-combat.js?v=0.15.4';
+import {createPiecePreview} from './piece-preview.js?v=0.15.4';
 
 const $ = (id) => document.getElementById(id);
 const canvas = $('render'), stage = $('scene');
@@ -61,6 +64,7 @@ let theme = 'classic', lang = 'es', botDifficulty = 'easy', mode = 'bot';
 let account = null, guestLocal = false, roomVersion = 0, boardScale = 0.065;
 let commandRecognition = null, gameStarted = false;
 let modelSet = 'anthro', moving = null;
+let pieceMaterial='arcane',pieceGlow='team',piecePreview=null,combatFX=null;
 let questUI=null,missionActive=null,missionSolved=false,missionPrior=null;
 const assets = new Map(), loader = new GLTFLoader();
 const communityAssets=new Map();let communityLoading=null;
@@ -77,7 +81,7 @@ async function loadAnthroModel(){
    const templates=collectAnthroSources(loaded);
    if(templates.size!==12)throw Error('GLB incompleto: faltan tipos o clips Walk');
    anthroSources=templates;
-   if(modelSet==='anthro'){moving=null;renderPieces();toast('✦ Ejército antropomorfo GLB animado listo.');}
+   if(modelSet==='anthro'){moving=null;renderPieces();piecePreview?.rebuild();toast('✦ Ejército antropomorfo GLB animado listo.');}
    return templates;
   }catch(error){
    console.warn('GLB antropomorfo no disponible; se conservarán las figuras ligeras del juego.',error);
@@ -166,12 +170,7 @@ function pieceModel(p){
   }
   return g;
 }
-function clearGroup(group){
-  while(group.children.length){const child=group.children[0];group.remove(child);child.traverse(node=>{if(node.isMesh && node.geometry && !node.userData.sharedGeo)node.geometry.dispose();if(node.isMesh && (node.userData.sharedGeo||node.userData.ownedMaterial) && node.material)node.material.dispose();});}
-}
-function renderPieces(){
-  clearGroup(pieces);clearGroup(markers);
-  for(const row of game.board())for(const p of row)if(p){
+function createPieceVisual(p){
     let g = null;
     if((modelSet==='staunton'||modelSet==='royal') && assets.has(p.type)){
       const template = assets.get(p.type);
@@ -183,6 +182,7 @@ function renderPieces(){
             o.userData.sharedGeo=true;
             o.material=material.clone();
             o.material.side=THREE.DoubleSide;
+            o.userData.ownedMaterial=true;
             o.castShadow=true;
           }
         });
@@ -228,12 +228,36 @@ function renderPieces(){
       if(p.type==='n')addGem(new THREE.ConeGeometry(.095,.26,5),.10,1.00,0).rotation.z=-.4;
       aura.dispose();
     }
-    g.userData.square=p.square;
-    const loc=positionOf(p.square);
-    g.position.set(loc.x,.07,loc.z);
-    if(p.color==='b')g.rotation.y=Math.PI;
-    pieces.add(g);
+ if(modelSet==='anthro'){
+  applyPieceAppearance(THREE,g,{material:pieceMaterial,glow:pieceGlow,color:p.color});
+ }
+ if(p.color==='b')g.rotation.y=Math.PI;
+ return g;
+}
+function disposePieceGroup(child){
+ child.traverse(node=>{
+  if(node.isMesh&&node.geometry&&!node.userData.sharedGeo)node.geometry.dispose();
+  if((node.isMesh||node.isSprite)&&node.userData.ownedMaterial&&node.material){
+   const mats=Array.isArray(node.material)?node.material:[node.material];
+   for(const mat of mats)mat?.dispose?.();
   }
+ });
+}
+function clearGroup(group){
+ while(group.children.length){
+  const child=group.children[0];group.remove(child);disposePieceGroup(child);
+ }
+}
+function renderPieces(){
+ combatFX?.cancel();
+ clearGroup(pieces);clearGroup(markers);
+ for(const row of game.board())for(const p of row)if(p){
+  const g=createPieceVisual(p);
+  g.userData.square=p.square;
+  const loc=positionOf(p.square);
+  g.position.set(loc.x,.07,loc.z);
+  pieces.add(g);
+ }
   // Local-only previous-move hint is shown on request, never transmitted online.
   if(selected){
     const source=positionOf(selected);
@@ -695,14 +719,43 @@ $('mode').onchange=()=>{
 };
 $('difficulty').onchange=()=>{botDifficulty=$('difficulty').value;};
 $('theme').onchange=()=>setTheme($('theme').value);
+// Customisation does not affect legal moves or chessboard coordinates.
+function bindPieceAppearance(){
+ try{
+  pieceMaterial=validPieceMaterial(localStorage.getItem('eco-piece-material')||'arcane');
+  pieceGlow=validPieceGlow(localStorage.getItem('eco-piece-glow')||'team');
+ }catch(error){}
+ for(const [id,values,chosen] of [
+  ['pieceMaterial',PIECE_MATERIALS,pieceMaterial],
+  ['pieceGlow',PIECE_GLOWS,pieceGlow]
+ ]){
+  const control=$(id);control.replaceChildren();
+  for(const [key,data] of Object.entries(values)){
+   const opt=document.createElement('option');opt.value=key;opt.textContent=data.label;control.add(opt);
+  }
+  control.value=chosen;
+ }
+ $('pieceMaterial').onchange=()=>{
+  pieceMaterial=validPieceMaterial($('pieceMaterial').value);
+  try{localStorage.setItem('eco-piece-material',pieceMaterial)}catch(error){}
+  moving=null;renderPieces();piecePreview?.rebuild();
+ };
+ $('pieceGlow').onchange=()=>{
+  pieceGlow=validPieceGlow($('pieceGlow').value);
+  try{localStorage.setItem('eco-piece-glow',pieceGlow)}catch(error){}
+  moving=null;renderPieces();piecePreview?.rebuild();
+ };
+ $('piecePreviewType').onchange=event=>piecePreview?.rebuild(event.target.value);
+}
+bindPieceAppearance();
 $('pieceSet').onchange=()=>{
- modelSet=$('pieceSet').value;moving=null;renderPieces();
+ modelSet=$('pieceSet').value;moving=null;renderPieces();piecePreview?.rebuild();
  if(modelSet==='community')loadCommunityPieces();
  if(modelSet==='anthro')loadAnthroModel();
 };
 $('boardSize').onchange=()=>{boardScale=Number($('boardSize').value)||0.065;};
-$('whiteColor').onchange=()=>{goldMat.color.set($('whiteColor').value);renderPieces();};
-$('blackColor').onchange=()=>{darkMat.color.set($('blackColor').value);renderPieces();};
+$('whiteColor').onchange=()=>{goldMat.color.set($('whiteColor').value);renderPieces();piecePreview?.rebuild();};
+$('blackColor').onchange=()=>{darkMat.color.set($('blackColor').value);renderPieces();piecePreview?.rebuild();};
 $('lang').onchange=()=>{lang=$('lang').value;translate();document.documentElement.lang=lang;};
 $('center').onclick=()=>{if(isAR){toast('En AR usa el control de escala.');return;}camera.position.set(8.4,10.6,11.5);orbit.target.set(0,0,0);orbit.update();};
 $('rotate').onclick=()=>{if(isAR)return;camera.position.set(-camera.position.z,camera.position.y,camera.position.x);orbit.update();};
@@ -1393,11 +1446,20 @@ function render(timestamp,frame){
     tickAnthroVisuals(pieces,moving,t,lastAnthroTick?Math.max(0,(t-lastAnthroTick)/1000):0);
     lastAnthroTick=t;
   }
+  combatFX?.tick(timestamp||performance.now());
+  piecePreview?.tick(timestamp||performance.now());
   if(theme==='jungle'&&!isAR)decorations.children.forEach((p,i)=>{p.rotation.z=Math.sin(timestamp*.0016+i*.8)*.12;});
   arcaneUI?.tick(timestamp||performance.now());
   magicEnv?.tick(timestamp||performance.now());
   renderer.render(scene,camera);
 }
+combatFX=createChessCombat({THREE,world,disposePiece:disposePieceGroup});
+piecePreview=createPiecePreview({
+ THREE,canvas:$('piecePreviewCanvas'),
+ createVisual:p=>createPieceVisual(p),
+ isShowing:()=>document.body.dataset.view==='settings'
+});
+piecePreview.rebuild($('piecePreviewType').value);
 arcaneUI=createArcaneUI({THREE,world});
 try{const saved=localStorage.getItem('ecoajedrez-graphics-profile');if(['auto','low','medium','high'].includes(saved))$('quality').value=saved;}catch(e){}
 magicEnv=createMagicWorld({THREE,world,scene,renderer,stage});

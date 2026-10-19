@@ -118,6 +118,7 @@ body.xr-active #gameToast{display:none!important}
 <link rel="stylesheet" href="./immersive-room.css?v=0.15.0">
 <link rel="stylesheet" href="./experience-modes.css?v=0.14.9">
 <link rel="stylesheet" href="./quest-map.css?v=0.15.2">
+<link rel="stylesheet" href="./piece-preview.css?v=0.15.4">
 <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js" defer></script>
 <script src="https://unpkg.com/qrcodejs@1.0.0/qrcode.min.js" defer></script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}</script>
@@ -303,6 +304,23 @@ body.xr-active #gameToast{display:none!important}
 <div><label for="difficulty" data-i18n="difficulty">Dificultad</label><select id="difficulty"><option value="easy" data-i18n="easy">Principiante</option><option value="medium" data-i18n="medium">Intermedio</option><option value="advanced" data-i18n="advanced">Avanzado (básico)</option></select></div>
 <div><label for="theme" data-i18n="scenario">Escenario del tablero clásico</label><select id="theme"><option value="classic" data-i18n="classic">Obsidiana clásico</option><option value="wood">Bosque de madera</option><option value="marble">Mármol imperial</option><option value="neon">Neón galáctico</option><option value="jungle" data-i18n="jungle">Selva encantada</option><option value="volcano">Volcán carmesí</option><option value="ice">Templo de hielo</option></select></div>
 <div><label for="pieceSet">Piezas 3D</label><select id="pieceSet"><option value="anthro" selected>✦ Antropomórficas mágicas · GRATIS</option><option value="staunton">Staunton 3D original</option><option value="royal">Realeza arcana 3D ✦</option><option value="fantasy">Fantasía encantada</option><option value="classic">Clásico ligero</option><option id="communityPieceOption" value="community" disabled>Staunton CC0 · pendiente de modelos</option></select></div>
+<section id="piecePreviewPanel" class="piecePreviewPanel" aria-label="Vista previa de fichas y materiales">
+ <div class="piecePreviewDescription">
+   <strong>✦ VISOR 3D DE TU EJÉRCITO</strong>
+   <small>Observa las figuras claras y oscuras con el material y el brillo elegidos. Arrastra para girarlas.</small>
+   <div class="piecePreviewOptions">
+    <label for="piecePreviewType">Ver figura <select id="piecePreviewType">
+     <option value="q">Dama</option><option value="k">Rey</option>
+     <option value="n">Caballo</option><option value="r">Torre</option>
+     <option value="b">Alfil</option><option value="p">Peón</option>
+    </select></label>
+    <label for="pieceMaterial">Textura/material <select id="pieceMaterial" aria-label="Material de las piezas"><option value="arcane">Original mágico</option></select></label>
+    <label for="pieceGlow">Color del brillo <select id="pieceGlow" aria-label="Color de las luces de las piezas"><option value="team">Según ejército</option></select></label>
+   </div>
+ </div>
+ <div class="piecePreviewViewport"><canvas id="piecePreviewCanvas" role="img" aria-label="Visor giratorio de dos piezas 3D de ajedrez, una blanca y una negra"></canvas>
+ <span class="piecePreviewLegend">♙ Claro <span>◈ Girar ↔</span> ♟ Oscuro</span></div>
+</section>
 <div class="boardPickerField"><label for="boardSkin">Reino y tablero (se eligen juntos)</label>
 <select id="boardSkin" aria-label="Seleccionar imagen del tablero"><option value="classic">Clásico</option></select></div>
 <div class="boardSkinCard"><div class="boardPairImages">
@@ -404,5 +422,5 @@ body.xr-active #gameToast{display:none!important}
 <script type="module" src="./celestial-ui.js?v=0.10.0"></script>
 <script type="module" src="./legal-consent.js?v=0.13.0"></script>
 <script type="module" src="./board-catalog-ui.js?v=0.14.8"></script>
-<script type="module" src="./main.js?v=0.15.3"></script>
+<script type="module" src="./main.js?v=0.15.4"></script>
 </body></html>
