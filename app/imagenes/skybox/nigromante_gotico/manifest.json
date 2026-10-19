@@ -1,0 +1,60 @@
+{
+  "proyecto": "ECOAJEDREZ",
+  "paquete": 12,
+  "reino": "Reino Nigromante / Gotico",
+  "formato": "WebP",
+  "resolucion_cara": [
+    1254,
+    1254
+  ],
+  "orden_threejs": [
+    "px",
+    "nx",
+    "py",
+    "ny",
+    "pz",
+    "nz"
+  ],
+  "proyeccion": "Cubica 90 grados por cara",
+  "origen": "Reinterpretacion artistica de referencias. Los bordes comparten muestreo continuo; no es un render 3D nativo.",
+  "carpeta_para_importar": "exactos/",
+  "carpeta_de_respaldo": "descriptivos/",
+  "caras": [
+    {
+      "codigo": "px",
+      "archivo": "px.webp",
+      "orientacion": "Derecha (+X)",
+      "archivo_largo": "ECOAJEDREZ_12_Reino_Nigromante_Gotico_px_Derecha_+X.webp"
+    },
+    {
+      "codigo": "nx",
+      "archivo": "nx.webp",
+      "orientacion": "Izquierda (-X)",
+      "archivo_largo": "ECOAJEDREZ_12_Reino_Nigromante_Gotico_nx_Izquierda_-X.webp"
+    },
+    {
+      "codigo": "py",
+      "archivo": "py.webp",
+      "orientacion": "Cielo (+Y)",
+      "archivo_largo": "ECOAJEDREZ_12_Reino_Nigromante_Gotico_py_Cielo_+Y.webp"
+    },
+    {
+      "codigo": "ny",
+      "archivo": "ny.webp",
+      "orientacion": "Suelo (-Y)",
+      "archivo_largo": "ECOAJEDREZ_12_Reino_Nigromante_Gotico_ny_Suelo_-Y.webp"
+    },
+    {
+      "codigo": "pz",
+      "archivo": "pz.webp",
+      "orientacion": "Frente (+Z)",
+      "archivo_largo": "ECOAJEDREZ_12_Reino_Nigromante_Gotico_pz_Frente_+Z.webp"
+    },
+    {
+      "codigo": "nz",
+      "archivo": "nz.webp",
+      "orientacion": "Atras (-Z)",
+      "archivo_largo": "ECOAJEDREZ_12_Reino_Nigromante_Gotico_nz_Atras_-Z.webp"
+    }
+  ]
+}

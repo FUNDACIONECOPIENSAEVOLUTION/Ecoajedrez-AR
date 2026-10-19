@@ -1,0 +1,31 @@
+ECOAJEDREZ - PAQUETE 12 - REINO NIGROMANTE / GOTICO
+
+Caras de cubo 90 grados, WebP de 1254 x 1254 pixeles.
+
+exactos/: IMPORTAR ESTAS SEIS IMAGENES EN EL JUEGO
+  px.webp -> derecha, +X
+  nx.webp -> izquierda, -X
+  py.webp -> techo/cielo, +Y (vista hacia arriba)
+  ny.webp -> suelo, -Y (vista completamente cenital)
+  pz.webp -> frente, +Z
+  nz.webp -> atras, -Z
+
+descriptivos/: COPIAS IDENTICAS CON NOMBRE DEL REINO Y ORIENTACION.
+
+Extras:
+  extras/vista_previa_6_caras.jpg
+  extras/panorama_360_reconstruido.webp
+  manifest.json
+
+UTILIZACION EN THREE.JS:
+  const sky = new THREE.CubeTextureLoader().setPath('exactos/').load([
+    'px.webp','nx.webp','py.webp','ny.webp','pz.webp','nz.webp'
+  ]);
+  scene.background = sky;
+
+IMPORTANTE: los bordes estan suavizados y comparten el mismo mapeo 360,
+pero el mundo esta reconstruido a partir de ilustraciones separadas, por
+lo que no es una captura real 360 grados de una escena tridimensional.
+Revisar la continuidad arquitectonica en el visor final.
+En realidad aumentada con camara, un skybox opaco sustituye la imagen real:
+si se desea visualizar el entorno real, usar un fondo AR transparente.
