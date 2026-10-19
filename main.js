@@ -20,7 +20,7 @@ import {checkSkybox,linkedRealm,validExperience,gameRealmName} from './experienc
 import {createQuestMap,successfulQuestMove} from './quest-map.js?v=0.15.2';
 import {COMMUNITY_FILES,communityPiecePath,communityPieceKey,communityPieceHeight} from './community-models.js?v=0.15.2';
 import {ANTHRO_GLB,ANTHRO_MANIFEST,collectAnthroSources,createAnthroVisual,tickAnthroVisuals} from './anthropomorphic-pieces.js?v=0.15.3';
-import {PIECE_MATERIALS,PIECE_GLOWS,validPieceMaterial,validPieceGlow,applyPieceAppearance} from './piece-materials.js?v=0.15.6';
+import {PIECE_MATERIALS,PIECE_GLOWS,validPieceMaterial,validPieceGlow,applyPieceAppearance} from './piece-materials.js?v=0.15.7';
 import {createChessCombat,faceMovement} from './piece-combat.js?v=0.15.4';
 import {createPiecePreview} from './piece-preview.js?v=0.15.5';
 import {loadPhotoPBR,readPBRManifest,PBR_ROOT} from './piece-pbr.js?v=0.15.6';
