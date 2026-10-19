@@ -17,6 +17,7 @@ import { createImmersiveChess } from './immersive-chess.js?v=0.14.7';
 import {createARChessPortal} from './ar-portal.js?v=0.14.8';
 import {createARImmersionRoom,arRoomSize} from './immersive-room.js?v=0.15.0';
 import {checkSkybox,linkedRealm,validExperience,gameRealmName} from './experience-modes.js?v=0.14.8';
+import {createQuestMap,successfulQuestMove} from './quest-map.js?v=0.15.2';
 
 const $ = (id) => document.getElementById(id);
 const canvas = $('render'), stage = $('scene');
@@ -58,6 +59,7 @@ let theme = 'classic', lang = 'es', botDifficulty = 'easy', mode = 'bot';
 let account = null, guestLocal = false, roomVersion = 0, boardScale = 0.065;
 let commandRecognition = null, gameStarted = false;
 let modelSet = 'staunton', moving = null;
+let questUI=null,missionActive=null,missionSolved=false,missionPrior=null;
 const assets = new Map(), loader = new GLTFLoader();
 const reticle = new THREE.Mesh(new THREE.RingGeometry(.125,.145,40), new THREE.MeshBasicMaterial({color:0x72ffba,side:THREE.DoubleSide}));
 reticle.rotation.x = -Math.PI/2; reticle.visible = false; scene.add(reticle);
@@ -292,7 +294,7 @@ function storageKey(){
   return 'ecoajedrez:local:0.4.1:'+uid;
 }
 function persistCurrentGame(){
-  if(!gameStarted||mode==='online')return;
+  if(!gameStarted||mode==='online'||missionActive)return;
   const preferences={theme,modelSet,lang,botDifficulty,boardScale,
     boardSkin:$('boardSkin').value,
     whiteColor:$('whiteColor').value,blackColor:$('blackColor').value};
@@ -328,6 +330,14 @@ function restoreLastGame(){
   if(mode==='bot'&&game.turn()==='b'&&!game.isGameOver())timer=setTimeout(playBot,600);
 }
 function playMove(from,to,promotion='q',source='local'){
+  if(missionActive){
+    if(missionSolved)return false;
+    if(missionActive.goal!=='checkmate'&&(from!==missionActive.from||to!==missionActive.to||
+       (missionActive.promotion&&missionActive.promotion!==promotion))){
+      toast('Objetivo de misión: '+missionActive.hint);
+      return false;
+    }
+  }
   if(!canPlay(source))return false;
   if(mode==='online' && !match.host && source==='local'){
     return match.send({type:'MOVE',from,to,promotion,version:roomVersion});
@@ -341,6 +351,11 @@ function playMove(from,to,promotion='q',source='local'){
   ghostHint?.clear();
   selected=null;arcaneUI?.selected(null);moving=null;renderPieces();animateMove(from,to);
   arcaneUI?.move(to,captured);updateStatus();
+  if(missionActive && successfulQuestMove(missionActive,{from,to,promotion},game)){
+    missionSolved=true;questUI?.complete(missionActive);
+    $('questHint').textContent='✓ MISIÓN SUPERADA · '+missionActive.title+' · Pulsa CAMINO para continuar.';
+    toast('✓ ¡Misión completada! Pulsa CAMINO DE MISIONES para avanzar.');
+  }
   if(mode==='online'){roomVersion++;broadcastState();}
   persistCurrentGame();
   if(mode==='bot' && !game.isGameOver()){clearTimeout(timer);timer=setTimeout(playBot,500);}
@@ -419,7 +434,7 @@ function chooseBot(){
   return choices[Math.floor(Math.random()*choices.length)];
 }
 function playBot(){
-  if(mode!=='bot'||game.turn()!=='b'||game.isGameOver())return;
+  if(mode!=='bot'||game.turn()!=='b'||game.isGameOver()||(missionActive&&missionSolved))return;
   const m=chooseBot();
   if(m)game.move({from:m.from,to:m.to,promotion:'q'});
   ghostHint?.clear();selected=null;arcaneUI?.selected(null);renderPieces();if(m){animateMove(m.from,m.to);arcaneUI?.move(m.to,Boolean(m.captured));}updateStatus();persistCurrentGame();
@@ -431,6 +446,13 @@ function animateMove(from,to){
   moving={piece:target,a,b,start:performance.now(),duration:370};
 }
 function reset(){
+  if(missionActive){
+    clearTimeout(timer);missionSolved=false;
+    if(missionActive.fen==='start')game.reset();else game.load(missionActive.fen);
+    selected=null;arcaneUI?.selected(null);moving=null;renderPieces();updateStatus();
+    $('questHint').textContent='✦ '+missionActive.title+' · '+missionActive.hint;
+    return;
+  }
   victoryFX?.reset();
   ghostHint?.clear();clearTimeout(timer);game.reset();selected=null;arcaneUI?.selected(null);moving=null;renderPieces();updateStatus();
   if(mode==='online' && match.host){roomVersion++;broadcastState();}
@@ -631,6 +653,7 @@ function setGameMode(next){
 }
 function gotoView(view){
   if(view!=='game')realmImmersion?.exit();
+  if(view!=='game'&&missionActive)leaveQuest(false);
   if(isAR && view!=='game'){voluntaryArExit=true;arInterrupted=false;arSession?.end().catch(()=>finishAR());}
   document.body.dataset.view=view;
   if(view==='menu')$('resumeGame').style.display=gameStarted?'block':'none';
@@ -1316,7 +1339,44 @@ boardSurface=createBoardSurface({THREE,world,renderer,onStatus:message=>{
   const target=$('boardSurfaceStatus');
   if(target)target.textContent=message;
 },onSurfaceChange:({active,width,depth})=>syncBoardTexture(active,width,depth)});
+function startQuest(quest){
+ if(mode==='online'&&match.connected()){toast('Sal de la partida online antes de una misión.');return;}
+ if(missionActive)leaveQuest(false);
+ clearTimeout(timer);
+ missionPrior={fen:game.fen(),pgn:game.pgn(),mode,started:gameStarted,
+  board:window.ecoBoardCatalogue?.getSelected()||'classic'};
+ missionActive=quest;missionSolved=false;
+ try{if(quest.fen==='start')game.reset();else game.load(quest.fen);}catch(error){
+  missionActive=null;missionPrior=null;toast('No fue posible preparar esta misión.');return;
+ }
+ setGameMode(quest.goal==='checkmate'?'bot':'local');
+ window.ecoBoardCatalogue?.selectBoard('cosmos');
+ document.body.classList.add('quest-playing');
+ $('questHint').hidden=false;$('questHint').textContent='✦ '+quest.title+' · '+quest.hint;
+ selected=null;arcaneUI?.selected(null);moving=null;renderPieces();updateStatus();
+ gotoView('game');
+ toast('✦ '+quest.hint);
+}
+function leaveQuest(showMenu=true){
+ if(!missionActive)return;
+ clearTimeout(timer);
+ const restore=missionPrior;
+ missionActive=null;missionSolved=false;missionPrior=null;
+ document.body.classList.remove('quest-playing');$('questHint').hidden=true;
+ if(restore){
+  try{if(restore.pgn)game.loadPgn(restore.pgn);else game.load(restore.fen);}
+  catch(error){game.load(restore.fen);}
+  setGameMode(restore.mode);gameStarted=restore.started;
+  window.ecoBoardCatalogue?.selectBoard(restore.board);
+ }
+ selected=null;arcaneUI?.selected(null);moving=null;renderPieces();updateStatus();
+ if(showMenu)gotoView('menu');
+ if(mode==='bot'&&game.turn()==='b'&&!game.isGameOver())timer=setTimeout(playBot,600);
+}
 const catalogue=window.ecoBoardCatalogue;
+let questStorage=null;
+try{questStorage=window.localStorage;}catch(error){}
+questUI=createQuestMap({storage:questStorage,onLaunch:startQuest,onReturn:()=>leaveQuest(true)});
 if(catalogue){
   boardSurface.select(catalogue.getSelected()).catch(()=>{});
 }

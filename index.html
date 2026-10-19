@@ -117,6 +117,7 @@ body.xr-active #gameToast{display:none!important}
 <link rel="stylesheet" href="./immersive-chess.css?v=0.15.2">
 <link rel="stylesheet" href="./immersive-room.css?v=0.15.0">
 <link rel="stylesheet" href="./experience-modes.css?v=0.14.9">
+<link rel="stylesheet" href="./quest-map.css?v=0.15.2">
 <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js" defer></script>
 <script src="https://unpkg.com/qrcodejs@1.0.0/qrcode.min.js" defer></script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}</script>
@@ -140,6 +141,18 @@ body.xr-active #gameToast{display:none!important}
 <span id="realmMovesMini">Jugadas: —</span>
 <small>♟ Pieza → destino · Pellizca para zoom · ↑↓ altura · PC: Shift + rueda</small>
 </div>
+<div id="questMap" hidden role="dialog" aria-modal="true" aria-labelledby="questTitle">
+ <section class="questPanel">
+ <div class="questHeader"><div><span class="eyebrow">✦ GALÁCTICO / CÓSMICO · EPISODIO PILOTO</span>
+ <h2 id="questTitle">CAMINO DE MISIONES</h2></div>
+ <button id="questClose" type="button">✕ CERRAR</button></div>
+ <p>Avanza por ocho desafíos de ajedrez reales. Cada camino desbloquea el siguiente; la batalla final es contra la computadora. Sin GPS y sin compras.</p>
+ <div id="questNodes" class="questNodes" role="group" aria-label="Desafíos del camino galáctico"></div>
+ <div class="questFooter"><p id="questMessage" role="status" aria-live="polite">Cargando tu progreso…</p>
+ <p>Las partidas normales y los otros reinos siguen disponibles, independientemente del camino de misiones.</p></div>
+ </section></div>
+ <button id="questExitGame" type="button">✦ CAMINO DE MISIONES</button>
+ <div id="questHint" hidden role="status" aria-live="polite"></div>
 <div id="gameHud">
 <div class="magicQuickBar" aria-label="Acciones rápidas durante la partida"><button id="lastMoveBtn" type="button" title="Mostrar solo para ti una silueta de la última jugada">♞</button><button id="realmQuickBtn" type="button" title="Entrar en el reino 360° sin cambiar tu partida">✦ 360°</button><button id="quickArBtn" type="button" title="Entrar en realidad aumentada">◎ AR</button></div>
 <div id="lastMoveMessage" role="status" aria-live="polite"></div>
@@ -255,7 +268,7 @@ body.xr-active #gameToast{display:none!important}
 <button id="closeQRScanner" type="button" class="ghost">✕ CERRAR CÁMARA</button>
 </div>
 </div>
-<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><button id="menuSettings" data-ui="menuSettings">⚙ CONFIGURACIÓN</button><button id="menuLegalInfo" type="button">ⓘ TÉRMINOS</button><button id="arenaPickerBtn" type="button">✧ PORTAL DE LA ARENA</button><button id="downloadPgn" data-ui="downloadPgn">⬇ GUARDAR PARTIDA PGN</button><button id="diagnoseBtn" data-ui="diagnostics">◈ DIAGNÓSTICO</button><button id="logoutBtn" data-ui="logout">⇥ CERRAR SESIÓN</button></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><button id="menuSettings" data-ui="menuSettings">⚙ CONFIGURACIÓN</button><button id="menuLegalInfo" type="button">ⓘ TÉRMINOS</button><button id="arenaPickerBtn" type="button">✧ PORTAL DE LA ARENA</button><button id="questOpen" type="button">✦ CAMINO DE MISIONES</button><button id="downloadPgn" data-ui="downloadPgn">⬇ GUARDAR PARTIDA PGN</button><button id="diagnoseBtn" data-ui="diagnostics">◈ DIAGNÓSTICO</button><button id="logoutBtn" data-ui="logout">⇥ CERRAR SESIÓN</button></div>
 <section id="visionGallery" class="visionGallery" aria-labelledby="visionGalleryHeading">
 <div class="visionTop"><span class="eyebrow">✦ ARTE DEL UNIVERSO ECOAJEDREZ</span><h2 id="visionGalleryHeading">VISIONES DE LOS REINOS</h2><p>Las imágenes «vista-» decoran este menú; los diseños jugables se eligen en configuración.</p></div>
 <div class="visionViewer"><button id="visionPrev" type="button" aria-label="Ilustración anterior">❮</button><img id="visionArt" loading="lazy" decoding="async" alt="Ilustración del universo ECOAJEDREZ"><button id="visionNext" type="button" aria-label="Ilustración siguiente">❯</button></div>
