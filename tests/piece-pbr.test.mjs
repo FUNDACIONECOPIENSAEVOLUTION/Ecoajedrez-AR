@@ -63,7 +63,7 @@ test('The real material keeps original magic gems and adds normal/roughness maps
  assert.deepEqual(material.normalScale.xy,[.50,.50]);
  assert.ok(gem.emissive.value);
  assert.equal(gem.emissiveIntensity,3);
- assert.match(main,/loadPhotoPBR\(THREE,requested\)/);
+ assert.match(main,/loadPhotoPBR\(THREE,source\)/);
  assert.match(main,/piecePreview\?\.rebuild\(\)/);
  assert.match(preview,/camera\.position\.set\(0,1\.55,3\.55\)/);
 });
