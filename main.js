@@ -15,6 +15,7 @@ import { makeLastMoveOverlay } from './last-move-ghost.js?v=0.13.0';
 import { createVictoryFX } from './victory-fx.js?v=0.14.2';
 import { createImmersiveChess } from './immersive-chess.js?v=0.14.7';
 import {createARChessPortal} from './ar-portal.js?v=0.14.8';
+import {createARImmersionRoom,arRoomSize} from './immersive-room.js?v=0.15.0';
 import {checkSkybox,linkedRealm,validExperience,gameRealmName} from './experience-modes.js?v=0.14.8';
 
 const $ = (id) => document.getElementById(id);
@@ -41,7 +42,7 @@ const game = new Chess();
 const world = new THREE.Group(), tiles = new THREE.Group(), pieces = new THREE.Group();
 const decorations = new THREE.Group(), markers = new THREE.Group();
 world.add(tiles, decorations, pieces, markers); scene.add(world);
-let arcaneUI=null,magicEnv=null,ghostHint=null,boardSurface=null,victoryFX=null,realmImmersion=null,arPortal=null;
+let arcaneUI=null,magicEnv=null,ghostHint=null,boardSurface=null,victoryFX=null,realmImmersion=null,arPortal=null,arRoom=null;
 const rootBase = new THREE.Mesh(new THREE.BoxGeometry(8.45, .35, 8.45), new THREE.MeshStandardMaterial({color:0x213544, metalness:.5, roughness:.28}));
 rootBase.position.y = -.23; rootBase.receiveShadow = true; tiles.add(rootBase);
 const raycaster = new THREE.Raycaster(), point = new THREE.Vector2();
@@ -951,6 +952,10 @@ let arPicking='touch', lastARPick=0, aimedSquare=null;
 const pointers=new Set();
 function arHint(message){$('arHint').textContent=message;}
 function showAR(){
+  arRoom?.clear();
+  $('arRoomStatus').textContent='Apunta a una mesa o suelo y fija el tablero. No camines guiándote por las paredes digitales.';
+  $('arRoomToggle').textContent='👁 Ocultar paredes';
+  $('arRoomToggle').setAttribute('aria-pressed','true');
   document.body.classList.add('xr-active');
   arPortal?.setVisible(false);
   $('placeArBtn').style.display='inline-block';
@@ -962,6 +967,7 @@ function showAR(){
   arHint('Busca una mesa o suelo, después pulsa FIJAR TABLERO.');
 }
 function hideAR(){
+  arRoom?.clear();
   arPortal?.setVisible(false);
   document.body.classList.remove('xr-active');
   $('arCrosshair').classList.add('hidden');
@@ -987,7 +993,10 @@ function placeARBoard(){
   world.quaternion.identity();
   world.scale.setScalar(boardScale*Number($('arScale').value));
   world.visible=true;boardPlaced=true;reticle.visible=false;hitRequested=true;
-  arPortal?.setVisible(true); // Decoration tied to tracked board only, never an opaque room.
+  arPortal?.setVisible(true); // Decoration tied to tracked board only.
+  // Six aligned kingdom photos enclose a 3D chamber. Camera passthrough remains visible.
+  arRoom?.place(window.ecoBoardCatalogue?.getSelected()||'classic',world.position.clone());
+  $('arRoomStatus').textContent='Cargando seis paredes del reino… puedes seguir jugando al ajedrez.';
   $('placeArBtn').style.display='none';setARPicking('touch');
   arHint('Tablero fijado con portal decorativo. Toca una pieza y su destino para jugar. Mantén visible tu entorno real.');
   return true;
@@ -999,6 +1008,8 @@ function setHologram(){
   world.scale.setScalar(boardScale*Number($('arScale').value));
   world.visible=true;boardPlaced=true;lastHit=null;reticle.visible=false;
   arPortal?.setVisible(false); // Unanchored holograms must not pretend to map safe physical space.
+  arRoom?.clear();
+  $('arRoomStatus').textContent='Sin superficie detectada: el holograma no está anclado. Cuarto inmersivo desactivado.';
   $('placeArBtn').style.display='none';
   arHint('Holograma AR sin detección de mesa. Se puede jugar, pero no está anclado a una superficie.');
 }
@@ -1049,6 +1060,7 @@ function finishAR(){
   pointers.clear();arPointerStart=null;
   world.position.set(0,0,0);world.quaternion.identity();world.scale.setScalar(1);
   world.visible=true;reticle.visible=false;orbit.enabled=true;
+  arRoom?.clear();
   hideAR();setTheme(theme);magicEnv?.setAR(false);
   resize();
   offerARRecovery();
@@ -1189,7 +1201,28 @@ $('arFixBtn').onclick=()=>{
 $('arTouchBtn').onclick=()=>setARPicking('touch');
 $('arAimBtn').onclick=()=>setARPicking('aim');
 $('arSelectBtn').onclick=selectAimedSquare;
-$('arScale').oninput=()=>{if(isAR&&boardPlaced)world.scale.setScalar(boardScale*Number($('arScale').value));};
+$('arScale').oninput=()=>{
+ if(isAR&&boardPlaced)world.scale.setScalar(boardScale*Number($('arScale').value));
+};
+$('arRoomSize').onchange=event=>{
+ const size=arRoom?.setSize(event.target.value)||arRoomSize(event.target.value);
+ if(arRoom?.ready())$('arRoomStatus').textContent='Cuarto '+size.label+' · '+size.width+' m; no señala los límites físicos seguros.';
+};
+$('arRoomOpacity').oninput=event=>arRoom?.setOpacity(event.target.value);
+$('arRoomToggle').onclick=()=>{
+ if(!arRoom?.ready()){$('arRoomStatus').textContent='Primero fija el tablero y espera que carguen las seis paredes.';return;}
+ const next=arRoom.setVisible(!arRoom.visible());
+ $('arRoomToggle').textContent=next?'👁 Ocultar paredes':'👁 Mostrar paredes';
+ $('arRoomToggle').setAttribute('aria-pressed',String(next));
+ $('arRoomStatus').textContent=next?'Paredes visuales activadas: mantén el entorno físico a la vista.':'Paredes ocultas: la cámara real sigue visible y la partida continúa.';
+};
+$('arBoardPreset').onchange=event=>{
+ const amount={normal:1,grande:2.8,colosal:5.6}[event.target.value]||1;
+ $('arScale').value=String(amount);
+ if(isAR&&boardPlaced)world.scale.setScalar(boardScale*amount);
+ const width=(8*boardScale*amount).toFixed(2);
+ $('arRoomStatus').textContent='Tablero y piezas a escala '+width+' m de ancho. Comprueba que tu espacio real está libre.';
+};
 document.addEventListener('pointerdown',onARPointerDown,true);
 document.addEventListener('pointermove',onARPointerMove,true);
 document.addEventListener('pointerup',onARPointerUp,true);
@@ -1229,6 +1262,12 @@ arcaneUI=createArcaneUI({THREE,world});
 try{const saved=localStorage.getItem('ecoajedrez-graphics-profile');if(['auto','low','medium','high'].includes(saved))$('quality').value=saved;}catch(e){}
 magicEnv=createMagicWorld({THREE,world,scene,renderer,stage});
 arPortal=createARChessPortal({THREE,world});
+arRoom=createARImmersionRoom({
+ THREE,scene,
+ onInfo:message=>{$('arRoomStatus').textContent=message;}
+});
+arRoom.setSize($('arRoomSize').value);
+arRoom.setOpacity($('arRoomOpacity').value);
 realmImmersion=createImmersiveChess({
  THREE,scene,camera,orbit,canvas,
  getBoardId:()=>window.ecoBoardCatalogue?.getSelected()||'classic',
