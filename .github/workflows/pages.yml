@@ -27,6 +27,8 @@ jobs:
           node --check skybox-test.js
           node --check immersive-chess.js
           node --check immersive-room.js
+          node --check quest-map.js
+          node --check community-models.js
           node --check experience-modes.js
           node --check ar-portal.js
           node --check skybox-config.js

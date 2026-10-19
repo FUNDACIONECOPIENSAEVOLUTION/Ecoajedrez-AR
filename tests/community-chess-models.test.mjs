@@ -1,0 +1,33 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {COMMUNITY_FILES,COMMUNITY_PIECES,COMMUNITY_COLORS,communityPiecePath,communityPieceHeight} from '../community-models.js';
+const html=fs.readFileSync('index.html','utf8');
+const main=fs.readFileSync('main.js','utf8');
+const build=fs.readFileSync('scripts/build-pages.mjs','utf8');
+test('Optional CC0 chess set is a 12-file complete GLB pack and cannot break existing styles',()=>{
+ assert.equal(COMMUNITY_PIECES.length,6);
+ assert.equal(COMMUNITY_COLORS.length,2);
+ assert.equal(COMMUNITY_FILES.length,12);
+ assert.equal(new Set(COMMUNITY_FILES).size,12);
+ assert.ok(COMMUNITY_FILES.includes('w-pawn.glb')&&COMMUNITY_FILES.includes('b-king.glb'));
+ assert.ok(communityPiecePath('w','queen').endsWith('/w-queen.glb'));
+ assert.ok(Object.keys(communityPieceHeight).every(t=>'prnbqk'.includes(t)));
+ assert.match(html,/id="communityPieceOption" value="community" disabled/);
+ assert.match(main,/checkCommunityModels\(\)/);
+ assert.match(main,/communityPieceKey\(p\.color,p\.type\)/);
+ assert.match(main,/if\(!g\)g=pieceModel\(p\)/);
+ assert.match(main,/new THREE\.Box3\(\)\.setFromObject\(source\)/);
+ assert.match(main,/obj\.userData\.sharedGeo=true/);
+ assert.match(main,/obj\.userData\.ownedMaterial=true/);
+});
+test('Build publishes no arbitrary external files and validates full GLB v2 headers',()=>{
+ assert.match(build,/const presentCommunity=COMMUNITY_FILES\.filter/);
+ assert.match(build,/presentCommunity\.length===COMMUNITY_FILES\.length/);
+ assert.match(build,/readUInt32LE\(4\)===2/);
+ assert.match(build,/readUInt32LE\(8\)===raw\.length/);
+ assert.match(build,/total>24000000/);
+ assert.match(build,/Community chess GLBs:/);
+ assert.ok(fs.existsSync('assets/models/community/README.md'));
+ for(const file of COMMUNITY_FILES)assert.equal(fs.existsSync('assets/models/community/'+file),false,'No unreviewed third-party binary should be shipped prematurely: '+file);
+});
