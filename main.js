@@ -19,6 +19,7 @@ import {createARImmersionRoom,arRoomSize} from './immersive-room.js?v=0.15.0';
 import {checkSkybox,linkedRealm,validExperience,gameRealmName} from './experience-modes.js?v=0.14.8';
 import {createQuestMap,successfulQuestMove} from './quest-map.js?v=0.15.2';
 import {COMMUNITY_FILES,communityPiecePath,communityPieceKey,communityPieceHeight} from './community-models.js?v=0.15.2';
+import {ANTHRO_GLB,ANTHRO_MANIFEST,collectAnthroSources,createAnthroVisual,tickAnthroVisuals} from './anthropomorphic-pieces.js?v=0.15.3';
 
 const $ = (id) => document.getElementById(id);
 const canvas = $('render'), stage = $('scene');
@@ -59,10 +60,33 @@ let hitSource = null, hitRequested = false, reticlePose = null, timer = null;
 let theme = 'classic', lang = 'es', botDifficulty = 'easy', mode = 'bot';
 let account = null, guestLocal = false, roomVersion = 0, boardScale = 0.065;
 let commandRecognition = null, gameStarted = false;
-let modelSet = 'staunton', moving = null;
+let modelSet = 'anthro', moving = null;
 let questUI=null,missionActive=null,missionSolved=false,missionPrior=null;
 const assets = new Map(), loader = new GLTFLoader();
 const communityAssets=new Map();let communityLoading=null;
+let anthroSources=null,anthroLoading=null,lastAnthroTick=0;
+async function loadAnthroModel(){
+ if(anthroSources||anthroLoading)return anthroLoading||anthroSources;
+ anthroLoading=(async()=>{
+  try{
+   const response=await fetch(ANTHRO_MANIFEST,{cache:'no-store'});
+   if(!response.ok)return null;
+   const state=await response.json();
+   if(!state?.ready||state.pieces!==32||state.walkClips!==32)return null;
+   const loaded=await loader.loadAsync(ANTHRO_GLB);
+   const templates=collectAnthroSources(loaded);
+   if(templates.size!==12)throw Error('GLB incompleto: faltan tipos o clips Walk');
+   anthroSources=templates;
+   if(modelSet==='anthro'){moving=null;renderPieces();toast('✦ Ejército antropomorfo GLB animado listo.');}
+   return templates;
+  }catch(error){
+   console.warn('GLB antropomorfo no disponible; se conservarán las figuras ligeras del juego.',error);
+   return null;
+  }
+ })();
+ try{return await anthroLoading;}finally{anthroLoading=null;}
+}
+
 const reticle = new THREE.Mesh(new THREE.RingGeometry(.125,.145,40), new THREE.MeshBasicMaterial({color:0x72ffba,side:THREE.DoubleSide}));
 reticle.rotation.x = -Math.PI/2; reticle.visible = false; scene.add(reticle);
 const letters = {
@@ -163,6 +187,9 @@ function renderPieces(){
           }
         });
       }
+    }
+    if(modelSet==='anthro'){
+      g=createAnthroVisual(THREE,p,anthroSources);
     }
     if(modelSet==='community'){
       const source=communityAssets.get(communityPieceKey(p.color,p.type));
@@ -671,6 +698,7 @@ $('theme').onchange=()=>setTheme($('theme').value);
 $('pieceSet').onchange=()=>{
  modelSet=$('pieceSet').value;moving=null;renderPieces();
  if(modelSet==='community')loadCommunityPieces();
+ if(modelSet==='anthro')loadAnthroModel();
 };
 $('boardSize').onchange=()=>{boardScale=Number($('boardSize').value)||0.065;};
 $('whiteColor').onchange=()=>{goldMat.color.set($('whiteColor').value);renderPieces();};
@@ -1360,6 +1388,11 @@ function render(timestamp,frame){
     );
     if(progress>=1)moving=null;
   }
+  if(modelSet==='anthro'){
+    const t=timestamp||performance.now();
+    tickAnthroVisuals(pieces,moving,t,lastAnthroTick?Math.max(0,(t-lastAnthroTick)/1000):0);
+    lastAnthroTick=t;
+  }
   if(theme==='jungle'&&!isAR)decorations.children.forEach((p,i)=>{p.rotation.z=Math.sin(timestamp*.0016+i*.8)*.12;});
   arcaneUI?.tick(timestamp||performance.now());
   magicEnv?.tick(timestamp||performance.now());
@@ -1453,5 +1486,6 @@ document.addEventListener('eco:board-skin-select',event=>{
 setTheme(theme);
 syncSelectedRealm(catalogue?.getSelected()||'classic');
 renderPieces();updateStatus();translate();
+if($('pieceSet').value==='anthro')loadAnthroModel();
 renderer.setAnimationLoop(render);
 loadChessModels();

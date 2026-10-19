@@ -4,7 +4,7 @@ import path from 'node:path';
 const dest='dist';
 fs.rmSync(dest,{recursive:true,force:true});
 fs.mkdirSync(dest,{recursive:true});
-const files=['index.html','arcane.css','opening.css','opening.js','celestial.css','cinematic-fix.css','adventure.css','login-scene.css','readability-qr.css','models-cache.css','magic-game.css','victory-fx.css','victory-fx.js','immersive-chess.js','immersive-chess.css','immersive-room.js','immersive-room.css','quest-map.js','quest-map.css','experience-modes.js','experience-modes.css','community-models.js','ar-portal.js','board-catalog.css','realm-pairing.js','board-skins.js','board-catalog-ui.js','magic-world.js','last-move-ghost.js','legal-consent.js','terms.html','qr-scanner.js','asset-cache.js','adventure-ui.js','sw.js','celestial-ui.js','arcane-ui.js','privacy.html','version.json','skybox-test.html','skybox-test.css','skybox-test.js','skybox-config.js','main.js','auth.js','commands.js','pvp.js','match-state.js','ecoajedrez.PNG','_headers'];
+const files=['index.html','arcane.css','opening.css','opening.js','celestial.css','cinematic-fix.css','adventure.css','login-scene.css','readability-qr.css','models-cache.css','magic-game.css','victory-fx.css','victory-fx.js','immersive-chess.js','immersive-chess.css','immersive-room.js','immersive-room.css','quest-map.js','quest-map.css','experience-modes.js','experience-modes.css','community-models.js','anthropomorphic-pieces.js','ar-portal.js','board-catalog.css','realm-pairing.js','board-skins.js','board-catalog-ui.js','magic-world.js','last-move-ghost.js','legal-consent.js','terms.html','qr-scanner.js','asset-cache.js','adventure-ui.js','sw.js','celestial-ui.js','arcane-ui.js','privacy.html','version.json','skybox-test.html','skybox-test.css','skybox-test.js','skybox-config.js','main.js','auth.js','commands.js','pvp.js','match-state.js','ecoajedrez.PNG','_headers'];
 for(const name of files){
  if(!fs.existsSync(name))throw Error('Missing asset: '+name);
  fs.copyFileSync(name,path.join(dest,name));
@@ -45,6 +45,32 @@ for(const name of modeCardNames){
     data.toString('ascii',0,4)!=='RIFF'||data.toString('ascii',8,12)!=='WEBP')
    throw Error('Invalid selected mode card WebP: '+name);
  fs.writeFileSync(path.join(modeCardDest,name),data);
+}
+
+// Original anthropomorphic chess GLB supplied by the user: one file for 32 figures.
+const anthroPath='assets/models/anthropomorphic/anthropomorphic-chess.glb';
+if(fs.existsSync(anthroPath)){
+ const bin=fs.readFileSync(anthroPath);
+ if(bin.length<10000||bin.length>8000000||bin.toString('ascii',0,4)!=='glTF'||
+    bin.readUInt32LE(4)!==2||bin.readUInt32LE(8)!==bin.length)
+   throw Error('Invalid anthropomorphic chess GLB');
+ const chunkBytes=bin.readUInt32LE(12);
+ if(chunkBytes<50||chunkBytes>bin.length-20||bin.toString('ascii',16,20)!=='JSON')
+   throw Error('Missing anthropomorphic GLB JSON chunk');
+ const json=JSON.parse(bin.toString('utf8',20,20+chunkBytes));
+ const roots=(json.nodes||[]).filter(n=>/^(White|Black)_(Pawn|Rook|Knight|Bishop|Queen|King)_\d+$/.test(n.name||''));
+ const names=(json.animations||[]).map(a=>a.name||'');
+ if(roots.length!==32||!roots.every(n=>names.includes(n.name+'_Walk')))
+   throw Error('Anthropomorphic GLB must contain 32 named pieces and 32 Walk clips');
+ const destination=path.join(dest,'assets/models/anthropomorphic');
+ fs.mkdirSync(destination,{recursive:true});
+ fs.writeFileSync(path.join(destination,'anthropomorphic-chess.glb'),bin);
+ fs.writeFileSync(path.join(destination,'manifest.json'),JSON.stringify({
+  ready:true,pieces:32,walkClips:32,format:'glTF 2.0',bytes:bin.length
+ },null,2)+'\n');
+ console.log('Approved free anthropomorphic GLB: 32 figures and 32 walking clips.');
+}else{
+ console.log('Anthropomorphic GLB pending upload; procedural free walking figures available.');
 }
 
 // Owner-reviewed optional community GLB chess pieces: publish ONLY a verified complete set.
