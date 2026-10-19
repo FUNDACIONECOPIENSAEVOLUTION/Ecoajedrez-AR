@@ -24,6 +24,7 @@ import {PIECE_MATERIALS,PIECE_GLOWS,validPieceMaterial,validPieceGlow,applyPiece
 import {createChessCombat,faceMovement} from './piece-combat.js?v=0.15.4';
 import {createPiecePreview} from './piece-preview.js?v=0.15.5';
 import {loadPhotoPBR,readPBRManifest,PBR_ROOT} from './piece-pbr.js?v=0.15.6';
+import {normalizeArmyLook,chooseContrastingArmy,armiesAreDistinct,isValidWireLook} from './army-appearance.js?v=0.15.7';
 import {setupMaterialGallery} from './piece-gallery.js?v=0.15.6';
 
 const $ = (id) => document.getElementById(id);
@@ -67,6 +68,61 @@ let account = null, guestLocal = false, roomVersion = 0, boardScale = 0.065;
 let commandRecognition = null, gameStarted = false;
 let modelSet = 'anthro', moving = null;
 let pieceMaterial='arcane',pieceGlow='team',piecePreview=null,combatFX=null;
+let rivalMaterial='obsidian',rivalGlow='violet',rivalMode='auto',remoteLook=null;
+let connectedMatch=null; // Se asigna después de inicializar PeerMatch.
+function myLook(){return normalizeArmyLook({material:pieceMaterial,glow:pieceGlow});}
+function otherLook(){return normalizeArmyLook({material:rivalMaterial,glow:rivalGlow});}
+function armyLooks(){
+ const mine=myLook();
+ if(mode==='online'&&connectedMatch?.connected()){
+  const w=connectedMatch.host?mine:(remoteLook||otherLook());
+  const b=connectedMatch.host?(remoteLook||otherLook()):mine;
+  return {w,b:armiesAreDistinct(w,b)?b:chooseContrastingArmy(w,b)};
+ }
+ return {w:mine,b:otherLook()};
+}
+function mineColor(){return mode==='online'&&connectedMatch?.connected()&&!connectedMatch.host?'b':'w';}
+function updateArmyStatus(){
+ const online=mode==='online'&&connectedMatch?.connected();
+ $('playerArmyLabel').textContent=online&&!connectedMatch.host?'TU EJÉRCITO · NEGRAS':'TU EJÉRCITO · BLANCAS';
+ $('rivalArmyLabel').textContent=online?'RIVAL EN LÍNEA · ELECCIÓN PROPIA':
+  mode==='bot'?'EJÉRCITO DE LA MÁQUINA':'EJÉRCITO DEL SEGUNDO JUGADOR';
+ for(const id of ['rivalAppearanceMode','rerollRival'])$(id).disabled=online;
+ for(const id of ['rivalMaterial','rivalGlow'])$(id).disabled=online||rivalMode==='auto';
+ const looks=armyLooks(),side=mineColor(),mine=looks[side],enemy=looks[side==='w'?'b':'w'];
+ $('pieceContrastStatus').textContent=(online?'Duelo online: cada jugador elige sus acabados. ':
+  rivalMode==='auto'?'Rival diferente generado automáticamente. ':'Dos ejércitos contrastantes. ')+
+  PIECE_MATERIALS[mine.material].label+' / '+PIECE_GLOWS[mine.glow].label+
+  ' frente a '+PIECE_MATERIALS[enemy.material].label+' / '+PIECE_GLOWS[enemy.glow].label;
+}
+function saveArmyChoice(){
+ try{
+  localStorage.setItem('eco-piece-material',pieceMaterial);
+  localStorage.setItem('eco-piece-glow',pieceGlow);
+  localStorage.setItem('eco-piece-rival',JSON.stringify({material:rivalMaterial,glow:rivalGlow,mode:rivalMode}));
+ }catch(error){}
+}
+function preloadArmyTextures(){
+ const looks=armyLooks();
+ for(const material of new Set([looks.w.material,looks.b.material])){
+  const source=PIECE_MATERIALS[material]?.photoSource||material;
+  if(source==='arcane')continue;
+  loadPhotoPBR(THREE,source).then(data=>{
+   if(data){renderPieces();piecePreview?.rebuild();}
+  }).catch(()=>{});
+ }
+}
+function refreshArmy({reroll=false,transmit=false}={}){
+ const chosen=chooseContrastingArmy(myLook(),otherLook(),{
+  random:reroll||(rivalMode==='auto'&&!armiesAreDistinct(myLook(),otherLook()))
+ });
+ rivalMaterial=chosen.material;rivalGlow=chosen.glow;
+ $('rivalMaterial').value=rivalMaterial;$('rivalGlow').value=rivalGlow;
+ updateArmyStatus();saveArmyChoice();renderPieces();piecePreview?.rebuild();
+ preloadArmyTextures();
+ if(transmit&&mode==='online'&&connectedMatch?.connected())
+  connectedMatch.send({type:'APPEARANCE',...myLook()});
+}
 let questUI=null,missionActive=null,missionSolved=false,missionPrior=null;
 const assets = new Map(), loader = new GLTFLoader();
 const communityAssets=new Map();let communityLoading=null;
@@ -241,7 +297,8 @@ function createPieceVisual(p){
       aura.dispose();
     }
  // Acabados seleccionables para todos los modelos 3D; no toca reglas ni colisiones.
- applyPieceAppearance(THREE,g,{material:pieceMaterial,glow:pieceGlow,color:p.color});
+ const selectedLook=armyLooks()[p.color];
+ applyPieceAppearance(THREE,g,{material:selectedLook.material,glow:selectedLook.glow,color:p.color});
  if(p.color==='b')g.rotation.y=Math.PI;
  return g;
 }
