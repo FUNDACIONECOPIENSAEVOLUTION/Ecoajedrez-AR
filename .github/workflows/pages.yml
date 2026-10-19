@@ -26,6 +26,7 @@ jobs:
           node --check victory-fx.js
           node --check skybox-test.js
           node --check immersive-chess.js
+          node --check immersive-room.js
           node --check experience-modes.js
           node --check ar-portal.js
           node --check skybox-config.js

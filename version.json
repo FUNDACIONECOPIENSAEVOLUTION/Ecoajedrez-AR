@@ -1,8 +1,8 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.14.9-beta.1",
+  "version": "0.15.0-beta.1",
   "updated": "2026-10-18",
-  "status": "Tres WebP aprobados se muestran en las tarjetas de 3D clásico, Reino 360 y AR con portal. Selector responsivo sin deformación y sin modificar la jugabilidad de ningún modo.",
+  "status": "13/13 complete and published 360° kingdoms, mapped to 13 playable chessboard textures. New configurable translucent AR immersion chamber from six cube faces (2.6 / 4.8 / 9m), independently scalable board and pieces. WebXR hit-test placement and optional XR anchor maintain world alignment. Unvalidated physically and does NOT detect safe movement boundaries.",
   "browserValidated": false,
   "physicalARValidated": false,
   "onlinePvP": "Casual PeerJS beta, six-character code and QR with camera scanner (native BarcodeDetector / lazy in-browser jsQR), validation restricts invite origin/path. Real two-device session requires device test; unranked and unaudited anti-cheat.",
@@ -138,7 +138,7 @@
     ],
     "resolution": "512..4096 píxeles cuadrados iguales (recomendada 1024 o 2048)",
     "maxBytesPerFace": 3000000,
-    "fullCubemapsUploadedAtRelease": 1,
+    "fullCubemapsUploadedAtRelease": 13,
     "onlyPublishCompleteSets": true,
     "viewer": "skybox-test.html con entrada explícita, salida y comprobación directa de caras",
     "motion": "3DoF: giro por arrastre o deviceorientation autorizado",
@@ -153,7 +153,11 @@
     "mobileGyro": "Optional permission-gated sensor orientation",
     "AR": "Existing real-surface WebXR hit-test only. Full virtual kingdom not available in AR, no physical area mapping.",
     "roomBoundaryCalibrated": false,
-    "entry": "Configure the selected board and opponent, choose Reino 360, Start; lab is debug-only."
+    "entry": "Configure the selected board and opponent, choose Reino 360, Start; lab is debug-only.",
+    "verifiedByCI": 13,
+    "rotation3DoF": true,
+    "playableBoardMap": "skybox-config.js pairs each of 13 realm IDs with its board texture",
+    "manualMobileGameplayValidationPending": true
   },
   "playExperiences": {
     "opponents": [
@@ -192,5 +196,30 @@
     ],
     "ui": "Three cards desktop, compact rows on mobile; square originals, no stretching",
     "visualDeviceValidationPending": true
+  },
+  "arRoom": {
+    "version": "0.15.0",
+    "directory": "app/imagenes/skybox",
+    "publishedCubes": 13,
+    "geometry": "six textured faces mapped onto a transparent interior cubic environment",
+    "physicalSizesMeters": [
+      2.6,
+      4.8,
+      9
+    ],
+    "boardScalePresets": [
+      1,
+      2.8,
+      5.6
+    ],
+    "maxWallOpacity": 0.6,
+    "initialWallOpacity": 0.4,
+    "position": "placed board hit-test position; WebXR anchor when available, otherwise session-local",
+    "passthroughCameraVisible": true,
+    "unanchoredHologramRoomDisabled": true,
+    "handTrackingImplemented": false,
+    "roomSafetyCalibrated": false,
+    "physicalARValidated": false,
+    "notes": "Virtual cubic enclosure is visual only; no obstacle/physical-boundary detection. Headset WebXR support depends on the platform; no physical 6DoF proof."
   }
 }

@@ -1,5 +1,12 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.15.0-beta.1 — 2026-10-18 · 13 reinos Skybox + cuarto AR ajustable
+- Verificadas en compilación las 78 caras de los 13 Skyboxes completos. Sus texturas de tablero se mantienen vinculadas con los trece reinos 1:1.
+- Nuevo cuarto AR translúcido con las seis caras del mismo reino y tres tamaños independientes de la escala del tablero: 2,6 m, 4,8 m y 9 m. Control de paredes, opacidad y piezas grandes/colosales desde el HUD de AR; sigue siendo el mismo ajedrez interactivo.
+- Anclaje espacial opcional WebXR XRHitTestResult.createAnchor cuando está disponible; fallback a coordenadas locales de sesión. Sin mapeo del perímetro transitable real ni reconocimiento de manos.
+- Material adicional de vistas/panoramas permanece como recurso de revisión, no reemplaza seis caras. Pruebas CI ampliadas; necesita prueba manual con cámara Android y soporte WebXR del equipo.
+
+
 ## 0.14.9-beta.1 — 2026-10-18 · Tarjetas de selección ilustradas
 - Tres WebP ligeros del propietario visibles en 3D clásico, Reino 360° y AR con portal, asignados al radio correcto en Configuración.
 - Diseño en tres columnas en escritorio y filas de imagen/texto en móvil, imágenes cuadradas sin estiramiento ni recorte, selección accesible.
