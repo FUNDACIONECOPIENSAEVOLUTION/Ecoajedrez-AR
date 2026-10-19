@@ -1,0 +1,18 @@
+ECOAJEDREZ — Paquete 13 — REINO ALQUIMISTA / ETER — GRAN SALON DE ALQUIMIA
+
+Carpeta exactos/ (usar para cargar directamente un Skybox de 6 caras):
+px.webp = Derecha (+X)
+nx.webp = Izquierda (-X)
+py.webp = Techo (+Y), vista hacia arriba
+ny.webp = Suelo (-Y), vista cenital completamente vertical
+pz.webp = Frente (+Z)
+nz.webp = Atras (-Z)
+
+Carpeta descriptivos/: mismas 6 imagenes, nombres largos con reino + vista.
+extras/: contacto de las 6 caras para inspeccion.
+
+Calidad WebP: 93/100; resolucion: 1254 x 1254 pixeles en las 6 caras.
+AVISO: Estas 6 vistas fueron ilustradas por separado, aunque conservan un estilo comun.
+No se garantiza continuidad geometrica perfecta de 90 grados en los bordes.
+Se recomienda probar en el visor 3D; la coincidencia exacta exige un unico render cubemap
+o conversion desde un panorama equirectangular 360 grados nativo.

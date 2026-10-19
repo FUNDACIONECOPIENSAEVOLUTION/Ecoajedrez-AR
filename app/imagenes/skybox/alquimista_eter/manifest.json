@@ -1,0 +1,92 @@
+{
+  "project": "ECOAJEDREZ",
+  "package_number": 13,
+  "realm": "Reino Alquimista / Éter — Gran Salón de Alquimia",
+  "format": "WebP",
+  "quality": 93,
+  "width": 1254,
+  "height": 1254,
+  "face_order": [
+    "px",
+    "nx",
+    "py",
+    "ny",
+    "pz",
+    "nz"
+  ],
+  "faces": [
+    {
+      "code": "px",
+      "axis": "+X",
+      "view": "Derecha",
+      "exact": "exactos/px.webp",
+      "descriptive": "descriptivos/ECOAJEDREZ_13_Reino_Alquimista_Eter_Gran_Salon__px__Derecha.webp",
+      "size": [
+        1254,
+        1254
+      ],
+      "source": "catedral_cósmica_de_alquimia_steampunk.png"
+    },
+    {
+      "code": "nx",
+      "axis": "-X",
+      "view": "Izquierda",
+      "exact": "exactos/nx.webp",
+      "descriptive": "descriptivos/ECOAJEDREZ_13_Reino_Alquimista_Eter_Gran_Salon__nx__Izquierda.webp",
+      "size": [
+        1254,
+        1254
+      ],
+      "source": "laboratorio_alquímico_de_éter_y_vapor.png"
+    },
+    {
+      "code": "py",
+      "axis": "+Y",
+      "view": "Techo",
+      "exact": "exactos/py.webp",
+      "descriptive": "descriptivos/ECOAJEDREZ_13_Reino_Alquimista_Eter_Gran_Salon__py__Techo.webp",
+      "size": [
+        1254,
+        1254
+      ],
+      "source": "cúpula_celestial_del_observatorio_alquímico.png"
+    },
+    {
+      "code": "ny",
+      "axis": "-Y",
+      "view": "Suelo_cenital",
+      "exact": "exactos/ny.webp",
+      "descriptive": "descriptivos/ECOAJEDREZ_13_Reino_Alquimista_Eter_Gran_Salon__ny__Suelo_cenital.webp",
+      "size": [
+        1254,
+        1254
+      ],
+      "source": "laboratorio_alquímico_steampunk_visto_desde_arriba.png"
+    },
+    {
+      "code": "pz",
+      "axis": "+Z",
+      "view": "Frente",
+      "exact": "exactos/pz.webp",
+      "descriptive": "descriptivos/ECOAJEDREZ_13_Reino_Alquimista_Eter_Gran_Salon__pz__Frente.webp",
+      "size": [
+        1254,
+        1254
+      ],
+      "source": "observatorio_alquímico_de_luz_cósmica.png"
+    },
+    {
+      "code": "nz",
+      "axis": "-Z",
+      "view": "Atras",
+      "exact": "exactos/nz.webp",
+      "descriptive": "descriptivos/ECOAJEDREZ_13_Reino_Alquimista_Eter_Gran_Salon__nz__Atras.webp",
+      "size": [
+        1254,
+        1254
+      ],
+      "source": "catedral_alquímica_de_las_estrellas.png"
+    }
+  ],
+  "technical_note": "Ilustraciones generadas individualmente: no se garantiza continuidad exacta ni proyeccion cubica nativa de 90 grados en todas las uniones. Probar dentro del visor 3D."
+}
