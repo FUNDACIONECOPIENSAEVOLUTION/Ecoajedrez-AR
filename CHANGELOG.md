@@ -1,5 +1,12 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.15.3-beta.1 — 2026-10-19 · Ejército antropomorfo animado gratuito
+- Configuración: nuevo estilo «Antropomórficas mágicas · GRATIS», con formas, miembros articulados, gemas emisivas cian/violeta y halo aditivo ligero. En la partida el balanceo de brazos y piernas se sincroniza con el desplazamiento de la pieza (misma lógica chess.js).
+- Cuando se suba un único GLB auténtico de 32 figuras/32 Walk clips a la carpeta dedicada, el loader cambiará automáticamente a sus mallas y animaciones. En ausencia del GLB queda la representación procedural reversible.
+- GLB entregado revisado: glTF 2.0, 1,53 MB, sin texturas externas, extensiones de emisión y 32 clips de caminar (NO ataque/muerte). Bloom original de la demo no está embebido y en versión móvil se simula con halos eficientes.
+- Piezas originales no retiradas; recompensas cosméticas y anuncios reales pendientes. Validación visual física Android pendiente.
+
+
 ## 0.15.2-beta.1 — 2026-10-19 · Camino Galáctico y altura de cámara 360°
 - Shift+rueda de mouse para altura gradual de cámara; botones ↑↓ en móvil sin confundir altitud con giroscopio ni zoom. Tablero y jugadas intactos.
 - Primer mapa jugable del reino Galáctico con 8 retos reales (7 objetivos tácticos y 1 duelo final con BOT), progreso local separado y restauración de la partida previa al abandonar misiones.
