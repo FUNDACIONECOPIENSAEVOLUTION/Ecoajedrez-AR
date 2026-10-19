@@ -11,9 +11,9 @@ const css=fs.readFileSync('piece-preview.css','utf8');
 const build=fs.readFileSync('scripts/build-pages.mjs','utf8');
 const preview=fs.readFileSync('piece-preview.js','utf8');
 
-test('Ten lightweight texture presets and six selectable colors are available to both armies',()=>{
- assert.equal(Object.keys(PIECE_MATERIALS).length,10);
- assert.equal(Object.keys(PIECE_GLOWS).length,6);
+test('Twenty selectable finishes and eleven glowing colors are available to both armies',()=>{
+ assert.equal(Object.keys(PIECE_MATERIALS).length,20);
+ assert.equal(Object.keys(PIECE_GLOWS).length,11);
  for(const name of ['walnut','oak','stone','marble','obsidian','bronze','gold','ice','basalt']){
   assert.ok(PIECE_MATERIALS[name].label);
  }
