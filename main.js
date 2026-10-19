@@ -267,6 +267,7 @@ function updateStatus(){
   $('status').textContent=text;
   const history=game.history();
   $('history').textContent=history.length?history.map((v,i)=>(i%2===0?String(Math.floor(i/2)+1)+'. ':'')+v).join('  '):'—';
+  realmImmersion?.refreshStatus?.();
   arcaneUI?.state({turn:game.turn(),check:game.isCheck(),mate:game.isCheckmate(),mode,connected:mode!=='online'||match.connected()});
   syncVictory();
 }
@@ -1289,7 +1290,7 @@ arRoom=createARImmersionRoom({
 arRoom.setSize($('arRoomSize').value);
 arRoom.setOpacity($('arRoomOpacity').value);
 realmImmersion=createImmersiveChess({
- THREE,scene,camera,orbit,canvas,
+ THREE,scene,camera,orbit,canvas,decorations,
  getBoardId:()=>window.ecoBoardCatalogue?.getSelected()||'classic',
  onInfo:message=>toast(message),
  getInteractivePiece:(x,y)=>{

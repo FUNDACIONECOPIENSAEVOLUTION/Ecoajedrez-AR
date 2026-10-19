@@ -1,14 +1,35 @@
-/* ECOAJEDREZ full-skybox gameplay UI. A small menu remains reachable at all times. */
-#realmMiniControls[hidden]{display:none!important}
-#realmMiniControls{position:fixed;right:12px;top:max(10px,env(safe-area-inset-top));z-index:7;
- display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;max-width:min(95vw,490px)}
-#realmMiniControls button{padding:10px 11px;min-height:42px;min-width:48px;cursor:pointer;
- border:1px solid #8affdd;border-radius:12px;color:#effff9;background:#0a2437ed;
- box-shadow:0 3px 14px #0008;font:800 12px system-ui;backdrop-filter:blur(9px)}
+/* ECOAJEDREZ 360°: compact accessible play camera and status. */
+#realmMiniControls[hidden],#realmPlayStatus[hidden]{display:none!important}
+#realmMiniControls{
+ position:fixed;right:10px;top:max(9px,env(safe-area-inset-top));z-index:7;
+ display:flex;flex-wrap:wrap;gap:5px;justify-content:flex-end;
+ max-width:min(96vw,720px);pointer-events:auto
+}
+#realmMiniControls button{
+ padding:9px 10px;min-height:40px;min-width:48px;cursor:pointer;
+ border:1px solid #8affdd;border-radius:11px;color:#effff9;background:#0a2437e9;
+ box-shadow:0 3px 14px #0008;font:800 12px system-ui;backdrop-filter:blur(9px)
+}
+#realmMiniControls button:hover{background:#1b5164}
 #realmMiniControls button:focus-visible{outline:3px solid #ffe7a1;outline-offset:2px}
+#realmPlayStatus{
+ position:fixed;left:50%;bottom:max(11px,env(safe-area-inset-bottom));transform:translateX(-50%);
+ z-index:6;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:5px 13px;
+ width:min(91vw,700px);padding:8px 12px;color:#ecfff9;
+ background:#071d31db;border:1px solid #82e1c58c;border-radius:12px;
+ font:700 11px/1.5 system-ui;text-align:center;pointer-events:none;
+ box-shadow:0 4px 18px #0006
+}
+#realmPlayStatus strong{color:#ffe4ae;white-space:nowrap}
+#realmPlayStatus span{min-width:0;max-width:min(62vw,340px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#realmPlayStatus small{flex:1 1 100%;color:#c7eee4;font-size:10px}
 body.realm-hud-hidden #gameHud{display:none!important}
 body.realm-hud-hidden #commandHint{display:none!important}
 body.realm-active #scene{background:#05111e}
-body.xr-active #realmMiniControls{display:none!important}
-@media(max-width:620px){#realmMiniControls{top:max(7px,env(safe-area-inset-top));left:8px;right:8px}
- #realmMiniControls button{font-size:11px;padding:8px;flex:1 1 auto}}
+body.xr-active #realmMiniControls,body.xr-active #realmPlayStatus{display:none!important}
+@media(max-width:620px){
+ #realmMiniControls{top:max(7px,env(safe-area-inset-top));left:7px;right:7px;max-width:none;gap:4px}
+ #realmMiniControls button{font-size:10px;padding:7px 6px;min-height:38px;flex:1 1 auto}
+ #realmPlayStatus{bottom:max(7px,env(safe-area-inset-bottom));padding:6px 8px;font-size:10px;gap:3px 8px}
+ #realmPlayStatus small{font-size:9px}
+}
