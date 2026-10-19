@@ -31,8 +31,8 @@ test('Direction-aware chess walking handles left, right and vertical/diagonal tr
  assert.ok(Math.abs(faceMovement(actor,-1,0)+Math.PI/2)<1e-8);
  assert.ok(Math.abs(faceMovement(actor,-1,-1)+Math.PI*.75)<1e-8);
  assert.equal(faceMovement(actor,0,0),0);
- assert.match(main,/faceMovement\\(target,b\\.x-a\\.x,b\\.z-a\\.z\\)/);
- assert.match(main,/target\\.position\\.set\\(a\\.x,\\.07,a\\.z\\)/);
+ assert.match(main,/faceMovement\(target,b\.x-a\.x,b\.z-a\.z\)/);
+ assert.match(main,/target\.position\.set\(a\.x,\.07,a\.z\)/);
 });
 test('Duel keeps defender visible during impact and removes it after its defeat',()=>{
  class Vector{constructor(x=0,y=0,z=0){this.x=x;this.y=y;this.z=z}set(x,y,z){this.x=x;this.y=y;this.z=z;return this}clone(){return new Vector(this.x,this.y,this.z)}copy(v){return this.set(v.x,v.y,v.z)}multiplyScalar(k){return this.set(this.x*k,this.y*k,this.z*k)}}
@@ -61,13 +61,13 @@ test('Preview has actual 3D canvas and material/glow controls and uses game visu
  for(const id of ['piecePreviewCanvas','piecePreviewType','pieceMaterial','pieceGlow','piecePreviewPanel']){
   assert.ok(html.includes('id="'+id+'"'),id);
  }
- assert.match(html,/piece-preview\\.css\\?v=0\\.15\\.4/);
+ assert.match(html,/piece-preview\.css\?v=0\.15\.4/);
  assert.match(css,/grid-template-columns/);
- assert.match(css,/@media\\(max-width:750px\\)/);
+ assert.match(css,/@media\(max-width:750px\)/);
  assert.match(main,/piecePreview=createPiecePreview/);
- assert.match(main,/createVisual:p=>createPieceVisual\\(p\\)/);
- assert.match(main,/piecePreview\\?\\.tick\\(timestamp\\|\\|performance\\.now\\(\\)\\)/);
- assert.match(main,/applyPieceAppearance\\(THREE,g,/);
+ assert.match(main,/createVisual:p=>createPieceVisual\(p\)/);
+ assert.match(main,/piecePreview\?\.tick\(timestamp\|\|performance\.now\(\)\)/);
+ assert.match(main,/applyPieceAppearance\(THREE,g,/);
  assert.match(main,/eco-piece-material/);
  assert.match(main,/eco-piece-glow/);
  assert.match(preview,/powerPreference:'low-power'/);
@@ -78,11 +78,11 @@ test('Preview has actual 3D canvas and material/glow controls and uses game visu
  }
 });
 test('Captured opponent is detached before the board is reconstructed, including en passant',()=>{
- assert.match(main,/function detachCapturedPiece\\(moved\\)/);
- assert.match(main,/moved\\.to\\[0\\]\\+moved\\.from\\[1\\]/);
- assert.match(main,/victim=detachCapturedPiece\\(moved\\)/);
- assert.match(main,/renderPieces\\(\\);animateMove\\(from,to,captured,victim\\)/);
- assert.match(main,/combatFX\\?\\.start\\(/);
- assert.match(main,/combatFX\\?\\.tick\\(timestamp\\|\\|performance\\.now\\(\\)\\)/);
- assert.match(main,/game\\.move\\(\\{from,to,promotion\\}\\)/);
+ assert.match(main,/function detachCapturedPiece\(moved\)/);
+ assert.match(main,/moved\.to\[0\]\+moved\.from\[1\]/);
+ assert.match(main,/victim=detachCapturedPiece\(moved\)/);
+ assert.match(main,/renderPieces\(\);animateMove\(from,to,captured,victim\)/);
+ assert.match(main,/combatFX\?\.start\(/);
+ assert.match(main,/combatFX\?\.tick\(timestamp\|\|performance\.now\(\)\)/);
+ assert.match(main,/game\.move\(\{from,to,promotion\}\)/);
 });
