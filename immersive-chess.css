@@ -33,3 +33,10 @@ body.xr-active #realmMiniControls,body.xr-active #realmPlayStatus{display:none!i
  #realmPlayStatus{bottom:max(7px,env(safe-area-inset-bottom));padding:6px 8px;font-size:10px;gap:3px 8px}
  #realmPlayStatus small{font-size:9px}
 }
+
+/* Additional elevation controls: the menu wraps rather than overflowing on narrow screens. */
+#realmCameraUp,#realmCameraDown{background:#163e53e9!important}
+@media(max-width:620px){
+ #realmMiniControls{max-height:31dvh;overflow-y:auto}
+ #realmMiniControls button{flex:0 1 auto;min-width:calc(25% - 8px)}
+}

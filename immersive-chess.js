@@ -6,6 +6,7 @@ export function createImmersiveChess({THREE,scene,camera,orbit,canvas,decoration
  const mini=$('realmMiniControls'),showControls=$('realmHudButton');
  const focusButton=$('realmFocusButton'),topButton=$('realmTopButton');
  const closer=$('realmZoomIn'),farther=$('realmZoomOut');
+ const higher=$('realmCameraUp'),lower=$('realmCameraDown');
  const exitButton=$('realmExitButton'),gyroButton=$('realmGyroButton');
  const hint=$('realmPlayStatus'),turn=$('realmTurnMini'),moves=$('realmMovesMini');
  let active=false,background=null,pending=0,drag=null,gyro=false,saved=null;
@@ -64,6 +65,15 @@ export function createImmersiveChess({THREE,scene,camera,orbit,canvas,decoration
   if(d<.001)return;
   const next=clamp(d*factor,5.2,26);
   camera.position.copy(target).add(diff.multiplyScalar(next/d));
+ }
+ function changeElevation(delta){
+  if(!active)return;
+  // Elevation is a deliberate camera movement, not a gyro-detected translation.
+  // Never allow the virtual view below the chessboard or far beyond the play arena.
+  hideSensor();
+  camera.position.y=clamp(camera.position.y+delta,2.2,18);
+  pointAtBoard();
+  onInfo('Altura de cámara ajustada. El tablero y las piezas siguen fijos.');
  }
  function showUI(visible){
   if(!active)return;
@@ -194,14 +204,20 @@ export function createImmersiveChess({THREE,scene,camera,orbit,canvas,decoration
  canvas.addEventListener('pointercancel',release);
  canvas.addEventListener('wheel',event=>{
   if(!active)return;event.preventDefault();
-  zoom(event.deltaY<0?.83:1.2);
+  if(event.shiftKey){
+   changeElevation(event.deltaY<0?1.15:-1.15);
+  }else{
+   zoom(event.deltaY<0?.83:1.2);
+  }
  },{passive:false});
  showControls.addEventListener('click',()=>showUI(document.body.classList.contains('realm-hud-hidden')));
  focusButton.addEventListener('click',focus);
  topButton.addEventListener('click',overhead);
  closer.addEventListener('click',()=>zoom(.8));
  farther.addEventListener('click',()=>zoom(1.25));
+ higher.addEventListener('click',()=>changeElevation(1.5));
+ lower.addEventListener('click',()=>changeElevation(-1.5));
  exitButton.addEventListener('click',()=>{exit();onInfo('Saliste del reino 360°. Tu partida continúa.');});
  gyroButton.addEventListener('click',toggleGyro);
- return {enter,exit,active:()=>active,isPanGesture,focus,overhead,zoom,showUI,refreshStatus};
+ return {enter,exit,active:()=>active,isPanGesture,focus,overhead,zoom,changeElevation,showUI,refreshStatus};
 }

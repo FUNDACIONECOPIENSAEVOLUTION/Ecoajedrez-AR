@@ -114,7 +114,7 @@ body.xr-active #gameToast{display:none!important}
 <link rel="stylesheet" href="./magic-game.css?v=0.13.0">
 <link rel="stylesheet" href="./board-catalog.css?v=0.14.3">
 <link rel="stylesheet" href="./victory-fx.css?v=0.14.3">
-<link rel="stylesheet" href="./immersive-chess.css?v=0.15.1">
+<link rel="stylesheet" href="./immersive-chess.css?v=0.15.2">
 <link rel="stylesheet" href="./immersive-room.css?v=0.15.0">
 <link rel="stylesheet" href="./experience-modes.css?v=0.14.9">
 <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js" defer></script>
@@ -130,13 +130,15 @@ body.xr-active #gameToast{display:none!important}
 <button id="realmTopButton" type="button" title="Vista superior para seleccionar las casillas">▦ Desde arriba</button>
 <button id="realmZoomIn" type="button" title="Acercarse al tablero" aria-label="Acercar tablero">＋ Acercar</button>
 <button id="realmZoomOut" type="button" title="Alejarse del tablero" aria-label="Alejar tablero">－ Alejar</button>
+<button id="realmCameraUp" type="button" title="Elevar la cámara para ver las jugadas" aria-label="Subir cámara">↑ Subir</button>
+<button id="realmCameraDown" type="button" title="Bajar la cámara sin atravesar el tablero" aria-label="Bajar cámara">↓ Bajar</button>
 <button id="realmGyroButton" type="button" aria-pressed="false">◉ Sensores</button>
 <button id="realmExitButton" type="button">✕ Salir 360°</button>
 </div>
 <div id="realmPlayStatus" hidden role="status" aria-live="polite" aria-label="Estado de la partida en reino 360°">
 <strong id="realmTurnMini">Tu partida continúa</strong>
 <span id="realmMovesMini">Jugadas: —</span>
-<small>♟ Toca pieza → destino · Arrastra el fondo para mirar · Pellizca o usa + / −</small>
+<small>♟ Pieza → destino · Pellizca para zoom · ↑↓ altura · PC: Shift + rueda</small>
 </div>
 <div id="gameHud">
 <div class="magicQuickBar" aria-label="Acciones rápidas durante la partida"><button id="lastMoveBtn" type="button" title="Mostrar solo para ti una silueta de la última jugada">♞</button><button id="realmQuickBtn" type="button" title="Entrar en el reino 360° sin cambiar tu partida">✦ 360°</button><button id="quickArBtn" type="button" title="Entrar en realidad aumentada">◎ AR</button></div>
@@ -389,5 +391,5 @@ body.xr-active #gameToast{display:none!important}
 <script type="module" src="./celestial-ui.js?v=0.10.0"></script>
 <script type="module" src="./legal-consent.js?v=0.13.0"></script>
 <script type="module" src="./board-catalog-ui.js?v=0.14.8"></script>
-<script type="module" src="./main.js?v=0.15.1"></script>
+<script type="module" src="./main.js?v=0.15.2"></script>
 </body></html>
