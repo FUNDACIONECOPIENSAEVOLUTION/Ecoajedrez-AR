@@ -9,7 +9,9 @@ for(const name of files){
  if(!fs.existsSync(name))throw Error('Missing asset: '+name);
  fs.copyFileSync(name,path.join(dest,name));
 }
-fs.cpSync('assets/models',path.join(dest,'assets/models'),{recursive:true});
+// Only publish game-approved model directories. NEVER publish the 3D intake folder.
+fs.mkdirSync(path.join(dest,'assets/models'),{recursive:true});
+fs.cpSync('assets/models/staunton',path.join(dest,'assets/models/staunton'),{recursive:true});
 fs.cpSync('assets/ui',path.join(dest,'assets/ui'),{recursive:true});
 
 // Eight user-uploaded and specifically approved visual cards: only these named files.
