@@ -1,4 +1,4 @@
-import {getPhotoPBR} from './piece-pbr.js?v=0.15.5';
+import {getPhotoPBR} from './piece-pbr.js?v=0.15.6';
 // ECOAJEDREZ: lightweight, procedurally painted 128px fantasy materials.
 // Shared textures, per-piece material colors and selectable emitted-light palettes.
 export const PIECE_MATERIALS=Object.freeze({
@@ -109,8 +109,8 @@ export function applyPieceAppearance(THREE,root,config={}){
     m.bumpMap=!pbr?.normal&&pbr?.height?pbr.height:null;
     if('bumpScale' in m)m.bumpScale=.018;
     if(m.normalMap&&m.normalScale?.set)m.normalScale.set(
-      ['basalt','stone','obsidian'].includes(name)?.8:.50,
-      ['basalt','stone','obsidian'].includes(name)?.8:.50
+      ['basalt','stone','obsidian'].includes(name) ? 0.8 : 0.50,
+      ['basalt','stone','obsidian'].includes(name) ? 0.8 : 0.50
     );
     if(m.color?.set){
       // Mantener los dos ejércitos distinguibles sin ocultar la imagen real.
