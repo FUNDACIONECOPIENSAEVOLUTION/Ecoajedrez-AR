@@ -38,3 +38,17 @@
 .ecoPbrStatus{font:600 11px/1.4 system-ui;color:#bdfbe3;margin:2px 0 0}
 .ecoPbrCredit{font-size:10px!important;color:#a9bfc9!important}
 @media(max-width:420px){.ecoPbrSurface{height:41px}.ecoPbrCaption{font-size:9px}}
+
+/* 0.15.7: selector de apariencias separado por ejército y paquetes reales */
+.ecoOpponentOptions{margin-top:10px;padding:11px;border:1px solid #6ab1bc;border-radius:12px;
+ background:linear-gradient(145deg,#0f3445,#071d2d);display:grid;gap:8px}
+.ecoOpponentOptions>strong{font:800 13px system-ui;color:#ffdc9a;letter-spacing:.3px}
+.ecoOpponentOptions label{font:650 11px/1.4 system-ui;color:#cef9ed}
+.ecoOpponentOptions select{display:block;width:100%;min-height:38px;margin-top:4px;background:#16364a;
+ color:#f2fbff;border:1px solid #7db4bc;border-radius:9px}
+.ecoOpponentGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#rerollRival{font:750 12px system-ui;padding:9px 10px;max-width:100%;background:#265269;color:#fff4cc;border:1px solid #a5d9c8}
+#pieceContrastStatus{font:600 11px/1.5 system-ui;color:#bcf5df;margin:0;overflow-wrap:anywhere}
+.armyPackNote{display:block;font:550 11px/1.35 system-ui;color:#c3e8dc;margin-top:5px}
+.ecoPbrSample .ecoPbrTinted{mix-blend-mode:luminosity;opacity:.8}
+@media(max-width:410px){.ecoOpponentGrid{grid-template-columns:1fr}}
