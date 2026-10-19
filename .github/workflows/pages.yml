@@ -38,6 +38,7 @@ jobs:
           node --check piece-pbr.js
           node --check piece-materials.js
           node --check piece-gallery.js
+          node --check army-appearance.js
           node --check piece-combat.js
           node --check piece-preview.js
           node --check quest-map.js
