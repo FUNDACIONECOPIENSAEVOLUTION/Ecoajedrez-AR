@@ -109,8 +109,8 @@ export function applyPieceAppearance(THREE,root,config={}){
     m.bumpMap=!pbr?.normal&&pbr?.height?pbr.height:null;
     if('bumpScale' in m)m.bumpScale=.018;
     if(m.normalMap&&m.normalScale?.set)m.normalScale.set(
-      name==='basalt'||name==='stone'||name==='obsidian'?.8:.50,
-      name==='basalt'||name==='stone'||name==='obsidian'?.8:.50
+      ['basalt','stone','obsidian'].includes(name)?.8:.50,
+      ['basalt','stone','obsidian'].includes(name)?.8:.50
     );
     if(m.color?.set){
       // Mantener los dos ejércitos distinguibles sin ocultar la imagen real.
