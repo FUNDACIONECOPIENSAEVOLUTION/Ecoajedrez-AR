@@ -37,7 +37,7 @@ test('First visit cinematic ends after up to 10 playback seconds and leaves fixe
  assert.match(css,/display:none!important/);
 });
 test('Desktop, tablet and phone controls remain visible and version increments',()=>{
- assert.equal(version.version,'0.15.6-beta.1');
+ assert.equal(version.version,'0.15.7-beta.1');
  assert.ok(html.includes('v'+version.version));
  assert.match(css,/@media\(max-width:1080px\)/);
  assert.match(css,/@media\(max-width:760px\)/);
