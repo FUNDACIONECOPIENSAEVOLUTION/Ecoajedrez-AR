@@ -207,7 +207,17 @@ function createPieceVisual(p){
         });
       }
     }
-    if(!g)g=pieceModel(p);
+    if(!g){
+      g=pieceModel(p);
+      // Las formas ligeras reutilizan oro/obsidiana globales; clonar SOLO
+      // materiales evita que el PBR de una ficha cambie todas las demás.
+      g.traverse(obj=>{
+        if(!obj.isMesh||!obj.material)return;
+        obj.material=Array.isArray(obj.material)?
+          obj.material.map(m=>m.clone()):obj.material.clone();
+        obj.userData.ownedMaterial=true;
+      });
+    }
     if(modelSet==='royal'){
       // Original fantasy ornaments over our own six local glTF meshes.
       const aura=new THREE.MeshStandardMaterial({
