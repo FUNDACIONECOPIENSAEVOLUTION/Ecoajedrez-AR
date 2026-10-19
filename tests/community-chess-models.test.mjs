@@ -16,7 +16,7 @@ test('Optional CC0 chess set is a 12-file complete GLB pack and cannot break exi
  assert.match(html,/id="communityPieceOption" value="community" disabled/);
  assert.match(main,/checkCommunityModels\(\)/);
  assert.match(main,/communityPieceKey\(p\.color,p\.type\)/);
- assert.match(main,/if\(!g\)g=pieceModel\(p\)/);
+ assert.match(main,/if\(!g\)\s*\{\s*g=pieceModel\(p\)/);
  assert.match(main,/new THREE\.Box3\(\)\.setFromObject\(source\)/);
  assert.match(main,/obj\.userData\.sharedGeo=true/);
  assert.match(main,/obj\.userData\.ownedMaterial=true/);
