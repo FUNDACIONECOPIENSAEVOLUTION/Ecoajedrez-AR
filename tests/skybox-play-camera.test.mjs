@@ -34,7 +34,7 @@ const THREE={Vector3:Vec,Quaternion:Quat,Euler:class{},Mesh,CircleGeometry:class
  CubeTextureLoader:class{load(paths,loaded){assert.equal(paths.length,6);const texture={dispose(){},needsUpdate:false};loaded(texture);return texture;}}
 };
 test('360 kingdom gameplay zooms/recenters/overhead, hides scenery, and suppresses accidental pinch clicks',async()=>{
- const keys=['realmMiniControls','realmHudButton','realmFocusButton','realmTopButton','realmZoomIn','realmZoomOut','realmExitButton','realmGyroButton','realmPlayStatus','realmTurnMini','realmMovesMini','status','history'];
+ const keys=['realmMiniControls','realmHudButton','realmFocusButton','realmTopButton','realmZoomIn','realmZoomOut','realmCameraUp','realmCameraDown','realmExitButton','realmGyroButton','realmPlayStatus','realmTurnMini','realmMovesMini','status','history'];
  const elements=Object.fromEntries(keys.map(k=>[k,createElement()]));
  elements.status.textContent='Turno blancas';elements.history.textContent='1. e4  e5';
  const classSet=new Set();
@@ -63,11 +63,18 @@ test('360 kingdom gameplay zooms/recenters/overhead, hides scenery, and suppress
   assert.ok(camera.position.length()<initial,'zoom in moves toward the board');
   elements.realmZoomOut.emit('click');
   assert.ok(camera.position.length()>0);
+  const startingHeight=camera.position.y;
+  elements.realmCameraUp.emit('click');
+  assert.ok(camera.position.y>startingHeight,'up button raises virtual camera');
+  elements.realmCameraDown.emit('click');
+  assert.ok(camera.position.y<startingHeight+1.5,'down button lowers virtual camera');
   elements.realmTopButton.emit('click');
   assert.ok(camera.position.z<.1);
   assert.equal(camera.fov,50);
   elements.realmFocusButton.emit('click');
   assert.ok(camera.position.z>5,'focus returns to the playable board');
+  canvas.emit('wheel',{deltaY:-130,shiftKey:true,preventDefault(){}});
+  assert.ok(camera.position.y>=2.2&&camera.position.y<=18,'Shift+wheel clamps elevation');
   canvas.emit('pointerdown',{pointerId:1,button:0,clientX:50,clientY:50});
   canvas.emit('pointermove',{pointerId:1,clientX:91,clientY:60});
   assert.equal(Boolean(game.isPanGesture()),true);
