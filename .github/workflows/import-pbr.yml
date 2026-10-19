@@ -1,0 +1,53 @@
+name: ECOAJEDREZ - Descargar relieves CC0 PBR
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/import-cc0-pbr.py'
+      - '.github/workflows/import-pbr.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ecoajedrez-import-pbr
+  cancel-in-progress: false
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install image conversion
+        run: python -m pip install --disable-pip-version-check Pillow==11.3.0
+      - name: Download licensed original diffuse, normal and roughness
+        run: python scripts/import-cc0-pbr.py
+      - name: Verify downloaded PBR maps in the static Pages build
+        run: |
+          node scripts/build-pages.mjs
+          node scripts/security-check.mjs
+          node -e "const v=require('./dist/assets/texturas-pbr/manifest.json'); if(Object.keys(v.materials).length<3)process.exit(1); console.log('Verified real PBR: '+Object.keys(v.materials).join(', '))"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ECOAJEDREZ_RELIEVES_PBR_CC0
+          path: assets/texturas-pbr/ECOAJEDREZ_RELIEVES_PBR_CC0.zip
+          if-no-files-found: error
+      - name: Publish CC0 PBR maps and provenance to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/texturas-pbr
+          if git diff --cached --quiet; then
+            echo "No texture changes to commit"
+          else
+            git commit -m "assets: add audited CC0 PBR albedo, OpenGL relief and roughness maps"
+            git push origin HEAD:main
+          fi

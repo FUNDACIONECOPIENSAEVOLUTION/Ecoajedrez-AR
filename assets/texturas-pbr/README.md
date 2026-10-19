@@ -41,3 +41,14 @@ Los colores emisivos de gemas/manos quedan aparte y no se sobrescriben. Al subir
 
 **Licencias:** conserve enlace, autor y fecha del activo. Las texturas CC0 no necesitan atribución obligatoria; la carpeta contiene instrucciones, pero no incluye activos ajenos sin revisión.
 **Precisión visual:** las fotografías PBR necesitan UVs adecuados en la geometría de cada pieza. Las piezas procedurales del juego tienen UV básicas; un GLB de terceros sin UV precisará tratamiento en Blender. El hielo translúcido además requiere propiedades de refracción/material físico; el PBR base mejorará el aspecto, pero no producirá por sí solo hielo perfecto.
+
+## Importación automatizada de relieve fotográfico PBR CC0 (v0.15.6)
+La biblioteca del juego admite **color.webp, normal.webp y roughness.webp** (mapas OpenGL). Para descargar texturas reales de Poly Haven / ambientCG y generar un ZIP 768px apto para móviles, el repositorio ejecuta [ECOAJEDREZ - Descargar relieves CC0 PBR](https://github.com/FUNDACIONECOPIENSAEVOLUTION/Ecoajedrez-AR/actions/workflows/import-pbr.yml).
+
+Este flujo descarga material real CC0 **en GitHub Actions**, no en el móvil. Comprueba la licencia de origen, realiza la conversión, registra los enlaces y SHA-256 de mapas originales en \`FUENTES_CC0_IMPORTADAS.json\` y genera \`ECOAJEDREZ_RELIEVES_PBR_CC0.zip\`. Después publica al repositorio solo los formatos autorizados. La ausencia de un material real conserva el fallback anterior; no inventa archivos ni atribuciones.
+
+- [Carpeta de texturas y relieves](https://github.com/FUNDACIONECOPIENSAEVOLUTION/Ecoajedrez-AR/tree/main/assets/texturas-pbr)
+- [Descarga del paquete ZIP una vez generado](https://github.com/FUNDACIONECOPIENSAEVOLUTION/Ecoajedrez-AR/raw/refs/heads/main/assets/texturas-pbr/ECOAJEDREZ_RELIEVES_PBR_CC0.zip)
+- [Historial de importación y artefactos](https://github.com/FUNDACIONECOPIENSAEVOLUTION/Ecoajedrez-AR/actions/workflows/import-pbr.yml)
+
+El paquete es una recopilación de terceros **CC0**, no texturas inventadas por la fundación. Por rendimiento se limitan a 768px y WebP. Los normales aportan relieve visual mediante iluminación PBR; no cambian físicamente los vértices de las figuras.
