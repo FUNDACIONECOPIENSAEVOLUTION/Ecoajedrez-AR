@@ -21,6 +21,7 @@ export function collectAnthroSources(gltf){
 }
 const geometries=new WeakMap();
 const glowTextures=new WeakMap();
+const glowMaterials=new WeakMap();
 function glowTexture(THREE,color){
  let textureMap=glowTextures.get(THREE);
  if(!textureMap){textureMap=new Map();glowTextures.set(THREE,textureMap);}
@@ -39,10 +40,13 @@ function glowTexture(THREE,color){
 }
 function addGlowHalo(THREE,group,color,height){
  if(typeof document==='undefined')return;
- const glow=new THREE.Sprite(new THREE.SpriteMaterial({
+ let list=glowMaterials.get(THREE);
+ if(!list){list=new Map();glowMaterials.set(THREE,list);}
+ if(!list.has(color))list.set(color,new THREE.SpriteMaterial({
   map:glowTexture(THREE,color),transparent:true,
   blending:THREE.AdditiveBlending,depthWrite:false,opacity:.68
  }));
+ const glow=new THREE.Sprite(list.get(color));
  glow.scale.set(.95,1.15,1);
  glow.position.y=height;
  glow.name='Luz mágico-neón';
