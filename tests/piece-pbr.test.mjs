@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {PBR_ROOT,loadPhotoPBR,getPhotoPBR,pbrTextureLoaded} from '../piece-pbr.js?v=0.15.5';
+import {PBR_ROOT,loadPhotoPBR,getPhotoPBR,pbrTextureLoaded} from '../piece-pbr.js?v=0.15.6';
 import {PIECE_MATERIALS,applyPieceAppearance} from '../piece-materials.js';
 const build=fs.readFileSync('scripts/build-pages.mjs','utf8');
 const main=fs.readFileSync('main.js','utf8');
@@ -60,7 +60,7 @@ test('The real material keeps original magic gems and adds normal/roughness maps
  assert.equal(material.map,pbr.color);
  assert.equal(material.normalMap,pbr.normal);
  assert.equal(material.roughnessMap,pbr.roughness);
- assert.deepEqual(material.normalScale.xy,[.32,.32]);
+ assert.deepEqual(material.normalScale.xy,[.50,.50]);
  assert.ok(gem.emissive.value);
  assert.equal(gem.emissiveIntensity,3);
  assert.match(main,/loadPhotoPBR\(THREE,requested\)/);

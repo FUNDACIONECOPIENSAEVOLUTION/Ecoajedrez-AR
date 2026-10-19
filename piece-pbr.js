@@ -42,9 +42,9 @@ export async function loadPhotoPBR(THREE,key){
   if(!valid('color',files.color))return null;
   try{
    const result={};
-   // The color is required; PBR normals and roughness may be absent.
+   // El color es obligatorio; normal, rugosidad, altura y metalness son mapas lineales opcionales.
    result.color=await getTexture(THREE,files.color,'color');
-   await Promise.all(['normal','roughness','metalness'].map(async role=>{
+   await Promise.all(['normal','roughness','metalness','height'].map(async role=>{
     if(!valid(role,files[role]))return;
     try{result[role]=await getTexture(THREE,files[role],role);}
     catch(error){console.warn('Mapa PBR opcional no disponible:',key,role);}

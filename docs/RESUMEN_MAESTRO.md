@@ -211,3 +211,13 @@ Hay **seis** archivos glTF originales autocontenidos bajo `assets/models/staunto
 ## v0.15.6 — Relieves fotográficos PBR CC0 descargables (propuesta ejecutable)
 - Scripts/import-cc0-pbr.py y GH Action import-pbr.yml descargan de Poly Haven / ambientCG texturas CC0 cuando el acceso remoto está disponible; procesan a 768px en WebP, publican color + normal OpenGL + roughness (y metalness si existe) y generan ZIP. Registra fuente y hashes SHA256 en FUENTES_CC0_IMPORTADAS.json. La ausencia de descarga no cambia acabados provisionales.
 - El build está preparado para copiar únicamente los mapas enumerados en la lista blanca y genera manifest PBR; no hotlink a servidores externos desde la partida. Acción automática escribe activos y dispara despliegue si finaliza correctamente. Verificar ejecución antes de afirmar que los mapas están presentes.
+
+## 0.15.6-beta.1 — 2026-10-19 · Nueve fototexturas PBR reales con relieve
+- Descarga en GitHub Actions desde Poly Haven API CC0 de nueve paquetes 1K sin costo: albedo, normales OpenGL y rugosidad; altura/metalness opcionales; fuentes exactas en docs/FOTOTEXTURAS_CC0.md.
+- Muestras del material con fotografías locales (no rectángulos planos) y botón de selección; el mismo aspecto se aplica a piezas 3D antropomórficas, Staunton, realeza y estilos geométricos.
+- Respaldo procedimental cuando un recurso falta, límite de 2 MB por mapa/30 MB total, y cliente sin solicitudes al proveedor externo. Descarga se hace solo en compilación.
+- Normales proporcionan relieve óptico en tiempo real; los mapas de altura quedan guardados para futuro modelado de mallas. No se declara desplazamiento 3D geométrico ni validación AR/visual hasta verificar.
+- Despliegue sujeto a pruebas automatizadas (PR), descarga 9/9 y revisión de navegador/móvil.
+
+
+**Próxima prueba crítica:** confirmar compilación GitHub Actions 9/9 desde Poly Haven, fotos y normales visibles en selector y modelos reales (incluido AR Android), y que FPS se mantenga aceptable. Los mapas binarios NO van al repo, se incorporan al dist mediante `scripts/descargar-relieves-pbr.py` en CI. Consultar docs/FOTOTEXTURAS_CC0.md.

@@ -1,4 +1,5 @@
-# LECTURA RÁPIDA OBLIGATORIA (ECOAJEDREZ v0.15.5-beta.1)
+# LECTURA RÁPIDA OBLIGATORIA (ECOAJEDREZ v0.15.6-beta.1)
+Materiales PBR: ver `docs/FOTOTEXTURAS_CC0.md`; el flujo de GitHub Actions descarga activos oficiales CC0 1K con Python, nunca usar hotlinks dentro del juego.
 Antes de leer el historial extenso, abrir `docs/RESUMEN_MAESTRO.md` (resumen canónico, mantenido por versión) y `docs/ENTREGA_0.11.md` si se modifica la UI, primer inicio o caché. Los ocho WebP están en `app/imagenes/tarjetas/` y YA se publican; nunca pedirlos otra vez sin comprobar GitHub. Conserva modo invitado, AR, privacidad y $0.
 
 # Instrucciones permanentes para ChatGPT, Codex y otras IAs — ECOAJEDREZ AR

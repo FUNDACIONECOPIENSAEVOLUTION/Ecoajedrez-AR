@@ -1,5 +1,13 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.15.6-beta.1 — 2026-10-19 · Nueve fototexturas PBR reales con relieve
+- Descarga en GitHub Actions desde Poly Haven API CC0 de nueve paquetes 1K sin costo: albedo, normales OpenGL y rugosidad; altura/metalness opcionales; fuentes exactas en docs/FOTOTEXTURAS_CC0.md.
+- Muestras del material con fotografías locales (no rectángulos planos) y botón de selección; el mismo aspecto se aplica a piezas 3D antropomórficas, Staunton, realeza y estilos geométricos.
+- Respaldo procedimental cuando un recurso falta, límite de 2 MB por mapa/30 MB total, y cliente sin solicitudes al proveedor externo. Descarga se hace solo en compilación.
+- Normales proporcionan relieve óptico en tiempo real; los mapas de altura quedan guardados para futuro modelado de mallas. No se declara desplazamiento 3D geométrico ni validación AR/visual hasta verificar.
+- Despliegue sujeto a pruebas automatizadas (PR), descarga 9/9 y revisión de navegador/móvil.
+
+
 ## 0.15.5-beta.1 — 2026-10-19 · Fototexturas PBR reales opcionales
 - Nueve carpetas de materiales PBR con guía para cargas CC0 descargadas desde ambientCG, Poly Haven o 3DTextures.me; mapas 1K de albedo, Normal OpenGL, roughness y metal.
 - Cargador local bajo demanda y publicación solo de archivos JPEG/WebP/PNG permitidos, con manifesto y comprobación de cabeceras/tamaño. Si falta el material real continúa el patrón anterior.
