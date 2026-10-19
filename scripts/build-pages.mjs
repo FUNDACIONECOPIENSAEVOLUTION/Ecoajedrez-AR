@@ -56,7 +56,7 @@ let pbrBytes=0;
 for(const id of allowedPBR){
  const maps={};
  const source=path.join('assets/texturas-pbr',id);
- for(const role of ['color','normal','roughness','metalness']){
+ for(const role of ['color','normal','roughness','metalness','height']){
   for(const extension of ['webp','jpg','png']){
    const name=role+'.'+extension,local=path.join(source,name);
    if(!fs.existsSync(local))continue;
