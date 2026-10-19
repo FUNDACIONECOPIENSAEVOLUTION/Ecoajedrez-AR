@@ -221,3 +221,9 @@ Hay **seis** archivos glTF originales autocontenidos bajo `assets/models/staunto
 
 
 **Próxima prueba crítica:** confirmar compilación GitHub Actions 9/9 desde Poly Haven, fotos y normales visibles en selector y modelos reales (incluido AR Android), y que FPS se mantenga aceptable. Los mapas binarios NO van al repo, se incorporan al dist mediante `scripts/descargar-relieves-pbr.py` en CI. Consultar docs/FOTOTEXTURAS_CC0.md.
+
+## 0.15.7-beta.1 — Ejércitos independientes, contraste y nuevos acabados
+- `army-appearance.js` contiene elección contrastante, validación de identificadores seguros y selección aleatoria entre las combinaciones mejor contrastadas. `main.js` asigna texturas diferenciadas por pieza `p.color`, vista previa de ambas, segundo selector, mensajes PeerJS de apariencia, y guardado local.
+- 20 materiales (10 base + 10 variantes de color) y 11 luces (6 anteriores + 5 nuevas). Los nuevos emplean `photoSource` con nueve imágenes Poly Haven existentes; NO son nuevos escaneos.
+- Los cinco estilos jugables tienen nombres claros pero conservan sus IDs internos y fallback. 6 glTF Staunton autopublicados; un GLB animado antropomórfico y doce comunitarios siguen ausentes según el último build verificado. No habilitar opciones indisponibles.
+- **Pendientes:** CI/Pages, revisión en navegador y 2 Android para comprobar contraste en 3D, skybox, AR y que ambos vean iguales acabados en la misma sala.
