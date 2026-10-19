@@ -1,5 +1,12 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.15.1-beta.1 — 2026-10-18 · Zoom y jugabilidad en Skybox 360°
+- Tablero de reino 360° inicialmente más cercano, vista superior, botones zoom ±, rueda y pellizco móvil. Giro de perspectiva por arrastre y sensores se conserva.
+- Árboles procedurales se ocultan únicamente dentro del reino 360°, evitando que las casillas queden tapadas; se restauran al salir.
+- Vista compacta de turno y jugadas para seleccionar y mover piezas sin que el menú tape el panorama; supresión de toques accidentales durante gestos de dos dedos.
+- Sin cambios a reglas, motor, 3D clásico o WebXR AR. Validación física pendiente.
+
+
 ## 0.15.0-beta.1 — 2026-10-18 · 13 reinos Skybox + cuarto AR ajustable
 - Verificadas en compilación las 78 caras de los 13 Skyboxes completos. Sus texturas de tablero se mantienen vinculadas con los trece reinos 1:1.
 - Nuevo cuarto AR translúcido con las seis caras del mismo reino y tres tamaños independientes de la escala del tablero: 2,6 m, 4,8 m y 9 m. Control de paredes, opacidad y piezas grandes/colosales desde el HUD de AR; sigue siendo el mismo ajedrez interactivo.

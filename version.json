@@ -1,8 +1,8 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.15.0-beta.1",
+  "version": "0.15.1-beta.1",
   "updated": "2026-10-18",
-  "status": "13/13 complete and published 360° kingdoms, mapped to 13 playable chessboard textures. New configurable translucent AR immersion chamber from six cube faces (2.6 / 4.8 / 9m), independently scalable board and pieces. WebXR hit-test placement and optional XR anchor maintain world alignment. Unvalidated physically and does NOT detect safe movement boundaries.",
+  "status": "360 chess usability: centered close-range board camera, overhead view, mousewheel/pinch zoom and +/−, independent environment rotation; hides obstructive decorative trees, keeps game moves/turn visible, maintains unchanged chess.js, 3D classic and AR interactions. Await manual mobile testing.",
   "browserValidated": false,
   "physicalARValidated": false,
   "onlinePvP": "Casual PeerJS beta, six-character code and QR with camera scanner (native BarcodeDetector / lazy in-browser jsQR), validation restricts invite origin/path. Real two-device session requires device test; unranked and unaudited anti-cheat.",
@@ -157,7 +157,21 @@
     "verifiedByCI": 13,
     "rotation3DoF": true,
     "playableBoardMap": "skybox-config.js pairs each of 13 realm IDs with its board texture",
-    "manualMobileGameplayValidationPending": true
+    "manualMobileGameplayValidationPending": true,
+    "cameraControls": [
+      "near board",
+      "overhead",
+      "recenter",
+      "zoom in",
+      "zoom out",
+      "mouse wheel",
+      "pinch zoom",
+      "look around",
+      "gyro optional"
+    ],
+    "occludingTreesHidden": true,
+    "liveMoveStrip": true,
+    "manualPlayValidationPending": true
   },
   "playExperiences": {
     "opponents": [
