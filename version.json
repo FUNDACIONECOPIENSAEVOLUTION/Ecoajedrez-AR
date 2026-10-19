@@ -1,8 +1,8 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.15.2-beta.1",
+  "version": "0.15.3-beta.1",
   "updated": "2026-10-19",
-  "status": "Galactic 8-node chess quest pilot with real chess.js positions and local progress, independent camera height for Skybox 360, optional external CC0 3D GLB set staging (no third-party models actually included), pre-APK PWA/TWA research. Physical Android 3D/AR and puzzle move playability require user tests.",
+  "status": "Free starter anthropomorphic magical army playable in classic 3D, 360 and AR; arms/legs swing when a move occurs and blue/purple emissive gems plus lightweight sprite glow are enabled. Original supplied glTF2 GLB holds 32 Walk clips and may be uploaded as one asset to replace procedural fallback. No live ads, locked paid models, attack/death GLB clips or on-device validation yet.",
   "browserValidated": false,
   "physicalARValidated": false,
   "onlinePvP": "Casual PeerJS beta, six-character code and QR with camera scanner (native BarcodeDetector / lazy in-browser jsQR), validation restricts invite origin/path. Real two-device session requires device test; unranked and unaudited anti-cheat.",
@@ -272,5 +272,31 @@
     "apkBuilt": false,
     "rootDigitalAssetLinksRequired": true,
     "arCompatibilityUnverified": true
+  },
+  "anthropomorphicChess": {
+    "selectable": true,
+    "free": true,
+    "defaultForNewPlayers": true,
+    "presentation": [
+      "3D clásico",
+      "Skybox 360",
+      "AR con portal"
+    ],
+    "preliminaryGeometry": "user-HTML-inspired procedurally built rig with neon emissive gem and sprites",
+    "motion": "arms and legs swing during moves; original 32 exported GLB Walk clips are used if model uploaded",
+    "glbExpected": "assets/models/anthropomorphic/anthropomorphic-chess.glb",
+    "glbUploadPending": true,
+    "packedSource": {
+      "format": "glTF 2.0",
+      "bytes": 1529992,
+      "rootPieces": 32,
+      "walkClips": 32,
+      "attackClips": 0,
+      "deathClips": 0
+    },
+    "sourceLicense": "user upload with authored procedural HTML; confirm provenance before monetization",
+    "rewardedAdsEnabled": false,
+    "moreArmiesLocked": false,
+    "manualDeviceTestingPending": true
   }
 }
