@@ -431,6 +431,7 @@ function storageKey(){
 function persistCurrentGame(){
   if(!gameStarted||mode==='online'||missionActive)return;
   const preferences={theme,modelSet,lang,botDifficulty,boardScale,
+    pieceMaterial,pieceGlow,rivalMaterial,rivalGlow,rivalMode,
     boardSkin:$('boardSkin').value,
     whiteColor:$('whiteColor').value,blackColor:$('blackColor').value};
   const success=saveLocalMatch(window.localStorage,storageKey(),game,mode,preferences);
@@ -458,6 +459,15 @@ function restoreLastGame(){
   if(pref.boardSkin && [...$('boardSkin').options].some(o=>o.value===pref.boardSkin)){
     window.ecoBoardCatalogue?.selectBoard(pref.boardSkin);
   }
+  pieceMaterial=validPieceMaterial(pref.pieceMaterial||pieceMaterial);
+  pieceGlow=validPieceGlow(pref.pieceGlow||pieceGlow);
+  rivalMaterial=validPieceMaterial(pref.rivalMaterial||rivalMaterial);
+  rivalGlow=validPieceGlow(pref.rivalGlow||rivalGlow);
+  rivalMode=pref.rivalMode==='manual'?'manual':'auto';
+  for(const [id,value] of [['pieceMaterial',pieceMaterial],['pieceGlow',pieceGlow],
+   ['rivalMaterial',rivalMaterial],['rivalGlow',rivalGlow],
+   ['rivalAppearanceMode',rivalMode]])$(id).value=value;
+  updateArmyStatus();preloadArmyTextures();
   theme=$('theme').value;modelSet=$('pieceSet').value;lang=$('lang').value;botDifficulty=$('difficulty').value;
   setTheme(theme);translate();renderPieces();updateStatus();
   gameStarted=true; $('resumeGame').style.display='block';
@@ -600,6 +610,7 @@ function animateMove(from,to,captured=false,victim=null){
    start:moving.start,duration:moving.duration});
 }
 function reset(){
+  if(mode==='bot'&&rivalMode==='auto')refreshArmy({reroll:true});
   if(missionActive){
     clearTimeout(timer);missionSolved=false;
     if(missionActive.fen==='start')game.reset();else game.load(missionActive.fen);
@@ -803,6 +814,7 @@ $('arVoiceBtn').onclick=()=>startSpeech($('arCommand'));
 $('mode').onchange=()=>{
   mode=$('mode').value;
   $('difficulty').disabled=mode!=='bot';
+  refreshArmy({reroll:mode==='bot'&&rivalMode==='auto'});
 };
 $('difficulty').onchange=()=>{botDifficulty=$('difficulty').value;};
 $('theme').onchange=()=>setTheme($('theme').value);
@@ -900,6 +912,8 @@ victoryFX=createVictoryFX({
 function setGameMode(next){
   if(next!=='online' && mode==='online')match.close();
   mode=next;$('mode').value=next;
+  if(next==='online')remoteLook=null;
+  updateArmyStatus();
   $('difficulty').disabled=next!=='bot';$('undo').disabled=next==='online';
   $('networkStatus').textContent=next==='online'?'DUELO ONLINE · BETA':next==='bot'?'VERSUS COMPUTADORA':'DOS JUGADORES LOCALES';
 }
