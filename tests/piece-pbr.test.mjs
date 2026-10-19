@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {PBR_ROOT,loadPhotoPBR,getPhotoPBR,pbrTextureLoaded} from '../piece-pbr.js';
+import {PBR_ROOT,loadPhotoPBR,getPhotoPBR,pbrTextureLoaded} from '../piece-pbr.js?v=0.15.5';
 import {PIECE_MATERIALS,applyPieceAppearance} from '../piece-materials.js';
 const build=fs.readFileSync('scripts/build-pages.mjs','utf8');
 const main=fs.readFileSync('main.js','utf8');
