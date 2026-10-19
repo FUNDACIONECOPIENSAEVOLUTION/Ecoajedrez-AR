@@ -79,7 +79,6 @@ export function applyPieceAppearance(THREE,root,config={}){
  const glow=validPieceGlow(config.glow||'team');
  const color=config.color==='b'?'b':'w';
  const base=PIECE_MATERIALS[name],energy=pieceGlowHex(glow,color);
- const theme=new THREE.Color(base.base);
  root.traverse(obj=>{
   if(obj.isSprite&&obj.name==='Luz mágico-neón'){
    if(obj.material?.color?.set) obj.material.color.set(energy);
@@ -100,7 +99,7 @@ export function applyPieceAppearance(THREE,root,config={}){
    }
    if(name!=='arcane'&&role!=='accent'){
     m.map=textureFor(THREE,name);
-    if(m.color?.copy)m.color.copy(theme);
+    if(m.color?.set)m.color.set(color==='b'?'#b2abb8':'#ffffff');
     if('roughness' in m)m.roughness=base.roughness;
     if('metalness' in m)m.metalness=base.metalness;
     m.needsUpdate=true;

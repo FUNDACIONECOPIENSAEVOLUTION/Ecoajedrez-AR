@@ -12,6 +12,7 @@ export function createChessCombat({THREE,world,disposePiece=()=>{}}){
  let effect=null;
  function cancel(){
   if(!effect)return;
+  effect.attacker.rotation.z=effect.attackerTilt;
   stage.remove(effect.defender);
   disposePiece(effect.defender);
   effect=null;
@@ -23,7 +24,7 @@ export function createChessCombat({THREE,world,disposePiece=()=>{}}){
   stage.add(defender);defender.position.set(to.x,.07,to.z);
   const orientation=faceMovement(defender,from.x-to.x,from.z-to.z);
   effect={defender,attacker,start,duration:Math.max(400,duration||760),orientation,
-   baseScale:defender.scale.clone(),from,to};
+   baseScale:defender.scale.clone(),attackerTilt:attacker.rotation.z||0,from,to};
   return true;
  }
  function tick(time){
@@ -33,6 +34,7 @@ export function createChessCombat({THREE,world,disposePiece=()=>{}}){
   // Both face each other, turn their torsos, strike and recoil.
   d.rotation.y=effect.orientation+Math.sin(time*.045)*(.055+Math.max(0,p-.45)*.15);
   const strike=p>=.44&&p<=.8?Math.sin((p-.44)/.36*Math.PI):0;
+  effect.attacker.rotation.z=effect.attackerTilt-strike*.12;
   d.rotation.z=strike*.16;
   const rig=d.userData.anthro;
   if(rig?.armR)rig.armR.rotation.x=-strike*.9;

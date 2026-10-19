@@ -621,7 +621,7 @@ async function loadCommunityPieces(){
     g.add(source);communityAssets.set(key,g);ready++;
    }catch(error){console.warn('Modelo CC0 descartado, se conserva pieza original:',key,error);}
   })));
-  if(modelSet==='community')renderPieces();
+  if(modelSet==='community'){renderPieces();piecePreview?.rebuild();}
   toast(ready===12?'✓ Piezas Staunton CC0 cargadas.':('✓ '+ready+'/12 modelos CC0 · respaldo original activo.'));
   return ready;
  })();
@@ -672,7 +672,7 @@ async function loadChessModels({retry=false}={}){
     assets.set(type,result.scene);
     loaded++;
     updateModelReadiness('Piezas reales cargadas: '+loaded+' / 6…',loaded);
-    if(modelSet==='staunton'||modelSet==='royal')renderPieces();
+    if(modelSet==='staunton'||modelSet==='royal'){renderPieces();piecePreview?.rebuild();}
    }catch(error){
     console.warn('Falla al interpretar modelo 3D '+chessModelNames[index],error);
     assets.set(type,null);
