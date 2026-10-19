@@ -76,6 +76,13 @@ jobs:
         run: |
           node scripts/build-pages.mjs
           node scripts/security-check.mjs
+      - name: Publicar paquete descargable de los 9 relieves CC0
+        uses: actions/upload-artifact@v4
+        with:
+          name: ECOAJEDREZ-9-RELIEVES-PBR-1K-CC0
+          path: assets/texturas-pbr/
+          if-no-files-found: error
+          retention-days: 30
 
   deploy:
     if: github.event_name != 'pull_request'
