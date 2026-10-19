@@ -58,6 +58,6 @@ test('360 degree tester uses CubeTextureLoader, drag, gyro permission and no che
  assert.match(chooser,/realmForBoard\(skin\.id\)/);
  assert.equal(version.version,'0.15.0-beta.1');
  assert.equal(version.skybox360.realmCount,13);
- assert.equal(version.skybox360.fullCubemapsUploadedAtRelease,1);
+ assert.equal(version.skybox360.fullCubemapsUploadedAtRelease,13);
  assert.equal(version.physicalARValidated,false);
 });
