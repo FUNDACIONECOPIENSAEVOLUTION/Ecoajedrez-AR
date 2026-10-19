@@ -50,7 +50,7 @@ export function chooseContrastingArmy(own,requested=null,{random=false,rng=Math.
   // Si el segundo jugador eligió algo incompatible, priorizar conservar
   // su material o su brillo. No modificar jamás la elección del primero.
   const preference=(!random&&wish?
-    (material===wish.material?.52:0)+(glow===wish.glow?.22:0):0);
+    (material===wish.material ? 0.52 : 0)+(glow===wish.glow ? 0.22 : 0):0);
   options.push({look,score:score+preference});
  }
  options.sort((a,b)=>b.score-a.score);
