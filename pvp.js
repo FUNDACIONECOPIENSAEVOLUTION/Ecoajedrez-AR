@@ -8,10 +8,11 @@ const MAX_MESSAGE_BYTES=64000;
 const LETTERS='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 export const normalizeRoomCode=value=>String(value||'').trim().toUpperCase().replace(/[^A-Z2-9]/g,'').slice(0,ROOM_SIZE);
 export class PeerMatch {
- constructor({onStatus,onMove,onState,onReady}={}){
+ constructor({onStatus,onMove,onState,onReady,onAppearance}={}){
   this.peer=null;this.conn=null;this.room='';this.host=false;
   this.onStatus=onStatus||(()=>{});this.onMove=onMove||(()=>{});
   this.onState=onState||(()=>{});this.onReady=onReady||(()=>{});
+  this.onAppearance=onAppearance||(()=>{});
  }
  available(){return typeof window.Peer==='function';}
  create(){
@@ -71,6 +72,13 @@ export class PeerMatch {
     this.onMove({from:data.from,to:data.to,promotion:/^[qrbn]$/.test(data.promotion)?data.promotion:'q',version:Number.isSafeInteger(data.version)&&data.version>=0&&data.version<=5000?data.version:-1});
    } else if(data.type==='STATE' && !this.host && typeof data.fen==='string' && data.fen.length<120 && Array.isArray(data.history) && data.history.length<=2048 && Number.isSafeInteger(data.version) && data.version>=0 && data.version<=5000){
     this.onState(data);
+   }else if(data.type==='APPEARANCE'&&
+     typeof data.material==='string'&&data.material.length<=32&&
+     /^[a-z]+$/.test(data.material)&&
+     typeof data.glow==='string'&&data.glow.length<=20&&
+     /^[a-z]+$/.test(data.glow)){
+    // Cosméticos no influyen en chess.js, historial ni sincronización de jugadas.
+    this.onAppearance({material:data.material,glow:data.glow});
    }else if(data.type==='HELLO' && this.host){this.onReady(true);}
   });
   c.on('close',()=>{if(this.conn===c){this.onStatus('✧ El rival abandonó el portal. La partida quedó pausada.');this.conn=null;}});
