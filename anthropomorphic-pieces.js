@@ -151,7 +151,11 @@ export function tickAnthroVisuals(group,moving,time,delta){
    a.lastWalk=walking;if(walking)a.mixer.update(Math.min(.05,Math.max(0,delta)));
   }else{
    const wave=Math.sin(time*.015+a.idleOffset);
-   a.armL.rotation.x=walking?-.43*wave:0;a.armR.rotation.x=walking?.43*wave:0;
+   a.armL.rotation.x=walking?-.43*wave:0;
+   const stage=walking&&moving.captured?
+    Math.max(0,Math.min(1,(time-moving.start)/moving.duration)):-1;
+   const attack=stage>=.58?Math.sin((stage-.58)/.42*Math.PI)*1.0:0;
+   a.armR.rotation.x=walking?.43*wave-attack:0;
    a.legL.rotation.x=walking?.55*wave:0;a.legR.rotation.x=walking?-.55*wave:0;
    a.body.position.y=walking?.03+Math.abs(wave)*.05:Math.sin(time*.0015+a.idleOffset)*.013;
    a.gem.emissiveIntensity=2.9+Math.sin(time*.0025+a.idleOffset)*.35;

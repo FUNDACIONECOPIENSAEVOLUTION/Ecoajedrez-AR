@@ -392,7 +392,7 @@ function playMove(from,to,promotion='q',source='local'){
     captured=Boolean(moved.captured);
   }catch(error){return false;}
   ghostHint?.clear();
-  selected=null;arcaneUI?.selected(null);moving=null;renderPieces();animateMove(from,to);
+  selected=null;arcaneUI?.selected(null);moving=null;renderPieces();animateMove(from,to,captured);
   arcaneUI?.move(to,captured);updateStatus();
   if(missionActive && successfulQuestMove(missionActive,{from,to,promotion},game)){
     missionSolved=true;questUI?.complete(missionActive);
@@ -401,7 +401,7 @@ function playMove(from,to,promotion='q',source='local'){
   }
   if(mode==='online'){roomVersion++;broadcastState();}
   persistCurrentGame();
-  if(mode==='bot' && !game.isGameOver()){clearTimeout(timer);timer=setTimeout(playBot,500);}
+  if(mode==='bot' && !game.isGameOver()){clearTimeout(timer);timer=setTimeout(playBot,modelSet==='anthro'?950:500);}
   return true;
 }
 function applyNotation(value){
@@ -480,13 +480,13 @@ function playBot(){
   if(mode!=='bot'||game.turn()!=='b'||game.isGameOver()||(missionActive&&missionSolved))return;
   const m=chooseBot();
   if(m)game.move({from:m.from,to:m.to,promotion:'q'});
-  ghostHint?.clear();selected=null;arcaneUI?.selected(null);renderPieces();if(m){animateMove(m.from,m.to);arcaneUI?.move(m.to,Boolean(m.captured));}updateStatus();persistCurrentGame();
+  ghostHint?.clear();selected=null;arcaneUI?.selected(null);renderPieces();if(m){animateMove(m.from,m.to,Boolean(m.captured));arcaneUI?.move(m.to,Boolean(m.captured));}updateStatus();persistCurrentGame();
 }
-function animateMove(from,to){
+function animateMove(from,to,captured=false){
   const target=[...pieces.children].find(x=>x.userData.square===to);
   if(!target)return;
   const a=positionOf(from),b=positionOf(to);
-  moving={piece:target,a,b,start:performance.now(),duration:370};
+  moving={piece:target,a,b,start:performance.now(),duration:modelSet==='anthro'?760:370,captured};
 }
 function reset(){
   if(missionActive){
