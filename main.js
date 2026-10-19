@@ -881,6 +881,22 @@ $('center').onclick=()=>{if(isAR){toast('En AR usa el control de escala.');retur
 $('rotate').onclick=()=>{if(isAR)return;camera.position.set(-camera.position.z,camera.position.y,camera.position.x);orbit.update();};
 const match=new PeerMatch({
   onStatus(message){$('networkStatus').textContent=message;const el=$('roomNote');if(el)el.textContent=message;},
+  onAppearance(data){
+    if(mode!=='online'||!isValidWireLook(data))return;
+    remoteLook=normalizeArmyLook(data);
+    // El anfitrión conserva el primer color; el invitado se adapta si colisionan.
+    if(!match.host){
+      const approved=chooseContrastingArmy(remoteLook,myLook());
+      if(approved.material!==pieceMaterial||approved.glow!==pieceGlow){
+        pieceMaterial=approved.material;pieceGlow=approved.glow;
+        $('pieceMaterial').value=pieceMaterial;$('pieceGlow').value=pieceGlow;
+        saveArmyChoice();
+        match.send({type:'APPEARANCE',...myLook()});
+        toast('Se ajustó tu color para evitar confusión con el rival.');
+      }
+    }
+    updateArmyStatus();renderPieces();piecePreview?.rebuild();preloadArmyTextures();
+  },
   onMove(move){
     if(mode!=='online'||!match.host)return;
     if(move.version!==roomVersion || !playMove(move.from,move.to,move.promotion,'remote'))broadcastState();
@@ -899,9 +915,12 @@ const match=new PeerMatch({
   },
   onReady(isHost){
     if(isHost){broadcastState();}else{match.send({type:'HELLO'});}
+    match.send({type:'APPEARANCE',...myLook()});
+    updateArmyStatus();renderPieces();preloadArmyTextures();
     gotoView('game');updateStatus();
   }
 });
+connectedMatch=match;
 victoryFX=createVictoryFX({
   onNewGame:()=>{
     if(mode==='online'&&!match.host){toast('Solo el anfitrión puede reiniciar el duelo.');return;}
@@ -911,8 +930,8 @@ victoryFX=createVictoryFX({
 });
 function setGameMode(next){
   if(next!=='online' && mode==='online')match.close();
+  if(next==='online'&&mode!=='online')remoteLook=null;
   mode=next;$('mode').value=next;
-  if(next==='online')remoteLook=null;
   updateArmyStatus();
   $('difficulty').disabled=next!=='bot';$('undo').disabled=next==='online';
   $('networkStatus').textContent=next==='online'?'DUELO ONLINE · BETA':next==='bot'?'VERSUS COMPUTADORA':'DOS JUGADORES LOCALES';
