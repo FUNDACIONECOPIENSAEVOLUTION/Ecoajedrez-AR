@@ -20,10 +20,11 @@ import {checkSkybox,linkedRealm,validExperience,gameRealmName} from './experienc
 import {createQuestMap,successfulQuestMove} from './quest-map.js?v=0.15.2';
 import {COMMUNITY_FILES,communityPiecePath,communityPieceKey,communityPieceHeight} from './community-models.js?v=0.15.2';
 import {ANTHRO_GLB,ANTHRO_MANIFEST,collectAnthroSources,createAnthroVisual,tickAnthroVisuals} from './anthropomorphic-pieces.js?v=0.15.3';
-import {PIECE_MATERIALS,PIECE_GLOWS,validPieceMaterial,validPieceGlow,applyPieceAppearance} from './piece-materials.js?v=0.15.5';
+import {PIECE_MATERIALS,PIECE_GLOWS,validPieceMaterial,validPieceGlow,applyPieceAppearance} from './piece-materials.js?v=0.15.6';
 import {createChessCombat,faceMovement} from './piece-combat.js?v=0.15.4';
 import {createPiecePreview} from './piece-preview.js?v=0.15.5';
-import {loadPhotoPBR} from './piece-pbr.js?v=0.15.5';
+import {loadPhotoPBR,readPBRManifest,PBR_ROOT} from './piece-pbr.js?v=0.15.6';
+import {setupMaterialGallery} from './piece-gallery.js?v=0.15.6';
 
 const $ = (id) => document.getElementById(id);
 const canvas = $('render'), stage = $('scene');
@@ -229,9 +230,8 @@ function createPieceVisual(p){
       if(p.type==='n')addGem(new THREE.ConeGeometry(.095,.26,5),.10,1.00,0).rotation.z=-.4;
       aura.dispose();
     }
- if(modelSet==='anthro'){
-  applyPieceAppearance(THREE,g,{material:pieceMaterial,glow:pieceGlow,color:p.color});
- }
+ // Acabados seleccionables para todos los modelos 3D; no toca reglas ni colisiones.
+ applyPieceAppearance(THREE,g,{material:pieceMaterial,glow:pieceGlow,color:p.color});
  if(p.color==='b')g.rotation.y=Math.PI;
  return g;
 }
@@ -755,11 +755,15 @@ function bindPieceAppearance(){
   }
   control.value=chosen;
  }
+ setupMaterialGallery({
+  root:$('pieceMaterialGallery'),select:$('pieceMaterial'),
+  materials:PIECE_MATERIALS,readManifest:readPBRManifest,assetRoot:PBR_ROOT
+ });
  async function prepareSelectedPBR(){
-  if(modelSet!=='anthro'||pieceMaterial==='arcane')return;
+  if(pieceMaterial==='arcane')return;
   const requested=pieceMaterial;
   const result=await loadPhotoPBR(THREE,requested);
-  if(result&&modelSet==='anthro'&&pieceMaterial===requested){
+  if(result&&pieceMaterial===requested){
    moving=null;renderPieces();piecePreview?.rebuild();
   }
  }
@@ -781,7 +785,10 @@ bindPieceAppearance();
 $('pieceSet').onchange=()=>{
  modelSet=$('pieceSet').value;moving=null;renderPieces();piecePreview?.rebuild();
  if(modelSet==='community')loadCommunityPieces();
- if(modelSet==='anthro'){loadAnthroModel();loadPhotoPBR(THREE,pieceMaterial).then(data=>{if(data&&modelSet==='anthro'){renderPieces();piecePreview?.rebuild();}}).catch(()=>{});}
+ if(modelSet==='anthro')loadAnthroModel();
+ if(pieceMaterial!=='arcane')loadPhotoPBR(THREE,pieceMaterial).then(data=>{
+   if(data){renderPieces();piecePreview?.rebuild();}
+ }).catch(()=>{});
 };
 $('boardSize').onchange=()=>{boardScale=Number($('boardSize').value)||0.065;};
 $('whiteColor').onchange=()=>{goldMat.color.set($('whiteColor').value);renderPieces();piecePreview?.rebuild();};
@@ -1581,6 +1588,6 @@ renderPieces();updateStatus();translate();
 if($('pieceSet').value==='anthro')loadAnthroModel();
 renderer.setAnimationLoop(render);
 loadPhotoPBR(THREE,pieceMaterial).then(data=>{
- if(data&&modelSet==='anthro'){renderPieces();piecePreview?.rebuild();}
+ if(data){renderPieces();piecePreview?.rebuild();}
 }).catch(()=>{});
 loadChessModels();
