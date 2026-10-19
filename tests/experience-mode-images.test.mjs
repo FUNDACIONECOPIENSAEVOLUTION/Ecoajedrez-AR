@@ -35,7 +35,7 @@ test('Responsive mode selector keeps images square and preserves selection',()=>
  assert.match(css,/@media\(max-width:790px\)/);
  assert.match(css,/experienceChoice:has\(input:checked\)/);
  assert.ok(html.includes('experience-modes.css?v=0.14.9'));
- assert.equal(version.version,'0.15.4-beta.1');
+ assert.equal(version.version,'0.15.5-beta.1');
 });
 test('Pages build enforces approved WebP files only',()=>{
  assert.match(build,/const modeCardNames=\['01_3d_clasico.webp','02_reino_360.webp','03_ar_con_portal.webp'\]/);
