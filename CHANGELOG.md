@@ -1,5 +1,12 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.15.4-beta.1 — 2026-10-19 · Vista previa, combate y personalización de piezas
+- Visor 3D de dos piezas y selector de los seis tipos con arrastre y giro suave, construido a partir de los modelos que usa realmente el juego; render limitado para móviles.
+- Diez materiales 128px ligeros: nogal, roble, piedra, mármol, obsidiana, bronce, oro, hielo, basalto y original; seis paletas de brillo, guardadas localmente. Primera versión aplicada a ejército antropomorfo.
+- Rotación de antropomorfas hacia la dirección de marcha, animación de captura con defensor conservado, reacción, golpe y reducción/desaparición, incluidos movimientos en passant.
+- Misma instancia chess.js y modos 3D, Skybox 360° y AR; requiere pruebas físicas en dispositivos y comprobación CI.
+
+
 ## 0.15.3-beta.1 — 2026-10-19 · Ejército antropomorfo animado gratuito
 - Configuración: nuevo estilo «Antropomórficas mágicas · GRATIS», con formas, miembros articulados, gemas emisivas cian/violeta y halo aditivo ligero. En la partida el balanceo de brazos y piernas se sincroniza con el desplazamiento de la pieza (misma lógica chess.js).
 - Cuando se suba un único GLB auténtico de 32 figuras/32 Walk clips a la carpeta dedicada, el loader cambiará automáticamente a sus mallas y animaciones. En ausencia del GLB queda la representación procedural reversible.

@@ -1,8 +1,8 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.15.3-beta.1",
+  "version": "0.15.4-beta.1",
   "updated": "2026-10-19",
-  "status": "Free starter anthropomorphic magical army playable in classic 3D, 360 and AR; arms/legs swing when a move occurs and blue/purple emissive gems plus lightweight sprite glow are enabled. Original supplied glTF2 GLB holds 32 Walk clips and may be uploaded as one asset to replace procedural fallback. No live ads, locked paid models, attack/death GLB clips or on-device validation yet.",
+  "status": "3D preview for six types in Settings (same selected meshes, two sides, draggable/rotating) plus 10 lightweight procedurally generated material presets, six glow colors, physically oriented anthropomorphic walking and a generic duel-and-vanishing capture effect including en passant. All modes share chess.js; browser/Android touch and real AR device validation pending.",
   "browserValidated": false,
   "physicalARValidated": false,
   "onlinePvP": "Casual PeerJS beta, six-character code and QR with camera scanner (native BarcodeDetector / lazy in-browser jsQR), validation restricts invite origin/path. Real two-device session requires device test; unranked and unaudited anti-cheat.",
@@ -298,5 +298,46 @@
     "rewardedAdsEnabled": false,
     "moreArmiesLocked": false,
     "manualDeviceTestingPending": true
+  },
+  "piecePresentation": {
+    "preview": {
+      "twoTeams": true,
+      "types": [
+        "queen",
+        "king",
+        "knight",
+        "rook",
+        "bishop",
+        "pawn"
+      ],
+      "render": "Three.js low power preview on settings only",
+      "touchRotate": true
+    },
+    "materialBank": [
+      "arcane",
+      "walnut",
+      "oak",
+      "stone",
+      "marble",
+      "obsidian",
+      "bronze",
+      "gold",
+      "ice",
+      "basalt"
+    ],
+    "glowColors": [
+      "team",
+      "cyan",
+      "violet",
+      "emerald",
+      "amber",
+      "scarlet"
+    ],
+    "settingsSavedInLocalStorage": true,
+    "materialScope": "anthropomorphic styles only for first release",
+    "combat": "captured defender detached from old chessboard, visible recoil and shrink during attacker walk; generic transform hooks for future assets",
+    "movementOrientation": "atan2(dx,dz); no rotation during idle until move",
+    "arDeviceValidated": false,
+    "manualPreviewTestPending": true
   }
 }
