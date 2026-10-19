@@ -11,9 +11,9 @@ const css=fs.readFileSync('piece-preview.css','utf8');
 const build=fs.readFileSync('scripts/build-pages.mjs','utf8');
 const preview=fs.readFileSync('piece-preview.js','utf8');
 
-test('Ten lightweight texture presets and six selectable colors are available to both armies',()=>{
- assert.equal(Object.keys(PIECE_MATERIALS).length,10);
- assert.equal(Object.keys(PIECE_GLOWS).length,6);
+test('Twenty selectable finishes and eleven glowing colors are available to both armies',()=>{
+ assert.equal(Object.keys(PIECE_MATERIALS).length,20);
+ assert.equal(Object.keys(PIECE_GLOWS).length,11);
  for(const name of ['walnut','oak','stone','marble','obsidian','bronze','gold','ice','basalt']){
   assert.ok(PIECE_MATERIALS[name].label);
  }
@@ -61,7 +61,7 @@ test('Preview has actual 3D canvas and material/glow controls and uses game visu
  for(const id of ['piecePreviewCanvas','piecePreviewType','pieceMaterial','pieceGlow','piecePreviewPanel']){
   assert.ok(html.includes('id="'+id+'"'),id);
  }
- assert.match(html,/piece-preview\.css\?v=0\.15\.6/);
+ assert.match(html,/piece-preview\.css\?v=0\.15\.7/);
  assert.match(css,/grid-template-columns/);
  assert.match(css,/@media\(max-width:750px\)/);
  assert.match(main,/piecePreview=createPiecePreview/);

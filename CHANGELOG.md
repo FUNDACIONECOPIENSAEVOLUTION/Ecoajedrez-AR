@@ -1,5 +1,13 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.15.7-beta.1 — 2026-10-19 · Ejército propio, rival contrastante y nuevas variantes
+- El usuario configura material fotográfico y brillo de su ejército; máquina aleatoria de contraste en cada nueva partida. Segundo jugador local puede escoger otro acabado manualmente. Las opciones se validan para evitar material/brillo iguales y se guarda la configuración.
+- Duelo PeerJS beta puede intercambiar únicamente identificadores cosméticos; no se altera la autoridad de chess.js, el resultado ni las reglas. Ante colisión de aspecto, el bando del invitado se ajusta.
+- 10 nuevos acabados tintados (plata, acero, titanio, cobre, platino, hierro, jade, amatista, rubí, zafiro) y 5 nuevos brillos. Son variaciones a partir de la biblioteca PBR CC0 1K, no escaneos fotográficos nuevos.
+- Selector de colección renombrado para claridad: Guardianes animados, Clásicas talladas, Corte imperial, Runas encantadas y Estrategas esenciales. El paquete externo CC0 sigue inactivo hasta contar con 12 GLB; el antropomorfo completo aún pendiente, con respaldo procedural jugable. Seis glTF originales completos.
+- Pruebas automáticas de contraste, modelos fuente y compatibilidad; pendiente revisión humana móvil/AR y PvP real.
+
+
 ## 0.15.6-beta.1 — 2026-10-19 · Nueve fototexturas PBR reales con relieve
 - Descarga en GitHub Actions desde Poly Haven API CC0 de nueve paquetes 1K sin costo: albedo, normales OpenGL y rugosidad; altura/metalness opcionales; fuentes exactas en docs/FOTOTEXTURAS_CC0.md.
 - Muestras del material con fotografías locales (no rectángulos planos) y botón de selección; el mismo aspecto se aplica a piezas 3D antropomórficas, Staunton, realeza y estilos geométricos.

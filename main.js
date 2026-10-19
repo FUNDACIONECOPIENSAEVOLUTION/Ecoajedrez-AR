@@ -20,10 +20,11 @@ import {checkSkybox,linkedRealm,validExperience,gameRealmName} from './experienc
 import {createQuestMap,successfulQuestMove} from './quest-map.js?v=0.15.2';
 import {COMMUNITY_FILES,communityPiecePath,communityPieceKey,communityPieceHeight} from './community-models.js?v=0.15.2';
 import {ANTHRO_GLB,ANTHRO_MANIFEST,collectAnthroSources,createAnthroVisual,tickAnthroVisuals} from './anthropomorphic-pieces.js?v=0.15.3';
-import {PIECE_MATERIALS,PIECE_GLOWS,validPieceMaterial,validPieceGlow,applyPieceAppearance} from './piece-materials.js?v=0.15.6';
+import {PIECE_MATERIALS,PIECE_GLOWS,validPieceMaterial,validPieceGlow,applyPieceAppearance} from './piece-materials.js?v=0.15.7';
 import {createChessCombat,faceMovement} from './piece-combat.js?v=0.15.4';
 import {createPiecePreview} from './piece-preview.js?v=0.15.5';
 import {loadPhotoPBR,readPBRManifest,PBR_ROOT} from './piece-pbr.js?v=0.15.6';
+import {normalizeArmyLook,chooseContrastingArmy,armiesAreDistinct,isValidWireLook} from './army-appearance.js?v=0.15.7';
 import {setupMaterialGallery} from './piece-gallery.js?v=0.15.6';
 
 const $ = (id) => document.getElementById(id);
@@ -67,6 +68,61 @@ let account = null, guestLocal = false, roomVersion = 0, boardScale = 0.065;
 let commandRecognition = null, gameStarted = false;
 let modelSet = 'anthro', moving = null;
 let pieceMaterial='arcane',pieceGlow='team',piecePreview=null,combatFX=null;
+let rivalMaterial='obsidian',rivalGlow='violet',rivalMode='auto',remoteLook=null;
+let connectedMatch=null; // Se asigna después de inicializar PeerMatch.
+function myLook(){return normalizeArmyLook({material:pieceMaterial,glow:pieceGlow});}
+function otherLook(){return normalizeArmyLook({material:rivalMaterial,glow:rivalGlow});}
+function armyLooks(){
+ const mine=myLook();
+ if(mode==='online'&&connectedMatch?.connected()){
+  const w=connectedMatch.host?mine:(remoteLook||otherLook());
+  const b=connectedMatch.host?(remoteLook||otherLook()):mine;
+  return {w,b:armiesAreDistinct(w,b)?b:chooseContrastingArmy(w,b)};
+ }
+ return {w:mine,b:otherLook()};
+}
+function mineColor(){return mode==='online'&&connectedMatch?.connected()&&!connectedMatch.host?'b':'w';}
+function updateArmyStatus(){
+ const online=mode==='online'&&connectedMatch?.connected();
+ $('playerArmyLabel').textContent=online&&!connectedMatch.host?'TU EJÉRCITO · NEGRAS':'TU EJÉRCITO · BLANCAS';
+ $('rivalArmyLabel').textContent=online?'RIVAL EN LÍNEA · ELECCIÓN PROPIA':
+  mode==='bot'?'EJÉRCITO DE LA MÁQUINA':'EJÉRCITO DEL SEGUNDO JUGADOR';
+ for(const id of ['rivalAppearanceMode','rerollRival'])$(id).disabled=online;
+ for(const id of ['rivalMaterial','rivalGlow'])$(id).disabled=online||rivalMode==='auto';
+ const looks=armyLooks(),side=mineColor(),mine=looks[side],enemy=looks[side==='w'?'b':'w'];
+ $('pieceContrastStatus').textContent=(online?'Duelo online: cada jugador elige sus acabados. ':
+  rivalMode==='auto'?'Rival diferente generado automáticamente. ':'Dos ejércitos contrastantes. ')+
+  PIECE_MATERIALS[mine.material].label+' / '+PIECE_GLOWS[mine.glow].label+
+  ' frente a '+PIECE_MATERIALS[enemy.material].label+' / '+PIECE_GLOWS[enemy.glow].label;
+}
+function saveArmyChoice(){
+ try{
+  localStorage.setItem('eco-piece-material',pieceMaterial);
+  localStorage.setItem('eco-piece-glow',pieceGlow);
+  localStorage.setItem('eco-piece-rival',JSON.stringify({material:rivalMaterial,glow:rivalGlow,mode:rivalMode}));
+ }catch(error){}
+}
+function preloadArmyTextures(){
+ const looks=armyLooks();
+ for(const material of new Set([looks.w.material,looks.b.material])){
+  const source=PIECE_MATERIALS[material]?.photoSource||material;
+  if(source==='arcane')continue;
+  loadPhotoPBR(THREE,source).then(data=>{
+   if(data){renderPieces();piecePreview?.rebuild();}
+  }).catch(()=>{});
+ }
+}
+function refreshArmy({reroll=false,transmit=false}={}){
+ const chosen=chooseContrastingArmy(myLook(),otherLook(),{
+  random:reroll||(rivalMode==='auto'&&!armiesAreDistinct(myLook(),otherLook()))
+ });
+ rivalMaterial=chosen.material;rivalGlow=chosen.glow;
+ $('rivalMaterial').value=rivalMaterial;$('rivalGlow').value=rivalGlow;
+ updateArmyStatus();saveArmyChoice();renderPieces();piecePreview?.rebuild();
+ preloadArmyTextures();
+ if(transmit&&mode==='online'&&connectedMatch?.connected())
+  connectedMatch.send({type:'APPEARANCE',...myLook()});
+}
 let questUI=null,missionActive=null,missionSolved=false,missionPrior=null;
 const assets = new Map(), loader = new GLTFLoader();
 const communityAssets=new Map();let communityLoading=null;
@@ -241,7 +297,8 @@ function createPieceVisual(p){
       aura.dispose();
     }
  // Acabados seleccionables para todos los modelos 3D; no toca reglas ni colisiones.
- applyPieceAppearance(THREE,g,{material:pieceMaterial,glow:pieceGlow,color:p.color});
+ const selectedLook=armyLooks()[p.color];
+ applyPieceAppearance(THREE,g,{material:selectedLook.material,glow:selectedLook.glow,color:p.color});
  if(p.color==='b')g.rotation.y=Math.PI;
  return g;
 }
@@ -374,6 +431,7 @@ function storageKey(){
 function persistCurrentGame(){
   if(!gameStarted||mode==='online'||missionActive)return;
   const preferences={theme,modelSet,lang,botDifficulty,boardScale,
+    pieceMaterial,pieceGlow,rivalMaterial,rivalGlow,rivalMode,
     boardSkin:$('boardSkin').value,
     whiteColor:$('whiteColor').value,blackColor:$('blackColor').value};
   const success=saveLocalMatch(window.localStorage,storageKey(),game,mode,preferences);
@@ -401,6 +459,15 @@ function restoreLastGame(){
   if(pref.boardSkin && [...$('boardSkin').options].some(o=>o.value===pref.boardSkin)){
     window.ecoBoardCatalogue?.selectBoard(pref.boardSkin);
   }
+  pieceMaterial=validPieceMaterial(pref.pieceMaterial||pieceMaterial);
+  pieceGlow=validPieceGlow(pref.pieceGlow||pieceGlow);
+  rivalMaterial=validPieceMaterial(pref.rivalMaterial||rivalMaterial);
+  rivalGlow=validPieceGlow(pref.rivalGlow||rivalGlow);
+  rivalMode=pref.rivalMode==='manual'?'manual':'auto';
+  for(const [id,value] of [['pieceMaterial',pieceMaterial],['pieceGlow',pieceGlow],
+   ['rivalMaterial',rivalMaterial],['rivalGlow',rivalGlow],
+   ['rivalAppearanceMode',rivalMode]])$(id).value=value;
+  updateArmyStatus();preloadArmyTextures();
   theme=$('theme').value;modelSet=$('pieceSet').value;lang=$('lang').value;botDifficulty=$('difficulty').value;
   setTheme(theme);translate();renderPieces();updateStatus();
   gameStarted=true; $('resumeGame').style.display='block';
@@ -543,6 +610,7 @@ function animateMove(from,to,captured=false,victim=null){
    start:moving.start,duration:moving.duration});
 }
 function reset(){
+  if(mode==='bot'&&rivalMode==='auto')refreshArmy({reroll:true});
   if(missionActive){
     clearTimeout(timer);missionSolved=false;
     if(missionActive.fen==='start')game.reset();else game.load(missionActive.fen);
@@ -746,6 +814,7 @@ $('arVoiceBtn').onclick=()=>startSpeech($('arCommand'));
 $('mode').onchange=()=>{
   mode=$('mode').value;
   $('difficulty').disabled=mode!=='bot';
+  refreshArmy({reroll:mode==='bot'&&rivalMode==='auto'});
 };
 $('difficulty').onchange=()=>{botDifficulty=$('difficulty').value;};
 $('theme').onchange=()=>setTheme($('theme').value);
@@ -754,10 +823,16 @@ function bindPieceAppearance(){
  try{
   pieceMaterial=validPieceMaterial(localStorage.getItem('eco-piece-material')||'arcane');
   pieceGlow=validPieceGlow(localStorage.getItem('eco-piece-glow')||'team');
+  const data=JSON.parse(localStorage.getItem('eco-piece-rival')||'{}');
+  rivalMaterial=validPieceMaterial(data.material||'obsidian');
+  rivalGlow=validPieceGlow(data.glow||'violet');
+  rivalMode=data.mode==='manual'?'manual':'auto';
  }catch(error){}
  for(const [id,values,chosen] of [
   ['pieceMaterial',PIECE_MATERIALS,pieceMaterial],
-  ['pieceGlow',PIECE_GLOWS,pieceGlow]
+  ['pieceGlow',PIECE_GLOWS,pieceGlow],
+  ['rivalMaterial',PIECE_MATERIALS,rivalMaterial],
+  ['rivalGlow',PIECE_GLOWS,rivalGlow]
  ]){
   const control=$(id);control.replaceChildren();
   for(const [key,data] of Object.entries(values)){
@@ -765,40 +840,38 @@ function bindPieceAppearance(){
   }
   control.value=chosen;
  }
- setupMaterialGallery({
-  root:$('pieceMaterialGallery'),select:$('pieceMaterial'),
-  materials:PIECE_MATERIALS,readManifest:readPBRManifest,assetRoot:PBR_ROOT
- });
- async function prepareSelectedPBR(){
-  if(pieceMaterial==='arcane')return;
-  const requested=pieceMaterial;
-  const result=await loadPhotoPBR(THREE,requested);
-  if(result&&pieceMaterial===requested){
-   moving=null;renderPieces();piecePreview?.rebuild();
-  }
- }
+ $('rivalAppearanceMode').value=rivalMode;
+ setupMaterialGallery({root:$('pieceMaterialGallery'),select:$('pieceMaterial'),
+  materials:PIECE_MATERIALS,readManifest:readPBRManifest,assetRoot:PBR_ROOT});
  $('pieceMaterial').onchange=()=>{
   pieceMaterial=validPieceMaterial($('pieceMaterial').value);
-  try{localStorage.setItem('eco-piece-material',pieceMaterial)}catch(error){}
-  moving=null;renderPieces();piecePreview?.rebuild();
-  prepareSelectedPBR().catch(()=>{});
+  refreshArmy({reroll:rivalMode==='auto',transmit:true});
  };
  $('pieceGlow').onchange=()=>{
   pieceGlow=validPieceGlow($('pieceGlow').value);
-  try{localStorage.setItem('eco-piece-glow',pieceGlow)}catch(error){}
-  moving=null;renderPieces();piecePreview?.rebuild();
+  refreshArmy({reroll:rivalMode==='auto',transmit:true});
  };
+ const opponentChanged=()=>{
+  rivalMaterial=validPieceMaterial($('rivalMaterial').value);
+  rivalGlow=validPieceGlow($('rivalGlow').value);
+  refreshArmy();
+ };
+ $('rivalMaterial').onchange=opponentChanged;
+ $('rivalGlow').onchange=opponentChanged;
+ $('rivalAppearanceMode').onchange=()=>{
+  rivalMode=$('rivalAppearanceMode').value==='manual'?'manual':'auto';
+  refreshArmy({reroll:rivalMode==='auto'});
+ };
+ $('rerollRival').onclick=()=>refreshArmy({reroll:true});
  $('piecePreviewType').onchange=event=>piecePreview?.rebuild(event.target.value);
- prepareSelectedPBR().catch(()=>{});
+ refreshArmy({reroll:rivalMode==='auto'});
 }
 bindPieceAppearance();
 $('pieceSet').onchange=()=>{
  modelSet=$('pieceSet').value;moving=null;renderPieces();piecePreview?.rebuild();
  if(modelSet==='community')loadCommunityPieces();
  if(modelSet==='anthro')loadAnthroModel();
- if(pieceMaterial!=='arcane')loadPhotoPBR(THREE,pieceMaterial).then(data=>{
-   if(data){renderPieces();piecePreview?.rebuild();}
- }).catch(()=>{});
+ preloadArmyTextures();
 };
 $('boardSize').onchange=()=>{boardScale=Number($('boardSize').value)||0.065;};
 $('whiteColor').onchange=()=>{goldMat.color.set($('whiteColor').value);renderPieces();piecePreview?.rebuild();};
@@ -808,6 +881,22 @@ $('center').onclick=()=>{if(isAR){toast('En AR usa el control de escala.');retur
 $('rotate').onclick=()=>{if(isAR)return;camera.position.set(-camera.position.z,camera.position.y,camera.position.x);orbit.update();};
 const match=new PeerMatch({
   onStatus(message){$('networkStatus').textContent=message;const el=$('roomNote');if(el)el.textContent=message;},
+  onAppearance(data){
+    if(mode!=='online'||!isValidWireLook(data))return;
+    remoteLook=normalizeArmyLook(data);
+    // El anfitrión conserva el primer color; el invitado se adapta si colisionan.
+    if(!match.host){
+      const approved=chooseContrastingArmy(remoteLook,myLook());
+      if(approved.material!==pieceMaterial||approved.glow!==pieceGlow){
+        pieceMaterial=approved.material;pieceGlow=approved.glow;
+        $('pieceMaterial').value=pieceMaterial;$('pieceGlow').value=pieceGlow;
+        saveArmyChoice();
+        match.send({type:'APPEARANCE',...myLook()});
+        toast('Se ajustó tu color para evitar confusión con el rival.');
+      }
+    }
+    updateArmyStatus();renderPieces();piecePreview?.rebuild();preloadArmyTextures();
+  },
   onMove(move){
     if(mode!=='online'||!match.host)return;
     if(move.version!==roomVersion || !playMove(move.from,move.to,move.promotion,'remote'))broadcastState();
@@ -826,9 +915,12 @@ const match=new PeerMatch({
   },
   onReady(isHost){
     if(isHost){broadcastState();}else{match.send({type:'HELLO'});}
+    match.send({type:'APPEARANCE',...myLook()});
+    updateArmyStatus();renderPieces();preloadArmyTextures();
     gotoView('game');updateStatus();
   }
 });
+connectedMatch=match;
 victoryFX=createVictoryFX({
   onNewGame:()=>{
     if(mode==='online'&&!match.host){toast('Solo el anfitrión puede reiniciar el duelo.');return;}
@@ -838,7 +930,9 @@ victoryFX=createVictoryFX({
 });
 function setGameMode(next){
   if(next!=='online' && mode==='online')match.close();
+  if(next==='online'&&mode!=='online')remoteLook=null;
   mode=next;$('mode').value=next;
+  updateArmyStatus();
   $('difficulty').disabled=next!=='bot';$('undo').disabled=next==='online';
   $('networkStatus').textContent=next==='online'?'DUELO ONLINE · BETA':next==='bot'?'VERSUS COMPUTADORA':'DOS JUGADORES LOCALES';
 }
@@ -1597,7 +1691,5 @@ syncSelectedRealm(catalogue?.getSelected()||'classic');
 renderPieces();updateStatus();translate();
 if($('pieceSet').value==='anthro')loadAnthroModel();
 renderer.setAnimationLoop(render);
-loadPhotoPBR(THREE,pieceMaterial).then(data=>{
- if(data){renderPieces();piecePreview?.rebuild();}
-}).catch(()=>{});
+preloadArmyTextures();
 loadChessModels();

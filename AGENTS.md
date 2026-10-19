@@ -1,4 +1,4 @@
-# LECTURA RÁPIDA OBLIGATORIA (ECOAJEDREZ v0.15.6-beta.1)
+# LECTURA RÁPIDA OBLIGATORIA (ECOAJEDREZ v0.15.7-beta.1)
 Materiales PBR: ver `docs/FOTOTEXTURAS_CC0.md`; el flujo de GitHub Actions descarga activos oficiales CC0 1K con Python, nunca usar hotlinks dentro del juego.
 Antes de leer el historial extenso, abrir `docs/RESUMEN_MAESTRO.md` (resumen canónico, mantenido por versión) y `docs/ENTREGA_0.11.md` si se modifica la UI, primer inicio o caché. Los ocho WebP están en `app/imagenes/tarjetas/` y YA se publican; nunca pedirlos otra vez sin comprobar GitHub. Conserva modo invitado, AR, privacidad y $0.
 
@@ -131,3 +131,6 @@ Nuevo `qr-scanner.js` para escanear QR de PeerJS con validación mismo origen/ru
 - CacheStorage/SW incluye 13 tableros como rutas permitidas ON-DEMAND; no cargar automáticamente 13 x 0.5–0.8 MB al inicio, solo el elegido. Mantener id de caché `v0.11.0` para no volver a descargar antiguos 14 recursos. Las vistas usan caché HTTP normal de navegador.
 - Build whitelist publica únicamente 13 + 7 archivos autorizados y valida WebP. `board-catalog.css` responsive, tests en `tests/board-skins.test.mjs`. Detalles `docs/ENTREGA_0.14.md`.
 - No se han probado físicamente todos los encuadres ni la modalidad AR con estas imágenes. No tocar jugabilidad/reglas/autenticación en esta entrega.
+
+## v0.15.7 · Personalización separada por bando
+`army-appearance.js`: nunca asignar material y brillo idénticos a ambos bandos. El dueño define su estilo; en vs máquina se sortea un rival contrastante cada partida, en 2 jugadores local el segundo puede elegir, en online el invitado resuelve conflictos con el anfitrión mediante un paquete APPEARANCE cosmético (no afecta chess.js). Los 10 nuevos acabados son variantes tintadas de PBR CC0 existente, no nuevas fotografías. No habilitar GLB comunitarios sin los 12 validados ni antropomorfo como archivo descargado cuando está ausente. Ver tests/army-appearance.test.mjs.

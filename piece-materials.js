@@ -11,7 +11,18 @@ export const PIECE_MATERIALS=Object.freeze({
  bronze:{label:'Bronce encantado',base:'#a66a36',roughness:.31,metalness:.78,pattern:'metal'},
  gold:{label:'Oro arcano',base:'#e0b15e',roughness:.22,metalness:.82,pattern:'metal'},
  ice:{label:'Hielo rúnico',base:'#9eddeb',roughness:.29,metalness:.12,pattern:'marble'},
- basalt:{label:'Basalto volcánico',base:'#4a3937',roughness:.87,metalness:.09,pattern:'stone'}
+ basalt:{label:'Basalto volcánico',base:'#4a3937',roughness:.87,metalness:.09,pattern:'stone'},
+ // Variantes derivadas de las nueve fotos CC0 disponibles: NO se fingen fotos nuevas.
+ silver:{label:'Plata lunar',base:'#dadfe6',tint:'#ccd8ee',photoSource:'gold',roughness:.22,metalness:.95,pattern:'metal'},
+ steel:{label:'Acero templado',base:'#8899aa',tint:'#8396a3',photoSource:'gold',roughness:.35,metalness:.90,pattern:'metal'},
+ titanium:{label:'Titanio nocturno',base:'#495363',tint:'#5c6d83',photoSource:'gold',roughness:.32,metalness:.91,pattern:'metal'},
+ copper:{label:'Cobre bruñido',base:'#c77745',tint:'#ca784c',photoSource:'bronze',roughness:.3,metalness:.85,pattern:'metal'},
+ platinum:{label:'Platino celestial',base:'#e2e7ea',tint:'#e0ecff',photoSource:'gold',roughness:.18,metalness:.97,pattern:'metal'},
+ iron:{label:'Hierro sombrío',base:'#484e55',tint:'#4f5b69',photoSource:'bronze',roughness:.60,metalness:.80,pattern:'metal'},
+ jade:{label:'Jade imperial',base:'#2a9c77',tint:'#57b999',photoSource:'marble',roughness:.2,metalness:.06,pattern:'marble'},
+ amethyst:{label:'Amatista real',base:'#986fc9',tint:'#ac81da',photoSource:'marble',roughness:.17,metalness:.13,pattern:'marble'},
+ ruby:{label:'Rubí escarlata',base:'#bd3446',tint:'#d65066',photoSource:'obsidian',roughness:.20,metalness:.25,pattern:'stone'},
+ sapphire:{label:'Zafiro imperial',base:'#3055ab',tint:'#5376d7',photoSource:'obsidian',roughness:.18,metalness:.18,pattern:'stone'}
 });
 export const PIECE_GLOWS=Object.freeze({
  team:{label:'Según ejército',white:'#40bfff',black:'#a14bff'},
@@ -19,7 +30,12 @@ export const PIECE_GLOWS=Object.freeze({
  violet:{label:'Violeta mágico',white:'#c37aff',black:'#c37aff'},
  emerald:{label:'Verde esmeralda',white:'#55f2a5',black:'#55f2a5'},
  amber:{label:'Ámbar',white:'#ffcf65',black:'#ffcf65'},
- scarlet:{label:'Carmesí',white:'#ff707b',black:'#ff707b'}
+ scarlet:{label:'Carmesí',white:'#ff707b',black:'#ff707b'},
+ gold:{label:'Dorado brillante',white:'#ffe28a',black:'#ffe28a'},
+ silver:{label:'Luz plateada',white:'#e5f3ff',black:'#e5f3ff'},
+ blue:{label:'Azul eléctrico',white:'#378eff',black:'#378eff'},
+ pink:{label:'Rosa neón',white:'#ff6edc',black:'#ff6edc'},
+ copper:{label:'Cobre incandescente',white:'#fa944d',black:'#fa944d'}
 });
 export function validPieceMaterial(id){return Object.hasOwn(PIECE_MATERIALS,id)?id:'arcane'}
 export function validPieceGlow(id){return Object.hasOwn(PIECE_GLOWS,id)?id:'team'}
@@ -99,7 +115,7 @@ export function applyPieceAppearance(THREE,root,config={}){
     continue;
    }
    if(name!=='arcane'&&role!=='accent'){
-    const pbr=getPhotoPBR(name);
+    const pbr=getPhotoPBR(base.photoSource||name);
     m.map=pbr?.color||textureFor(THREE,name);
     m.normalMap=pbr?.normal||null;
     m.roughnessMap=pbr?.roughness||null;
@@ -114,10 +130,10 @@ export function applyPieceAppearance(THREE,root,config={}){
     );
     if(m.color?.set){
       // Mantener los dos ejércitos distinguibles sin ocultar la imagen real.
-      const hue=(name==='gold'?'#ffe2a7':name==='bronze'?'#d9a778':
-        name==='ice'?'#d5f8ff':name==='obsidian'?'#aaa0bb':'#ffffff');
+      const hue=(base.tint|| (name==='gold'?'#ffe2a7':name==='bronze'?'#d9a778':
+        name==='ice'?'#d5f8ff':name==='obsidian'?'#aaa0bb':'#ffffff'));
       m.color.set(hue);
-      if(color==='b')m.color.multiplyScalar(.70);
+      if(color==='b'&&m.color.multiplyScalar)m.color.multiplyScalar(.70);
     }
     if('roughness' in m)m.roughness=base.roughness;
     if('metalness' in m)m.metalness=base.metalness;
