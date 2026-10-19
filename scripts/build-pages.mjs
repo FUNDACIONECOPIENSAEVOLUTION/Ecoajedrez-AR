@@ -4,7 +4,7 @@ import path from 'node:path';
 const dest='dist';
 fs.rmSync(dest,{recursive:true,force:true});
 fs.mkdirSync(dest,{recursive:true});
-const files=['index.html','arcane.css','opening.css','opening.js','celestial.css','cinematic-fix.css','adventure.css','login-scene.css','readability-qr.css','models-cache.css','magic-game.css','victory-fx.css','victory-fx.js','immersive-chess.js','immersive-chess.css','immersive-room.js','immersive-room.css','quest-map.js','quest-map.css','experience-modes.js','experience-modes.css','ar-portal.js','board-catalog.css','realm-pairing.js','board-skins.js','board-catalog-ui.js','magic-world.js','last-move-ghost.js','legal-consent.js','terms.html','qr-scanner.js','asset-cache.js','adventure-ui.js','sw.js','celestial-ui.js','arcane-ui.js','privacy.html','version.json','skybox-test.html','skybox-test.css','skybox-test.js','skybox-config.js','main.js','auth.js','commands.js','pvp.js','match-state.js','ecoajedrez.PNG','_headers'];
+const files=['index.html','arcane.css','opening.css','opening.js','celestial.css','cinematic-fix.css','adventure.css','login-scene.css','readability-qr.css','models-cache.css','magic-game.css','victory-fx.css','victory-fx.js','immersive-chess.js','immersive-chess.css','immersive-room.js','immersive-room.css','quest-map.js','quest-map.css','experience-modes.js','experience-modes.css','community-models.js','ar-portal.js','board-catalog.css','realm-pairing.js','board-skins.js','board-catalog-ui.js','magic-world.js','last-move-ghost.js','legal-consent.js','terms.html','qr-scanner.js','asset-cache.js','adventure-ui.js','sw.js','celestial-ui.js','arcane-ui.js','privacy.html','version.json','skybox-test.html','skybox-test.css','skybox-test.js','skybox-config.js','main.js','auth.js','commands.js','pvp.js','match-state.js','ecoajedrez.PNG','_headers'];
 for(const name of files){
  if(!fs.existsSync(name))throw Error('Missing asset: '+name);
  fs.copyFileSync(name,path.join(dest,name));
@@ -43,6 +43,29 @@ for(const name of modeCardNames){
     data.toString('ascii',0,4)!=='RIFF'||data.toString('ascii',8,12)!=='WEBP')
    throw Error('Invalid selected mode card WebP: '+name);
  fs.writeFileSync(path.join(modeCardDest,name),data);
+}
+
+// Owner-reviewed optional community GLB chess pieces: publish ONLY a verified complete set.
+const {COMMUNITY_FILES}=await import('../community-models.js');
+const sourceCommunity='assets/models/community';
+const presentCommunity=COMMUNITY_FILES.filter(name=>fs.existsSync(path.join(sourceCommunity,name)));
+if(presentCommunity.length===COMMUNITY_FILES.length){
+ const dst=path.join(dest,sourceCommunity);
+ fs.mkdirSync(dst,{recursive:true});
+ let total=0;
+ for(const name of COMMUNITY_FILES){
+  const raw=fs.readFileSync(path.join(sourceCommunity,name));
+  const glb=raw.length>=24&&raw.length<=3000000&&raw.toString('ascii',0,4)==='glTF'&&
+   raw.readUInt32LE(4)===2&&raw.readUInt32LE(8)===raw.length;
+  if(!glb)throw Error('Invalid approved community chess GLB: '+name);
+  total+=raw.length;
+  if(total>24000000)throw Error('Community chess piece assets too large');
+  fs.writeFileSync(path.join(dst,name),raw);
+ }
+ fs.writeFileSync(path.join(dst,'manifest.json'),JSON.stringify({ready:true,files:COMMUNITY_FILES},null,2)+'\n');
+ console.log('Optional community chess GLB set: 12 / 12 (verified).');
+}else{
+ console.log('Community chess GLBs: '+presentCommunity.length+' / 12. Original Staunton fallback retained.');
 }
 
 // User-approved, real gameplay boards (13) and decorative vista artwork (7).

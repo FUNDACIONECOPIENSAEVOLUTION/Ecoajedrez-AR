@@ -18,6 +18,7 @@ import {createARChessPortal} from './ar-portal.js?v=0.14.8';
 import {createARImmersionRoom,arRoomSize} from './immersive-room.js?v=0.15.0';
 import {checkSkybox,linkedRealm,validExperience,gameRealmName} from './experience-modes.js?v=0.14.8';
 import {createQuestMap,successfulQuestMove} from './quest-map.js?v=0.15.2';
+import {COMMUNITY_FILES,communityPiecePath,communityPieceKey,communityPieceHeight} from './community-models.js?v=0.15.2';
 
 const $ = (id) => document.getElementById(id);
 const canvas = $('render'), stage = $('scene');
@@ -61,6 +62,7 @@ let commandRecognition = null, gameStarted = false;
 let modelSet = 'staunton', moving = null;
 let questUI=null,missionActive=null,missionSolved=false,missionPrior=null;
 const assets = new Map(), loader = new GLTFLoader();
+const communityAssets=new Map();let communityLoading=null;
 const reticle = new THREE.Mesh(new THREE.RingGeometry(.125,.145,40), new THREE.MeshBasicMaterial({color:0x72ffba,side:THREE.DoubleSide}));
 reticle.rotation.x = -Math.PI/2; reticle.visible = false; scene.add(reticle);
 const letters = {
@@ -159,6 +161,20 @@ function renderPieces(){
             o.material.side=THREE.DoubleSide;
             o.castShadow=true;
           }
+        });
+      }
+    }
+    if(modelSet==='community'){
+      const source=communityAssets.get(communityPieceKey(p.color,p.type));
+      if(source){
+        g=source.clone(true);
+        g.traverse(obj=>{
+          if(!obj.isMesh)return;
+          obj.userData.sharedGeo=true;
+          obj.userData.ownedMaterial=true;
+          obj.material=Array.isArray(obj.material)?
+            obj.material.map(mat=>mat.clone()):obj.material.clone();
+          obj.castShadow=true;
         });
       }
     }
@@ -498,6 +514,49 @@ canvas.addEventListener('pointerup',event=>{
 canvas.addEventListener('pointercancel',()=>{down=null;orbit.enabled=!realmImmersion?.active();});
 // Original locally hosted models: exactly six types, reused by 32 pieces.
 const chessModelTypes=['p','r','n','b','q','k'];
+async function checkCommunityModels(){
+ const option=$('communityPieceOption');
+ if(!option)return;
+ try{
+  const response=await fetch('./assets/models/community/manifest.json',{cache:'no-store'});
+  if(!response.ok)return;
+  const manifest=await response.json();
+  if(manifest?.ready===true&&manifest?.files?.length===12){
+   option.disabled=false;option.textContent='Staunton CC0 · modelos HD ligeros';
+  }
+ }catch(error){} // Optional model pack: never block original chess pieces.
+}
+async function loadCommunityPieces(){
+ if(communityLoading)return communityLoading;
+ communityLoading=(async()=>{
+  const option=$('communityPieceOption');
+  if(option?.disabled){toast('Piezas CC0 aún no disponibles. Se conservan las originales.');return 0;}
+  let ready=0;
+  await Promise.all(['w','b'].flatMap(color=>chessModelTypes.map(async(type,i)=>{
+   const key=communityPieceKey(color,type);
+   if(communityAssets.has(key)){ready++;return;}
+   try{
+    const result=await loader.loadAsync(communityPiecePath(color,chessModelNames[i]));
+    if(!result?.scene)throw Error('Sin escena GLB');
+    const source=result.scene;
+    const bounds=new THREE.Box3().setFromObject(source),size=new THREE.Vector3();
+    bounds.getSize(size);
+    if(!Number.isFinite(size.y)||size.y<.01)throw Error('Escala del GLB inválida');
+    const scale=communityPieceHeight[type]/size.y;
+    source.scale.multiplyScalar(scale);
+    const fitted=new THREE.Box3().setFromObject(source);
+    const center=new THREE.Vector3();fitted.getCenter(center);
+    const g=new THREE.Group();
+    source.position.x-=center.x;source.position.z-=center.z;source.position.y-=fitted.min.y;
+    g.add(source);communityAssets.set(key,g);ready++;
+   }catch(error){console.warn('Modelo CC0 descartado, se conserva pieza original:',key,error);}
+  })));
+  if(modelSet==='community')renderPieces();
+  toast(ready===12?'✓ Piezas Staunton CC0 cargadas.':('✓ '+ready+'/12 modelos CC0 · respaldo original activo.'));
+  return ready;
+ })();
+ try{return await communityLoading;}finally{communityLoading=null;}
+}
 const chessModelNames=['pawn','rook','knight','bishop','queen','king'];
 let modelsLoading=null;
 function updateModelReadiness(message,completed=0){
@@ -585,6 +644,7 @@ window.addEventListener('eco:assets-ready',event=>{
 $('pieceSet').addEventListener('change',()=>{
  if(['staunton','royal'].includes($('pieceSet').value) &&
   chessModelTypes.some(type=>!assets.get(type)))loadChessModels();
+checkCommunityModels();
 });
 $('reset').onclick=()=>{if(mode==='online'&&!match.host){toast('Solo el anfitrión reinicia el duelo.');return;}reset();};
 $('undo').onclick=()=>{
@@ -608,7 +668,10 @@ $('mode').onchange=()=>{
 };
 $('difficulty').onchange=()=>{botDifficulty=$('difficulty').value;};
 $('theme').onchange=()=>setTheme($('theme').value);
-$('pieceSet').onchange=()=>{modelSet=$('pieceSet').value;moving=null;renderPieces();};
+$('pieceSet').onchange=()=>{
+ modelSet=$('pieceSet').value;moving=null;renderPieces();
+ if(modelSet==='community')loadCommunityPieces();
+};
 $('boardSize').onchange=()=>{boardScale=Number($('boardSize').value)||0.065;};
 $('whiteColor').onchange=()=>{goldMat.color.set($('whiteColor').value);renderPieces();};
 $('blackColor').onchange=()=>{darkMat.color.set($('blackColor').value);renderPieces();};
