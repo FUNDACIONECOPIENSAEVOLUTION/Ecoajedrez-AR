@@ -1,8 +1,8 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.15.1-beta.1",
-  "updated": "2026-10-18",
-  "status": "360 chess usability: centered close-range board camera, overhead view, mousewheel/pinch zoom and +/−, independent environment rotation; hides obstructive decorative trees, keeps game moves/turn visible, maintains unchanged chess.js, 3D classic and AR interactions. Await manual mobile testing.",
+  "version": "0.15.2-beta.1",
+  "updated": "2026-10-19",
+  "status": "Galactic 8-node chess quest pilot with real chess.js positions and local progress, independent camera height for Skybox 360, optional external CC0 3D GLB set staging (no third-party models actually included), pre-APK PWA/TWA research. Physical Android 3D/AR and puzzle move playability require user tests.",
   "browserValidated": false,
   "physicalARValidated": false,
   "onlinePvP": "Casual PeerJS beta, six-character code and QR with camera scanner (native BarcodeDetector / lazy in-browser jsQR), validation restricts invite origin/path. Real two-device session requires device test; unranked and unaudited anti-cheat.",
@@ -171,7 +171,16 @@
     ],
     "occludingTreesHidden": true,
     "liveMoveStrip": true,
-    "manualPlayValidationPending": true
+    "manualPlayValidationPending": true,
+    "cameraElevation": {
+      "mouse": "Shift+wheel",
+      "mobile": "Up/down buttons",
+      "limits": [
+        2.2,
+        18
+      ],
+      "gyroscopeDoesNotTrackTranslation": true
+    }
   },
   "playExperiences": {
     "opponents": [
@@ -235,5 +244,33 @@
     "roomSafetyCalibrated": false,
     "physicalARValidated": false,
     "notes": "Virtual cubic enclosure is visual only; no obstacle/physical-boundary detection. Headset WebXR support depends on the platform; no physical 6DoF proof."
+  },
+  "galacticQuests": {
+    "nodes": 8,
+    "pilotKingdom": "galactico_cosmico",
+    "puzzles": 7,
+    "finalBotChallenge": 1,
+    "mode": "one playable chess.js instance",
+    "sequentialUnlock": true,
+    "storage": "localStorage guest",
+    "restorePreviousMatch": "PGN/FEN",
+    "productionValidation": false
+  },
+  "externalChessPieces": {
+    "active": false,
+    "sourceCandidates": [
+      "Polyy.AI CC0 low-poly GLB",
+      "Omie's Assets CC0 FBX/Blender",
+      "Polyy.AI theme sets"
+    ],
+    "filesNeeded": 12,
+    "path": "assets/models/community",
+    "fallback": "Original six Staunton glTF",
+    "downloadPending": true
+  },
+  "apkRoadmap": {
+    "apkBuilt": false,
+    "rootDigitalAssetLinksRequired": true,
+    "arCompatibilityUnverified": true
   }
 }

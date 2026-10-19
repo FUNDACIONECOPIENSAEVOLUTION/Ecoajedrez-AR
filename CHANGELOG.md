@@ -1,5 +1,12 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.15.2-beta.1 — 2026-10-19 · Camino Galáctico y altura de cámara 360°
+- Shift+rueda de mouse para altura gradual de cámara; botones ↑↓ en móvil sin confundir altitud con giroscopio ni zoom. Tablero y jugadas intactos.
+- Primer mapa jugable del reino Galáctico con 8 retos reales (7 objetivos tácticos y 1 duelo final con BOT), progreso local separado y restauración de la partida previa al abandonar misiones.
+- Importador opcional de 12 modelos GLB CC0 blancos/negros con validación, activación condicionada y respaldo completo. Los modelos ajenos **no se han descargado ni publicado**; hay una carpeta e instrucciones para cuando se aprueben.
+- Documento de evaluación APK/TWA, licencias y pasos pendientes; aún sin APK ni pruebas reales en dispositivos AR.
+
+
 ## 0.15.1-beta.1 — 2026-10-18 · Zoom y jugabilidad en Skybox 360°
 - Tablero de reino 360° inicialmente más cercano, vista superior, botones zoom ±, rueda y pellizco móvil. Giro de perspectiva por arrastre y sensores se conserva.
 - Árboles procedurales se ocultan únicamente dentro del reino 360°, evitando que las casillas queden tapadas; se restauran al salir.
