@@ -1,8 +1,8 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.15.5-beta.1",
+  "version": "0.15.6-beta.1",
   "updated": "2026-10-19",
-  "status": "PBR photo-real texture support staged from three verified CC0 libraries with approved local 1K image manifests (color, OpenGL normal, roughness and optional metalness). No third-party binary textures yet downloaded or published; procedural fallback retained. Larger 3D preview, 3D/Skybox/AR shared gameplay untouched. Awaiting real texture uploads and device verification.",
+  "status": "Paquete de 9 acabados PBR fotográficos CC0 1K instalado automáticamente durante la compilación (color, normal GL, roughness, height/metalness opcionales). Selector de muestras reales, disponible para estilos 3D. Despliegue y verificación física pendientes.",
   "browserValidated": false,
   "physicalARValidated": false,
   "onlinePvP": "Casual PeerJS beta, six-character code and QR with camera scanner (native BarcodeDetector / lazy in-browser jsQR), validation restricts invite origin/path. Real two-device session requires device test; unranked and unaudited anti-cheat.",
@@ -357,7 +357,8 @@
       "color.jpg",
       "normal.jpg",
       "roughness.jpg",
-      "metalness.jpg"
+      "height.jpg (opcional)",
+      "metalness.jpg (opcional)"
     ],
     "acceptedExtensions": [
       "jpg",
@@ -369,7 +370,11 @@
     "unapprovedThirdPartyFilesIncluded": false,
     "createdImageSource": "PBR photo sources Poly Haven, ambientCG, 3DTextures.me (CC0)",
     "fallbackIfMissing": true,
-    "realTextureUploadsPending": true,
-    "loadedOnDemand": true
+    "realTextureUploadsPending": false,
+    "loadedOnDemand": true,
+    "automatedPhotoDownload": true,
+    "source": "Poly Haven CC0 (descarga servidor de CI, sin API en dispositivo)",
+    "sourceScript": "scripts/descargar-relieves-pbr.py",
+    "realTextureBuildPendingVerification": true
   }
 }
