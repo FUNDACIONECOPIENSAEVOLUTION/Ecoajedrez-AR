@@ -104,8 +104,21 @@ export function applyPieceAppearance(THREE,root,config={}){
     m.normalMap=pbr?.normal||null;
     m.roughnessMap=pbr?.roughness||null;
     m.metalnessMap=pbr?.metalness||null;
-    if(m.normalMap&&m.normalScale?.set)m.normalScale.set(.32,.32);
-    if(m.color?.set)m.color.set(color==='b'?'#b2abb8':'#ffffff');
+    // En modelos ligeros, los normales simulan el relieve sin deformar
+    // la geometría ni perjudicar las pulsaciones/selección en AR.
+    m.bumpMap=!pbr?.normal&&pbr?.height?pbr.height:null;
+    if('bumpScale' in m)m.bumpScale=.018;
+    if(m.normalMap&&m.normalScale?.set)m.normalScale.set(
+      name==='basalt'||name==='stone'||name==='obsidian'?.8:.50,
+      name==='basalt'||name==='stone'||name==='obsidian'?.8:.50
+    );
+    if(m.color?.set){
+      // Mantener los dos ejércitos distinguibles sin ocultar la imagen real.
+      const hue=(name==='gold'?'#ffe2a7':name==='bronze'?'#d9a778':
+        name==='ice'?'#d5f8ff':name==='obsidian'?'#aaa0bb':'#ffffff');
+      m.color.set(hue);
+      if(color==='b')m.color.multiplyScalar(.70);
+    }
     if('roughness' in m)m.roughness=base.roughness;
     if('metalness' in m)m.metalness=base.metalness;
     m.needsUpdate=true;
