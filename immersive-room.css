@@ -1,0 +1,26 @@
+/* Adjustable, transparent AR-room controls. They stay accessible on WebXR DOM Overlay. */
+.ar-hud .arRoomControls{
+ position:absolute;left:8px;right:8px;top:clamp(110px,16dvh,175px);
+ display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;
+ max-height:22dvh;overflow-y:auto;pointer-events:auto;
+ padding:6px 7px;background:#071e31c9;border:1px solid #66daba88;border-radius:13px;
+ backdrop-filter:blur(8px);
+}
+.ar-hud .arRoomControls label{display:inline-flex;min-height:34px;gap:4px;padding:4px 7px;font-size:11px}
+.ar-hud .arRoomControls select{
+ color:#f1fff7;background:#143e50;border:1px solid #75c8bb;
+ border-radius:7px;min-height:31px;padding:3px;font-size:11px;max-width:135px
+}
+.ar-hud .arRoomControls input[type=range]{width:72px;min-width:60px}
+.ar-hud .arRoomControls button{padding:7px 8px;font-size:11px}
+.ar-hud .arRoomControls small{
+ color:#e5e8d1;font:550 10px/1.25 system-ui;
+ flex:1 1 100%;text-align:center;max-width:100%;pointer-events:none
+}
+@media(max-width:620px){
+ .ar-hud .arRoomControls{top:clamp(134px,19dvh,205px);max-height:24dvh;gap:4px;padding:5px}
+ .ar-hud .arRoomControls label{font-size:10px;padding:3px 5px}
+ .ar-hud .arRoomControls select{font-size:10px;max-width:104px}
+ .ar-hud .arRoomControls small{font-size:9px}
+}
+@media(max-height:550px){.ar-hud .arRoomControls{top:110px;max-height:32dvh}}

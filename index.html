@@ -115,6 +115,7 @@ body.xr-active #gameToast{display:none!important}
 <link rel="stylesheet" href="./board-catalog.css?v=0.14.3">
 <link rel="stylesheet" href="./victory-fx.css?v=0.14.3">
 <link rel="stylesheet" href="./immersive-chess.css?v=0.14.7">
+<link rel="stylesheet" href="./immersive-room.css?v=0.15.0">
 <link rel="stylesheet" href="./experience-modes.css?v=0.14.9">
 <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js" defer></script>
 <script src="https://unpkg.com/qrcodejs@1.0.0/qrcode.min.js" defer></script>
@@ -144,9 +145,24 @@ body.xr-active #gameToast{display:none!important}
 <div id="arHud" class="ar-hud">
 <div class="arBar"><button id="placeArBtn" data-ui="placeAR" type="button">📍 FIJAR TABLERO</button><button id="exitArBtn" data-ui="exitAR" type="button">✕ SALIR AR</button><button id="arTouchBtn" data-ui="arTouch" type="button">👆 TOCAR</button><button id="arAimBtn" data-ui="arAim" type="button">⊕ APUNTAR</button><button id="arFixBtn" type="button" title="Restablece la cámara AR sin perder la partida">↻ RECUPERAR</button></div>
 <div id="arHint">Busca una mesa y pulsa FIJAR TABLERO</div>
+<div id="arRoomControls" class="arRoomControls" aria-label="Cuarto de inmersión AR">
+  <label for="arRoomSize">✦ Cuarto <select id="arRoomSize" aria-label="Tamaño del cuarto mágico">
+    <option value="mesa">Pequeño · 2,6 m</option>
+    <option value="sala" selected>Sala · 4,8 m</option>
+    <option value="gigante">Gigante · 9 m</option>
+  </select></label>
+  <label for="arBoardPreset">♟ Fichas <select id="arBoardPreset" aria-label="Escala de tablero y piezas">
+    <option value="normal" selected>Normales</option>
+    <option value="grande">Grandes</option>
+    <option value="colosal">Colosales</option>
+  </select></label>
+  <label for="arRoomOpacity">Transparencia <input type="range" id="arRoomOpacity" min="0.15" max="0.60" step="0.05" value="0.40" aria-label="Opacidad de paredes virtuales"></label>
+  <button id="arRoomToggle" type="button" aria-pressed="true">👁 Ocultar paredes</button>
+  <small id="arRoomStatus" role="status" aria-live="polite">Coloca primero el tablero sobre una superficie real. Las paredes virtuales no detectan obstáculos.</small>
+</div>
 <div id="arCrosshair" class="aimCrosshair hidden">⊕</div>
 <div class="arBottom"><button id="arSelectBtn" data-ui="selectAR" type="button" style="display:none">✓ SELECCIONAR CASILLA</button>
-<label>Escala <input type="range" id="arScale" min="0.35" max="2.8" step="0.05" value="1"></label>
+<label>Escala <input type="range" id="arScale" min="0.35" max="6" step="0.05" value="1"></label>
 <input id="arCommand" placeholder="e4 / Cf3" maxlength="80" aria-label="Comando de movimiento AR">
 <button id="arPlayMove" type="button">♟ MOVER</button>
 <button id="arVoiceBtn" type="button">🎙 DICTAR</button>
