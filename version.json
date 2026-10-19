@@ -1,8 +1,8 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.15.6-beta.1",
+  "version": "0.15.7-beta.1",
   "updated": "2026-10-19",
-  "status": "Paquete de 9 acabados PBR fotográficos CC0 1K instalado automáticamente durante la compilación (color, normal GL, roughness, height/metalness opcionales). Selector de muestras reales, disponible para estilos 3D. Despliegue y verificación física pendientes.",
+  "status": "Ejércitos con elección de material/brillo independiente; rival CPU aleatorio y contrastante, jugador local configurable y paquetes 3D renombrados sin cambiar IDs. Apariencia PeerJS beta. GLB comunitarios y antropomórfico pendientes de subida; modelos Staunton y fallback procedural conservados. Pendiente validación física.",
   "browserValidated": false,
   "physicalARValidated": false,
   "onlinePvP": "Casual PeerJS beta, six-character code and QR with camera scanner (native BarcodeDetector / lazy in-browser jsQR), validation restricts invite origin/path. Real two-device session requires device test; unranked and unaudited anti-cheat.",
@@ -376,5 +376,17 @@
     "source": "Poly Haven CC0 (descarga servidor de CI, sin API en dispositivo)",
     "sourceScript": "scripts/descargar-relieves-pbr.py",
     "realTextureBuildPendingVerification": true
+  },
+  "armyCosmetics": {
+    "version": 1,
+    "playerLook": true,
+    "opponentLook": true,
+    "randomBotContrast": true,
+    "localPlayers": true,
+    "pvpAppearanceMessages": true,
+    "materialVariants": 10,
+    "extraGlowColors": 5,
+    "fullCommunityPackInstalled": false,
+    "anthropomorphicGlbInstalled": false
   }
 }
