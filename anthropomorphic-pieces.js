@@ -100,7 +100,9 @@ function procedural(THREE,p){
  function add(parent,shape,dim,material,x=0,y=0,z=0){
   const mesh=new THREE.Mesh(geo(shape,dim),mats[material]);
   mesh.position.set(x,y,z);mesh.castShadow=true;
-  mesh.userData.sharedGeo=true;mesh.userData.ownedMaterial=true;parent.add(mesh);return mesh;
+  mesh.userData.sharedGeo=true;mesh.userData.ownedMaterial=true;
+  mesh.userData.ecoMaterialRole=material==='gem'?'glow':material;
+  parent.add(mesh);return mesh;
  }
  const spec={p:[.19,.17,.37,.10],r:[.24,.21,.45,.13],n:[.21,.19,.40,.12],
   b:[.20,.16,.45,.10],q:[.22,.19,.49,.12],k:[.25,.20,.53,.13]}[p.type];

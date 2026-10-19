@@ -34,6 +34,9 @@ export function createChessCombat({THREE,world,disposePiece=()=>{}}){
   d.rotation.y=effect.orientation+Math.sin(time*.045)*(.055+Math.max(0,p-.45)*.15);
   const strike=p>=.44&&p<=.8?Math.sin((p-.44)/.36*Math.PI):0;
   d.rotation.z=strike*.16;
+  const rig=d.userData.anthro;
+  if(rig?.armR)rig.armR.rotation.x=-strike*.9;
+  if(rig?.armL)rig.armL.rotation.x=strike*.38;
   d.position.y=.07+strike*.095;
   const shrink=p<.70?1:Math.max(.001,1-(p-.70)/.30);
   d.scale.copy(effect.baseScale).multiplyScalar(shrink);

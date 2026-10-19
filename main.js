@@ -396,6 +396,14 @@ function restoreLastGame(){
   $('saveStatus').textContent='💾 Partida local recuperada con '+game.history().length+' movimientos.';
   if(mode==='bot'&&game.turn()==='b'&&!game.isGameOver())timer=setTimeout(playBot,600);
 }
+function detachCapturedPiece(moved){
+ if(!moved?.captured)return null;
+ const square=(moved.flags||'').includes('e')?
+  moved.to[0]+moved.from[1]:moved.to;
+ const defender=pieces.children.find(p=>p.userData.square===square);
+ if(!defender)return null;
+ pieces.remove(defender);return defender;
+}
 function playMove(from,to,promotion='q',source='local'){
   if(missionActive){
     if(missionSolved)return false;
@@ -409,14 +417,15 @@ function playMove(from,to,promotion='q',source='local'){
   if(mode==='online' && !match.host && source==='local'){
     return match.send({type:'MOVE',from,to,promotion,version:roomVersion});
   }
-  let captured=false;
+  let captured=false,victim=null;
   try{
     const moved=game.move({from,to,promotion});
     if(!moved)return false;
     captured=Boolean(moved.captured);
+    victim=detachCapturedPiece(moved);
   }catch(error){return false;}
   ghostHint?.clear();
-  selected=null;arcaneUI?.selected(null);moving=null;renderPieces();animateMove(from,to,captured);
+  selected=null;arcaneUI?.selected(null);moving=null;renderPieces();animateMove(from,to,captured,victim);
   arcaneUI?.move(to,captured);updateStatus();
   if(missionActive && successfulQuestMove(missionActive,{from,to,promotion},game)){
     missionSolved=true;questUI?.complete(missionActive);
@@ -503,14 +512,24 @@ function chooseBot(){
 function playBot(){
   if(mode!=='bot'||game.turn()!=='b'||game.isGameOver()||(missionActive&&missionSolved))return;
   const m=chooseBot();
-  if(m)game.move({from:m.from,to:m.to,promotion:'q'});
-  ghostHint?.clear();selected=null;arcaneUI?.selected(null);renderPieces();if(m){animateMove(m.from,m.to,Boolean(m.captured));arcaneUI?.move(m.to,Boolean(m.captured));}updateStatus();persistCurrentGame();
+  let victim=null;
+  if(m){
+    const moved=game.move({from:m.from,to:m.to,promotion:'q'});
+    victim=detachCapturedPiece(moved);
+  }
+  ghostHint?.clear();selected=null;arcaneUI?.selected(null);renderPieces();
+  if(m){animateMove(m.from,m.to,Boolean(m.captured),victim);arcaneUI?.move(m.to,Boolean(m.captured));}
+  updateStatus();persistCurrentGame();
 }
-function animateMove(from,to,captured=false){
+function animateMove(from,to,captured=false,victim=null){
   const target=[...pieces.children].find(x=>x.userData.square===to);
-  if(!target)return;
+  if(!target){if(victim)disposePieceGroup(victim);return;}
   const a=positionOf(from),b=positionOf(to);
-  moving={piece:target,a,b,start:performance.now(),duration:modelSet==='anthro'?760:370,captured};
+  target.position.set(a.x,.07,a.z);
+  if(modelSet==='anthro')faceMovement(target,b.x-a.x,b.z-a.z);
+  moving={piece:target,a,b,start:performance.now(),duration:modelSet==='anthro'?(captured?1040:760):captured?710:370,captured};
+  if(victim)combatFX?.start({defender:victim,attacker:target,from:a,to:b,
+   start:moving.start,duration:moving.duration});
 }
 function reset(){
   if(missionActive){
