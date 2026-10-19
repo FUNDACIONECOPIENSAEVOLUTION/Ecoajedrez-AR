@@ -1,5 +1,5 @@
 # ECOAJEDREZ 3D/AR · RESUMEN MAESTRO PARA LA PRÓXIMA IA
-**Revisión vigente:** 0.15.1-beta.1 · 2026-10-18. **Leer primero la sección más reciente al final.** Leer **este archivo primero**; consultar AGENTS.md y código solo si la tarea lo requiere. Evitar reanalizar conversaciones largas.
+**Revisión vigente:** 0.15.2-beta.1 · 2026-10-18. **Leer primero la sección más reciente al final.** Leer **este archivo primero**; consultar AGENTS.md y código solo si la tarea lo requiere. Evitar reanalizar conversaciones largas.
 
 ## Identidad y fuentes de verdad
 - Repositorio canónico con permisos de escritura: https://github.com/FUNDACIONECOPIENSAEVOLUTION/Ecoajedrez-AR (rama main).
@@ -165,3 +165,11 @@ Hay **seis** archivos glTF originales autocontenidos bajo `assets/models/staunto
 - La v0.15.1 tiene zoom con rueda y pellizco + vista superior, pero NO cambio gradual de altura: Shift+rueda y botones ↑↓ quedan propuestos. Giroscopio solo orienta mirada; PC con mouse no posee sensor real a menos que hardware lo proporcione.
 - Compatibilidad WebXR dentro de una WebView Android empaquetada NO demostrada. Antes del APK escoger entre TWA/Chrome o Capacitor+ARCore según pruebas físicas; nunca afirmar actualizaciones nativas automáticas desde solo GitHub Pages.
 - GPS será *opt-in* en primer plano, sin almacenar domicilios/rutas, con alternativa desde casa y lugares públicos comprobados. No realizar caminata mirando RA. Sin pagos ni anuncios reales antes de validar juego y requisitos de plataforma.
+
+## 0.15.2-beta.1 — Altura de cámara 360°, misiones galácticas, importación de piezas CC0 (2026-10-19)
+- `immersive-chess.js`: se agregaron altura de cámara gradual ↑/↓ y Shift+rueda de mouse, con límites de altura 2.2 a 18 unidades, cámara apuntando al centro del tablero y separación de controles de zoom ±/pellizco, sensores de orientación y altura. No hay verdadero tracking físico de movimiento del teléfono sin WebXR 6DoF. No modifica 3D clásico ni AR.
+- `quest-map.js` + `quest-map.css`: interfaz camino galáctico con 8 nodos de ajedrez **usando la MISMA instancia game/chess.js**: e2-e4, Ng1-f3, Bf1-c4, exd5, Kd1 ante jaque, Qg7#, promoción g8=Q y partida final contra BOT. Niveles desbloqueados secuencialmente, progreso en localStorage `ecoajedrez-quests-galactico-v1`. Para cada puzzle se carga FEN inicial o de entrenamiento; el juego compara jugada/jaque mate con la condición; se evita persistirlo en el slot normal y se restaura partida previa (PGN/FEN) al salir. Modo **beta** y pruebas físicas de usuario pendientes; esto no representa mapa completo de 13 reinos todavía.
+- Integración menú con botón Camino de Misiones y botón de retorno desde el tablero; no exige GPS ni pagos y conserva modo libre/PvP.
+- `community-models.js`, `assets/models/community/README.md`: instalador opcional de 12 GLB de ajedrez CC0; los archivos externos NO están descargados ni subidos. Build publica solo archivos exactos y completos, GLB 2.0 verificado, máximo 3 MB cada uno/24 MB en total; opción nueva de piezas deshabilitada hasta entonces. Carga por demanda y geometrías normalizadas, respaldo original por tipo ante errores.
+- Investigación documentada en [MODELOS_3D_Y_APK_ECOAJEDREZ.md](./MODELOS_3D_Y_APK_ECOAJEDREZ.md). Recomendada versión CC0 low-poly de Polyy.AI 12 GLB; Omie's CC0 Blender/FBX requiere conversión. **Observación APK:** TWA requiere assetlinks.json en raíz `/.well-known/` del dominio, no en subcarpeta GitHub Pages. Comprobar posibilidad de controlar host raíz o dominio propio; validar WebXR/AR en Android, sin APK aún.
+- Validar tests GitHub Actions de esta versión, luego pruebas manuales de 3D/Skybox/AR y misiones. No confundir CI estructural con éxito visual o físicas de AR.
