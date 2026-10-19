@@ -29,7 +29,7 @@ function glowTexture(THREE,color){
  const canvas=document.createElement('canvas');canvas.width=64;canvas.height=64;
  const ctx=canvas.getContext('2d');
  const grd=ctx.createRadialGradient(32,32,0,32,32,32);
- const rgb=color==='w'?'85,210,255':'184,85,255';
+ const rgb='255,255,255'; // Neutral halo: tint comes from PIECE_GLOWS, not baked blue/violet pixels.
  grd.addColorStop(0,'rgba('+rgb+',.68)');
  grd.addColorStop(.19,'rgba('+rgb+',.34)');
  grd.addColorStop(.5,'rgba('+rgb+',.11)');
