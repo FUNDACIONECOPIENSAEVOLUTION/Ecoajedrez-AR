@@ -1,0 +1,32 @@
+/* Original galactic road-map; each node represents an executable chess.js puzzle. */
+#questMap[hidden]{display:none!important}
+#questMap{position:fixed;inset:0;z-index:105;overflow:auto;background:#04111bef;
+ padding:clamp(12px,3vw,30px);color:#effff8}
+#questMap .questPanel{width:min(860px,100%);margin:0 auto;padding:clamp(16px,3vw,26px);
+ border:1px solid #8ee7d6;border-radius:22px;
+ background:radial-gradient(ellipse at 54% 0%,#314e83,#0d2b47 48%,#07182a);
+ box-shadow:0 25px 65px #0008}
+.questHeader{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+#questMap h2{color:#ffdc9d;font:800 clamp(20px,3vw,29px) Georgia,serif;margin:0 0 10px}
+#questMap p{color:#ddf4ea;font-size:13px;line-height:1.55}
+#questMap button{color:#effff7;border:1px solid #91e6d4;border-radius:11px;cursor:pointer}
+#questMap button:focus-visible{outline:3px solid #ffdfa1;outline-offset:3px}
+#questClose{padding:9px 15px;background:#143748}
+.questNodes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;position:relative;padding:12px 0 22px}
+.questNode{min-width:0;min-height:150px;padding:14px 10px;display:flex;flex-direction:column;align-items:center;
+ gap:5px;justify-content:center;background:linear-gradient(145deg,#1b526d,#17344f);
+ box-shadow:0 0 15px #5bc5c43c}
+.questNode:nth-child(even){transform:translateY(14px)}
+.questNode .questNumber{background:#f7d89e;color:#0a2035;padding:3px 9px;border-radius:100px;font-weight:900}
+.questNode .questIcon{font-size:28px;color:#ddfff0}
+.questNode strong{color:#ffe0a5;text-align:center;font-size:14px}
+.questNode small{font-size:11px;color:#e0f5ec;text-align:center}
+.questNode .questState{margin-top:5px;font-size:10px;font-weight:900;letter-spacing:.09em}
+.questNode[disabled]{opacity:.48;cursor:not-allowed;filter:grayscale(.5)}
+.questNode:not(:disabled):hover{background:#21647c;box-shadow:0 0 21px #8fffe16a}
+.questFooter{margin-top:12px;padding:12px;background:#102c42;border-radius:12px}
+#questExitGame{display:none;position:fixed;z-index:7;left:10px;bottom:max(12px,env(safe-area-inset-bottom));
+ padding:9px 12px;background:#103b50;font-size:12px}
+body.quest-playing #questExitGame{display:block}
+@media(max-width:610px){.questNodes{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ .questNode{min-height:138px}.questNode:nth-child(even){transform:none}}
