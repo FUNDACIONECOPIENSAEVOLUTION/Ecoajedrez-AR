@@ -27,6 +27,7 @@ jobs:
           node --check skybox-test.js
           node --check immersive-chess.js
           node --check immersive-room.js
+          node --check piece-pbr.js
           node --check piece-materials.js
           node --check piece-combat.js
           node --check piece-preview.js

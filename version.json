@@ -1,8 +1,8 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.15.4-beta.1",
+  "version": "0.15.5-beta.1",
   "updated": "2026-10-19",
-  "status": "3D preview for six types in Settings (same selected meshes, two sides, draggable/rotating) plus 10 lightweight procedurally generated material presets, six glow colors, physically oriented anthropomorphic walking and a generic duel-and-vanishing capture effect including en passant. All modes share chess.js; browser/Android touch and real AR device validation pending.",
+  "status": "PBR photo-real texture support staged from three verified CC0 libraries with approved local 1K image manifests (color, OpenGL normal, roughness and optional metalness). No third-party binary textures yet downloaded or published; procedural fallback retained. Larger 3D preview, 3D/Skybox/AR shared gameplay untouched. Awaiting real texture uploads and device verification.",
   "browserValidated": false,
   "physicalARValidated": false,
   "onlinePvP": "Casual PeerJS beta, six-character code and QR with camera scanner (native BarcodeDetector / lazy in-browser jsQR), validation restricts invite origin/path. Real two-device session requires device test; unranked and unaudited anti-cheat.",
@@ -339,5 +339,37 @@
     "movementOrientation": "atan2(dx,dz); no rotation during idle until move",
     "arDeviceValidated": false,
     "manualPreviewTestPending": true
+  },
+  "pbrTextureMaterials": {
+    "readyToImport": true,
+    "materialFolders": [
+      "walnut",
+      "oak",
+      "stone",
+      "marble",
+      "obsidian",
+      "bronze",
+      "gold",
+      "ice",
+      "basalt"
+    ],
+    "supportedMaps": [
+      "color.jpg",
+      "normal.jpg",
+      "roughness.jpg",
+      "metalness.jpg"
+    ],
+    "acceptedExtensions": [
+      "jpg",
+      "webp",
+      "png"
+    ],
+    "maxPerFileBytes": 2000000,
+    "manifest": "assets/texturas-pbr/manifest.json",
+    "unapprovedThirdPartyFilesIncluded": false,
+    "createdImageSource": "PBR photo sources Poly Haven, ambientCG, 3DTextures.me (CC0)",
+    "fallbackIfMissing": true,
+    "realTextureUploadsPending": true,
+    "loadedOnDemand": true
   }
 }

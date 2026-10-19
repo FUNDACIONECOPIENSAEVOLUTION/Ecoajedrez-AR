@@ -1,5 +1,12 @@
 # Historial de ECOAJEDREZ AR
 
+## 0.15.5-beta.1 — 2026-10-19 · Fototexturas PBR reales opcionales
+- Nueve carpetas de materiales PBR con guía para cargas CC0 descargadas desde ambientCG, Poly Haven o 3DTextures.me; mapas 1K de albedo, Normal OpenGL, roughness y metal.
+- Cargador local bajo demanda y publicación solo de archivos JPEG/WebP/PNG permitidos, con manifesto y comprobación de cabeceras/tamaño. Si falta el material real continúa el patrón anterior.
+- El brillo mágico/partículas originales se mantienen independientes del nuevo aspecto físico, sin interferir en chess.js, Skybox ni AR.
+- Cámara del visor 3D acercada y lienzo ampliado para distinguir detalles; falta descargar y verificar los materiales externos y probar Android.
+
+
 ## 0.15.4-beta.1 — 2026-10-19 · Vista previa, combate y personalización de piezas
 - Visor 3D de dos piezas y selector de los seis tipos con arrastre y giro suave, construido a partir de los modelos que usa realmente el juego; render limitado para móviles.
 - Diez materiales 128px ligeros: nogal, roble, piedra, mármol, obsidiana, bronce, oro, hielo, basalto y original; seis paletas de brillo, guardadas localmente. Primera versión aplicada a ejército antropomorfo.
