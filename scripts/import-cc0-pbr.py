@@ -53,6 +53,13 @@ def role_urls(manifest):
    if role in result:break
  return result
 def from_poly(id):
+ if id=='ice':
+  # Real CC0 snow/frost texture, not an unrelated dark rock labelled as ice.
+  slug='snow_02'
+  files=jget('https://api.polyhaven.com/files/'+slug)
+  roles=role_urls(files)
+  if all(roles.get(r) for r in ['color','normal','roughness']):
+   return 'Poly Haven',slug,'https://polyhaven.com/a/'+slug,{r:get(url) for r,url in roles.items()},roles
  terms=SEARCH[id]
  keys={'walnut':['walnut'],'oak':['oak','wood'],'stone':['stone','rock','granite'],
   'marble':['marble'],'obsidian':['stone','rock','obsidian'],
@@ -85,10 +92,19 @@ def from_ambient(id):
     roles[role]=z.read(files[0]);urls[role]=url+'#'+files[0]
  if not all(r in roles for r in ['color','normal','roughness']):raise ValueError('PBR missing map')
  return 'ambientCG',asset,'https://ambientcg.com/view?id='+asset,roles,urls
-def convert(raw):
+def convert(raw,role='color',material='stone'):
  with Image.open(io.BytesIO(raw)) as img:
   img=ImageOps.exif_transpose(img).convert('RGB')
   img.thumbnail((768,768),Image.Resampling.LANCZOS)
+  # PBR relief is genuine CC0 photogrammetry. Gold/bronze and magic ice
+  # albedo are tinted art variants of a real metal/snow scan, never sold as raw
+  # photographs of solid gold, bronze or transparent crystalline ice.
+  if role=='color' and material in ('gold','bronze','ice'):
+   mono=ImageOps.grayscale(img)
+   palette={'gold':('#28160c','#ffd780'),
+    'bronze':('#251a15','#c88b55'),
+    'ice':('#687c8b','#e7f8ff')}
+   img=ImageOps.colorize(mono,*palette[material])
   out=io.BytesIO();img.save(out,format='WEBP',quality=85,method=6)
   return out.getvalue(),[img.width,img.height]
 def main():
@@ -111,11 +127,12 @@ def main():
   try:
    results={};sources={}
    for role,raw in maps.items():
-    converted,dimensions=convert(raw)
+    converted,dimensions=convert(raw,role,id)
     if len(converted)>2000000:raise ValueError('Output exceeds 2MB')
     results[role+'.webp']=converted
     sources[role]={'url':urls[role],'sha256':hashlib.sha256(raw).hexdigest(),
-     'size':len(converted),'resolution':dimensions}
+     'size':len(converted),'resolution':dimensions,
+     'color_reinterpreted_for_fantasy':role=='color' and id in ('gold','bronze','ice')}
    for req in ['color.webp','normal.webp','roughness.webp']:
     if req not in results:raise ValueError('Missing '+req)
    folder=OUT/id;folder.mkdir(parents=True,exist_ok=True)
