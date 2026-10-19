@@ -21,3 +21,20 @@
  #piecePreviewCanvas{height:218px}.piecePreviewOptions{grid-template-columns:repeat(2,minmax(0,1fr))}
  .piecePreviewOptions label:nth-child(2){grid-column:auto}}
 @media(max-width:410px){.piecePreviewOptions{grid-template-columns:1fr}}
+
+/* Materiales CC0 reales: miniaturas originales con degradado si no hay mapas */
+.ecoPbrGallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.ecoPbrSample{overflow:hidden;min-width:0;padding:3px;border:1px solid #7097a2;border-radius:9px;
+ background:#0b2538;color:#e8f9ff;text-align:center;cursor:pointer}
+.ecoPbrSurface{display:block;position:relative;height:48px;overflow:hidden;border-radius:6px;
+ background:linear-gradient(120deg,#ffffff23,transparent 40%,#00000055),var(--ecoPbrColor,#6c6c6c)}
+.ecoPbrSurface img{display:block;width:100%;height:100%;object-fit:cover}
+.ecoPbrSample.hasPhoto .ecoPbrSurface:after{content:"PBR";position:absolute;top:2px;right:3px;
+ padding:1px 3px;border-radius:3px;background:#072b2acb;color:#b0ffe0;font:800 8px system-ui}
+.ecoPbrCaption{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
+ padding:4px 1px 1px;font:650 10px system-ui}
+.ecoPbrSample:hover,.ecoPbrSample:focus-visible{border-color:#a6fbe3}
+.ecoPbrSample.active{border-color:#ffe1a3;outline:2px solid #ffe1a3;outline-offset:0}
+.ecoPbrStatus{font:600 11px/1.4 system-ui;color:#bdfbe3;margin:2px 0 0}
+.ecoPbrCredit{font-size:10px!important;color:#a9bfc9!important}
+@media(max-width:420px){.ecoPbrSurface{height:41px}.ecoPbrCaption{font-size:9px}}
