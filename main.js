@@ -811,10 +811,16 @@ function bindPieceAppearance(){
  try{
   pieceMaterial=validPieceMaterial(localStorage.getItem('eco-piece-material')||'arcane');
   pieceGlow=validPieceGlow(localStorage.getItem('eco-piece-glow')||'team');
+  const data=JSON.parse(localStorage.getItem('eco-piece-rival')||'{}');
+  rivalMaterial=validPieceMaterial(data.material||'obsidian');
+  rivalGlow=validPieceGlow(data.glow||'violet');
+  rivalMode=data.mode==='manual'?'manual':'auto';
  }catch(error){}
  for(const [id,values,chosen] of [
   ['pieceMaterial',PIECE_MATERIALS,pieceMaterial],
-  ['pieceGlow',PIECE_GLOWS,pieceGlow]
+  ['pieceGlow',PIECE_GLOWS,pieceGlow],
+  ['rivalMaterial',PIECE_MATERIALS,rivalMaterial],
+  ['rivalGlow',PIECE_GLOWS,rivalGlow]
  ]){
   const control=$(id);control.replaceChildren();
   for(const [key,data] of Object.entries(values)){
@@ -822,40 +828,38 @@ function bindPieceAppearance(){
   }
   control.value=chosen;
  }
- setupMaterialGallery({
-  root:$('pieceMaterialGallery'),select:$('pieceMaterial'),
-  materials:PIECE_MATERIALS,readManifest:readPBRManifest,assetRoot:PBR_ROOT
- });
- async function prepareSelectedPBR(){
-  if(pieceMaterial==='arcane')return;
-  const requested=pieceMaterial;
-  const result=await loadPhotoPBR(THREE,requested);
-  if(result&&pieceMaterial===requested){
-   moving=null;renderPieces();piecePreview?.rebuild();
-  }
- }
+ $('rivalAppearanceMode').value=rivalMode;
+ setupMaterialGallery({root:$('pieceMaterialGallery'),select:$('pieceMaterial'),
+  materials:PIECE_MATERIALS,readManifest:readPBRManifest,assetRoot:PBR_ROOT});
  $('pieceMaterial').onchange=()=>{
   pieceMaterial=validPieceMaterial($('pieceMaterial').value);
-  try{localStorage.setItem('eco-piece-material',pieceMaterial)}catch(error){}
-  moving=null;renderPieces();piecePreview?.rebuild();
-  prepareSelectedPBR().catch(()=>{});
+  refreshArmy({reroll:rivalMode==='auto',transmit:true});
  };
  $('pieceGlow').onchange=()=>{
   pieceGlow=validPieceGlow($('pieceGlow').value);
-  try{localStorage.setItem('eco-piece-glow',pieceGlow)}catch(error){}
-  moving=null;renderPieces();piecePreview?.rebuild();
+  refreshArmy({reroll:rivalMode==='auto',transmit:true});
  };
+ const opponentChanged=()=>{
+  rivalMaterial=validPieceMaterial($('rivalMaterial').value);
+  rivalGlow=validPieceGlow($('rivalGlow').value);
+  refreshArmy();
+ };
+ $('rivalMaterial').onchange=opponentChanged;
+ $('rivalGlow').onchange=opponentChanged;
+ $('rivalAppearanceMode').onchange=()=>{
+  rivalMode=$('rivalAppearanceMode').value==='manual'?'manual':'auto';
+  refreshArmy({reroll:rivalMode==='auto'});
+ };
+ $('rerollRival').onclick=()=>refreshArmy({reroll:true});
  $('piecePreviewType').onchange=event=>piecePreview?.rebuild(event.target.value);
- prepareSelectedPBR().catch(()=>{});
+ refreshArmy({reroll:rivalMode==='auto'});
 }
 bindPieceAppearance();
 $('pieceSet').onchange=()=>{
  modelSet=$('pieceSet').value;moving=null;renderPieces();piecePreview?.rebuild();
  if(modelSet==='community')loadCommunityPieces();
  if(modelSet==='anthro')loadAnthroModel();
- if(pieceMaterial!=='arcane')loadPhotoPBR(THREE,pieceMaterial).then(data=>{
-   if(data){renderPieces();piecePreview?.rebuild();}
- }).catch(()=>{});
+ preloadArmyTextures();
 };
 $('boardSize').onchange=()=>{boardScale=Number($('boardSize').value)||0.065;};
 $('whiteColor').onchange=()=>{goldMat.color.set($('whiteColor').value);renderPieces();piecePreview?.rebuild();};
@@ -1654,7 +1658,5 @@ syncSelectedRealm(catalogue?.getSelected()||'classic');
 renderPieces();updateStatus();translate();
 if($('pieceSet').value==='anthro')loadAnthroModel();
 renderer.setAnimationLoop(render);
-loadPhotoPBR(THREE,pieceMaterial).then(data=>{
- if(data){renderPieces();piecePreview?.rebuild();}
-}).catch(()=>{});
+preloadArmyTextures();
 loadChessModels();
