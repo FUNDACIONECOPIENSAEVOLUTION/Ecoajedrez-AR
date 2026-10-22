@@ -1,3 +1,13 @@
+## 0.16.1-beta.1 — 2026-10-22 (corrección publicable, pruebas visuales pendientes)
+- Auditoría de 13 tableros, 7 imágenes decorativas, 10 fondos de reino y 13 skyboxes de seis caras: rutas verificadas en GitHub.
+- Vista previa de reino usa recursos WebP reales; cuando falta el manifiesto no oculta imágenes que sí existen.
+- Alquimia, Amatista y Gótico: si no hay WebP específico, se usa la vista frontal del reino 360° correspondiente en lugar de mostrar otro reino.
+- Corregido el empaquetado Pages: seis GLB robóticos y seis retratos JPG, con verificación de formato y manifiesto de disponibilidad.
+- Se difiere la descarga pesada de robots hasta que el usuario elige esa colección.
+- Mejoras de PBR, tintes por ejército, luz de acento y orientación inicial de personajes robóticos y guardianes geométricos.
+- Prueba automatizada de integridad de catálogo y reinos, sin modificar las reglas del ajedrez ni la interacción AR.
+- No se afirma validación real de navegador, Android ni CI hasta recibir resultados de la compilación y prueba física.
+
 ## 0.16.0-beta.1 — 2026-10-22 (rama de pruebas, no publicada)
 - Incorporación condicional de seis modelos robóticos GLB y seis imágenes de selección.
 - Movimiento procedural de marcha rígida y salto por tipo de robot; sin rig ni clips Walk reales.
