@@ -47,7 +47,7 @@ test('AR retains the camera; source assets and game moves do not change',()=>{
  assert.match(main,/world\.scale\.setScalar/);
  assert.match(main,/getSelected\(\)/);
  const manifest=JSON.parse(fs.readFileSync('version.json','utf8'));
- assert.equal(manifest.version,'0.15.7-beta.1');
+ assert.equal(manifest.version,JSON.parse(fs.readFileSync('package.json','utf8')).version);
  assert.equal(manifest.environments.pairCount,13);
  assert.equal(manifest.physicalARValidated,false);
 });

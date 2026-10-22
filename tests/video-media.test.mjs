@@ -73,8 +73,8 @@ test('Background clips play one at a time without cropping, with static fallback
  assert.match(css,/object-fit:contain/);
  assert.match(html,/muted loop playsinline preload="none"/);
  assert.match(html,/id="toggleAmbientVideo"/);
- assert.match(html,/data-app-version>v0\.15\.7-beta\.1/);
- assert.equal(manifest.version,'0.15.7-beta.1');
+ assert.ok(html.includes('data-app-version>v'+manifest.version));
+ assert.equal(manifest.version,JSON.parse(fs.readFileSync('package.json','utf8')).version);
 });
 
 test('User uploaded media does not weaken the CSP or bundle server secrets',()=>{

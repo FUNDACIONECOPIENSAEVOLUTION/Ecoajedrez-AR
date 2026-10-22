@@ -121,3 +121,13 @@ Se verificaron ocho WebP reales en `app/imagenes/tarjetas/` y se publican en Pag
 
 
 Estado: rama de cambio con CI pendiente. URL pública y AR requieren validación posterior. Referencia: docs/FOTOTEXTURAS_CC0.md.
+
+## Actualización 2026-10-22 · v0.16.1-beta.1 — revisión de reinos y robots
+
+- Recursos en fuente auditados: 13 imágenes de tableros jugables, 7 decorativas, 10 fondos WebP y 13 reinos 360° × 6 caras (78 archivos).
+- Falla de catálogo: `publishedRealmURL` dependía solo del manifest; ahora revisa las URLs WebP publicadas con HEAD. El visor muestra fallback de error en vez de cuadro vacío.
+- Los reinos Alquimia/Amatista/Gótico utilizan `pz.webp` de su propio skybox si todavía no hay fondo 3D dedicado; sustituir cuando haya una imagen específica.
+- Corrección de publicación: `scripts/build-pages.mjs` copia únicamente los seis GLB y seis JPG aprobados, validando cabecera y peso; se genera manifiesto público `ready:true`.
+- Robots: materiales PBR y brillo aplicados a mallas GLB, colores de equipo con tintes diferenciados, orientación inicial de ambos bandos y halo de energía de bajo coste. Los GLB originales siguen sin rig; caminata realista pendiente.
+- Pruebas: `tests/realm-catalog-robotics.test.mjs` protege la integridad de 13 tableros, reinos y recursos robóticos. Validación Android, navegadores y AR por el propietario pendiente.
+- No se modificaron reglas de ajedrez, datos de jugadores, credenciales ni servicios de pago.

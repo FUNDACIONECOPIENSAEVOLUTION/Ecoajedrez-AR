@@ -56,7 +56,7 @@ test('360 degree tester uses CubeTextureLoader, drag, gyro permission and no che
   assert.ok(page.includes('id="'+id+'"'));
  assert.doesNotMatch(game,/id="skyboxTryBtn"/);
  assert.match(chooser,/realmForBoard\(skin\.id\)/);
- assert.equal(version.version,'0.15.7-beta.1');
+ assert.equal(version.version,JSON.parse(fs.readFileSync('package.json','utf8')).version);
  assert.equal(version.skybox360.realmCount,13);
  assert.equal(version.skybox360.fullCubemapsUploadedAtRelease,13);
  assert.equal(version.physicalARValidated,false);

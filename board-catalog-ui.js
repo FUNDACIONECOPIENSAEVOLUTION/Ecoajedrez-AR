@@ -1,9 +1,9 @@
-// ECOAJEDREZ · v0.14 interactive chooser for REAL board textures and
+// ECOAJEDREZ · v0.16.1 interactive chooser for REAL board textures and
 // independent decorative 'vista-' gallery. Does not manage game logic.
 import {BOARD_SKINS,VISION_ART,boardURL,findBoard} from './board-skins.js?v=0.14.3';
-import { publishedRealmURL } from './realm-pairing.js?v=0.14.4';
+import { publishedRealmURL } from './realm-pairing.js?v=0.16.1';
 import {realmForBoard} from './skybox-config.js?v=0.14.5';
-import {gameRealmName} from './experience-modes.js?v=0.14.8';
+import {gameRealmName} from './experience-modes.js?v=0.16.1';
 const setting=document.getElementById('boardSkin');
 const menuSelect=document.getElementById('toolsBoardSkin');
 const preview=document.getElementById('boardSkinPreview');
@@ -29,19 +29,30 @@ for(const select of [setting,menuSelect]){
 }
 async function previewRealm(id){
  const sequence=++realmSequence;
- if(realmPreview){realmPreview.hidden=true;realmPreview.removeAttribute('src');}
+ if(realmPreview){realmPreview.onload=null;realmPreview.onerror=null;realmPreview.hidden=true;realmPreview.removeAttribute('src');}
  if(realmEmpty){
   realmEmpty.hidden=false;
-  realmEmpty.textContent=id==='classic'?'Reino clásico · libre':'Reino en espera de su imagen WebP';
+  realmEmpty.textContent=id==='classic'?'Reino clásico · libre':'Comprobando imagen del reino…';
  }
+ if(id==='classic')return;
  const url=await publishedRealmURL(id);
  if(sequence!==realmSequence)return;
- if(url&&realmPreview){
-  realmPreview.src=url;
-  realmPreview.alt='Reino 3D del tablero '+findBoard(id).label;
+ if(!url||!realmPreview){
+  if(realmEmpty)realmEmpty.textContent='Sin vista de reino publicada; tablero disponible';
+  return;
+ }
+ realmPreview.onload=()=>{
+  if(sequence!==realmSequence)return;
   realmPreview.hidden=false;
   if(realmEmpty)realmEmpty.hidden=true;
- }
+ };
+ realmPreview.onerror=()=>{
+  if(sequence!==realmSequence)return;
+  realmPreview.hidden=true;
+  if(realmEmpty){realmEmpty.hidden=false;realmEmpty.textContent='No se pudo mostrar la vista del reino';}
+ };
+ realmPreview.alt='Reino 3D del tablero '+findBoard(id).label;
+ realmPreview.src=url;
 }
 function updatePreview(id){
  const skin=findBoard(id);

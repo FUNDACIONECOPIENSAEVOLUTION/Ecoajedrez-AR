@@ -1,8 +1,8 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.16.0-beta.1",
+  "version": "0.16.1-beta.1",
   "updated": "2026-10-22",
-  "status": "Rama de prueba: catálogo de seis robots GLB con vistas JPG, movimiento rígido provisional, mejoras táctiles en móvil. No publicado ni probado en Android. Los seis Staunton GLTF y cinco estilos previos se conservan; el paquete comunitario CC0 y GLB antropomórfico externo faltan.",
+  "status": "Pruebas publicables: corregida carga de reinos 3D sin depender exclusivamente del manifiesto; 13 tableros y 13 reinos 360 auditados; tres vistas recuperadas desde skybox frontal; despliegue de seis GLB robóticos, seis JPG, colores y brillos PBR y orientación corregidos. Validación visual desde móvil aún pendiente.",
   "browserValidated": false,
   "physicalARValidated": false,
   "onlinePvP": "Casual PeerJS beta, six-character code and QR with camera scanner (native BarcodeDetector / lazy in-browser jsQR), validation restricts invite origin/path. Real two-device session requires device test; unranked and unaudited anti-cheat.",
@@ -10,7 +10,7 @@
   "modelType": "Six tiny, original, embedded-buffer glTF Staunton types (one per piece kind), with Royal arcane 3D embellishments and procedural fantasy and classic variants; third-party character/franchise GLBs not included",
   "arImplementation": "WebXR hit-test with touch/aim + recovery dialog after interrupted Android session; screen-drag feedback, NOT camera hand recognition or hand occlusion",
   "userReportedARWorking": true,
-  "validationBasis": "El usuario confirmó AR y funcionamiento invitado de v0.5; el nuevo 0.6 necesita pruebas físicas, entre dos celulares y desbloqueo.",
+  "validationBasis": "Comprobación de existencia de rutas de recursos en GitHub y revisión de código; validación del despliegue web y pruebas móviles pendientes de confirmación del usuario.",
   "googleAuth": "Server-only BFF code exists but no Cloudflare Functions secrets deployed; Google unavailable on GitHub Pages; guest fully usable",
   "localPersistence": "LocalStorage por UID o invitado, sin servicio externo",
   "diagnostics": "WebXR, WebGL2, Firebase SDK, PeerJS, modelos, conexión, micrófono",
@@ -398,7 +398,7 @@
       "classic"
     ],
     "robotic": {
-      "branchOnly": true,
+      "branchOnly": false,
       "files": 6,
       "images": 6,
       "embeddedAnimations": false,
@@ -412,5 +412,21 @@
       "ready": false,
       "proceduralFallback": true
     }
+  },
+  "realmCatalogAudit": {
+    "version": "0.16.1-beta.1",
+    "sourceChecked": true,
+    "playableBoards": 13,
+    "decorativeBoardImages": 7,
+    "publishedFlatRealmCandidates": 10,
+    "skyboxRealms": 13,
+    "skyboxFacesVerified": 78,
+    "dedicatedFlatFallbacks": [
+      "alquimia",
+      "amatista",
+      "gotico"
+    ],
+    "pageBrowserValidationPending": true,
+    "verifiedAt": "2026-10-22"
   }
 }

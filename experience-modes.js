@@ -11,23 +11,18 @@ export const gameRealmName=boardId=>realmForBoard(boardId)?.label||'Reino clási
 export async function checkSkybox(boardId){
  const realm=realmForBoard(boardId);
  if(!realm)return {ready:false,reason:'Selecciona uno de los 13 tableros mágicos para entrar a un reino 360°.',realm:null};
- try{
-  const result=await fetch('./app/imagenes/skybox/manifest.json?v=0.14.8',{cache:'no-store'});
-  if(result.ok){
-   const data=await result.json(),entry=data?.realms?.[realm.id];
-   if(entry?.ready)return {ready:true,realm};
-   if(Array.isArray(entry?.missing)&&entry.missing.length){
-    // Manifest may be stale during a fresh GitHub Pages publication. Check real faces below.
-   }else if(entry?.reason)return {ready:false,realm,reason:entry.reason};
-  }
- }catch(e){}
+ // A cached manifest can lag behind the real published images. Probe six faces
+ // before entering the scene, even when the manifest still says "ready".
  try{
   const urls=skyboxFaceUrls(realm.id);
-  const statuses=await Promise.all(urls.map(url=>fetch(url,{method:'HEAD',cache:'no-store'})));
+  const statuses=await Promise.all(urls.map(async url=>{
+   const result=await fetch(url,{method:'HEAD',cache:'no-store'});
+   return result.status===405?fetch(url,{cache:'force-cache'}):result;
+  }));
   const missing=statuses.map((x,i)=>x.ok?null:urls[i].split('/').at(-1)).filter(Boolean);
   return missing.length===0?{ready:true,realm}:
    {ready:false,realm,reason:'Faltan '+missing.length+' caras WebP del reino '+realm.label+': '+missing.join(', ')+'.'};
  }catch(e){
-  return {ready:false,realm,reason:'Sin conexión para verificar el reino. Conéctate a Internet y vuelve a intentarlo.'};
+  return {ready:false,realm,reason:'No fue posible verificar las seis imágenes del reino 360°. Revisa la conexión y vuelve a intentarlo.'};
  }
 }
