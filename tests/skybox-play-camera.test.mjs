@@ -103,7 +103,7 @@ test('Classic 3D, 360 and AR keep the same move engine and distinguish selection
  assert.match(js,/const square=pick3DSquare\(event\.clientX,event\.clientY\)/);
  assert.match(js,/if\(realmImmersion\?\.isPanGesture\(\)\)/);
  assert.match(js,/getInteractivePiece:\(x,y\)=>\{/);
- assert.match(js,/const sq=pick3DSquare\(x,y\),piece=sq&&game\.get\(sq\)/);
+ assert.match(js,/return Boolean\(pick3DSquare\(x,y\)\)/);
  assert.match(js,/realmImmersion\?\.refreshStatus\?\.\(\)/);
  assert.match(js,/decorations,\s*getBoardId/);
  assert.match(js,/function onARPointerUp\(event\)/);
