@@ -9,7 +9,7 @@ import { initializeAccountAuth, loginGoogle, logoutFirebase, authAvailable } fro
 import { makeSnapshot, verifyAndRestore, saveLocalMatch, readLocalMatch } from './match-state.js?v=0.4.1';
 import { createArcaneUI } from './arcane-ui.js?v=0.6.0';
 import { createMagicWorld } from './magic-world.js?v=0.14.3';
-import { realmTheme,publishedRealmURL } from './realm-pairing.js?v=0.14.4';
+import { realmTheme,publishedRealmURL } from './realm-pairing.js?v=0.16.1';
 import { createBoardSurface } from './board-skins.js?v=0.14.3';
 import { makeLastMoveOverlay } from './last-move-ghost.js?v=0.13.0';
 import { createVictoryFX } from './victory-fx.js?v=0.14.2';
@@ -20,7 +20,7 @@ import {checkSkybox,linkedRealm,validExperience,gameRealmName} from './experienc
 import {createQuestMap,successfulQuestMove} from './quest-map.js?v=0.15.2';
 import {COMMUNITY_FILES,communityPiecePath,communityPieceKey,communityPieceHeight} from './community-models.js?v=0.15.2';
 import {ANTHRO_GLB,ANTHRO_MANIFEST,collectAnthroSources,createAnthroVisual,tickAnthroVisuals} from './anthropomorphic-pieces.js?v=0.15.3';
-import {PIECE_MATERIALS,PIECE_GLOWS,validPieceMaterial,validPieceGlow,applyPieceAppearance} from './piece-materials.js?v=0.15.7';
+import {PIECE_MATERIALS,PIECE_GLOWS,validPieceMaterial,validPieceGlow,pieceGlowHex,applyPieceAppearance} from './piece-materials.js?v=0.15.7';
 import {createChessCombat,faceMovement} from './piece-combat.js?v=0.15.4';
 import {createPiecePreview} from './piece-preview.js?v=0.15.5';
 import {loadPhotoPBR,readPBRManifest,PBR_ROOT} from './piece-pbr.js?v=0.15.6';
@@ -256,7 +256,17 @@ function createPieceVisual(p){
     }
     if(modelSet==='robotic'&&robotAssets.has(p.type)){
       g=robotAssets.get(p.type).clone(true);g.userData.robotic=true;
-      g.traverse(o=>{if(!o.isMesh)return;o.userData.sharedGeo=true;o.material=Array.isArray(o.material)?o.material.map(v=>v.clone()):o.material.clone();o.userData.ownedMaterial=true;o.castShadow=true;});
+      g.traverse(o=>{
+        if(!o.isMesh)return;
+        o.userData.sharedGeo=true;
+        o.material=Array.isArray(o.material)?o.material.map(v=>v.clone()):o.material.clone();
+        const materials=Array.isArray(o.material)?o.material:[o.material];
+        const names=(o.name+' '+materials.map(v=>v?.name||'').join(' ')).toLowerCase();
+        const isGlow=/eye|ojo|led|glow|light|emissive|visor|energy|energia|luz/.test(names)||
+          materials.some(mat=>mat?.emissiveIntensity>1);
+        o.userData.ecoMaterialRole=isGlow?'glow':'body';
+        o.userData.ownedMaterial=true;o.castShadow=true;
+      });
     }
     if(modelSet==='anthro'){
       g=createAnthroVisual(THREE,p,anthroSources);
@@ -308,13 +318,29 @@ function createPieceVisual(p){
       if(p.type==='n')addGem(new THREE.ConeGeometry(.095,.26,5),.10,1.00,0).rotation.z=-.4;
       aura.dispose();
     }
- // Acabados seleccionables para todos los modelos 3D; no toca reglas ni colisiones.
+ // Apply the SAME player-selected PBR finish/glow to native and imported pieces.
  const selectedLook=armyLooks()[p.color];
- if(modelSet==='robotic'&&g.userData.robotic){
-   const tint=new THREE.Color(p.color==='w'?0xd5ecff:0xf0b17f);
-   g.traverse(o=>{if(!o.isMesh)return;for(const mat of (Array.isArray(o.material)?o.material:[o.material]))if(mat.color)mat.color.lerp(tint,p.color==='w'?.13:.48);});
- }else applyPieceAppearance(THREE,g,{material:selectedLook.material,glow:selectedLook.glow,color:p.color});
- if(p.color==='b')g.rotation.y=Math.PI;
+ applyPieceAppearance(THREE,g,{material:selectedLook.material,glow:selectedLook.glow,color:p.color});
+ if(g.userData.robotic||modelSet==='anthro'){
+   const bodyTint=new THREE.Color(p.color==='w'?($('whiteColor')?.value||'#efffff'):($('blackColor')?.value||'#203d54'));
+   const glowColor=new THREE.Color(pieceGlowHex(selectedLook.glow,p.color));
+   g.traverse(o=>{
+     if(!o.isMesh||!o.material||o.userData.ecoMaterialRole==='glow')return;
+     for(const mat of (Array.isArray(o.material)?o.material:[o.material])){
+       if(mat.color?.lerp)mat.color.lerp(bodyTint,selectedLook.material==='arcane'?.42:.23);
+       if(g.userData.robotic){
+         if(selectedLook.material==='arcane'){
+           if('metalness' in mat)mat.metalness=Math.max(.68,mat.metalness||0);
+           if('roughness' in mat)mat.roughness=Math.min(.30,mat.roughness??.5);
+         }
+         if(mat.emissive?.copy){mat.emissive.copy(glowColor);mat.emissiveIntensity=.14;}
+       }
+       mat.needsUpdate=true;
+     }
+   });
+   // GLB/procedural robots face +Z in their source. White moves -Z; black moves +Z.
+   g.rotation.y=p.color==='w'?Math.PI:0;
+ }else if(p.color==='b')g.rotation.y=Math.PI;
  return g;
 }
 function disposePieceGroup(child){
@@ -337,6 +363,7 @@ function renderPieces(){
  for(const row of game.board())for(const p of row)if(p){
   const g=createPieceVisual(p);
   g.userData.square=p.square;
+  g.userData.pieceType=p.type;
   const loc=positionOf(p.square);
   g.position.set(loc.x,.07,loc.z);
   pieces.add(g);
@@ -1658,7 +1685,25 @@ piecePreview=createPiecePreview({
  isShowing:()=>document.body.dataset.view==='settings'
 });
 piecePreview.rebuild($('piecePreviewType').value);
-loadRoboticPieces().catch(error=>console.warn('Carga de robots',error));
+// One small manifest probe enables the set. Download heavy GLBs only when selected.
+async function checkRoboticPack(){
+ const option=$('roboticPieceOption');
+ if(!option)return;
+ try{
+   const response=await fetch(ROBOT_ROOT+'manifest.json',{cache:'no-store'});
+   if(!response.ok)throw Error('manifest HTTP '+response.status);
+   const manifest=await response.json();
+   if(manifest.ready!==true||!Array.isArray(manifest.models)||manifest.models.length!==6)
+     throw Error('incomplete robotic pack');
+   option.disabled=false;
+   option.textContent='Guardianes robóticos · 6 GLB + 6 retratos';
+   if(modelSet==='robotic')await loadRoboticPieces();
+ }catch(error){
+   option.disabled=true;option.textContent='Guardianes robóticos · sin publicación completa';
+   if(modelSet==='robotic'){$('pieceSet').value='anthro';modelSet='anthro';renderPieces();piecePreview?.rebuild();}
+ }
+}
+checkRoboticPack().catch(error=>console.warn('Pack robótico',error));
 setTimeout(dismissGameplayHint,3400);
 arcaneUI=createArcaneUI({THREE,world});
 try{const saved=localStorage.getItem('ecoajedrez-graphics-profile');if(['auto','low','medium','high'].includes(saved))$('quality').value=saved;}catch(e){}
