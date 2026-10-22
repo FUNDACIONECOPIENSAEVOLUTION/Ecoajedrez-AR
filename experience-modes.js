@@ -16,8 +16,13 @@ export async function checkSkybox(boardId){
  try{
   const urls=skyboxFaceUrls(realm.id);
   const statuses=await Promise.all(urls.map(async url=>{
-   const result=await fetch(url,{method:'HEAD',cache:'no-store'});
-   return result.status===405?fetch(url,{cache:'force-cache'}):result;
+   try{
+    const result=await fetch(url,{method:'HEAD',cache:'no-store'});
+    if(result.ok)return result;
+   }catch(error){/* Some gateways and offline caches do not implement HEAD. */}
+   // Actual WebP retrieval may work even when the HEAD request did not.
+   try{return await fetch(url,{cache:'force-cache'});}
+   catch(error){return {ok:false};}
   }));
   const missing=statuses.map((x,i)=>x.ok?null:urls[i].split('/').at(-1)).filter(Boolean);
   return missing.length===0?{ready:true,realm}:
