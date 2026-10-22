@@ -1,9 +1,9 @@
-// ECOAJEDREZ · v0.16.1 interactive chooser for REAL board textures and
+// ECOAJEDREZ · v0.16.2 interactive chooser for REAL board textures and
 // independent decorative 'vista-' gallery. Does not manage game logic.
 import {BOARD_SKINS,VISION_ART,boardURL,findBoard} from './board-skins.js?v=0.14.3';
-import { publishedRealmURL } from './realm-pairing.js?v=0.16.1';
+import { publishedRealmURL } from './realm-pairing.js?v=0.16.2';
 import {realmForBoard} from './skybox-config.js?v=0.14.5';
-import {gameRealmName} from './experience-modes.js?v=0.16.1';
+import {gameRealmName} from './experience-modes.js?v=0.16.2';
 const setting=document.getElementById('boardSkin');
 const menuSelect=document.getElementById('toolsBoardSkin');
 const preview=document.getElementById('boardSkinPreview');

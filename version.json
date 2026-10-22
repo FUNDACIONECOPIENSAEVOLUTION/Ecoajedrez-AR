@@ -1,8 +1,8 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.16.1-beta.1",
+  "version": "0.16.2-beta.1",
   "updated": "2026-10-22",
-  "status": "Pruebas publicables: corregida carga de reinos 3D sin depender exclusivamente del manifiesto; 13 tableros y 13 reinos 360 auditados; tres vistas recuperadas desde skybox frontal; despliegue de seis GLB robóticos, seis JPG, colores y brillos PBR y orientación corregidos. Validación visual desde móvil aún pendiente.",
+  "status": "Parche de parejas visuales y catálogos: vistas WebP de 13 reinos comprobadas por carga real de imagen; tres fondos propios del skybox sin mezcla de reinos; selección de seis piezas con miniaturas JPG de robots y disponibilidad real de modelos; 360 tolera HEAD fallido. Validación Android y despliegue por comprobar.",
   "browserValidated": false,
   "physicalARValidated": false,
   "onlinePvP": "Casual PeerJS beta, six-character code and QR with camera scanner (native BarcodeDetector / lazy in-browser jsQR), validation restricts invite origin/path. Real two-device session requires device test; unranked and unaudited anti-cheat.",
@@ -414,7 +414,7 @@
     }
   },
   "realmCatalogAudit": {
-    "version": "0.16.1-beta.1",
+    "version": "0.16.2-beta.1",
     "sourceChecked": true,
     "playableBoards": 13,
     "decorativeBoardImages": 7,
@@ -427,6 +427,11 @@
       "gotico"
     ],
     "pageBrowserValidationPending": true,
-    "verifiedAt": "2026-10-22"
+    "verifiedAt": "2026-10-22",
+    "realImageProbes": true,
+    "pairedPreview": true,
+    "pieceTypeGallery": 6,
+    "androidValidated": false,
+    "deployValidated": false
   }
 }
