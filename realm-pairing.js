@@ -1,4 +1,5 @@
-// ECOAJEDREZ v0.16.1 · Official realm pairings for user-uploaded WebP artwork.
+import {realmForBoard} from './skybox-config.js?v=0.16.2';
+// ECOAJEDREZ v0.16.2 · Official realm pairings for user-uploaded WebP artwork.
 // 13 playable boards share 10 available 3D kingdoms; optional dedicated backgrounds
 // override the fallback as the owner uploads them. No renaming or image duplication.
 export const BOARD_REALM_THEMES={
@@ -53,30 +54,49 @@ export function publishedRealms(){
   .catch(()=>new Set());
  return publishedPromise;
 }
-// Probe actual published WebP resources instead of trusting only manifest.json.
-// During a new Pages release the manifest may temporarily be absent or stale.
-const resolvedRealmURLs=new Map();
+// Each board is a fixed pair: its existing flat artwork or the FRONT of
+// its OWN 360° kingdom. Never display an unrelated kingdom as the fallback.
+export function realmImageCandidates(id){
+ const realm=realmForBoard(id);
+ if(!realm||!realmTheme(id))return [];
+ const ownFront='./app/imagenes/skybox/'+realm.id+'/pz.webp';
+ // The three later-created realms do NOT have a unique flat WebP yet.
+ // Prefer their distinct 360° artwork over another kingdom's shared image.
+ if(REALM_SKYBOX_FALLBACK[id])return [ownFront];
+ const flat=BOARD_REALM_IMAGES[id];
+ return [...new Set([REALM_DIR+encodeURIComponent(flat),ownFront])];
+}
+
+// A previous HEAD request could fail while an image GET worked on GitHub
+// Pages/mobile caches. Test the actual <img> decode path instead.
+const imageURLs=new Map();
+function canRenderImage(url){
+ return new Promise(resolve=>{
+  const probe=new Image();
+  let ended=false;
+  const finish=value=>{
+   if(ended)return;ended=true;
+   clearTimeout(timeout);probe.onload=null;probe.onerror=null;
+   resolve(value);
+  };
+  const timeout=setTimeout(()=>finish(false),12000);
+  probe.onload=()=>finish(probe.naturalWidth>0);
+  probe.onerror=()=>finish(false);
+  probe.src=url;
+  if(probe.complete&&probe.naturalWidth>0)finish(true);
+ });
+}
 export async function publishedRealmURL(id){
  if(!realmTheme(id))return null;
- if(resolvedRealmURLs.has(id))return resolvedRealmURLs.get(id);
- const promise=(async()=>{
-  const paths=realmCandidates(id).map(file=>REALM_DIR+encodeURIComponent(file));
-  const front=REALM_SKYBOX_FALLBACK[id];
-  if(front)paths.splice(1,0,'./app/imagenes/skybox/'+front+'/pz.webp');
-  for(const url of paths){
-   try{
-    const response=await fetch(url,{method:'HEAD',cache:'no-store'});
-    if(response.ok)return url;
-    if(response.status===405){
-     const fallback=await fetch(url,{cache:'force-cache'});
-     if(fallback.ok)return url;
-    }
-   }catch(error){/* Keep trying published alternatives. */}
+ if(imageURLs.has(id))return imageURLs.get(id);
+ const work=(async()=>{
+  for(const url of realmImageCandidates(id)){
+   if(await canRenderImage(url))return url;
   }
   return null;
  })();
- resolvedRealmURLs.set(id,promise);
- const result=await promise;
- if(!result)resolvedRealmURLs.delete(id); // Allow recovery after a new Pages deploy.
+ imageURLs.set(id,work);
+ const result=await work;
+ if(!result)imageURLs.delete(id); // Allow recovery after failed network loads.
  return result;
 }
