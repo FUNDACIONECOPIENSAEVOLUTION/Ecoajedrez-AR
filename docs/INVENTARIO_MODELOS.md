@@ -48,3 +48,20 @@ Hay verificación automática de tamaños, buffers, normales e índices; falta v
 - Adobe Mixamo es un servicio con condiciones de uso, NO material CC0; uso comercial en juegos permitido con limitaciones de distribución en bruto.
 
 Ver [ENTREGA_0.3.0.md](ENTREGA_0.3.0.md) para detalles y próximos tests.
+## Auditoría de colecciones 2026-10-22 — rama 0.16.0-beta.1
+
+| ID del selector | Nombre propuesto | Recurso real | Estado |
+|---|---|---|---|
+| `anthro` | Guardianes animados (procedural) | `anthropomorphic-pieces.js`, genera piezas geométricas y animaciones por código | Jugable con respaldo; **NO** existe `assets/models/anthropomorphic/anthropomorphic-chess.glb` ni su manifest |
+| `staunton` | Clásicas talladas | 6 glTF originales `assets/models/staunton/*.gltf` | Disponible |
+| `royal` | Corte imperial | Reutiliza los 6 glTF Staunton con detalles adicionales creados por código | Disponible; **no son seis modelos nuevos independientes** |
+| `fantasy` | Runas encantadas | Modelado geométrico desde `main.js` | Disponible, sin GLB externo |
+| `classic` | Estrategas esenciales | Modelado geométrico desde `main.js` | Disponible, sin GLB externo |
+| `robotic` | Guardianes robóticos negro/azul | 6 GLB + 6 JPG en `app/imagenes/fichas/roboticos/` | Solo rama `feature/robotic-chess-set`; integrado en código, requiere prueba de navegador y móviles antes de fusionar |
+| `community` | Externa CC0 | Debe tener 12 archivos `w-*.glb` y `b-*.glb` más manifest | Incompleta, deshabilitada |
+
+**Cantidad real:** 7 opciones previstas (5 integradas, 1 robótica en pruebas, 1 comunitaria deshabilitada). No confundir estilos con paquetes de modelos independientes: `royal` usa Staunton, `anthro` usa formas procedurales mientras no haya GLB y `fantasy`/`classic` son procedurales.
+
+**Otras fuentes históricas:** el repositorio anterior contiene 13 modelos de personajes de franquicia y un OBJ; son un inventario externo **no importado**, con restricciones de licencia y tamaños que impiden contarlos como grupos jugables. No agregar como opciones activas sin licencia y conversión.
+
+**Pendiente:** comprobar render y escalas de los robots en Android; confirmar acciones de caminata y captura, integrar clips riggeados solo tras preparar armatures en Blender, completar paquete comunitario si se desea. La rama no está publicada en GitHub Pages (producción es `main`).
