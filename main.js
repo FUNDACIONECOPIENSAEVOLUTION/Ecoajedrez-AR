@@ -1629,10 +1629,15 @@ function render(timestamp,frame){
       moving.a.z+(moving.b.z-moving.a.z)*smooth
     );
     if(modelSet==='robotic'&&moving.piece.userData.robotic){
-      moving.piece.rotation.z=Math.sin(progress*Math.PI*6)*.055*Math.sin(Math.PI*progress);
-      moving.piece.position.y=.07+Math.sin(progress*Math.PI)*.12;
+      const type=moving.piece.userData.pieceType;
+      const arc=Math.sin(progress*Math.PI);
+      const stride=Math.sin(progress*Math.PI*(type==='n'?2:6));
+      // Los GLB originales son mallas rígidas: animación de marcha/salto sin deformar la geometría.
+      moving.piece.position.y=.07+arc*(type==='n'?.69:type==='r'?.035:.10);
+      moving.piece.rotation.z=stride*arc*(type==='r'?.018:.047);
+      moving.piece.rotation.x=Math.sin(progress*Math.PI*2)*arc*(type==='n'?.12:.035);
     }
-    if(progress>=1){moving.piece.rotation.z=0;moving=null;}
+    if(progress>=1){moving.piece.rotation.z=0;moving.piece.rotation.x=0;moving=null;}
   }
   if(modelSet==='anthro'){
     const t=timestamp||performance.now();
