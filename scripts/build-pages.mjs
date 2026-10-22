@@ -14,6 +14,46 @@ fs.mkdirSync(path.join(dest,'assets/models'),{recursive:true});
 fs.cpSync('assets/models/staunton',path.join(dest,'assets/models/staunton'),{recursive:true});
 fs.cpSync('assets/ui',path.join(dest,'assets/ui'),{recursive:true});
 
+// Owner-supplied robotic chess army: publish ONLY these six validated game models
+// and six matching selection portraits; no raw intake folders or reference videos.
+const roboticBase='app/imagenes/fichas/roboticos';
+const roboticNames=['peon','torre','caballo','alfil','reina','rey'];
+const roboticModelDest=path.join(dest,roboticBase,'modelos');
+const roboticImageDest=path.join(dest,roboticBase,'imagenes');
+fs.mkdirSync(roboticModelDest,{recursive:true});
+fs.mkdirSync(roboticImageDest,{recursive:true});
+let roboticBytes=0;
+for(const name of roboticNames){
+ const modelPath=path.join(roboticBase,'modelos',name+'.glb');
+ const imagePath=path.join(roboticBase,'imagenes',name+'.jpg');
+ if(!fs.existsSync(modelPath)||!fs.existsSync(imagePath))
+  throw Error('Missing uploaded robotic chess model/portrait: '+name);
+ const bytes=fs.readFileSync(modelPath);
+ if(bytes.length<256||bytes.length>15000000||bytes.toString('ascii',0,4)!=='glTF'||
+    bytes.readUInt32LE(4)!==2||bytes.readUInt32LE(8)!==bytes.length)
+  throw Error('Invalid GLB robotic chess piece: '+name);
+ const jsonLength=bytes.readUInt32LE(12);
+ if(jsonLength<30||jsonLength>bytes.length-20||bytes.toString('ascii',16,20)!=='JSON')
+  throw Error('Missing GLB JSON chunk in robotic piece: '+name);
+ const gltf=JSON.parse(bytes.toString('utf8',20,20+jsonLength));
+ if(!Array.isArray(gltf.meshes)||!gltf.meshes.length||!Array.isArray(gltf.nodes)||!gltf.nodes.length)
+  throw Error('Robotic chess model has no usable geometry: '+name);
+ roboticBytes+=bytes.length;
+ if(roboticBytes>75000000)throw Error('Robotic set exceeds the combined 75 MB budget');
+ const image=fs.readFileSync(imagePath);
+ if(image.length<512||image.length>3000000||
+    image[0]!==0xff||image[1]!==0xd8||image[2]!==0xff)
+  throw Error('Invalid JPG portrait of robotic piece: '+name);
+ fs.writeFileSync(path.join(roboticModelDest,name+'.glb'),bytes);
+ fs.writeFileSync(path.join(roboticImageDest,name+'.jpg'),image);
+}
+fs.writeFileSync(path.join(dest,roboticBase,'manifest.json'),
+ JSON.stringify({version:'0.16.1-beta.1',ready:true,
+  models:roboticNames.map(name=>'modelos/'+name+'.glb'),
+  portraits:roboticNames.map(name=>'imagenes/'+name+'.jpg'),
+  rigged:false,clips:0},null,2)+'\\n');
+console.log('Guardianes robóticos: 6 / 6 GLB y 6 / 6 imágenes publicados ('+roboticBytes+' bytes).');
+
 // Eight user-uploaded and specifically approved visual cards: only these named files.
 const cardNames=[
  '01_vs_computadora.webp','02_dos_jugadores.webp','03_duelo_online.webp','04_unirme_partida.webp',
@@ -170,7 +210,7 @@ console.log('Approved board images: '+boardFiles.length+' playable, '+decorative
 
 // Only whitelist owner-approved uploaded backgrounds (no wildcards / user files).
 // Import the same data as the UI so every 3D board & realm keep identical names.
-const {BOARD_REALM_IMAGES}=await import('../realm-pairing.js');
+const {BOARD_REALM_IMAGES,BOARD_REALM_THEMES,REALM_SKYBOX_FALLBACK}=await import('../realm-pairing.js');
 const realmFiles=[...new Set([
  ...Object.values(BOARD_REALM_IMAGES),
  ...Object.keys(BOARD_REALM_IMAGES).map(id=>'entorno_'+id+'.webp')
@@ -243,6 +283,18 @@ for(const entry of SKYBOX_REALMS){
 }
 fs.writeFileSync(path.join(skyDest,'manifest.json'),JSON.stringify(skyManifest,null,2)+'\n');
 console.log('Complete 360 skybox kingdoms published: '+completeSkyboxes+' / '+SKYBOX_REALMS.length+'.');
+// Validate every game board has an actual 3D background in the built artifact:
+// dedicated/approved flat WebP or the already verified face of its own 360 realm.
+const unresolvedBoards=Object.keys(BOARD_REALM_THEMES).filter(id=>{
+ const hasImage=availableRealms.includes('entorno_'+id+'.webp')||
+   availableRealms.includes(BOARD_REALM_IMAGES[id]);
+ const hasCubeFallback=Boolean(REALM_SKYBOX_FALLBACK[id] &&
+   skyManifest.realms[REALM_SKYBOX_FALLBACK[id]]?.ready);
+ return !hasImage&&!hasCubeFallback;
+});
+if(unresolvedBoards.length)throw Error('Playable boards without a published kingdom backdrop: '+unresolvedBoards.join(', '));
+console.log('Paired realm catalogue: '+Object.keys(BOARD_REALM_THEMES).length+' / 13 boards have a background.');
+
 
 // Exact single owner-uploaded post-intro background (not arbitrary directory publishing).
 const loginImage='app/imagenes/interfaces/login_post_intro_fondo.png';
