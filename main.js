@@ -126,7 +126,8 @@ function refreshArmy({reroll=false,transmit=false}={}){
 let questUI=null,missionActive=null,missionSolved=false,missionPrior=null;
 const assets = new Map(), loader = new GLTFLoader();
 const communityAssets=new Map();let communityLoading=null;
-const robotAssets=new Map();let robotLoading=null;const ROBOT_ROOT='./app/imagenes/fichas/roboticos/';const ROBOT_NAMES={p:'peon',r:'torre',n:'caballo',b:'alfil',q:'reina',k:'rey'};
+const robotAssets=new Map();let robotLoading=null;const ROBOT_ROOT='./app/imagenes/fichas/roboticos/';
+const robotGlowGeometry=new THREE.TorusGeometry(.32,.018,8,32);const ROBOT_NAMES={p:'peon',r:'torre',n:'caballo',b:'alfil',q:'reina',k:'rey'};
 let anthroSources=null,anthroLoading=null,lastAnthroTick=0;
 async function loadAnthroModel(){
  if(anthroSources||anthroLoading)return anthroLoading||anthroSources;
@@ -338,6 +339,15 @@ function createPieceVisual(p){
        mat.needsUpdate=true;
      }
    });
+   if(g.userData.robotic){
+     // Lightweight emissive floor accent, visible even if the GLB stores eyes
+     // and blue circuitry in one single baked texture/mesh.
+     const material=new THREE.MeshBasicMaterial({color:glowColor,transparent:true,opacity:.70,depthWrite:false});
+     const ring=new THREE.Mesh(robotGlowGeometry,material);
+     ring.rotation.x=Math.PI/2;ring.position.y=.035;
+     ring.userData.sharedGeo=true;ring.userData.ownedMaterial=true;
+     g.add(ring);
+   }
    // GLB/procedural robots face +Z in their source. White moves -Z; black moves +Z.
    g.rotation.y=p.color==='w'?Math.PI:0;
  }else if(p.color==='b')g.rotation.y=Math.PI;
