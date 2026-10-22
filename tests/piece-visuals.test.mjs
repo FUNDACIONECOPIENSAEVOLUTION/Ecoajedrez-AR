@@ -61,8 +61,13 @@ test('Preview has actual 3D canvas and material/glow controls and uses game visu
  for(const id of ['piecePreviewCanvas','piecePreviewType','pieceMaterial','pieceGlow','piecePreviewPanel']){
   assert.ok(html.includes('id="'+id+'"'),id);
  }
- assert.match(html,/piece-preview\.css\?v=0\.15\.7/);
+ assert.match(html,/piece-preview\.css\?v=0\.16\.2/);
  assert.match(css,/grid-template-columns/);
+ assert.ok(html.includes('id="pieceCatalogGrid"'));
+ assert.ok(html.includes('id="pieceCatalogStatus"'));
+ assert.match(main,/function refreshPieceCatalog\(\)/);
+ assert.match(main,/ROBOT_ROOT\+'imagenes\/'\+ROBOT_NAMES\[type\]/);
+
  assert.match(css,/@media\(max-width:750px\)/);
  assert.match(main,/piecePreview=createPiecePreview/);
  assert.match(main,/createVisual:p=>createPieceVisual\(p\)/);
