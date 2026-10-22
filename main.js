@@ -168,7 +168,14 @@ function translate(){
   document.querySelectorAll('[data-ui]').forEach(el=>el.textContent=interfaceText[lang]?.[el.dataset.ui]||interfaceText.es[el.dataset.ui]||el.textContent);
   updateStatus();
 }
-function toast(msg){if(isAR){arHint('✦ '+msg);return;}const el=$('gameToast');el.textContent=msg;el.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>el.style.display='none',4000);}
+function toast(msg){
+ if(isAR){arHint('✦ '+msg);return;}
+ const el=$('gameToast');
+ el.textContent=msg;el.style.display='block';
+ clearTimeout(toast.t);
+ const important=/error|no disponible|inválid|fall|conexión|denegad|permiso|advertencia/i.test(msg);
+ toast.t=setTimeout(()=>{el.style.display='none';},important?2700:1500);
+}
 const geoCache = {
   cyl:(a,b,h,n=20)=>new THREE.CylinderGeometry(a,b,h,n),
   box:(x,y,z)=>new THREE.BoxGeometry(x,y,z),
@@ -551,8 +558,13 @@ function startSpeech(target){
   try{rec.start();toast('Escuchando jugada…');}catch(error){commandRecognition=null;toast('No se pudo iniciar el micrófono.');}
 }
 
+function dismissGameplayHint(){
+ const hint=$('commandHint');
+ if(hint){hint.classList.add('dismissed');}
+}
 function pickSquare(square){
   if(!square || game.isGameOver())return;
+  dismissGameplayHint();
   if(!canPlay())return;
   const current=game.get(square);
   if(selected && playMove(selected,square))return;
@@ -646,7 +658,11 @@ function pick3DSquare(x,y){
   if(!rect.width||!rect.height)return null;
   point.set(((x-rect.left)/rect.width)*2-1,-((y-rect.top)/rect.height)*2+1);
   raycaster.setFromCamera(point,camera);
-  return squareFromHit([pieces,markers,tiles],raycaster.ray.origin,raycaster.ray.direction);
+  // Priorizar casillas y evitar que el volumen de un robot intercepte la selección.
+  const tile=squareFromHit([tiles],raycaster.ray.origin,raycaster.ray.direction);
+  if(tile)return tile;
+  // En perspectiva rasante, permitir tocar el cuerpo de la pieza.
+  return squareFromHit([pieces],raycaster.ray.origin,raycaster.ray.direction);
 }
 let down=null;
 canvas.addEventListener('pointerdown',event=>{
@@ -662,7 +678,7 @@ canvas.addEventListener('pointerup',event=>{
   const downEvent=down;down=null;orbit.enabled=!realmImmersion?.active();
   const destination=pick3DSquare(event.clientX,event.clientY);
   if(!destination)return;
-  const moved=Math.hypot(event.clientX-downEvent.x,event.clientY-downEvent.y)>12;
+  const moved=Math.hypot(event.clientX-downEvent.x,event.clientY-downEvent.y)>(event.pointerType==='touch'?19:12);
   if(moved&&downEvent.square&&downEvent.square!==destination){
     if(selected!==downEvent.square)pickSquare(downEvent.square);
     pickSquare(destination);
@@ -1638,6 +1654,7 @@ piecePreview=createPiecePreview({
 });
 piecePreview.rebuild($('piecePreviewType').value);
 loadRoboticPieces().catch(error=>console.warn('Carga de robots',error));
+setTimeout(dismissGameplayHint,3400);
 arcaneUI=createArcaneUI({THREE,world});
 try{const saved=localStorage.getItem('ecoajedrez-graphics-profile');if(['auto','low','medium','high'].includes(saved))$('quality').value=saved;}catch(e){}
 magicEnv=createMagicWorld({THREE,world,scene,renderer,stage});
