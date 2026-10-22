@@ -1,0 +1,38 @@
+{
+  "id": "roboticos_negro_azul",
+  "label": "Guardianes Robóticos",
+  "estado": "assets_pendientes_de_subir",
+  "base": "app/imagenes/fichas/roboticos/",
+  "piezas": {
+    "p": {
+      "modelo": "modelos/peon.glb",
+      "imagen": "imagenes/peon.jpg"
+    },
+    "b": {
+      "modelo": "modelos/alfil.glb",
+      "imagen": "imagenes/alfil.jpg",
+      "video": "videos/alfil.mp4"
+    },
+    "n": {
+      "modelo": "modelos/caballo.glb",
+      "imagen": null,
+      "video": "videos/caballo.mp4"
+    },
+    "r": {
+      "modelo": "modelos/torre.glb",
+      "imagen": "imagenes/torre.jpg",
+      "video": "videos/torre.mp4"
+    },
+    "q": {
+      "modelo": "modelos/reina.glb",
+      "imagen": "imagenes/reina.jpg",
+      "video": "videos/reina.mp4"
+    },
+    "k": {
+      "modelo": "modelos/rey.glb",
+      "imagen": "imagenes/rey.jpg",
+      "video": "videos/rey.mp4"
+    }
+  },
+  "animacionesEmbebidas": false
+}
