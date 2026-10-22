@@ -46,7 +46,7 @@ export const realmCandidates=id=>BOARD_REALM_IMAGES[id]?
 export const realmURL=id=>BOARD_REALM_IMAGES[id]?REALM_DIR+BOARD_REALM_IMAGES[id]:null;
 let publishedPromise=null;
 export function publishedRealms(){
- if(!publishedPromise)publishedPromise=fetch(REALM_DIR+'manifest.json?v=0.16.1',{cache:'no-store'})
+ if(!publishedPromise)publishedPromise=fetch(REALM_DIR+'manifest.json?v=0.16.2',{cache:'no-store'})
   .then(r=>r.ok?r.json():{available:[]})
   .then(data=>new Set((Array.isArray(data.available)?data.available:[])
     .filter(file=>Object.values(BOARD_REALM_IMAGES).includes(file)||
