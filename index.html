@@ -56,7 +56,9 @@ body[data-view=game] #gameHud{display:block}
 .hudBottom .primary{background:linear-gradient(110deg,#36bd99,#a8f5d3);color:#06362d}
 #moveInput{width:130px}
 #history{font-size:12px;color:#dffae9;max-width:220px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
-#commandHint{position:absolute;bottom:75px;left:50%;transform:translateX(-50%);background:#0c2940d9;padding:8px 12px;border-radius:10px;font-size:12px;color:#bde5d5;text-align:center;max-width:92%;pointer-events:none}
+#commandHint{position:absolute;bottom:75px;left:50%;transform:translateX(-50%);background:#0c2940d9;padding:8px 12px;border-radius:10px;font-size:12px;color:#bde5d5;text-align:center;max-width:92%;pointer-events:none;opacity:.95;transition:opacity .24s ease}
+#commandHint.dismissed{opacity:0;visibility:hidden}
+#gameToast{pointer-events:none;user-select:none;}
 #gameToast{display:none;position:absolute;top:85px;right:14px;padding:12px;background:#102d43;z-index:20;border:1px solid #8bffdd;border-radius:12px;font-size:13px;max-width:290px}
 #loadingPortal{display:none;position:fixed;inset:0;z-index:90;background:radial-gradient(circle,#14556d,#06131f 64%);align-items:center;justify-content:center;flex-direction:column;pointer-events:none;animation:portalIn .5s ease}
 #loadingPortal.show{display:flex}
@@ -446,5 +448,5 @@ body.xr-active #gameToast{display:none!important}
 <script type="module" src="./celestial-ui.js?v=0.10.0"></script>
 <script type="module" src="./legal-consent.js?v=0.13.0"></script>
 <script type="module" src="./board-catalog-ui.js?v=0.14.8"></script>
-<script type="module" src="./main.js?v=0.15.7-robotic1"></script>
+<script type="module" src="./main.js?v=0.15.7-robotic2"></script>
 </body></html>
