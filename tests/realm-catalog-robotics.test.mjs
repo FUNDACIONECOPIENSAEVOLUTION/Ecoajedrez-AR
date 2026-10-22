@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import {BOARD_SKINS,VISION_ART} from '../board-skins.js';
-import {BOARD_REALM_IMAGES,BOARD_REALM_THEMES,REALM_SKYBOX_FALLBACK,publishedRealmURL} from '../realm-pairing.js';
+import {BOARD_REALM_IMAGES,BOARD_REALM_THEMES,REALM_SKYBOX_FALLBACK,realmImageCandidates,publishedRealmURL} from '../realm-pairing.js';
 import {SKYBOX_FACES,SKYBOX_REALMS,skyboxFaceUrls,realmForBoard} from '../skybox-config.js';
 
 const exists=file=>fs.existsSync(path.resolve(file));
@@ -54,17 +54,23 @@ test('all 13 360 realms include 6 real faces',()=>{
 test('missing dedicated Alchemy/Amethyst/Gothic previews use own 360 artwork',async()=>{
  const pairs={alquimia:'alquimista_eter',amatista:'espejo_vacio',gotico:'nigromante_gotico'};
  assert.deepEqual(REALM_SKYBOX_FALLBACK,pairs);
- const original=globalThis.fetch;
- globalThis.fetch=async(url)=>({
-  ok:Object.values(pairs).some(id=>String(url).endsWith('/'+id+'/pz.webp')),
-  status:Object.values(pairs).some(id=>String(url).endsWith('/'+id+'/pz.webp'))?200:404
- });
+ const original=globalThis.Image;
+ globalThis.Image=class{
+  naturalWidth=1024;
+  complete=false;
+  set src(url){
+   this.current=url;
+   queueMicrotask(()=>this.onload?.());
+  }
+ };
  try{
   for(const [board,realm] of Object.entries(pairs)){
+   const candidates=realmImageCandidates(board);
+   assert.deepEqual(candidates,['./app/imagenes/skybox/'+realm+'/pz.webp']);
    const url=await publishedRealmURL(board);
-   assert.equal(url,'./app/imagenes/skybox/'+realm+'/pz.webp');
+   assert.equal(url,candidates[0]);
   }
- }finally{globalThis.fetch=original;}
+ }finally{globalThis.Image=original;}
 });
 
 test('six robotic models and portraits have valid file headers',()=>{
@@ -82,5 +88,19 @@ test('six robotic models and portraits have valid file headers',()=>{
   const jpeg=Buffer.alloc(3),jfd=fs.openSync(image,'r');
   try{fs.readSync(jfd,jpeg,0,3,0);}finally{fs.closeSync(jfd);}
   assert.equal(jpeg[0],0xff);assert.equal(jpeg[1],0xd8);assert.equal(jpeg[2],0xff);
+ }
+});
+
+test('every themed board has a deterministic kingdom image pair without HEAD-only gating',()=>{
+ const playable=BOARD_SKINS.filter(b=>b.file);
+ for(const skin of playable){
+  const realm=realmForBoard(skin.id);
+  const candidates=realmImageCandidates(skin.id);
+  assert.ok(candidates.length>0,skin.id);
+  assert.ok(candidates.every(url=>url.endsWith('.webp')),skin.id);
+  assert.ok(candidates.some(url=>url.includes('/skybox/'+realm.id+'/pz.webp')||url.includes('/entornos/')),skin.id);
+  const first=candidates[0].replace(/^\.\//,'');
+  assert.ok(exists(first),'Missing direct image for '+skin.id+': '+first);
+  assert.ok(isWebP(first),'Invalid direct realm WebP '+skin.id);
  }
 });
