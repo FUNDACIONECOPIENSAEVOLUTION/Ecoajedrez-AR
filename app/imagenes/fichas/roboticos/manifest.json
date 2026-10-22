@@ -1,38 +1,41 @@
 {
-  "id": "roboticos_negro_azul",
-  "label": "Guardianes Robóticos",
-  "estado": "assets_pendientes_de_subir",
-  "base": "app/imagenes/fichas/roboticos/",
+  "coleccion": "roboticos_negro_azul",
   "piezas": {
-    "p": {
+    "peon": {
       "modelo": "modelos/peon.glb",
-      "imagen": "imagenes/peon.jpg"
+      "imagen": "imagenes/peon.jpg",
+      "video": null,
+      "animaciones_embebidas": false
     },
-    "b": {
+    "alfil": {
       "modelo": "modelos/alfil.glb",
       "imagen": "imagenes/alfil.jpg",
-      "video": "videos/alfil.mp4"
+      "video": "videos/alfil.mp4",
+      "animaciones_embebidas": false
     },
-    "n": {
+    "caballo": {
       "modelo": "modelos/caballo.glb",
       "imagen": null,
-      "video": "videos/caballo.mp4"
+      "video": "videos/caballo.mp4",
+      "animaciones_embebidas": false
     },
-    "r": {
+    "torre": {
       "modelo": "modelos/torre.glb",
       "imagen": "imagenes/torre.jpg",
-      "video": "videos/torre.mp4"
+      "video": "videos/torre.mp4",
+      "animaciones_embebidas": false
     },
-    "q": {
+    "reina": {
       "modelo": "modelos/reina.glb",
       "imagen": "imagenes/reina.jpg",
-      "video": "videos/reina.mp4"
+      "video": "videos/reina.mp4",
+      "animaciones_embebidas": false
     },
-    "k": {
+    "rey": {
       "modelo": "modelos/rey.glb",
       "imagen": "imagenes/rey.jpg",
-      "video": "videos/rey.mp4"
+      "video": "videos/rey.mp4",
+      "animaciones_embebidas": false
     }
-  },
-  "animacionesEmbebidas": false
+  }
 }

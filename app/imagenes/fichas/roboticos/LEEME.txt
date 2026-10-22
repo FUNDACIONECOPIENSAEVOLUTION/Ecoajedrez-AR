@@ -1,0 +1,9 @@
+ECOAJEDREZ — Colección robótica negra y azul
+
+Subir el contenido de esta carpeta a app/imagenes/fichas/roboticos/ (ruta sugerida; ajustar al código real).
+Modelos GLB: 6, sin esqueleto ni clips de animación internos.
+Imágenes JPG: 5 (falta imagen de caballo). Videos MP4: 5 (falta video de peón).
+El archivo codigo/animaciones.js contiene una PRIMERA VERSIÓN de desplazamiento, salto del caballo, ataque por inclinación y desaparición al ser capturado, para THREE.js. No contiene caminata articulada: requiere separar mallas, rigging y exportar clips GLB desde Blender.
+IMPORTANTE: No sustituir modelos existentes del juego sin integrar el catálogo y verificar escalas, orientación, carga y rutas.
+Secuencia de captura: animarAtaque(atacante), animarCaptura(victima), retirar victima de escena, animarMovimiento(atacante, destino).
+La lógica legal del ajedrez se mantiene en el motor actual.
