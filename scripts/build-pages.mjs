@@ -51,7 +51,7 @@ fs.writeFileSync(path.join(dest,roboticBase,'manifest.json'),
  JSON.stringify({version:'0.16.1-beta.1',ready:true,
   models:roboticNames.map(name=>'modelos/'+name+'.glb'),
   portraits:roboticNames.map(name=>'imagenes/'+name+'.jpg'),
-  rigged:false,clips:0},null,2)+'\\n');
+  rigged:false,clips:0},null,2)+String.fromCharCode(10));
 console.log('Guardianes robóticos: 6 / 6 GLB y 6 / 6 imágenes publicados ('+roboticBytes+' bytes).');
 
 // Eight user-uploaded and specifically approved visual cards: only these named files.
