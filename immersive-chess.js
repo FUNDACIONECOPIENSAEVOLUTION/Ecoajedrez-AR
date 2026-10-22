@@ -163,7 +163,7 @@ export function createImmersiveChess({THREE,scene,camera,orbit,canvas,decoration
  }
  function isPanGesture(){
   // Called by main.js before this controller receives pointerup; suppress misclicks after pinch.
-  return Boolean(active&&(gestureSuppressed||(drag&&drag.distance>12)||pointers.size>=2));
+  return Boolean(active&&(gestureSuppressed||(drag&&drag.distance>19)||pointers.size>=2));
  }
  function distanceBetweenPointers(){
   const values=[...pointers.values()];
@@ -189,7 +189,7 @@ export function createImmersiveChess({THREE,scene,camera,orbit,canvas,decoration
   if(gyro||!drag||drag.id!==event.pointerId)return;
   const dx=event.clientX-drag.x,dy=event.clientY-drag.y;
   drag.x=event.clientX;drag.y=event.clientY;drag.distance+=Math.hypot(dx,dy);
-  if(drag.distance<=12)return;
+  if(drag.distance<=19)return;
   yaw-=dx*.0045;
   pitch=clamp(pitch-dy*.0045,-Math.PI/2+.03,Math.PI/2-.03);
   camera.rotation.set(pitch,yaw,0,'YXZ');
