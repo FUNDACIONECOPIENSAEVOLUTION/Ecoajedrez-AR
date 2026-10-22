@@ -670,7 +670,7 @@ canvas.addEventListener('pointerdown',event=>{
   const square=pick3DSquare(event.clientX,event.clientY),piece=square?game.get(square):null;
   const draggingPiece=canPlay() && piece && piece.color===game.turn();
   down={x:event.clientX,y:event.clientY,square:draggingPiece?square:null};
-  if(draggingPiece)orbit.enabled=false;
+  if(draggingPiece || (square && selected))orbit.enabled=false;
 });
 canvas.addEventListener('pointerup',event=>{
   if(isAR||!down)return;
@@ -1675,8 +1675,8 @@ realmImmersion=createImmersiveChess({
  getBoardId:()=>window.ecoBoardCatalogue?.getSelected()||'classic',
  onInfo:message=>toast(message),
  getInteractivePiece:(x,y)=>{
-  const sq=pick3DSquare(x,y),piece=sq&&game.get(sq);
-  return Boolean(piece&&piece.color===game.turn()&&canPlay());
+  // Los toques dentro de cualquier casilla son para jugar; no para girar el paisaje.
+  return Boolean(pick3DSquare(x,y));
  }
 });
 ghostHint=makeLastMoveOverlay({THREE,world,positionOf,onText:text=>{$('lastMoveMessage').textContent=text;}});
