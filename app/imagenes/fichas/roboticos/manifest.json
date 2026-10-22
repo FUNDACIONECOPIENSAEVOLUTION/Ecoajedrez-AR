@@ -15,7 +15,7 @@
     },
     "caballo": {
       "modelo": "modelos/caballo.glb",
-      "imagen": null,
+      "imagen": "imagenes/caballo.jpg",
       "video": "videos/caballo.mp4",
       "animaciones_embebidas": false
     },
