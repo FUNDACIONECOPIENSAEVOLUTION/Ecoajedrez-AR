@@ -9,7 +9,7 @@ import { initializeAccountAuth, loginGoogle, logoutFirebase, authAvailable } fro
 import { makeSnapshot, verifyAndRestore, saveLocalMatch, readLocalMatch } from './match-state.js?v=0.4.1';
 import { createArcaneUI } from './arcane-ui.js?v=0.6.0';
 import { createMagicWorld } from './magic-world.js?v=0.14.3';
-import { realmTheme,publishedRealmURL } from './realm-pairing.js?v=0.16.1';
+import { realmTheme,publishedRealmURL } from './realm-pairing.js?v=0.16.2';
 import { createBoardSurface } from './board-skins.js?v=0.14.3';
 import { makeLastMoveOverlay } from './last-move-ghost.js?v=0.13.0';
 import { createVictoryFX } from './victory-fx.js?v=0.14.2';
@@ -741,8 +741,14 @@ async function loadRoboticPieces(){
    }catch(error){console.warn('No se pudo cargar robot '+type,error);}
   }));
   const option=$('roboticPieceOption');
-  if(option){option.disabled=ready!==6;option.textContent=ready===6?'Guardianes robóticos · 6 modelos 3D':'Robóticos · '+ready+'/6 modelos';}
+  if(option){
+   // Partial upload/load failures stay visible rather than hiding the whole army:
+   // individual missing GLBs render a safe built-in chess piece temporarily.
+   option.disabled=false;
+   option.textContent=ready===6?'Guardianes robóticos · 6 modelos 3D':'Robóticos · '+ready+'/6 GLB disponibles';
+  }
   if(modelSet==='robotic'){renderPieces();piecePreview?.rebuild();}
+  refreshPieceCatalog();
   return ready;
  })();
  try{return await robotLoading;}finally{robotLoading=null;}
@@ -846,6 +852,7 @@ async function loadChessModels({retry=false}={}){
   updateModelReadiness(ready===6?'✓ 6 / 6 modelos 3D originales listos para jugar.':
    '⚠ '+ready+' / 6 modelos activos. Las piezas geométricas quedan disponibles.',ready);
   await updateCacheReadiness();
+  refreshPieceCatalog();
   return ready;
  })();
  try{return await modelsLoading;}
@@ -947,12 +954,13 @@ function bindPieceAppearance(){
   refreshArmy({reroll:rivalMode==='auto'});
  };
  $('rerollRival').onclick=()=>refreshArmy({reroll:true});
- $('piecePreviewType').onchange=event=>piecePreview?.rebuild(event.target.value);
+ $('piecePreviewType').onchange=event=>{piecePreview?.rebuild(event.target.value);refreshPieceCatalog();};
  refreshArmy({reroll:rivalMode==='auto'});
 }
 bindPieceAppearance();
 $('pieceSet').onchange=()=>{
  modelSet=$('pieceSet').value;moving=null;renderPieces();piecePreview?.rebuild();
+ refreshPieceCatalog();
  if(modelSet==='community')loadCommunityPieces();
  if(modelSet==='anthro')loadAnthroModel();
  if(modelSet==='robotic')loadRoboticPieces();
@@ -1695,6 +1703,62 @@ piecePreview=createPiecePreview({
  isShowing:()=>document.body.dataset.view==='settings'
 });
 piecePreview.rebuild($('piecePreviewType').value);
+
+const cataloguePieceTypes=[
+ ['p','Peón','♟'],['r','Torre','♜'],['n','Caballo','♞'],
+ ['b','Alfil','♝'],['q','Reina','♛'],['k','Rey','♚']
+];
+function refreshPieceCatalog(){
+ const grid=$('pieceCatalogGrid'),status=$('pieceCatalogStatus');
+ if(!grid||!status)return;
+ const robot=modelSet==='robotic';
+ const selected=$('piecePreviewType')?.value||'q';
+ grid.replaceChildren();
+ for(const [type,label,glyph] of cataloguePieceTypes){
+  const card=document.createElement('button');
+  card.type='button';card.className='pieceCatalogCard';
+  card.setAttribute('aria-label','Previsualizar '+label);
+  card.setAttribute('aria-pressed',String(type===selected));
+  if(robot){
+   const img=document.createElement('img');
+   img.loading='lazy';img.alt='Modelo robótico de '+label;
+   img.src=ROBOT_ROOT+'imagenes/'+ROBOT_NAMES[type]+'.jpg';
+   img.onerror=()=>{
+    img.remove();
+    const icon=document.createElement('span');
+    icon.className='pieceCatalogGlyph';icon.textContent=glyph;
+    card.prepend(icon);
+   };
+   card.append(img);
+  }else{
+   const icon=document.createElement('span');
+   icon.className='pieceCatalogGlyph';icon.textContent=glyph;
+   card.append(icon);
+  }
+  const caption=document.createElement('span');caption.textContent=label;
+  card.append(caption);
+  card.onclick=()=>{
+   $('piecePreviewType').value=type;
+   piecePreview?.rebuild(type);
+   refreshPieceCatalog();
+  };
+  grid.append(card);
+ }
+ const num=chessModelTypes.filter(type=>robotAssets.has(type)).length;
+ const staunton=chessModelTypes.filter(type=>assets.has(type)&&assets.get(type)).length;
+ const messages={
+  anthro:'Guardianes animados: seis tipos disponibles con anatomía geométrica y movimiento por código.',
+  staunton:'Clásicas talladas: '+staunton+' / 6 modelos GLTF descargados; respaldo geométrico si falta alguno.',
+  royal:'Corte imperial: '+staunton+' / 6 GLTF base y adornos originales del juego.',
+  fantasy:'Runas encantadas: seis figuras generadas por el motor 3D.',
+  classic:'Estrategas esenciales: seis figuras generadas por el motor 3D.',
+  robotic:'Guardianes robóticos: '+num+' / 6 modelos GLB cargados; seis retratos disponibles. El resto usa respaldo temporal.',
+  community:'Colección externa CC0: los doce GLB son opcionales y deben estar completos.'
+ };
+ status.textContent=messages[modelSet]||'Colección preparada para jugar.';
+}
+refreshPieceCatalog();
+
 // One small manifest probe enables the set. Download heavy GLBs only when selected.
 async function checkRoboticPack(){
  const option=$('roboticPieceOption');
@@ -1707,10 +1771,12 @@ async function checkRoboticPack(){
      throw Error('incomplete robotic pack');
    option.disabled=false;
    option.textContent='Guardianes robóticos · 6 GLB + 6 retratos';
+   refreshPieceCatalog();
    if(modelSet==='robotic')await loadRoboticPieces();
  }catch(error){
    option.disabled=true;option.textContent='Guardianes robóticos · sin publicación completa';
    if(modelSet==='robotic'){$('pieceSet').value='anthro';modelSet='anthro';renderPieces();piecePreview?.rebuild();}
+   refreshPieceCatalog();
  }
 }
 checkRoboticPack().catch(error=>console.warn('Pack robótico',error));
