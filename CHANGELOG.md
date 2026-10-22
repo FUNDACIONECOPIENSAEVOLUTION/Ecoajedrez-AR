@@ -1,3 +1,12 @@
+## 0.16.2-beta.1 — 2026-10-22 (parejas y fichas)
+- Cada tablero busca exclusivamente la imagen de su reino asociado; la validación utiliza carga IMG real en lugar de depender de HEAD o solo del manifiesto.
+- Los tres reinos sin fondo WebP dedicado muestran la cara frontal de su **propio** skybox. Los otros diez usan sus imágenes originales y pueden recurrir a su propio skybox si hay error.
+- El modo 360 verifica las seis caras y, si HEAD falla, intenta descargar la imagen real antes de declarar el reino ausente.
+- Catálogo visible de seis tipos de pieza por colección; Guardianes robóticos usa sus seis JPG y muestra el progreso de los GLB.
+- Los GLB que aún no terminen de cargar cuentan con respaldo geométrico para mantener la partida jugable.
+- Importaciones y caché de módulos actualizadas a 0.16.2; se preservan el ajedrez, el modo AR y los estilos originales.
+- Requiere pruebas CI, GitHub Pages y prueba visual en dispositivos para confirmar todo el resultado.
+
 ## 0.16.1-beta.1 — 2026-10-22 (corrección publicable, pruebas visuales pendientes)
 - Auditoría de 13 tableros, 7 imágenes decorativas, 10 fondos de reino y 13 skyboxes de seis caras: rutas verificadas en GitHub.
 - Vista previa de reino usa recursos WebP reales; cuando falta el manifiesto no oculta imágenes que sí existen.
