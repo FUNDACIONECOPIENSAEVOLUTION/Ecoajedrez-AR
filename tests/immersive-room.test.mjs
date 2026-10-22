@@ -25,7 +25,7 @@ test('All thirteen uploaded full cubemaps are paired with the selected real ches
    assert.equal(buffer.toString('ascii',8,12),'WEBP');
   }
  }
- assert.match(main,/const sq=pick3DSquare\(x,y\),piece=sq&&game\.get\(sq\)/);
+ assert.match(main,/return Boolean\(pick3DSquare\(x,y\)\)/);
  assert.match(main,/realmImmersion\?\.enter\(\)/);
  assert.match(main,/boardSurface\.select\(catalogue\.getSelected\(\)\)/);
  assert.match(main,/new Chess\(\)/);
