@@ -73,7 +73,7 @@ test('Safe static bundling and version match added game module references',()=>{
   assert.ok(build.includes("'"+p+"'"),p);
   assert.ok((p==='magic-world.js'||p==='last-move-ghost.js'?main:html).includes('./'+p),p);
  }
- assert.equal(manifest.version,'0.15.7-beta.1');
+ assert.equal(manifest.version,JSON.parse(fs.readFileSync('package.json','utf8')).version);
  assert.ok(html.includes('v'+manifest.version));
  assert.ok(manifest.lastMoveHint.localOnly);
 });
