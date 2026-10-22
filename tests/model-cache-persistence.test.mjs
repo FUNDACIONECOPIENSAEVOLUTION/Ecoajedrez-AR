@@ -26,7 +26,7 @@ test('All six chess pieces are valid self-contained glTFs and selectable in sett
  assert.match(main,/if\(modelsLoading\)return modelsLoading/);
  assert.match(main,/cache\.preparePublicAssets\(\{modelsOnly:true,force:true\}\)/);
  assert.match(main,/cached\.getResource|cache\.cacheReport/);
- assert.equal(version.version,'0.15.7-beta.1');
+ assert.equal(version.version,JSON.parse(fs.readFileSync('package.json','utf8')).version);
  assert.match(build,/'models-cache\.css'/);
 });
 
