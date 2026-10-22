@@ -126,6 +126,7 @@ function refreshArmy({reroll=false,transmit=false}={}){
 let questUI=null,missionActive=null,missionSolved=false,missionPrior=null;
 const assets = new Map(), loader = new GLTFLoader();
 const communityAssets=new Map();let communityLoading=null;
+const robotAssets=new Map();let robotLoading=null;const ROBOT_ROOT='./app/imagenes/fichas/roboticos/';const ROBOT_NAMES={p:'peon',r:'torre',n:'caballo',b:'alfil',q:'reina',k:'rey'};
 let anthroSources=null,anthroLoading=null,lastAnthroTick=0;
 async function loadAnthroModel(){
  if(anthroSources||anthroLoading)return anthroLoading||anthroSources;
@@ -167,7 +168,14 @@ function translate(){
   document.querySelectorAll('[data-ui]').forEach(el=>el.textContent=interfaceText[lang]?.[el.dataset.ui]||interfaceText.es[el.dataset.ui]||el.textContent);
   updateStatus();
 }
-function toast(msg){if(isAR){arHint('✦ '+msg);return;}const el=$('gameToast');el.textContent=msg;el.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>el.style.display='none',4000);}
+function toast(msg){
+ if(isAR){arHint('✦ '+msg);return;}
+ const el=$('gameToast');
+ el.textContent=msg;el.style.display='block';
+ clearTimeout(toast.t);
+ const important=/error|no disponible|inválid|fall|conexión|denegad|permiso|advertencia/i.test(msg);
+ toast.t=setTimeout(()=>{el.style.display='none';},important?2700:1500);
+}
 const geoCache = {
   cyl:(a,b,h,n=20)=>new THREE.CylinderGeometry(a,b,h,n),
   box:(x,y,z)=>new THREE.BoxGeometry(x,y,z),
@@ -246,6 +254,10 @@ function createPieceVisual(p){
         });
       }
     }
+    if(modelSet==='robotic'&&robotAssets.has(p.type)){
+      g=robotAssets.get(p.type).clone(true);g.userData.robotic=true;
+      g.traverse(o=>{if(!o.isMesh)return;o.userData.sharedGeo=true;o.material=Array.isArray(o.material)?o.material.map(v=>v.clone()):o.material.clone();o.userData.ownedMaterial=true;o.castShadow=true;});
+    }
     if(modelSet==='anthro'){
       g=createAnthroVisual(THREE,p,anthroSources);
     }
@@ -298,7 +310,10 @@ function createPieceVisual(p){
     }
  // Acabados seleccionables para todos los modelos 3D; no toca reglas ni colisiones.
  const selectedLook=armyLooks()[p.color];
- applyPieceAppearance(THREE,g,{material:selectedLook.material,glow:selectedLook.glow,color:p.color});
+ if(modelSet==='robotic'&&g.userData.robotic){
+   const tint=new THREE.Color(p.color==='w'?0xd5ecff:0xf0b17f);
+   g.traverse(o=>{if(!o.isMesh)return;for(const mat of (Array.isArray(o.material)?o.material:[o.material]))if(mat.color)mat.color.lerp(tint,p.color==='w'?.13:.48);});
+ }else applyPieceAppearance(THREE,g,{material:selectedLook.material,glow:selectedLook.glow,color:p.color});
  if(p.color==='b')g.rotation.y=Math.PI;
  return g;
 }
@@ -543,8 +558,13 @@ function startSpeech(target){
   try{rec.start();toast('Escuchando jugada…');}catch(error){commandRecognition=null;toast('No se pudo iniciar el micrófono.');}
 }
 
+function dismissGameplayHint(){
+ const hint=$('commandHint');
+ if(hint){hint.classList.add('dismissed');}
+}
 function pickSquare(square){
   if(!square || game.isGameOver())return;
+  dismissGameplayHint();
   if(!canPlay())return;
   const current=game.get(square);
   if(selected && playMove(selected,square))return;
@@ -605,7 +625,7 @@ function animateMove(from,to,captured=false,victim=null){
   const a=positionOf(from),b=positionOf(to);
   target.position.set(a.x,.07,a.z);
   if(modelSet==='anthro')faceMovement(target,b.x-a.x,b.z-a.z);
-  moving={piece:target,a,b,start:performance.now(),duration:modelSet==='anthro'?(captured?1040:760):captured?710:370,captured};
+  moving={piece:target,a,b,start:performance.now(),duration:modelSet==='robotic'?(captured?1050:790):modelSet==='anthro'?(captured?1040:760):captured?710:370,captured};
   if(victim)combatFX?.start({defender:victim,attacker:target,from:a,to:b,
    start:moving.start,duration:moving.duration});
 }
@@ -638,7 +658,11 @@ function pick3DSquare(x,y){
   if(!rect.width||!rect.height)return null;
   point.set(((x-rect.left)/rect.width)*2-1,-((y-rect.top)/rect.height)*2+1);
   raycaster.setFromCamera(point,camera);
-  return squareFromHit([pieces,markers,tiles],raycaster.ray.origin,raycaster.ray.direction);
+  // Priorizar casillas y evitar que el volumen de un robot intercepte la selección.
+  const tile=squareFromHit([tiles],raycaster.ray.origin,raycaster.ray.direction);
+  if(tile)return tile;
+  // En perspectiva rasante, permitir tocar el cuerpo de la pieza.
+  return squareFromHit([pieces],raycaster.ray.origin,raycaster.ray.direction);
 }
 let down=null;
 canvas.addEventListener('pointerdown',event=>{
@@ -646,7 +670,7 @@ canvas.addEventListener('pointerdown',event=>{
   const square=pick3DSquare(event.clientX,event.clientY),piece=square?game.get(square):null;
   const draggingPiece=canPlay() && piece && piece.color===game.turn();
   down={x:event.clientX,y:event.clientY,square:draggingPiece?square:null};
-  if(draggingPiece)orbit.enabled=false;
+  if(draggingPiece || (square && selected))orbit.enabled=false;
 });
 canvas.addEventListener('pointerup',event=>{
   if(isAR||!down)return;
@@ -654,7 +678,7 @@ canvas.addEventListener('pointerup',event=>{
   const downEvent=down;down=null;orbit.enabled=!realmImmersion?.active();
   const destination=pick3DSquare(event.clientX,event.clientY);
   if(!destination)return;
-  const moved=Math.hypot(event.clientX-downEvent.x,event.clientY-downEvent.y)>12;
+  const moved=Math.hypot(event.clientX-downEvent.x,event.clientY-downEvent.y)>(event.pointerType==='touch'?19:12);
   if(moved&&downEvent.square&&downEvent.square!==destination){
     if(selected!==downEvent.square)pickSquare(downEvent.square);
     pickSquare(destination);
@@ -663,6 +687,29 @@ canvas.addEventListener('pointerup',event=>{
 canvas.addEventListener('pointercancel',()=>{down=null;orbit.enabled=!realmImmersion?.active();});
 // Original locally hosted models: exactly six types, reused by 32 pieces.
 const chessModelTypes=['p','r','n','b','q','k'];
+async function loadRoboticPieces(){
+ if(robotLoading)return robotLoading;
+ robotLoading=(async()=>{
+  let ready=0;
+  await Promise.all(chessModelTypes.map(async type=>{
+   if(robotAssets.has(type)){ready++;return;}
+   try{
+    const gltf=await loader.loadAsync(ROBOT_ROOT+'modelos/'+ROBOT_NAMES[type]+'.glb');
+    const source=gltf.scene,box=new THREE.Box3().setFromObject(source),size=new THREE.Vector3();box.getSize(size);
+    if(!Number.isFinite(size.y)||size.y<.001)throw Error('Geometría inválida');
+    source.scale.multiplyScalar(Math.min(1.45/size.y,.86/Math.max(size.x,size.z,.001)));
+    const fitted=new THREE.Box3().setFromObject(source),center=new THREE.Vector3();fitted.getCenter(center);
+    source.position.set(-center.x,-fitted.min.y,-center.z);
+    const wrapper=new THREE.Group();wrapper.add(source);robotAssets.set(type,wrapper);ready++;
+   }catch(error){console.warn('No se pudo cargar robot '+type,error);}
+  }));
+  const option=$('roboticPieceOption');
+  if(option){option.disabled=ready!==6;option.textContent=ready===6?'Guardianes robóticos · 6 modelos 3D':'Robóticos · '+ready+'/6 modelos';}
+  if(modelSet==='robotic'){renderPieces();piecePreview?.rebuild();}
+  return ready;
+ })();
+ try{return await robotLoading;}finally{robotLoading=null;}
+}
 async function checkCommunityModels(){
  const option=$('communityPieceOption');
  if(!option)return;
@@ -871,6 +918,7 @@ $('pieceSet').onchange=()=>{
  modelSet=$('pieceSet').value;moving=null;renderPieces();piecePreview?.rebuild();
  if(modelSet==='community')loadCommunityPieces();
  if(modelSet==='anthro')loadAnthroModel();
+ if(modelSet==='robotic')loadRoboticPieces();
  preloadArmyTextures();
 };
 $('boardSize').onchange=()=>{boardScale=Number($('boardSize').value)||0.065;};
@@ -1580,7 +1628,16 @@ function render(timestamp,frame){
       .07 + Math.sin(progress*Math.PI)*.34,
       moving.a.z+(moving.b.z-moving.a.z)*smooth
     );
-    if(progress>=1)moving=null;
+    if(modelSet==='robotic'&&moving.piece.userData.robotic){
+      const type=moving.piece.userData.pieceType;
+      const arc=Math.sin(progress*Math.PI);
+      const stride=Math.sin(progress*Math.PI*(type==='n'?2:6));
+      // Los GLB originales son mallas rígidas: animación de marcha/salto sin deformar la geometría.
+      moving.piece.position.y=.07+arc*(type==='n'?.69:type==='r'?.035:.10);
+      moving.piece.rotation.z=stride*arc*(type==='r'?.018:.047);
+      moving.piece.rotation.x=Math.sin(progress*Math.PI*2)*arc*(type==='n'?.12:.035);
+    }
+    if(progress>=1){moving.piece.rotation.z=0;moving.piece.rotation.x=0;moving=null;}
   }
   if(modelSet==='anthro'){
     const t=timestamp||performance.now();
@@ -1601,6 +1658,8 @@ piecePreview=createPiecePreview({
  isShowing:()=>document.body.dataset.view==='settings'
 });
 piecePreview.rebuild($('piecePreviewType').value);
+loadRoboticPieces().catch(error=>console.warn('Carga de robots',error));
+setTimeout(dismissGameplayHint,3400);
 arcaneUI=createArcaneUI({THREE,world});
 try{const saved=localStorage.getItem('ecoajedrez-graphics-profile');if(['auto','low','medium','high'].includes(saved))$('quality').value=saved;}catch(e){}
 magicEnv=createMagicWorld({THREE,world,scene,renderer,stage});
@@ -1616,8 +1675,8 @@ realmImmersion=createImmersiveChess({
  getBoardId:()=>window.ecoBoardCatalogue?.getSelected()||'classic',
  onInfo:message=>toast(message),
  getInteractivePiece:(x,y)=>{
-  const sq=pick3DSquare(x,y),piece=sq&&game.get(sq);
-  return Boolean(piece&&piece.color===game.turn()&&canPlay());
+  // Los toques dentro de cualquier casilla son para jugar; no para girar el paisaje.
+  return Boolean(pick3DSquare(x,y));
  }
 });
 ghostHint=makeLastMoveOverlay({THREE,world,positionOf,onText:text=>{$('lastMoveMessage').textContent=text;}});

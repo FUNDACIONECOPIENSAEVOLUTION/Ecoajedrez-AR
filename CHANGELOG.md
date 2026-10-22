@@ -1,3 +1,10 @@
+## 0.16.0-beta.1 — 2026-10-22 (rama de pruebas, no publicada)
+- Incorporación condicional de seis modelos robóticos GLB y seis imágenes de selección.
+- Movimiento procedural de marcha rígida y salto por tipo de robot; sin rig ni clips Walk reales.
+- Mejoras en interacción táctil 3D/360 y avisos del tablero; pruebas físicas aún pendientes.
+- Inventario auditado de estilos originales, paquetes externos incompletos y opciones disponibles.
+- Numeración actualizada en package.json, version.json y UI. No se ha fusionado a main.
+
 # Historial de ECOAJEDREZ AR
 
 ## 0.15.7-beta.1 — 2026-10-19 · Ejército propio, rival contrastante y nuevas variantes

@@ -1,8 +1,8 @@
 {
   "name": "Ecoajedrez-AR",
-  "version": "0.15.7-beta.1",
-  "updated": "2026-10-19",
-  "status": "Ejércitos con elección de material/brillo independiente; rival CPU aleatorio y contrastante, jugador local configurable y paquetes 3D renombrados sin cambiar IDs. Apariencia PeerJS beta. GLB comunitarios y antropomórfico pendientes de subida; modelos Staunton y fallback procedural conservados. Pendiente validación física.",
+  "version": "0.16.0-beta.1",
+  "updated": "2026-10-22",
+  "status": "Rama de prueba: catálogo de seis robots GLB con vistas JPG, movimiento rígido provisional, mejoras táctiles en móvil. No publicado ni probado en Android. Los seis Staunton GLTF y cinco estilos previos se conservan; el paquete comunitario CC0 y GLB antropomórfico externo faltan.",
   "browserValidated": false,
   "physicalARValidated": false,
   "onlinePvP": "Casual PeerJS beta, six-character code and QR with camera scanner (native BarcodeDetector / lazy in-browser jsQR), validation restricts invite origin/path. Real two-device session requires device test; unranked and unaudited anti-cheat.",
@@ -388,5 +388,29 @@
     "extraGlowColors": 5,
     "fullCommunityPackInstalled": false,
     "anthropomorphicGlbInstalled": false
+  },
+  "pieceCollections": {
+    "enabledBuiltIn": [
+      "anthro-procedural",
+      "staunton",
+      "royal",
+      "fantasy",
+      "classic"
+    ],
+    "robotic": {
+      "branchOnly": true,
+      "files": 6,
+      "images": 6,
+      "embeddedAnimations": false,
+      "browserValidated": false
+    },
+    "community": {
+      "ready": false,
+      "filesExpected": 12
+    },
+    "anthroGLB": {
+      "ready": false,
+      "proceduralFallback": true
+    }
   }
 }

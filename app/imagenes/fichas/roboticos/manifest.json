@@ -1,0 +1,41 @@
+{
+  "coleccion": "roboticos_negro_azul",
+  "piezas": {
+    "peon": {
+      "modelo": "modelos/peon.glb",
+      "imagen": "imagenes/peon.jpg",
+      "video": null,
+      "animaciones_embebidas": false
+    },
+    "alfil": {
+      "modelo": "modelos/alfil.glb",
+      "imagen": "imagenes/alfil.jpg",
+      "video": "videos/alfil.mp4",
+      "animaciones_embebidas": false
+    },
+    "caballo": {
+      "modelo": "modelos/caballo.glb",
+      "imagen": "imagenes/caballo.jpg",
+      "video": "videos/caballo.mp4",
+      "animaciones_embebidas": false
+    },
+    "torre": {
+      "modelo": "modelos/torre.glb",
+      "imagen": "imagenes/torre.jpg",
+      "video": "videos/torre.mp4",
+      "animaciones_embebidas": false
+    },
+    "reina": {
+      "modelo": "modelos/reina.glb",
+      "imagen": "imagenes/reina.jpg",
+      "video": "videos/reina.mp4",
+      "animaciones_embebidas": false
+    },
+    "rey": {
+      "modelo": "modelos/rey.glb",
+      "imagen": "imagenes/rey.jpg",
+      "video": "videos/rey.mp4",
+      "animaciones_embebidas": false
+    }
+  }
+}
